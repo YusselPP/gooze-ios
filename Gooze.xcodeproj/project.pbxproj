@@ -7,14 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D013931672FCA4D16CB7BB1 /* Pods_GoozeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */; };
+		615DA239FA3CF4C00BF3948F /* Pods_Gooze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89160AC4FDEE198C99719CCF /* Pods_Gooze.framework */; };
+		7A967A10E39F3A51B91D40E1 /* Pods_GoozeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */; };
+		8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */; };
+		8D572DB71F9D1B8300B824FA /* Staging.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D572DB61F9D17D700B824FA /* Staging.plist */; };
+		8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DB81F9D334000B824FA /* GZELoginViewModel.swift */; };
+		8D572DBB1F9D352F00B824FA /* GZEUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBA1F9D352F00B824FA /* GZEUser.swift */; };
+		8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBC1F9D468C00B824FA /* GZEApi.swift */; };
+		8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */; };
 		8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720911F9B9B6700485566 /* AppDelegate.swift */; };
-		8DF720941F9B9B6700485566 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720931F9B9B6700485566 /* ViewController.swift */; };
 		8DF720971F9B9B6700485566 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720951F9B9B6700485566 /* Main.storyboard */; };
 		8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720981F9B9B6700485566 /* Gooze.xcdatamodeld */; };
 		8DF7209C1F9B9B6700485566 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DF7209B1F9B9B6700485566 /* Assets.xcassets */; };
 		8DF7209F1F9B9B6700485566 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DF7209D1F9B9B6700485566 /* LaunchScreen.storyboard */; };
 		8DF720AA1F9B9B6700485566 /* GoozeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720A91F9B9B6700485566 /* GoozeTests.swift */; };
 		8DF720B51F9B9B6700485566 /* GoozeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720B41F9B9B6700485566 /* GoozeUITests.swift */; };
+		8DF720CB1F9BA4C500485566 /* Debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720CA1F9BA4C500485566 /* Debug.plist */; };
+		8DF720CD1F9BA4F400485566 /* Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720CC1F9BA4F400485566 /* Release.plist */; };
+		8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720D21F9BA5B000485566 /* Localizable.strings */; };
+		8DF720D61F9BA8F900485566 /* GZELoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +47,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E55F6110322C5A75DED7636 /* Pods-GoozeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests.release.xcconfig"; sourceTree = "<group>"; };
+		11CFE1F4F0EF2193E3C78C76 /* Pods-GoozeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests.release.xcconfig"; sourceTree = "<group>"; };
+		16C27C9562DE92D6236779F5 /* Pods-Gooze.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gooze.staging.xcconfig"; path = "Pods/Target Support Files/Pods-Gooze/Pods-Gooze.staging.xcconfig"; sourceTree = "<group>"; };
+		1F9A603E7119AA0190291E9B /* Pods-GoozeUITests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeUITests.staging.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests.staging.xcconfig"; sourceTree = "<group>"; };
+		212F82775173B5FDD57FEA8F /* Pods-GoozeTests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeTests.staging.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests.staging.xcconfig"; sourceTree = "<group>"; };
+		228D2956DF4ECD20CD97E61A /* Pods-GoozeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		599D824A0D69C6202B4F3677 /* Pods-GoozeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		89160AC4FDEE198C99719CCF /* Pods_Gooze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gooze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAppConfig.swift; sourceTree = "<group>"; };
+		8D572DB61F9D17D700B824FA /* Staging.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Staging.plist; sourceTree = "<group>"; };
+		8D572DB81F9D334000B824FA /* GZELoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELoginViewModel.swift; sourceTree = "<group>"; };
+		8D572DBA1F9D352F00B824FA /* GZEUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUser.swift; sourceTree = "<group>"; };
+		8D572DBC1F9D468C00B824FA /* GZEApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApi.swift; sourceTree = "<group>"; };
+		8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserRepositoryProtocol.swift; sourceTree = "<group>"; };
 		8DF7208E1F9B9B6700485566 /* Gooze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gooze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DF720911F9B9B6700485566 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8DF720931F9B9B6700485566 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8DF720961F9B9B6700485566 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8DF720991F9B9B6700485566 /* Gooze.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Gooze.xcdatamodel; sourceTree = "<group>"; };
 		8DF7209B1F9B9B6700485566 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +74,17 @@
 		8DF720B01F9B9B6700485566 /* GoozeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoozeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DF720B41F9B9B6700485566 /* GoozeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoozeUITests.swift; sourceTree = "<group>"; };
 		8DF720B61F9B9B6700485566 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DF720CA1F9BA4C500485566 /* Debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Debug.plist; sourceTree = "<group>"; };
+		8DF720CC1F9BA4F400485566 /* Release.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Release.plist; sourceTree = "<group>"; };
+		8DF720CE1F9BA5A100485566 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		8DF720CF1F9BA5A100485566 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		8DF720D31F9BA5C700485566 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8DF720D41F9BA5D000485566 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELoginViewController.swift; sourceTree = "<group>"; };
+		8EDE9DEC944C30648F4A150C /* Pods-Gooze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gooze.release.xcconfig"; path = "Pods/Target Support Files/Pods-Gooze/Pods-Gooze.release.xcconfig"; sourceTree = "<group>"; };
+		9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoozeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoozeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F06601825C56AA9D2A670CC1 /* Pods-Gooze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gooze.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Gooze/Pods-Gooze.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				615DA239FA3CF4C00BF3948F /* Pods_Gooze.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D013931672FCA4D16CB7BB1 /* Pods_GoozeTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,12 +108,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A967A10E39F3A51B91D40E1 /* Pods_GoozeUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11C0641BA5A96E2FBBBBA4F2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F06601825C56AA9D2A670CC1 /* Pods-Gooze.debug.xcconfig */,
+				8EDE9DEC944C30648F4A150C /* Pods-Gooze.release.xcconfig */,
+				16C27C9562DE92D6236779F5 /* Pods-Gooze.staging.xcconfig */,
+				228D2956DF4ECD20CD97E61A /* Pods-GoozeTests.debug.xcconfig */,
+				11CFE1F4F0EF2193E3C78C76 /* Pods-GoozeTests.release.xcconfig */,
+				212F82775173B5FDD57FEA8F /* Pods-GoozeTests.staging.xcconfig */,
+				599D824A0D69C6202B4F3677 /* Pods-GoozeUITests.debug.xcconfig */,
+				0E55F6110322C5A75DED7636 /* Pods-GoozeUITests.release.xcconfig */,
+				1F9A603E7119AA0190291E9B /* Pods-GoozeUITests.staging.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8D572DBE1F9D471B00B824FA /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		8DF720851F9B9B6600485566 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +146,8 @@
 				8DF720A81F9B9B6700485566 /* GoozeTests */,
 				8DF720B31F9B9B6700485566 /* GoozeUITests */,
 				8DF7208F1F9B9B6700485566 /* Products */,
+				11C0641BA5A96E2FBBBBA4F2 /* Pods */,
+				D2595DE5E3752238DE06EC1D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,13 +164,21 @@
 		8DF720901F9B9B6700485566 /* Gooze */ = {
 			isa = PBXGroup;
 			children = (
+				8D572DBE1F9D471B00B824FA /* Protocols */,
+				8DF720C71F9BA44A00485566 /* Services */,
+				8DF720C61F9BA43E00485566 /* ViewModels */,
+				8DF720C51F9BA43300485566 /* Models */,
+				8DF720C41F9BA42400485566 /* Views */,
 				8DF720911F9B9B6700485566 /* AppDelegate.swift */,
-				8DF720931F9B9B6700485566 /* ViewController.swift */,
 				8DF720951F9B9B6700485566 /* Main.storyboard */,
 				8DF7209B1F9B9B6700485566 /* Assets.xcassets */,
 				8DF7209D1F9B9B6700485566 /* LaunchScreen.storyboard */,
 				8DF720A01F9B9B6700485566 /* Info.plist */,
 				8DF720981F9B9B6700485566 /* Gooze.xcdatamodeld */,
+				8DF720D21F9BA5B000485566 /* Localizable.strings */,
+				8DF720CA1F9BA4C500485566 /* Debug.plist */,
+				8DF720CC1F9BA4F400485566 /* Release.plist */,
+				8D572DB61F9D17D700B824FA /* Staging.plist */,
 			);
 			path = Gooze;
 			sourceTree = "<group>";
@@ -128,6 +201,49 @@
 			path = GoozeUITests;
 			sourceTree = "<group>";
 		};
+		8DF720C41F9BA42400485566 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		8DF720C51F9BA43300485566 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8D572DBA1F9D352F00B824FA /* GZEUser.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8DF720C61F9BA43E00485566 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8D572DB81F9D334000B824FA /* GZELoginViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		8DF720C71F9BA44A00485566 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */,
+				8D572DBC1F9D468C00B824FA /* GZEApi.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D2595DE5E3752238DE06EC1D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				89160AC4FDEE198C99719CCF /* Pods_Gooze.framework */,
+				A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */,
+				9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +251,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8DF720B91F9B9B6700485566 /* Build configuration list for PBXNativeTarget "Gooze" */;
 			buildPhases = (
+				AF3DED966CF4059C70DF1F99 /* [CP] Check Pods Manifest.lock */,
 				8DF7208A1F9B9B6700485566 /* Sources */,
 				8DF7208B1F9B9B6700485566 /* Frameworks */,
 				8DF7208C1F9B9B6700485566 /* Resources */,
+				B97BE90AC098B123BF2E65B6 /* [CP] Embed Pods Frameworks */,
+				24CDE2CDB08E25E30A586587 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -152,9 +271,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8DF720BC1F9B9B6700485566 /* Build configuration list for PBXNativeTarget "GoozeTests" */;
 			buildPhases = (
+				1147258FD0ADE09A854183C3 /* [CP] Check Pods Manifest.lock */,
 				8DF720A11F9B9B6700485566 /* Sources */,
 				8DF720A21F9B9B6700485566 /* Frameworks */,
 				8DF720A31F9B9B6700485566 /* Resources */,
+				40DBD718D50416B0539E73B9 /* [CP] Embed Pods Frameworks */,
+				6BC3FC0874996AD9F970A1DE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -170,9 +292,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8DF720BF1F9B9B6700485566 /* Build configuration list for PBXNativeTarget "GoozeUITests" */;
 			buildPhases = (
+				5175ECF0A84467F7E45DD058 /* [CP] Check Pods Manifest.lock */,
 				8DF720AC1F9B9B6700485566 /* Sources */,
 				8DF720AD1F9B9B6700485566 /* Frameworks */,
 				8DF720AE1F9B9B6700485566 /* Resources */,
+				DCFF88A5E3A77C936A9102BF /* [CP] Embed Pods Frameworks */,
+				6E771F80FFB36C333ED9A445 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -196,6 +321,7 @@
 				TargetAttributes = {
 					8DF7208D1F9B9B6700485566 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					8DF720A41F9B9B6700485566 = {
@@ -217,6 +343,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = 8DF720851F9B9B6600485566;
 			productRefGroup = 8DF7208F1F9B9B6700485566 /* Products */;
@@ -236,7 +363,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DF7209F1F9B9B6700485566 /* LaunchScreen.storyboard in Resources */,
+				8DF720CB1F9BA4C500485566 /* Debug.plist in Resources */,
+				8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */,
 				8DF7209C1F9B9B6700485566 /* Assets.xcassets in Resources */,
+				8D572DB71F9D1B8300B824FA /* Staging.plist in Resources */,
+				8DF720CD1F9BA4F400485566 /* Release.plist in Resources */,
 				8DF720971F9B9B6700485566 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,14 +388,181 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1147258FD0ADE09A854183C3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GoozeTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		24CDE2CDB08E25E30A586587 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Gooze/Pods-Gooze-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		40DBD718D50416B0539E73B9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5175ECF0A84467F7E45DD058 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GoozeUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6BC3FC0874996AD9F970A1DE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E771F80FFB36C333ED9A445 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AF3DED966CF4059C70DF1F99 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Gooze-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B97BE90AC098B123BF2E65B6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Gooze/Pods-Gooze-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Gloss/Gloss.framework",
+				"${BUILT_PRODUCTS_DIR}/Localize-Swift/Localize_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/LoopBack/LoopBack.framework",
+				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/ReactiveSwift/ReactiveSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gloss.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Localize_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LoopBack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Gooze/Pods-Gooze-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DCFF88A5E3A77C936A9102BF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8DF7208A1F9B9B6700485566 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DF720941F9B9B6700485566 /* ViewController.swift in Sources */,
+				8DF720D61F9BA8F900485566 /* GZELoginViewController.swift in Sources */,
+				8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */,
+				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
+				8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */,
+				8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */,
 				8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,
+				8D572DBB1F9D352F00B824FA /* GZEUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +602,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8DF720961F9B9B6700485566 /* Base */,
+				8DF720CE1F9BA5A100485566 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -312,17 +611,128 @@
 			isa = PBXVariantGroup;
 			children = (
 				8DF7209E1F9B9B6700485566 /* Base */,
+				8DF720CF1F9BA5A100485566 /* es */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8DF720D21F9BA5B000485566 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DF720D31F9BA5C700485566 /* Base */,
+				8DF720D41F9BA5D000485566 /* es */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8D4A20001F9CECB100CBF545 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Staging;
+		};
+		8D4A20011F9CECB100CBF545 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 16C27C9562DE92D6236779F5 /* Pods-Gooze.staging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Gooze/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = gooze.Gooze;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Staging;
+		};
+		8D4A20021F9CECB100CBF545 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 212F82775173B5FDD57FEA8F /* Pods-GoozeTests.staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = GoozeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = gooze.GoozeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gooze.app/Gooze";
+			};
+			name = Staging;
+		};
+		8D4A20031F9CECB100CBF545 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1F9A603E7119AA0190291E9B /* Pods-GoozeUITests.staging.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = GoozeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = gooze.GoozeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Gooze;
+			};
+			name = Staging;
+		};
 		8DF720B71F9B9B6700485566 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -367,7 +777,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -380,6 +790,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -418,7 +829,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -428,34 +839,39 @@
 		};
 		8DF720BA1F9B9B6700485566 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F06601825C56AA9D2A670CC1 /* Pods-Gooze.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Gooze/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = gooze.Gooze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		8DF720BB1F9B9B6700485566 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8EDE9DEC944C30648F4A150C /* Pods-Gooze.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Gooze/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = gooze.Gooze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		8DF720BD1F9B9B6700485566 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 228D2956DF4ECD20CD97E61A /* Pods-GoozeTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -472,6 +888,7 @@
 		};
 		8DF720BE1F9B9B6700485566 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11CFE1F4F0EF2193E3C78C76 /* Pods-GoozeTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -488,6 +905,7 @@
 		};
 		8DF720C01F9B9B6700485566 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 599D824A0D69C6202B4F3677 /* Pods-GoozeUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -503,6 +921,7 @@
 		};
 		8DF720C11F9B9B6700485566 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0E55F6110322C5A75DED7636 /* Pods-GoozeUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -524,6 +943,7 @@
 			buildConfigurations = (
 				8DF720B71F9B9B6700485566 /* Debug */,
 				8DF720B81F9B9B6700485566 /* Release */,
+				8D4A20001F9CECB100CBF545 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -533,6 +953,7 @@
 			buildConfigurations = (
 				8DF720BA1F9B9B6700485566 /* Debug */,
 				8DF720BB1F9B9B6700485566 /* Release */,
+				8D4A20011F9CECB100CBF545 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -542,6 +963,7 @@
 			buildConfigurations = (
 				8DF720BD1F9B9B6700485566 /* Debug */,
 				8DF720BE1F9B9B6700485566 /* Release */,
+				8D4A20021F9CECB100CBF545 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -551,6 +973,7 @@
 			buildConfigurations = (
 				8DF720C01F9B9B6700485566 /* Debug */,
 				8DF720C11F9B9B6700485566 /* Release */,
+				8D4A20031F9CECB100CBF545 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

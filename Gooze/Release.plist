@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LogLevel</key>
+	<string>error</string>
+	<key>LogAppID</key>
+	<string>v6g2XV</string>
+	<key>LogAppSecret</key>
+	<string>ypzfjdx2bffbxSqjoxebh3qmoiznmohu</string>
+	<key>LogAppKey</key>
+	<string>vskgnz6i2hmIdQ04Q0mjmelZz7bf7txR</string>
+</dict>
+</plist>

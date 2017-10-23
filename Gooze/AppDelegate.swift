@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreData
+import SwiftyBeaver
+
+let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
+        initialSetup()
+        
         return true
     }
 
@@ -89,5 +95,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    // MARK: - Gooze Initial Setup
+    
+    func initialSetup() {
+        GZEAppConfig.load()
+        setUpLogs()
+        setUpInitialController()
+    }
+    
+    func setUpLogs() {
+        // SwiftyBearer cloud
+        let platform = SBPlatformDestination(appID: GZEAppConfig.logAppID,
+                                             appSecret: GZEAppConfig.logAppSecret,
+                                             encryptionKey: GZEAppConfig.logAppKey)
+
+        if (GZEAppConfig.logAppID.isEmpty) {
+            NSLog("LogAppID configuration is empty. Platform logging will be disabled.")
+        } else {
+            log.addDestination(platform)
+            NSLog("Added logging Platform destination. AppID: " + GZEAppConfig.logAppID)
+        }
+
+        // add log destinations.
+        if GZEAppConfig.environment == .debug {
+            log.addDestination(ConsoleDestination())
+            NSLog("Added logging Console destination")
+        }
+
+        for destination in log.destinations {
+            switch GZEAppConfig.logLevel {
+            case "verbose":
+                destination.minLevel = .verbose
+            case "debug":
+                destination.minLevel = .debug
+            case "info":
+                destination.minLevel = .info
+            case "warning":
+                destination.minLevel = .warning
+            default:
+                destination.minLevel = .error
+            }
+            destination.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
+        }
+
+        log.debug("Log level: " + GZEAppConfig.logLevel)
+    }
+
+    func setUpInitialController() {
+        let loginController = window?.rootViewController as? GZELoginViewController
+        // Set up initial view model
+        loginController?.loginViewModel = GZELoginViewModel()
+    }
 }
 
