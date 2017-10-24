@@ -23,13 +23,8 @@ class GZELoginViewModel {
     let password: MutableProperty<String?> = MutableProperty("")
     let errorMessage: MutableProperty<String?> = MutableProperty("")
 
-    var postAction = Action<String, String, TestError>(enabledIf: MutableProperty(true)) { input in
-        log.debug(input)
-        return SignalProducer<String, TestError> { sink, disposable in
-            sink.send(value: "Hello")
-            sink.send(error: TestError.error1)
-            sink.sendCompleted()
-        }
+    lazy var postAction = Action<Void, GZEUser, GZERepositoryError>(enabledIf: MutableProperty(true)) {
+        return GZEUserApiRepository().login(self.username.value!, self.password.value!)
     }
 
     init() {
@@ -39,10 +34,4 @@ class GZELoginViewModel {
             self.errorMessage.value = "oh \((self.i))"
         }
     }
-
-
-    //func login() -> Action<(), NSData, NSError> {
-    //    log.debug("login called")
-    //    return postAction
-    //}
 }

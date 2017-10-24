@@ -29,11 +29,9 @@ class GZELoginViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         loginViewModel.username <~ usernameTextField.reactive.textValues
+        loginViewModel.password <~ passwordTextField.reactive.textValues
         infoLabel.reactive.text <~ loginViewModel.errorMessage
-        loginButton.reactive.pressed = CocoaAction(loginViewModel.postAction) { button in
-            log.debug("pressed")
-            return "Hi"
-        }
+        loginButton.reactive.pressed = CocoaAction(loginViewModel.postAction)
     }
 
     override func didReceiveMemoryWarning() {

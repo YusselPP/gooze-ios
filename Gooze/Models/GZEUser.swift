@@ -8,8 +8,9 @@
 
 import Foundation
 import Gloss
+import LoopBack
 
-class GZEUser {
+class GZEUser: LBModel {
 
     enum Gender: String {
         case male = "male"
@@ -60,12 +61,10 @@ class GZEUser {
     var createdAt: Date?
     var updatedAt: Date?
 
-    init() {
-    }
-
     // MARK: - Gloss Deserialization
     init?(json: JSON) {
+        super.init()
         self.email = "email" <~~ json
-        self.username = "login" <~~ json
+        self.username = "username" <~~ json
     }
 }

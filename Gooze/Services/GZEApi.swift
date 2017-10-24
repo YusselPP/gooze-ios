@@ -7,13 +7,24 @@
 //
 
 import Foundation
+import Gloss
 import LoopBack
 
-class GZEApi: GZEUserRepositoryProtocol {
+class GZEApi {
+    let tokenKey = "LBRESTAdapterAccessToken"
+    let apiUrl = "http://localhost:3000/api"
+    let adapter: LBRESTAdapter
 
-    static func login(_ username: String, _ password: String) -> GZEUser {
-        //TODO: get the user from the API
-        
-        return GZEUser()
+    init() {
+        adapter = LBRESTAdapter(url: URL(string: apiUrl)!)
     }
+
+//    func setToken(_ accessToken: String) {
+//        adapter.accessToken = accessToken
+//        saveToken(accessToken)
+//    }
+//
+//    func saveToken(_ accessToken: String) {
+//        UserDefaults.standard.set(accessToken, forKey: tokenKey)
+//    }
 }

@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import ReactiveSwift
 
 protocol GZEUserRepositoryProtocol {
 
-    static func login(_ username: String, _ password: String) -> GZEUser
+    func login(_ username: String, _ password: String) -> SignalProducer<GZEUser, GZERepositoryError>
 }

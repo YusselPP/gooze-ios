@@ -10,6 +10,9 @@
 		5D013931672FCA4D16CB7BB1 /* Pods_GoozeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */; };
 		615DA239FA3CF4C00BF3948F /* Pods_Gooze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89160AC4FDEE198C99719CCF /* Pods_Gooze.framework */; };
 		7A967A10E39F3A51B91D40E1 /* Pods_GoozeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */; };
+		8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */; };
+		8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2447301F9E9700004330AF /* GZERepositoryError.swift */; };
+		8D2447331F9EA26E004330AF /* GZEUserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2447321F9EA26E004330AF /* GZEUserRepository.swift */; };
 		8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */; };
 		8D572DB71F9D1B8300B824FA /* Staging.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D572DB61F9D17D700B824FA /* Staging.plist */; };
 		8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DB81F9D334000B824FA /* GZELoginViewModel.swift */; };
@@ -55,6 +58,9 @@
 		228D2956DF4ECD20CD97E61A /* Pods-GoozeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		599D824A0D69C6202B4F3677 /* Pods-GoozeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		89160AC4FDEE198C99719CCF /* Pods_Gooze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gooze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserApiRepository.swift; sourceTree = "<group>"; };
+		8D2447301F9E9700004330AF /* GZERepositoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERepositoryError.swift; sourceTree = "<group>"; };
+		8D2447321F9EA26E004330AF /* GZEUserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserRepository.swift; sourceTree = "<group>"; };
 		8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAppConfig.swift; sourceTree = "<group>"; };
 		8D572DB61F9D17D700B824FA /* Staging.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Staging.plist; sourceTree = "<group>"; };
 		8D572DB81F9D334000B824FA /* GZELoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELoginViewModel.swift; sourceTree = "<group>"; };
@@ -135,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */,
+				8D2447301F9E9700004330AF /* GZERepositoryError.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -230,6 +237,8 @@
 			children = (
 				8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */,
 				8D572DBC1F9D468C00B824FA /* GZEApi.swift */,
+				8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */,
+				8D2447321F9EA26E004330AF /* GZEUserRepository.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -560,8 +569,11 @@
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
 				8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */,
 				8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */,
+				8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */,
 				8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */,
+				8D2447331F9EA26E004330AF /* GZEUserRepository.swift in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,
+				8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */,
 				8D572DBB1F9D352F00B824FA /* GZEUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
