@@ -8,6 +8,7 @@
 
 import Foundation
 import ReactiveSwift
+import Result
 import Gloss
 import LoopBack
 
@@ -26,46 +27,67 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
 
     func login(_ username: String, _ password: String) -> SignalProducer<GZEUser, GZERepositoryError> {
 
+
         return SignalProducer<GZEUser, GZERepositoryError> { sink, disposable in
 
             self.userRepository.login(email: username, password: password, success: { response in
 
-                // self.api.setToken("agw4zsSKUk6BRB5uvoG6eQJFWTwzGxkTutqn00FSE4amoDyBUDit7FCKV3HvXFdB")
+                log.debug("login response: " + response.debugDescription)
 
-                let user = GZEUser(json: response?.toDictionary() as! JSON)
-                sink.send(value: user!)
+                if
+                    let tokenId = response?._id as? String,
+                    let json = response?.toDictionary()["user"] as? JSON,
+                    let user = GZEUser(json: json) {
+
+                    self.api.setToken(tokenId)
+                    sink.send(value: user)
+                } else {
+                    sink.send(error: GZERepositoryError.InvalidResponseFormat)
+                }
+
+                sink.sendCompleted()
 
             }, failure: { error in
 
-                log.error(error as Any)
+                log.error("login failed: " + error.debugDescription)
+
                 sink.send(error: GZERepositoryError.ModelNotFound)
+                sink.sendCompleted()
             })
 
-            sink.sendCompleted()
+
         }
     }
 
-    func find(byId: String) -> SignalProducer<GZEUser, GZERepositoryError> {
-
-        log.debug(self.api.adapter.accessToken)
-        log.debug(UserDefaults.standard.object(forKey: "LBRESTAdapterAccessToken") as Any)
+    func find(byId id: String) -> SignalProducer<GZEUser, GZERepositoryError> {
 
         return SignalProducer<GZEUser, GZERepositoryError> { sink, disposable in
 
-            self.userRepository.find(byId: byId, success: { response in
+            self.userRepository.find(byId: id, success: { response in
 
-                let user = GZEUser(json: response?.toDictionary() as! JSON)
-                log.debug(response as Any)
-                log.debug(user as Any)
-                sink.send(value: user!)
+                log.debug("find response: " + response.debugDescription)
+
+                if
+                    let jsonResponse = response?.toDictionary() as? JSON,
+                    let user = GZEUser(json: jsonResponse) {
+
+                    log.debug("found user instance: " + user.debugDescription)
+                    sink.send(value: user)
+                } else {
+                    sink.send(error: GZERepositoryError.InvalidResponseFormat)
+                }
+
+                sink.sendCompleted()
 
             }, failure: { error in
 
-                log.error(error as Any)
+                log.error("find failed: " + error.debugDescription)
+
                 sink.send(error: GZERepositoryError.ModelNotFound)
+                sink.sendCompleted()
             })
 
-            sink.sendCompleted()
+
         }
     }
 }

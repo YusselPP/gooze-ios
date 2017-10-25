@@ -16,6 +16,7 @@ class GZELoginViewModel {
         case error1
     }
 
+    var userRepository = GZEUserApiRepository()
     var user: GZEUser?
 
     var i = 0
@@ -24,14 +25,17 @@ class GZELoginViewModel {
     let errorMessage: MutableProperty<String?> = MutableProperty("")
 
     lazy var postAction = Action<Void, GZEUser, GZERepositoryError>(enabledIf: MutableProperty(true)) {
-        return GZEUserApiRepository().login(self.username.value!, self.password.value!)
+        return self.userRepository.login(self.username.value!, self.password.value!)
     }
 
     init() {
         postAction.errors.observeValues { err in
-            log.debug(err)
-            self.i = self.i + 1
-            self.errorMessage.value = "oh \((self.i))"
+            log.error(err)
+            self.errorMessage.value = err.localizedDescription
         }
+        postAction.values.observeValues({ user in
+            log.debug("User logged succesfully: " + user.description)
+            self.user = user
+        })
     }
 }

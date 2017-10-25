@@ -10,4 +10,5 @@ import Foundation
 
 enum GZERepositoryError: Error {
     case ModelNotFound
+    case InvalidResponseFormat
 }

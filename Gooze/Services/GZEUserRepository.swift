@@ -29,7 +29,7 @@ class GZEUserRepository: LBPersistedModelRepository {
         failure: @escaping SLFailureBlock) {
 
         log.debug("login called " + email + " " + password)
-        self.invokeStaticMethod("login", parameters: nil, bodyParameters: ["email": email, "password": password], success: { (value) in
+        self.invokeStaticMethod("login", parameters: ["include": "user"], bodyParameters: ["email": email, "password": password], success: { (value) in
             let adapter = self.adapter as! LBRESTAdapter;
             if self.accessTokenRepository == nil {
                 self.accessTokenRepository = (adapter.repository(with: LBAccessTokenRepository.self) as! LBAccessTokenRepository)

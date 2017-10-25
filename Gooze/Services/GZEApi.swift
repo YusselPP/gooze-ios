@@ -19,12 +19,13 @@ class GZEApi {
         adapter = LBRESTAdapter(url: URL(string: apiUrl)!)
     }
 
-//    func setToken(_ accessToken: String) {
-//        adapter.accessToken = accessToken
-//        saveToken(accessToken)
-//    }
-//
-//    func saveToken(_ accessToken: String) {
-//        UserDefaults.standard.set(accessToken, forKey: tokenKey)
-//    }
+    func setToken(_ accessToken: String) {
+        log.debug("Token set: " + accessToken)
+        adapter.accessToken = accessToken
+        saveToken(accessToken)
+    }
+
+    func saveToken(_ accessToken: String) {
+        UserDefaults.standard.set(accessToken, forKey: tokenKey)
+    }
 }

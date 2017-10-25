@@ -12,6 +12,11 @@ import LoopBack
 
 class GZEUser: LBModel {
 
+    static var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return dateFormatter
+    }
     enum Gender: String {
         case male = "male"
         case female = "female"
@@ -61,10 +66,21 @@ class GZEUser: LBModel {
     var createdAt: Date?
     var updatedAt: Date?
 
+
+
     // MARK: - Gloss Deserialization
     init?(json: JSON) {
+
         super.init()
-        self.email = "email" <~~ json
+        self.id = "id" <~~ json
         self.username = "username" <~~ json
+        self.email = "email" <~~ json
+
+        self.createdAt = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEUser.dateFormatter)(json)
+        self.updatedAt = Decoder.decode(dateForKey: "updatedAt", dateFormatter: GZEUser.dateFormatter)(json)
+    }
+
+    override init!(repository: SLRepository!, parameters: [AnyHashable : Any]!) {
+        super.init()
     }
 }

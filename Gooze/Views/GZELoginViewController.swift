@@ -28,8 +28,8 @@ class GZELoginViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        loginViewModel.username <~ usernameTextField.reactive.textValues
-        loginViewModel.password <~ passwordTextField.reactive.textValues
+        loginViewModel.username <~ usernameTextField.reactive.continuousTextValues
+        loginViewModel.password <~ passwordTextField.reactive.continuousTextValues
         infoLabel.reactive.text <~ loginViewModel.errorMessage
         loginButton.reactive.pressed = CocoaAction(loginViewModel.postAction)
     }
