@@ -24,7 +24,7 @@ class GZELoginViewModel {
     let password: MutableProperty<String?> = MutableProperty("")
     let errorMessage: MutableProperty<String?> = MutableProperty("")
 
-    lazy var postAction = Action<Void, GZEUser, GZERepositoryError>(enabledIf: MutableProperty(true)) {
+    lazy var postAction: Action<Void, GZEUser, GZERepositoryError> = Action<Void, GZEUser, GZERepositoryError>(enabledIf: MutableProperty(true)) {
         return self.userRepository.login(self.username.value!, self.password.value!)
     }
 
