@@ -11,5 +11,5 @@ import ReactiveSwift
 
 protocol GZEUserRepositoryProtocol {
 
-    func login(_ username: String, _ password: String) -> SignalProducer<GZEUser, GZERepositoryError>
+    func login(_ username: String?, _ password: String?) -> SignalProducer<GZEUser, GZERepositoryError>
 }

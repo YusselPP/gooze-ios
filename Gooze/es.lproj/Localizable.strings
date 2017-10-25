@@ -5,3 +5,7 @@
   Created by Yussel on 10/21/17.
   Copyright © 2017 Gooze. All rights reserved.
 */
+// Protocols/GZEUserApiRepositoryError
+"Unknown error"="Error desconcido";
+// Services/GZEUserApiRepository
+"Username and password are required"="Ingresa tu usuario y contraseña";

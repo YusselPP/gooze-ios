@@ -144,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setUpInitialController() {
         let loginController = window?.rootViewController as? GZELoginViewController
         // Set up initial view model
-        loginController?.loginViewModel = GZELoginViewModel()
+        loginController?.viewModel = GZELoginViewModel(GZEUserApiRepository())
     }
 }
 

@@ -7,12 +7,17 @@
 //
 
 import Foundation
+import Localize_Swift
 import ReactiveSwift
 import Result
 import Gloss
 import LoopBack
 
 class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtocol {
+
+    enum ErrorMessage: String {
+        case UserPassword = "Username and password are required"
+    }
 
     let modelName: String = "GoozeUsers"
     let api: GZEApi
@@ -25,12 +30,18 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
     }
 
 
-    func login(_ username: String, _ password: String) -> SignalProducer<GZEUser, GZERepositoryError> {
+    func login(_ username: String?, _ password: String?) -> SignalProducer<GZEUser, GZERepositoryError> {
 
 
         return SignalProducer<GZEUser, GZERepositoryError> { sink, disposable in
 
-            self.userRepository.login(email: username, password: password, success: { response in
+            guard username != nil && !username!.isEmpty && password != nil && !password!.isEmpty else {
+                sink.send(error: GZERepositoryError.BadRequest(message: ErrorMessage.UserPassword.rawValue))
+                sink.sendCompleted()
+                return
+            }
+
+            self.userRepository.login(email: username!, password: password!, success: { response in
 
                 log.debug("login response: " + response.debugDescription)
 
@@ -41,6 +52,8 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
 
                     self.api.setToken(tokenId)
                     sink.send(value: user)
+
+                    log.debug("User logged in succesfully: " + user.description)
                 } else {
                     sink.send(error: GZERepositoryError.InvalidResponseFormat)
                 }
@@ -49,7 +62,8 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
 
             }, failure: { error in
 
-                log.error("login failed: " + error.debugDescription)
+                log.debug("login failed: " + error.debugDescription)
+                log.debug(GZERepositoryError.ModelNotFound.localizedDescription)
 
                 sink.send(error: GZERepositoryError.ModelNotFound)
                 sink.sendCompleted()
