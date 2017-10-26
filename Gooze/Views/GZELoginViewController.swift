@@ -17,7 +17,8 @@ class GZELoginViewController: UIViewController {
 
     var viewModel: GZELoginViewModel!
 
-    
+    var loginSuccesObserver: Disposable?
+    var loginErrorObserver: Disposable?
 
     @IBOutlet weak var feedbackLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
@@ -27,6 +28,8 @@ class GZELoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        log.debug("GZELoginViewController loaded")
         // Do any additional setup after loading the view.
 
         // Button titles
@@ -42,13 +45,9 @@ class GZELoginViewController: UIViewController {
             SwiftOverlays.showBlockingWaitOverlay()
         }
 
-        viewModel.loginAction.values.observeValues({ _ in
+        loginSuccesObserver = viewModel.loginAction.values.observeValues(onLogin)
 
-            SwiftOverlays.removeAllBlockingOverlays()
-            self.performSegue(withIdentifier: self.viewModel.loginSegueId, sender: nil)
-        })
-
-        viewModel.loginAction.errors.observeValues { err in
+        loginErrorObserver = viewModel.loginAction.errors.observeValues { err in
 
             SwiftOverlays.removeAllBlockingOverlays()
             self.displayMessage(self.viewModel.viewTitle, err.localizedDescription)
@@ -60,28 +59,28 @@ class GZELoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    func onLogin(user: GZEUser) -> Void {
 
-    // MARK: - Navigation
+        SwiftOverlays.removeAllBlockingOverlays()
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        if segue.identifier == viewModel.loginSegueId,
-            let navController = segue.destination as? UINavigationController,
-            let searchGoozeController = navController.viewControllers.first as? GZESearchGoozeViewController {
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if
+            let navController = mainStoryboard.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
+            let viewController = navController.viewControllers.first as? GZESearchGoozeViewController {
 
-            searchGoozeController.viewModel = viewModel.getSearchGoozeViewModel()
+            loginSuccesObserver?.dispose()
+            loginErrorObserver?.dispose()
+            viewController.viewModel = GZESearchGoozeViewModel()
+
+            setRootController(controller: navController)
+        } else {
+            log.error("Unable to instantiate SearchGoozeNavController")
+            displayMessage("Unexpected error", "Please contact support")
         }
     }
 
-    @IBAction func unwindToLogin(segue: UIStoryboardSegue) {
-        log.debug("unwindToLogin")
-    }
-
-    func displayMessage(_ title: String, _ message: String) -> Void {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: viewModel.displayOkTitle, style: UIAlertActionStyle.default, handler: nil))
-        present(alert, animated: true)
+    deinit {
+        log.debug("GZELoginViewController disposed")
     }
 }

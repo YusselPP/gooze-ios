@@ -11,11 +11,20 @@ import Gloss
 import LoopBack
 
 class GZEApi {
+
+    static private var _instance: GZEApi?
+    static var instance: GZEApi {
+        if _instance == nil {
+            _instance = GZEApi()
+        }
+        return _instance!
+    }
+
     let tokenKey = "LBRESTAdapterAccessToken"
     let apiUrl = "http://localhost:3000/api"
     let adapter: LBRESTAdapter
 
-    init() {
+    private init() {
         adapter = LBRESTAdapter(url: URL(string: apiUrl)!)
     }
 

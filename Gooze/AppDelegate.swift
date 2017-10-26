@@ -136,15 +136,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 destination.minLevel = .error
             }
             destination.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
+
+            // FILTERS
+            destination.minLevel = .error
+            let filter1 = Filters.Path.contains("ViewController", minLevel: .debug)
+            destination.addFilter(filter1)
         }
 
         log.debug("Log level: " + GZEAppConfig.logLevel)
     }
 
     func setUpInitialController() {
-        let loginController = window?.rootViewController as? GZELoginViewController
-        // Set up initial view model
-        loginController?.viewModel = GZELoginViewModel(GZEUserApiRepository())
+        if
+            let navController = window?.rootViewController as? UINavigationController,
+            let loginController = navController.viewControllers.first as? GZELoginViewController {
+
+            // Set up initial view model
+            loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
+        }
     }
 }
 

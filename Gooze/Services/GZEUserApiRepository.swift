@@ -24,7 +24,7 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
     let userRepository: GZEUserRepository
 
     override init() {
-        self.api = GZEApi()
+        self.api = GZEApi.instance
         self.userRepository = api.adapter.repository(with: GZEUserRepository.self) as! GZEUserRepository
         super.init()
     }

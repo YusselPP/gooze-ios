@@ -13,7 +13,6 @@ import ReactiveCocoa
 
 class GZELoginViewModel {
 
-    let loginSegueId = "loginSegue"
     let viewTitle = "Login".localized()
     let loginButtonTitle = "Login".localized()
     let signUpButtonTitle = "Sign up".localized()

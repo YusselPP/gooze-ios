@@ -16,6 +16,7 @@ class GZESearchGoozeViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        log.debug("GZESearchGoozeViewController loaded")
     }
 
     override func didReceiveMemoryWarning() {
@@ -24,7 +25,20 @@ class GZESearchGoozeViewController: UIViewController {
     }
     
     @IBAction func logoutButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "unwindToLogin", sender: self)
+
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if
+            let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
+            let loginController = navController.viewControllers.first as? GZELoginViewController {
+
+            // Set up initial view model
+            loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
+            setRootController(controller: navController)
+        } else {
+            log.error("Unable to instantiate InitialViewController")
+            displayMessage("Unexpected error", "Please contact support")
+        }
     }
 
     /*
@@ -37,4 +51,11 @@ class GZESearchGoozeViewController: UIViewController {
     }
     */
 
+    @IBAction func unwindToSearchGooze(segue: UIStoryboardSegue) {
+        log.debug("unwindToSearchGooze")
+    }
+
+    deinit {
+        log.debug("GZESearchGoozeViewController disposed")
+    }
 }
