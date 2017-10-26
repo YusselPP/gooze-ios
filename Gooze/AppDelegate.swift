@@ -101,6 +101,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GZEAppConfig.load()
         setUpLogs()
         setUpInitialController()
+
+        // TODO: Move to a service
+        // Override point for customization after application launch.
+        UINavigationBar.appearance().barTintColor = UIColor(red: 44/255, green: 198/255, blue: 159/255, alpha: 1)
+        UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().isTranslucent = false
+
+        UITextField.appearance().backgroundColor = .black
+        UITextField.appearance().textColor = .white
+        UITextField.appearance().tintColor = UIColor(red: 44/255, green: 198/255, blue: 159/255, alpha: 1)
     }
     
     func setUpLogs() {

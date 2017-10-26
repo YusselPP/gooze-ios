@@ -54,6 +54,23 @@ class GZELoginViewController: UIViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Hide navigation bar
+        if let navBarController = self.navigationController {
+            navBarController.setNavigationBarHidden(true, animated: false)
+        }
+
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        // Show navigation bar
+        if let navBarController = self.navigationController {
+            navBarController.setNavigationBarHidden(false, animated: true)
+        }
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
