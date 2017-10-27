@@ -49,10 +49,11 @@ class GZELoginViewController: UIViewController {
 
         loginSuccesObserver = viewModel.loginAction.values.observeValues(onLogin)
 
-        loginErrorObserver = viewModel.loginAction.errors.observeValues { err in
+        loginErrorObserver = viewModel.loginAction.errors.observeValues {[weak self] err in
 
             SwiftOverlays.removeAllBlockingOverlays()
-            self.displayMessage(self.viewModel.viewTitle, err.localizedDescription)
+            guard let strongSelf = self else { return }
+            strongSelf.displayMessage(strongSelf.viewModel.viewTitle, err.localizedDescription)
         }
     }
 

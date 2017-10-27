@@ -53,8 +53,9 @@ class GZELoginViewModel {
 
     private func createLoginAction() -> Action<Void, GZEUser, GZERepositoryError> {
         log.debug("Creating login action")
-        return Action<Void, GZEUser, GZERepositoryError>{
-            return self.userRepository.login(self.username.value, self.password.value)
+        return Action<Void, GZEUser, GZERepositoryError>{[weak self] in
+            guard let strongSelf = self else { return SignalProducer.empty }
+            return strongSelf.userRepository.login(strongSelf.username.value, strongSelf.password.value)
         }
     }
 

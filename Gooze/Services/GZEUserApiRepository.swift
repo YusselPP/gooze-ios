@@ -34,7 +34,12 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEUser, GZERepositoryError> {
 
 
-        return SignalProducer<GZEUser, GZERepositoryError> { sink, disposable in
+        return SignalProducer<GZEUser, GZERepositoryError> {[weak self] sink, disposable in
+
+            guard let strongSelf = self else { return }
+            disposable.add {
+                log.debug("login SignalProducer disposed")
+            }
 
             guard username != nil && !username!.isEmpty && password != nil && !password!.isEmpty else {
                 sink.send(error: GZERepositoryError.BadRequest(message: ErrorMessage.UserPassword.rawValue))
@@ -42,7 +47,7 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
                 return
             }
 
-            self.userRepository.login(email: username!, password: password!, success: { response in
+            strongSelf.userRepository.login(email: username!, password: password!, success: { response in
 
                 log.debug("login response: " + response.debugDescription)
 
@@ -51,7 +56,7 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
                     let json = response?.toDictionary()["user"] as? JSON,
                     let user = GZEUser(json: json) {
 
-                    self.api.setToken(tokenId)
+                    strongSelf.api.setToken(tokenId)
                     sink.send(value: user)
 
                     log.debug("User logged in succesfully: " + user.description)
@@ -76,9 +81,14 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
 
     func find(byId id: String) -> SignalProducer<GZEUser, GZERepositoryError> {
 
-        return SignalProducer<GZEUser, GZERepositoryError> { sink, disposable in
+        return SignalProducer<GZEUser, GZERepositoryError> { [weak self] sink, disposable in
 
-            self.userRepository.find(byId: id, success: { response in
+            guard let strongSelf = self else { return }
+            disposable.add {
+                log.debug("find SignalProducer disposed")
+            }
+            
+            strongSelf.userRepository.find(byId: id, success: { response in
 
                 log.debug("find response: " + response.debugDescription)
 
