@@ -35,6 +35,7 @@
 		8DF720CD1F9BA4F400485566 /* Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720CC1F9BA4F400485566 /* Release.plist */; };
 		8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720D21F9BA5B000485566 /* Localizable.strings */; };
 		8DF720D61F9BA8F900485566 /* GZELoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */; };
+		F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */; };
 		F0DDECDE1FA1079100450B2D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0DDECE01FA1079100450B2D /* Localizable.strings */; };
 		F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DDECE11FA1290C00450B2D /* GZESearchGoozeViewController.swift */; };
 		F0DDECE41FA1295600450B2D /* GZESearchGoozeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DDECE31FA1295600450B2D /* GZESearchGoozeViewModel.swift */; };
@@ -107,6 +108,7 @@
 		9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoozeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoozeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F06601825C56AA9D2A670CC1 /* Pods-Gooze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gooze.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Gooze/Pods-Gooze.debug.xcconfig"; sourceTree = "<group>"; };
+		F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZEUserRouter.swift; sourceTree = "<group>"; };
 		F0DDECDF1FA1079100450B2D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F0DDECE11FA1290C00450B2D /* GZESearchGoozeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZESearchGoozeViewController.swift; sourceTree = "<group>"; };
 		F0DDECE31FA1295600450B2D /* GZESearchGoozeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZESearchGoozeViewModel.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 		8DF720901F9B9B6700485566 /* Gooze */ = {
 			isa = PBXGroup;
 			children = (
+				F0B8368D1FA3EC43007068F9 /* GoozeApi */,
 				8DA28BEA1FA1895400EE1362 /* Extensions */,
 				8D572DBE1F9D471B00B824FA /* Protocols */,
 				8DF720C71F9BA44A00485566 /* Services */,
@@ -300,6 +303,14 @@
 				9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F0B8368D1FA3EC43007068F9 /* GoozeApi */ = {
+			isa = PBXGroup;
+			children = (
+				F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */,
+			);
+			name = GoozeApi;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -631,6 +642,7 @@
 				F0E067F61FA274B500AE59BE /* GZESignUpPhotoViewController.swift in Sources */,
 				8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */,
 				8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */,
+				F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */,
 				8D2447331F9EA26E004330AF /* GZEUserRepository.swift in Sources */,
 				F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */,
 				F0DDECE41FA1295600450B2D /* GZESearchGoozeViewModel.swift in Sources */,

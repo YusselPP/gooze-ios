@@ -12,7 +12,8 @@ import LoopBack
 import Alamofire
 import ReactiveSwift
 
-class GZEUser: LBPersistedModel, Glossy {
+
+class GZEUser: Glossy {
 
     static var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -110,13 +111,7 @@ class GZEUser: LBPersistedModel, Glossy {
     var createdAt: Date?
     var updatedAt: Date?
 
-    override init() {
-        super.init()
-        log.debug("\(self) init")
-    }
-
-    init(repository: GZEUserRepositoryProtocol, parameters: [AnyHashable : Any]!) {
-        super.init(repository: repository as! GZEUserApiRepository, parameters: parameters)
+    init() {
         log.debug("\(self) init")
     }
 
@@ -134,7 +129,7 @@ class GZEUser: LBPersistedModel, Glossy {
             let dic: [String: Any] = ["username": strongSelf.username!, "email": strongSelf.email!, "password": strongSelf.password!]
             let params = dic
 
-            Alamofire.request(Router.createUser(parameters: params)).responseJSON { response in
+            Alamofire.request(GZEUserRouter.createUser(parameters: params)).responseJSON { response in
 
                 log.debug("Request: \(String(describing: response.request))")   // original url request
                 log.debug("Request headers: \(String(describing: response.request?.allHTTPHeaderFields))")   // original url request
@@ -180,7 +175,6 @@ class GZEUser: LBPersistedModel, Glossy {
     // MARK: - Gloss Deserialization
 
     required init?(json: JSON) {
-        super.init()
 
         self.id = "id" <~~ json
 

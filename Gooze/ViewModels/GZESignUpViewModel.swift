@@ -42,7 +42,7 @@ class GZESignUpViewModel {
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
-        self.user = GZEUser(repository: userRepository, parameters: nil)
+        self.user = GZEUser()
         log.debug("\(self) init")
     }
 
