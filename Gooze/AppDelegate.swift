@@ -149,9 +149,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             destination.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
 
             // FILTERS
-            destination.minLevel = .error
-            let filter1 = Filters.Path.contains("View", minLevel: .debug)
-            destination.addFilter(filter1)
+            //destination.minLevel = .error
+            //let filter1 = Filters.Path.contains("View", minLevel: .debug)
+            //destination.addFilter(filter1)
         }
 
         log.debug("Log level: " + GZEAppConfig.logLevel)

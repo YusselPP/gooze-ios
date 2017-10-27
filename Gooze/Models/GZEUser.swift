@@ -9,8 +9,9 @@
 import Foundation
 import Gloss
 import LoopBack
+import ReactiveSwift
 
-class GZEUser: LBModel {
+class GZEUser: LBPersistedModel {
 
     static var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -52,9 +53,9 @@ class GZEUser: LBModel {
     var origin: String?
     var phrase: String?
 
-    var languages: [String]?
-    var interestedIn: [String]?
-    var photos: [String]?
+    var languages: [String] = []
+    var interestedIn: [String] = []
+    var photos: [String] = []
 
     var currentLocation: GeoPoint?
     var registerCode: String?
@@ -84,9 +85,35 @@ class GZEUser: LBModel {
         self.updatedAt = Decoder.decode(dateForKey: "updatedAt", dateFormatter: GZEUser.dateFormatter)(json)
     }
 
-    override init!(repository: SLRepository!, parameters: [AnyHashable : Any]!) {
-        super.init()
+    init(repository: GZEUserRepositoryProtocol, parameters: [AnyHashable : Any]!) {
+        super.init(repository: repository as! GZEUserApiRepository, parameters: parameters)
         log.debug("\(self) init")
+    }
+
+    func save() -> SignalProducer<Bool, GZERepositoryError> {
+
+        return SignalProducer<Bool, GZERepositoryError> { [weak self] sink, disposable in
+
+            guard let strongSelf = self else { return }
+            disposable.add {
+                log.debug("save SignalProducer disposed")
+            }
+
+            log.debug("trying to save user")
+            strongSelf.save(success: {
+
+                log.debug("user saved!")
+                sink.send(value: true)
+                sink.sendCompleted()
+
+            }, failure: { error in
+
+                log.error("find failed: " + error.debugDescription)
+
+                sink.send(error: GZERepositoryError.ModelNotFound)
+                sink.sendCompleted()
+            })
+        }
     }
 
     // MARK: Deinitializers

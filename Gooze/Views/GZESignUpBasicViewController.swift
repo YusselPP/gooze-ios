@@ -27,7 +27,7 @@ class GZESignUpBasicViewController: UIViewController {
         // Do any additional setup after loading the view.
         viewModel.username <~ usernameTextField.reactive.continuousTextValues
         viewModel.email <~ emailTextField.reactive.continuousTextValues
-        let x = viewModel.password <~ passwordTextField.reactive.continuousTextValues
+        viewModel.password <~ passwordTextField.reactive.continuousTextValues
     }
 
     override func didReceiveMemoryWarning() {

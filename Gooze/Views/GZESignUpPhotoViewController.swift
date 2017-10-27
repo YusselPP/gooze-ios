@@ -19,6 +19,8 @@ class GZESignUpPhotoViewController: UIViewController {
         let opacity = MutableProperty<Float>(1)
     }
 
+    var viewModel: GZESignUpViewModel!
+
     let blur = Blur()
 
     @IBOutlet weak var photoImageView: UIImageView!
@@ -27,6 +29,7 @@ class GZESignUpPhotoViewController: UIViewController {
     @IBOutlet weak var blurEffectView: UIVisualEffectView!
     @IBOutlet weak var widthSlider: UISlider!
     @IBOutlet weak var heightSlider: UISlider!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,16 +42,10 @@ class GZESignUpPhotoViewController: UIViewController {
         blurEffectView.layer.masksToBounds = true
         blurEffectView.alpha = CGFloat(alphaSlider.value)
 
-
-
-        // blur.opacity <~ alphaSlider.reactive.values
-        // blur.width <~ widthSlider.reactive.values
-        // blur.height <~ heightSlider.reactive.values
-
-        // blurEffectView.reactive.alpha <~ alphaSlider.reactive.values
-
         let panGesture = UIPanGestureRecognizer(target: self, action:(#selector(GZESignUpPhotoViewController.blurPan(_:))))
         blurEffectView.addGestureRecognizer(panGesture)
+
+        saveButton.reactive.pressed = CocoaAction(viewModel.saveAction)
     }
 
     override func viewDidAppear(_ animated: Bool) {
