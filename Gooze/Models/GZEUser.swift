@@ -9,6 +9,7 @@
 // import Foundation
 import Gloss
 import LoopBack
+import Alamofire
 import ReactiveSwift
 
 class GZEUser: LBPersistedModel, Glossy {
@@ -119,9 +120,9 @@ class GZEUser: LBPersistedModel, Glossy {
         log.debug("\(self) init")
     }
 
-    func save() -> SignalProducer<Bool, GZERepositoryError> {
+    func save() -> SignalProducer<String, GZERepositoryError> {
 
-        return SignalProducer<Bool, GZERepositoryError> { [weak self] sink, disposable in
+        return SignalProducer<String, GZERepositoryError> { [weak self] sink, disposable in
 
             guard let strongSelf = self else { return }
             disposable.add {
@@ -129,19 +130,50 @@ class GZEUser: LBPersistedModel, Glossy {
             }
 
             log.debug("trying to save user")
-            strongSelf.save(success: {
 
-                log.debug("user saved!")
-                sink.send(value: true)
-                sink.sendCompleted()
+            let dic: [String: Any] = ["username": strongSelf.username!, "email": strongSelf.email!, "password": strongSelf.password!]
+            let params = dic
 
-            }, failure: { error in
+            Alamofire.request(Router.createUser(parameters: params)).responseJSON { response in
 
-                log.error("find failed: " + error.debugDescription)
+                log.debug("Request: \(String(describing: response.request))")   // original url request
+                log.debug("Request headers: \(String(describing: response.request?.allHTTPHeaderFields))")   // original url request
+                log.debug("Response: \(String(describing: response.response))") // http url response
+                log.debug("Result: \(response.result)")
+                log.debug("Error: \(response.error)")
 
-                sink.send(error: GZERepositoryError.ModelNotFound)
-                sink.sendCompleted()
-            })
+                // response serialization result
+                if let json = response.result.value {
+                    log.debug("JSON: \(json)") // serialized json response
+
+                    if let dictionary = json as? [String: Any],
+                        let err = dictionary["error"] as? [String: Any],
+                        let errMessage = err["message"] as? String {
+
+                        sink.send(value: errMessage)
+                    } else {
+                        sink.send(value: "User saved!")
+                    }
+                    sink.sendCompleted()
+                } else {
+                    sink.send(error: GZERepositoryError.ModelNotFound)
+                    sink.sendCompleted()
+                }
+            }
+
+//            strongSelf.save(success: {
+//
+//                log.debug("user saved!")
+//                sink.send(value: true)
+//                sink.sendCompleted()
+//
+//            }, failure: { error in
+//
+//                log.error("find failed: " + error.debugDescription)
+//
+//                sink.send(error: GZERepositoryError.ModelNotFound)
+//                sink.sendCompleted()
+//            })
         }
     }
 

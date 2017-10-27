@@ -21,6 +21,9 @@ class GZESignUpPhotoViewController: UIViewController {
 
     var viewModel: GZESignUpViewModel!
 
+    var signUpErrorsObserver: Disposable?
+    var signUpValuesObserver: Disposable?
+
     let blur = Blur()
 
     @IBOutlet weak var photoImageView: UIImageView!
@@ -48,12 +51,31 @@ class GZESignUpPhotoViewController: UIViewController {
         saveButton.reactive.pressed = CocoaAction(viewModel.saveAction)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        signUpValuesObserver = viewModel.saveAction.values.observeValues { [unowned self] res in
+            self.displayMessage("Gooze", res)
+        }
+
+        signUpErrorsObserver = viewModel.saveAction.errors.observeValues { [unowned self] (err: Error) in
+            self.displayMessage("Error", err.localizedDescription)
+        }
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         widthSlider.maximumValue = Float(photoImageView.bounds.width)
         heightSlider.maximumValue = Float(photoImageView.bounds.height)
         setViewSize(blurEffectView, CGFloat(50), CGFloat(50))
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        signUpValuesObserver?.dispose()
+        signUpErrorsObserver?.dispose()
     }
 
     @IBAction func blurHeightSliderChanged(_ sender: UISlider) {

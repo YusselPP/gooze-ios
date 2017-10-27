@@ -70,6 +70,13 @@ class GZEAppConfig {
         }
     }
 
+    static var goozeApiUrl: String {
+        get {
+            return getValue("GoozeApiUrl", defaultValue: "http://localhost:3000/api")
+        }
+    }
+
+
 
     // Mark: Load config file
     static func load() -> Void {

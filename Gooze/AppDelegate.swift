@@ -109,9 +109,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         UINavigationBar.appearance().isTranslucent = false
 
-        UITextField.appearance().backgroundColor = .black
-        UITextField.appearance().textColor = .white
-        UITextField.appearance().tintColor = UIColor(red: 44/255, green: 198/255, blue: 159/255, alpha: 1)
+        // UITextField.appearance().backgroundColor = .black
+        // UITextField.appearance().textColor = .white
+        // UITextField.appearance().tintColor = UIColor(red: 44/255, green: 198/255, blue: 159/255, alpha: 1)
     }
     
     func setUpLogs() {

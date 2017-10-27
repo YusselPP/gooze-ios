@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DG4-Ue-xVF">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DG4-Ue-xVF">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -100,7 +100,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Usuario" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6eX-MY-EaI">
+                            <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Usuario" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6eX-MY-EaI">
                                 <rect key="frame" x="70" y="214" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="fhJ-9l-Hel"/>
@@ -110,7 +110,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Correo electrónico" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H7a-eX-2Up">
+                            <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Correo electrónico" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H7a-eX-2Up">
                                 <rect key="frame" x="70.5" y="269" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="T6Z-u1-MJw"/>
@@ -120,7 +120,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Contraseña" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="grg-n3-sB7">
+                            <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Contraseña" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="grg-n3-sB7">
                                 <rect key="frame" x="70.5" y="324" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="AjG-lG-eam"/>
@@ -135,9 +135,9 @@
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="grg-n3-sB7" firstAttribute="top" secondItem="H7a-eX-2Up" secondAttribute="bottom" constant="25" id="0O7-95-hwr"/>
+                            <constraint firstItem="6eX-MY-EaI" firstAttribute="top" secondItem="uNt-lM-Chj" secondAttribute="bottom" constant="50" id="6FS-k3-RhO"/>
                             <constraint firstItem="6eX-MY-EaI" firstAttribute="centerX" secondItem="8t7-vt-l8m" secondAttribute="centerX" id="CvA-xx-28i"/>
                             <constraint firstItem="grg-n3-sB7" firstAttribute="centerX" secondItem="8t7-vt-l8m" secondAttribute="centerX" id="E7J-oS-Nhj"/>
-                            <constraint firstItem="H7a-eX-2Up" firstAttribute="centerY" secondItem="8t7-vt-l8m" secondAttribute="centerY" id="c0m-Ho-n3L"/>
                             <constraint firstItem="H7a-eX-2Up" firstAttribute="centerX" secondItem="8t7-vt-l8m" secondAttribute="centerX" id="sd1-Pb-7Zt"/>
                             <constraint firstItem="H7a-eX-2Up" firstAttribute="top" secondItem="6eX-MY-EaI" secondAttribute="bottom" constant="25" id="v3Y-cY-klg"/>
                         </constraints>
@@ -171,20 +171,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="MOu-2B-z8z">
-                                <rect key="frame" x="70" y="89" width="180" height="30"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="180" id="1mV-jn-SnS"/>
-                                    <constraint firstAttribute="height" constant="30" id="2av-Lg-LFg"/>
-                                </constraints>
-                                <date key="date" timeIntervalSinceReferenceDate="530691071.68498802">
-                                    <!--2017-10-26 06:11:11 +0000-->
-                                </date>
-                            </datePicker>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Interasado en" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sjZ-nD-feW">
-                                <rect key="frame" x="70" y="474" width="180" height="30"/>
+                                <rect key="frame" x="70" y="504" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="c9M-Iu-fDD"/>
                                     <constraint firstAttribute="width" constant="180" id="yNc-LJ-Vv2"/>
@@ -194,7 +182,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Género" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IzF-2J-7wJ">
-                                <rect key="frame" x="70" y="144" width="180" height="30"/>
+                                <rect key="frame" x="70" y="174" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="0Ij-Es-Zra"/>
                                     <constraint firstAttribute="height" constant="30" id="eXz-R5-IZm"/>
@@ -204,7 +192,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Peso" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aup-w3-dhk">
-                                <rect key="frame" x="70" y="199" width="180" height="30"/>
+                                <rect key="frame" x="70" y="229" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="CPj-tU-P2Z"/>
                                     <constraint firstAttribute="height" constant="30" id="gmz-5K-8rk"/>
@@ -214,7 +202,7 @@
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Estatura" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qFq-V0-P2L">
-                                <rect key="frame" x="70" y="254" width="180" height="30"/>
+                                <rect key="frame" x="70" y="284" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="03o-1V-yRz"/>
                                     <constraint firstAttribute="height" constant="30" id="gJ6-5g-Xud"/>
@@ -224,7 +212,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Lugar de origen" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="a0p-LU-Ioz">
-                                <rect key="frame" x="70" y="309" width="180" height="30"/>
+                                <rect key="frame" x="70" y="339" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="57o-4l-EMA"/>
                                     <constraint firstAttribute="width" constant="180" id="rkU-Lx-xZR"/>
@@ -234,7 +222,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Frase" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NbQ-Eg-dPE">
-                                <rect key="frame" x="70" y="364" width="180" height="30"/>
+                                <rect key="frame" x="70" y="394" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="UjZ-8b-ugg"/>
                                     <constraint firstAttribute="width" constant="180" id="qwq-4Y-VHI"/>
@@ -244,7 +232,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="lenguas" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZHg-0t-tuz">
-                                <rect key="frame" x="70" y="419" width="180" height="30"/>
+                                <rect key="frame" x="70" y="449" width="180" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="Icc-bD-qzv"/>
                                     <constraint firstAttribute="height" constant="30" id="yMm-xx-qoW"/>
@@ -253,6 +241,18 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <datePicker contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="MOu-2B-z8z">
+                                <rect key="frame" x="70" y="94" width="180" height="30"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="220" id="1mV-jn-SnS"/>
+                                    <constraint firstAttribute="height" constant="60" id="2av-Lg-LFg"/>
+                                </constraints>
+                                <date key="date" timeIntervalSinceReferenceDate="530691071.68498802">
+                                    <!--2017-10-26 06:11:11 +0000-->
+                                </date>
+                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" red="0.094117647058823528" green="0.098039215686274508" blue="0.10980392156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -315,7 +315,7 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cat" translatesAutoresizingMaskIntoConstraints="NO" id="4hT-lE-ril">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                                     </imageView>
-                                    <visualEffectView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VIu-Wa-AWy">
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VIu-Wa-AWy">
                                         <rect key="frame" x="135" y="127" width="50" height="50"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="76C-aU-hD0">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -477,6 +477,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="VIG-vL-FDD">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
