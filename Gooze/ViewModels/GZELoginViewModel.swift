@@ -39,6 +39,7 @@ class GZELoginViewModel {
     // Mark: Initializers
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
+        log.debug("\(self) init")
     }
 
 
@@ -46,12 +47,20 @@ class GZELoginViewModel {
         return GZESearchGoozeViewModel()
     }
 
+    func getSignUpViewModel() -> GZESignUpViewModel {
+        return GZESignUpViewModel(userRepository)
+    }
 
     private func createLoginAction() -> Action<Void, GZEUser, GZERepositoryError> {
         log.debug("Creating login action")
         return Action<Void, GZEUser, GZERepositoryError>{
             return self.userRepository.login(self.username.value, self.password.value)
         }
+    }
+
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 
 }

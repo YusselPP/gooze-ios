@@ -26,6 +26,7 @@ class GZEApi {
 
     private init() {
         adapter = LBRESTAdapter(url: URL(string: apiUrl)!)
+        log.debug("\(self) init")
     }
 
     func setToken(_ accessToken: String) {
@@ -36,5 +37,10 @@ class GZEApi {
 
     func saveToken(_ accessToken: String) {
         UserDefaults.standard.set(accessToken, forKey: tokenKey)
+    }
+
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

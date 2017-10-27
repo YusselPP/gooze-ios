@@ -12,7 +12,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        log.debug("ViewController loaded")
+
+        log.debug("\(self) init")
         // Do any additional setup after loading the view.
     }
 
@@ -31,8 +32,10 @@ class ViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+
+    // MARK: Deinitializers
     deinit {
-        log.debug("ViewController disposed")
+        log.debug("\(self) disposed")
     }
 
 }

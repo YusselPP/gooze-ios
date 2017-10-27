@@ -10,9 +10,12 @@ import UIKit
 
 class GZESignUpMoreViewController: UIViewController {
 
+    var viewModel: GZESignUpViewModel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        log.debug("\(self) init")
         // Do any additional setup after loading the view.
     }
 
@@ -32,4 +35,8 @@ class GZESignUpMoreViewController: UIViewController {
     }
     */
 
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
+    }
 }

@@ -15,8 +15,8 @@ class GZESearchGoozeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        log.debug("\(self) init")
         // Do any additional setup after loading the view.
-        log.debug("GZESearchGoozeViewController loaded")
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,7 +55,8 @@ class GZESearchGoozeViewController: UIViewController {
         log.debug("unwindToSearchGooze")
     }
 
+    // MARK: Deinitializers
     deinit {
-        log.debug("GZESearchGoozeViewController disposed")
+        log.debug("\(self) disposed")
     }
 }

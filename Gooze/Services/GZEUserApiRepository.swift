@@ -27,6 +27,7 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
         self.api = GZEApi.instance
         self.userRepository = api.adapter.repository(with: GZEUserRepository.self) as! GZEUserRepository
         super.init()
+        log.debug("\(self) init")
     }
 
 
@@ -103,5 +104,10 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
 
 
         }
+    }
+
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

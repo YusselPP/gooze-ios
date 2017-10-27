@@ -16,6 +16,7 @@ class GZEUserRepository: LBPersistedModelRepository {
 
     override init() {
         super.init(className: "GoozeUsers")
+        log.debug("\(self) init")
     }
 
     static func repository() -> GZEUserRepository {
@@ -39,5 +40,10 @@ class GZEUserRepository: LBPersistedModelRepository {
             self.currentUserId = accessToken.userId
             success(accessToken);
         }, failure: failure)
+    }
+
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

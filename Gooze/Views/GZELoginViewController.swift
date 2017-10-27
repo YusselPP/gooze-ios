@@ -20,6 +20,8 @@ class GZELoginViewController: UIViewController {
     var loginSuccesObserver: Disposable?
     var loginErrorObserver: Disposable?
 
+    let signUpSegueId = "signUpSegue"
+
     @IBOutlet weak var feedbackLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -29,7 +31,7 @@ class GZELoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        log.debug("GZELoginViewController loaded")
+        log.debug("\(self) init")
         // Do any additional setup after loading the view.
 
         // Button titles
@@ -97,7 +99,22 @@ class GZELoginViewController: UIViewController {
         }
     }
 
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if
+            segue.identifier == signUpSegueId,
+            let viewController = segue.destination as? GZESignUpBasicViewController {
+
+            viewController.viewModel = viewModel.getSignUpViewModel()
+        }
+    }
+
+    // MARK: Deinitializers
     deinit {
-        log.debug("GZELoginViewController disposed")
+        log.debug("\(self) disposed")
     }
 }

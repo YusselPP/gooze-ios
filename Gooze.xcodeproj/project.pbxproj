@@ -21,6 +21,7 @@
 		8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */; };
 		8DA28BE71FA1659B00EE1362 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA28BE61FA1659B00EE1362 /* ViewController.swift */; };
 		8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */; };
+		8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */; };
 		8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720911F9B9B6700485566 /* AppDelegate.swift */; };
 		8DF720971F9B9B6700485566 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720951F9B9B6700485566 /* Main.storyboard */; };
 		8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720981F9B9B6700485566 /* Gooze.xcdatamodeld */; };
@@ -77,6 +78,7 @@
 		8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserRepositoryProtocol.swift; sourceTree = "<group>"; };
 		8DA28BE61FA1659B00EE1362 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZESignUpViewModel.swift; sourceTree = "<group>"; };
 		8DF7208E1F9B9B6700485566 /* Gooze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gooze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DF720911F9B9B6700485566 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DF720961F9B9B6700485566 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				F0DDECE01FA1079100450B2D /* Localizable.strings */,
 				8D572DB81F9D334000B824FA /* GZELoginViewModel.swift */,
 				F0DDECE31FA1295600450B2D /* GZESearchGoozeViewModel.swift */,
+				8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -603,6 +606,7 @@
 				8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */,
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
 				8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */,
+				8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */,
 				8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */,
 				8DA28BE71FA1659B00EE1362 /* ViewController.swift in Sources */,
 				8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */,

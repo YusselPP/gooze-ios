@@ -66,12 +66,16 @@ class GZEUser: LBModel {
     var createdAt: Date?
     var updatedAt: Date?
 
-
+    override init() {
+        super.init()
+        log.debug("\(self) init")
+    }
 
     // MARK: - Gloss Deserialization
     init?(json: JSON) {
-
         super.init()
+        log.debug("\(self) init")
+
         self.id = "id" <~~ json
         self.username = "username" <~~ json
         self.email = "email" <~~ json
@@ -82,5 +86,11 @@ class GZEUser: LBModel {
 
     override init!(repository: SLRepository!, parameters: [AnyHashable : Any]!) {
         super.init()
+        log.debug("\(self) init")
+    }
+
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

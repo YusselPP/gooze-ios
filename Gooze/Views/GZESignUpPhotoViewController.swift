@@ -31,6 +31,8 @@ class GZESignUpPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        log.debug("\(self) init")
+
         imageContainerView.clipsToBounds = true
 
         blurEffectView.layer.cornerRadius = 20
@@ -98,4 +100,8 @@ class GZESignUpPhotoViewController: UIViewController {
     }
     */
 
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
+    }
 }

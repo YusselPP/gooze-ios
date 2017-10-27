@@ -9,5 +9,12 @@
 import Foundation
 
 class GZESearchGoozeViewModel {
-    
+
+    init() {
+        log.debug("\(self) init")
+    }
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
+    }
 }

@@ -150,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             // FILTERS
             destination.minLevel = .error
-            let filter1 = Filters.Path.contains("ViewController", minLevel: .debug)
+            let filter1 = Filters.Path.contains("View", minLevel: .debug)
             destination.addFilter(filter1)
         }
 
