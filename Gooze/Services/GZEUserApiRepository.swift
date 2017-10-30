@@ -116,6 +116,85 @@ class GZEUserApiRepository: LBPersistedModelRepository, GZEUserRepositoryProtoco
         }
     }
 
+    func create() -> SignalProducer<Bool, GZERepositoryError> {
+
+        return SignalProducer<Bool, GZERepositoryError> { [weak self] sink, disposable in
+
+            guard let strongSelf = self else { return }
+            disposable.add {
+                log.debug("save SignalProducer disposed")
+            }
+
+            log.debug("trying to save user")
+            strongSelf.save(success: {
+
+                log.debug("user saved!")
+                sink.send(value: true)
+                sink.sendCompleted()
+
+            }, failure: { error in
+
+                log.error("find failed: " + error.debugDescription)
+
+                sink.send(error: GZERepositoryError.ModelNotFound)
+                sink.sendCompleted()
+            })
+        }
+    }
+
+    func update() -> SignalProducer<Bool, GZERepositoryError> {
+
+        return SignalProducer<Bool, GZERepositoryError> { [weak self] sink, disposable in
+
+            guard let strongSelf = self else { return }
+            disposable.add {
+                log.debug("save SignalProducer disposed")
+            }
+
+            log.debug("trying to save user")
+            strongSelf.save(success: {
+
+                log.debug("user saved!")
+                sink.send(value: true)
+                sink.sendCompleted()
+
+            }, failure: { error in
+
+                log.error("find failed: " + error.debugDescription)
+
+                sink.send(error: GZERepositoryError.ModelNotFound)
+                sink.sendCompleted()
+            })
+        }
+    }
+
+    func delete() -> SignalProducer<Bool, GZERepositoryError> {
+
+        return SignalProducer<Bool, GZERepositoryError> { [weak self] sink, disposable in
+
+            guard let strongSelf = self else { return }
+            disposable.add {
+                log.debug("save SignalProducer disposed")
+            }
+
+            log.debug("trying to save user")
+            strongSelf.save(success: {
+
+                log.debug("user saved!")
+                sink.send(value: true)
+                sink.sendCompleted()
+
+            }, failure: { error in
+
+                log.error("find failed: " + error.debugDescription)
+
+                sink.send(error: GZERepositoryError.ModelNotFound)
+                sink.sendCompleted()
+            })
+        }
+    }
+
+
     // MARK: Deinitializers
     deinit {
         log.debug("\(self) disposed")

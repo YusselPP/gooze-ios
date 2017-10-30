@@ -1,0 +1,37 @@
+{
+  "unknown": "unknown",
+
+  "username": "user1",
+  "registerCode": "randomCode",
+  "invitedBy": "other@mail.com",
+  "birthday": "2017-10-28T16:01:34.390Z",
+  "gender": "male",
+  "weight": 2,
+  "height": 1.1,
+  "languages": [
+    "español"
+  ],
+  "interestedIn": [
+     "female"
+   ],
+  "photos": [
+     {
+      "image": "adsfasdg",
+      "blocked": false
+     }
+  ],
+  "origin": "México",
+  "phrase": "My phrase",
+  "mode": "client",
+  "status": "unavailable",
+  "loggedIn": false,
+  "currentLocation": {
+      "lat": 0,
+      "lng": 2.0
+  },
+  "email": "user1@mail.com",
+  "emailVerified": true,
+  "id": "123456",
+  "createdAt": "2017-10-28T16:01:34.390Z",
+  "updatedAt": "2017-10-28T16:01:34.390Z"
+}
