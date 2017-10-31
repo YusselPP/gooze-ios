@@ -15,11 +15,6 @@ import ReactiveSwift
 
 class GZEUser: Glossy {
 
-    static var dateFormatter: DateFormatter {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        return dateFormatter
-    }
     enum Gender: String {
         case male = "male"
         case female = "female"
@@ -143,9 +138,9 @@ class GZEUser: Glossy {
         self.status = "status" <~~ json
         self.loggedIn = "loggedIn" <~~ json
 
-        self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEUser.dateFormatter)(json)
-        self.createdAt = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEUser.dateFormatter)(json)
-        self.updatedAt = Decoder.decode(dateForKey: "updatedAt", dateFormatter: GZEUser.dateFormatter)(json)
+        self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
+        self.createdAt = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json)
+        self.updatedAt = Decoder.decode(dateForKey: "updatedAt", dateFormatter: GZEApi.dateFormatter)(json)
 
         log.debug("\(self) init")
     }
@@ -178,9 +173,9 @@ class GZEUser: Glossy {
             "status" ~~> self.status,
             "loggedIn" ~~> self.loggedIn,
 
-            "birthday" ~~> Encoder.encode(dateForKey: "birthday", dateFormatter: GZEUser.dateFormatter)(self.birthday),
-            "createdAt" ~~> Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEUser.dateFormatter)(self.createdAt),
-            "updatedAt" ~~> Encoder.encode(dateForKey: "updatedAt", dateFormatter: GZEUser.dateFormatter)(self.updatedAt),
+            Encoder.encode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(self.birthday),
+            Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(self.createdAt),
+            Encoder.encode(dateForKey: "updatedAt", dateFormatter: GZEApi.dateFormatter)(self.updatedAt),
         ])
     }
 

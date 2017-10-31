@@ -21,10 +21,10 @@ class GZELoginViewModel {
     let userRepository: GZEUserRepositoryProtocol
 
 
-    let username = MutableProperty<String?>("")
+    let email = MutableProperty<String?>("")
     let password = MutableProperty<String?>("")
 
-    var loginAction: Action<Void, GZEUser, GZERepositoryError> {
+    var loginAction: Action<Void, GZEAccesToken, GZERepositoryError> {
         if let loginAction = _loginAction {
             return loginAction
         }
@@ -32,7 +32,7 @@ class GZELoginViewModel {
         return _loginAction!
     }
 
-    private var _loginAction: Action<Void, GZEUser, GZERepositoryError>?
+    private var _loginAction: Action<Void, GZEAccesToken, GZERepositoryError>?
 
 
 
@@ -51,11 +51,11 @@ class GZELoginViewModel {
         return GZESignUpViewModel(userRepository)
     }
 
-    private func createLoginAction() -> Action<Void, GZEUser, GZERepositoryError> {
+    private func createLoginAction() -> Action<Void, GZEAccesToken, GZERepositoryError> {
         log.debug("Creating login action")
-        return Action<Void, GZEUser, GZERepositoryError>{[weak self] in
+        return Action<Void, GZEAccesToken, GZERepositoryError>{[weak self] in
             guard let strongSelf = self else { return SignalProducer.empty }
-            return strongSelf.userRepository.login(strongSelf.username.value, strongSelf.password.value)
+            return strongSelf.userRepository.login(strongSelf.email.value, strongSelf.password.value)
         }
     }
 

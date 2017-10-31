@@ -13,35 +13,59 @@ import Alamofire
 
 class GZEApi {
 
-    static private var _instance: GZEApi?
     static var instance: GZEApi {
-        if _instance == nil {
-            _instance = GZEApi()
+        if let api = _instance {
+            return api
         }
+        _instance = GZEApi()
         return _instance!
     }
 
-    let tokenKey = "LBRESTAdapterAccessToken"
-    let apiUrl = GZEAppConfig.goozeApiUrl
-    let adapter: LBRESTAdapter
-
-    private init() {
-        adapter = LBRESTAdapter(url: URL(string: apiUrl)!)
-        log.debug("\(self) init")
+    static var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return dateFormatter
     }
 
-    func setToken(_ accessToken: String) {
-        log.debug("Token set: " + accessToken)
-        adapter.accessToken = accessToken
+    var accessToken: GZEAccesToken?
+
+    func loadToken() -> GZEAccesToken? {
+        var token: GZEAccesToken? = nil
+        if
+            let jsonTokenString = UserDefaults.standard.string(forKey: GZEApi.tokenKey),
+            let jsonData = jsonTokenString.data(using: .utf8),
+            let storedToken = GZEAccesToken(data: jsonData) {
+
+            token = storedToken
+        }
+        log.debug("Stored token obtained: \(String(describing: token))")
+        return token
+    }
+
+    func setToken(_ accessToken: GZEAccesToken) {
+        log.debug("Token set: \(accessToken)")
+        self.accessToken = accessToken
         saveToken(accessToken)
     }
 
-    func saveToken(_ accessToken: String) {
-        UserDefaults.standard.set(accessToken, forKey: tokenKey)
+    func saveToken(_ accessToken: GZEAccesToken) {
+        guard
+            let jsonToken = accessToken.toJSON(),
+            let jsonTokenData = try? JSONSerialization.data(withJSONObject: jsonToken),
+            let jsonTokenString = String(data: jsonTokenData, encoding: .utf8) else {
+
+            return
+        }
+        log.debug("Token stored: \(jsonTokenString)")
+        UserDefaults.standard.set(jsonTokenString, forKey: GZEApi.tokenKey)
     }
 
-    // MARK: Deinitializers
-    deinit {
-        log.debug("\(self) disposed")
+
+    private static let tokenKey = "GZEAccessToken"
+    private static var _instance: GZEApi?
+
+    private init() {
+        self.accessToken = loadToken()
     }
+
 }

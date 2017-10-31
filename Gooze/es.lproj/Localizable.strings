@@ -8,4 +8,4 @@
 // Protocols/GZEUserApiRepositoryError
 "Unknown error"="Error desconcido";
 // Services/GZEUserApiRepository
-"Username and password are required"="Ingresa tu usuario y contraseña";
+"email and password are required"="Ingresa tu correo electrónico y contraseña";

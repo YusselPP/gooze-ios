@@ -34,7 +34,7 @@ enum GZEUserRouter: URLRequestConvertible {
         case .readUser:
             return .get
         case .updateUser:
-            return .put
+            return .patch
         case .destroyUser:
             return .delete
         }

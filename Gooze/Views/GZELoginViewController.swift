@@ -40,7 +40,7 @@ class GZELoginViewController: UIViewController {
 
 
         // Bindings
-        viewModel.username <~ emailTextField.reactive.continuousTextValues
+        viewModel.email <~ emailTextField.reactive.continuousTextValues
         viewModel.password <~ passwordTextField.reactive.continuousTextValues
 
         loginButton.reactive.pressed = CocoaAction(viewModel.loginAction) { _ in
@@ -79,7 +79,7 @@ class GZELoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func onLogin(user: GZEUser) -> Void {
+    func onLogin(user: GZEAccesToken) -> Void {
 
         SwiftOverlays.removeAllBlockingOverlays()
 
