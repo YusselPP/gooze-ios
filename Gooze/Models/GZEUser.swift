@@ -6,7 +6,7 @@
 //  Copyright © 2017 Gooze. All rights reserved.
 //
 
-// import Foundation
+import Foundation
 import Gloss
 import LoopBack
 import Alamofire
@@ -113,63 +113,6 @@ class GZEUser: Glossy {
 
     init() {
         log.debug("\(self) init")
-    }
-
-    func save() -> SignalProducer<String, GZERepositoryError> {
-
-        return SignalProducer<String, GZERepositoryError> { [weak self] sink, disposable in
-
-            guard let strongSelf = self else { return }
-            disposable.add {
-                log.debug("save SignalProducer disposed")
-            }
-
-            log.debug("trying to save user")
-
-            let dic: [String: Any] = ["username": strongSelf.username!, "email": strongSelf.email!, "password": strongSelf.password!]
-            let params = dic
-
-            Alamofire.request(GZEUserRouter.createUser(parameters: params)).responseJSON { response in
-
-                log.debug("Request: \(String(describing: response.request))")   // original url request
-                log.debug("Request headers: \(String(describing: response.request?.allHTTPHeaderFields))")   // original url request
-                log.debug("Response: \(String(describing: response.response))") // http url response
-                log.debug("Result: \(response.result)")
-                log.debug("Error: \(response.error)")
-
-                // response serialization result
-                if let json = response.result.value {
-                    log.debug("JSON: \(json)") // serialized json response
-
-                    if let dictionary = json as? [String: Any],
-                        let err = dictionary["error"] as? [String: Any],
-                        let errMessage = err["message"] as? String {
-
-                        sink.send(value: errMessage)
-                    } else {
-                        sink.send(value: "User saved!")
-                    }
-                    sink.sendCompleted()
-                } else {
-                    sink.send(error: GZERepositoryError.ModelNotFound)
-                    sink.sendCompleted()
-                }
-            }
-
-//            strongSelf.save(success: {
-//
-//                log.debug("user saved!")
-//                sink.send(value: true)
-//                sink.sendCompleted()
-//
-//            }, failure: { error in
-//
-//                log.error("find failed: " + error.debugDescription)
-//
-//                sink.send(error: GZERepositoryError.ModelNotFound)
-//                sink.sendCompleted()
-//            })
-        }
     }
 
     // MARK: - Gloss Deserialization

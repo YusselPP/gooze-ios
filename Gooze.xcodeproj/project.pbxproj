@@ -42,6 +42,8 @@
 		F0E067F11FA2525D00AE59BE /* GZESignUpBasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E067F01FA2525D00AE59BE /* GZESignUpBasicViewController.swift */; };
 		F0E067F31FA2528400AE59BE /* GZESignUpMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E067F21FA2528400AE59BE /* GZESignUpMoreViewController.swift */; };
 		F0E067F61FA274B500AE59BE /* GZESignUpPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E067F41FA2529F00AE59BE /* GZESignUpPhotoViewController.swift */; };
+		F0EE89131FA7A48B001D194C /* GZEApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0EE89121FA7A48B001D194C /* GZEApiError.swift */; };
+		F0EE89161FA7C577001D194C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0EE89181FA7C577001D194C /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +117,8 @@
 		F0E067F01FA2525D00AE59BE /* GZESignUpBasicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZESignUpBasicViewController.swift; sourceTree = "<group>"; };
 		F0E067F21FA2528400AE59BE /* GZESignUpMoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZESignUpMoreViewController.swift; sourceTree = "<group>"; };
 		F0E067F41FA2529F00AE59BE /* GZESignUpPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZESignUpPhotoViewController.swift; sourceTree = "<group>"; };
+		F0EE89121FA7A48B001D194C /* GZEApiError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZEApiError.swift; sourceTree = "<group>"; };
+		F0EE89171FA7C577001D194C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,8 +313,10 @@
 			isa = PBXGroup;
 			children = (
 				F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */,
+				F0EE89121FA7A48B001D194C /* GZEApiError.swift */,
+				F0EE89181FA7C577001D194C /* Localizable.strings */,
 			);
-			name = GoozeApi;
+			path = GoozeApi;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,6 +441,7 @@
 				8DF720CB1F9BA4C500485566 /* Debug.plist in Resources */,
 				8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */,
 				8DF7209C1F9B9B6700485566 /* Assets.xcassets in Resources */,
+				F0EE89161FA7C577001D194C /* Localizable.strings in Resources */,
 				8D572DB71F9D1B8300B824FA /* Staging.plist in Resources */,
 				F0DDECDE1FA1079100450B2D /* Localizable.strings in Resources */,
 				8DF720CD1F9BA4F400485566 /* Release.plist in Resources */,
@@ -644,6 +651,7 @@
 				8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */,
 				F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */,
 				8D2447331F9EA26E004330AF /* GZEUserRepository.swift in Sources */,
+				F0EE89131FA7A48B001D194C /* GZEApiError.swift in Sources */,
 				F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */,
 				F0DDECE41FA1295600450B2D /* GZESearchGoozeViewModel.swift in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,
@@ -717,6 +725,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				F0DDECDF1FA1079100450B2D /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		F0EE89181FA7C577001D194C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F0EE89171FA7C577001D194C /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

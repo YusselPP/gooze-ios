@@ -13,6 +13,11 @@ enum GZERepositoryError: Error {
     case BadRequest(message: String)
     case ModelNotFound
     case InvalidResponseFormat
+
+    case UnexpectedError
+
+    case GZEApiError(error: GZEApiError)
+    case NetworkError(error: Error)
 }
 
 extension GZERepositoryError: LocalizedError {
@@ -24,6 +29,13 @@ extension GZERepositoryError: LocalizedError {
             return "Model not found"
         case .InvalidResponseFormat:
             return "Invalid response format"
+        case .UnexpectedError:
+            return "Unexpected Error".localized()
+
+        case .GZEApiError(let apiError):
+            return apiError.getMessage()
+        case .NetworkError(let error):
+            return error.localizedDescription
         }
     }
 }

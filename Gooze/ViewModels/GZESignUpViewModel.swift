@@ -30,14 +30,14 @@ class GZESignUpViewModel {
     let interestedIn = MutableProperty<String?>("")
 
 
-    var saveAction: Action<Void, String, GZERepositoryError> {
+    var saveAction: Action<Void, Bool, GZERepositoryError> {
         if let saveAction = _saveAction {
             return saveAction
         }
         _saveAction = createSaveAction()
         return _saveAction!
     }
-    private var _saveAction: Action<Void, String, GZERepositoryError>?
+    private var _saveAction: Action<Void, Bool, GZERepositoryError>?
 
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
@@ -46,13 +46,13 @@ class GZESignUpViewModel {
         log.debug("\(self) init")
     }
 
-    private func createSaveAction() -> Action<Void, String, GZERepositoryError> {
+    private func createSaveAction() -> Action<Void, Bool, GZERepositoryError> {
         log.debug("Creating save action")
-        return Action<Void, String, GZERepositoryError>{[weak self] in
+        return Action<Void, Bool, GZERepositoryError>{[weak self] in
             guard let strongSelf = self else { return SignalProducer.empty }
             strongSelf.fillUser()
             // strongSelf.user.repository = (strongSelf.userRepository as! GZEUserApiRepository).userRepository.reposi
-            return strongSelf.user.save()
+            return strongSelf.userRepository.create(strongSelf.user)
         }
     }
 

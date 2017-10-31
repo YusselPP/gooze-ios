@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  Gooze
+
+  Created by Yussel Paredes on 10/30/17.
+  Copyright © 2017 Gooze. All rights reserved.
+*/
+// Fields
+"username"="usuario";
+"email"="correo electrónico";
+"password"="contraseña";
+"birthday"="fecha de nacimiento";
+
+// Validation
+"can\'t be blank"="no puede estar vacio";
+"is not a valid date"="no es una fecha valida";
+"Invalid password"="no puede estar vacio";
