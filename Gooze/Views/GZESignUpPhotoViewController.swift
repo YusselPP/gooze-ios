@@ -10,6 +10,7 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 import ALCameraViewController
+import iCarousel
 
 class GZESignUpPhotoViewController: UIViewController {
 
@@ -27,42 +28,35 @@ class GZESignUpPhotoViewController: UIViewController {
 
     let blur = Blur()
 
+    var selectedImageButton: UIButton?
+
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var imageContainerView: UIView!
-    @IBOutlet weak var alphaSlider: UISlider!
+    // @IBOutlet weak var alphaSlider: UISlider!
     @IBOutlet weak var blurEffectView: UIVisualEffectView!
-    @IBOutlet weak var widthSlider: UISlider!
-    @IBOutlet weak var heightSlider: UISlider!
+    // @IBOutlet weak var widthSlider: UISlider!
+    // @IBOutlet weak var heightSlider: UISlider!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+
+    @IBOutlet weak var editButtonView: UIView!
+    @IBOutlet weak var image1Button: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
-            // Do something with your image here.
-            self?.photoImageView.image = image
-            self?.dismiss(animated: true, completion: nil)
-        }
+        selectedImageButton = image1Button
+        photoImageView.image = selectedImageButton?.backgroundImage(for: .normal)
 
-        present(cameraViewController, animated: true, completion: nil)
-
-
-        /// Provides an image picker wrapped inside a UINavigationController instance
-//        let imagePickerViewController = CameraViewController.imagePickerViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
-//            // Do something with your image here.
-//            // If cropping is enabled this image will be the cropped version
-//
-//            self?.dismiss(animated: true, completion: nil)
-//        }
+        editButtonView.layer.cornerRadius = 5
 
 
         imageContainerView.clipsToBounds = true
 
         blurEffectView.layer.cornerRadius = 20
         blurEffectView.layer.masksToBounds = true
-        blurEffectView.alpha = CGFloat(alphaSlider.value)
+        // blurEffectView.alpha = CGFloat(alphaSlider.value)
 
         let panGesture = UIPanGestureRecognizer(target: self, action:(#selector(GZESignUpPhotoViewController.blurPan(_:))))
         blurEffectView.addGestureRecognizer(panGesture)
@@ -85,8 +79,8 @@ class GZESignUpPhotoViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        widthSlider.maximumValue = Float(photoImageView.bounds.width)
-        heightSlider.maximumValue = Float(photoImageView.bounds.height)
+        // widthSlider.maximumValue = Float(photoImageView.bounds.width)
+        // heightSlider.maximumValue = Float(photoImageView.bounds.height)
         setViewSize(blurEffectView, CGFloat(50), CGFloat(50))
     }
 
@@ -97,16 +91,29 @@ class GZESignUpPhotoViewController: UIViewController {
         signUpErrorsObserver?.dispose()
     }
 
-    @IBAction func blurHeightSliderChanged(_ sender: UISlider) {
-        setViewSize(blurEffectView, CGFloat(sender.value), blurEffectView.frame.height)
-    }
+//    @IBAction func blurHeightSliderChanged(_ sender: UISlider) {
+//        setViewSize(blurEffectView, CGFloat(sender.value), blurEffectView.frame.height)
+//    }
+//
+//    @IBAction func blurWidthSliderChanged(_ sender: UISlider) {
+//        setViewSize(blurEffectView, blurEffectView.frame.width, CGFloat(sender.value))
+//    }
+//
+//    @IBAction func alphaSliderChanged(_ sender: UISlider) {
+//        blurEffectView.alpha = CGFloat(sender.value)
+//    }
+    @IBAction func editPhotoButtonTapped(_ sender: UIButton) {
 
-    @IBAction func blurWidthSliderChanged(_ sender: UISlider) {
-        setViewSize(blurEffectView, blurEffectView.frame.width, CGFloat(sender.value))
-    }
+        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
 
-    @IBAction func alphaSliderChanged(_ sender: UISlider) {
-        blurEffectView.alpha = CGFloat(sender.value)
+            log.debug("camera controller handler")
+            // Do something with your image here.
+            self?.photoImageView.image = image
+            self?.selectedImageButton?.setBackgroundImage(image, for: .normal)
+            self?.dismiss(animated: true, completion: nil)
+        }
+
+        present(cameraViewController, animated: true, completion: nil)
     }
 
     @IBAction func blurPan(_ sender: UIPanGestureRecognizer) {
@@ -115,6 +122,11 @@ class GZESignUpPhotoViewController: UIViewController {
         sender.view!.center = CGPoint(x: sender.view!.center.x + translation.x, y: sender.view!.center.y + translation.y)
         
         sender.setTranslation(CGPoint.zero, in: self.view)
+    }
+
+    @IBAction func imageTapped(_ sender: UIButton) {
+        selectedImageButton = sender
+        photoImageView.image = sender.backgroundImage(for: .normal)
     }
 
     override func didReceiveMemoryWarning() {

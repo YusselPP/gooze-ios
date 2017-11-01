@@ -20,7 +20,7 @@ class GZESignUpViewModel {
     let password = MutableProperty<String?>("")
 
     // additional data
-    let birthday = MutableProperty<Date>(Date())
+    let birthday = MutableProperty<String?>("")
     let gender = MutableProperty<String?>("")
     let weight = MutableProperty<String?>("")
     let height = MutableProperty<String?>("")
@@ -61,7 +61,9 @@ class GZESignUpViewModel {
         user.email = email.value
         user.password = password.value
 
-        user.birthday = birthday.value
+        if let birthday = birthday.value {
+            user.birthday = DateFormatter().date(from: birthday)
+        }
         if let gender = gender.value {
             user.gender = GZEUser.Gender(rawValue: gender)
         }

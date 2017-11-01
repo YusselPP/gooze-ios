@@ -14,6 +14,7 @@ target 'Gooze' do
   pod 'SwiftOverlays', '~> 3.0.0'
   pod 'Alamofire', '~> 4.5'
   pod 'ALCameraViewController', '~> 2.0.3'
+  pod 'iCarousel', '~> 1.8.3'
 
   target 'GoozeTests' do
     inherit! :search_paths

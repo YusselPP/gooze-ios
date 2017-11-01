@@ -16,7 +16,7 @@ class GZESignUpMoreViewController: UIViewController {
 
     let moreToPhotoSignUpSegueId = "moreToPhotoSignUpSegue"
 
-    @IBOutlet weak var birthdayDatePicker: UIDatePicker!
+    @IBOutlet weak var birthdayTextField: UITextField!
     @IBOutlet weak var genderTextField: UITextField!
     @IBOutlet weak var weightTextField: UITextField!
     @IBOutlet weak var heightTextField: UITextField!
@@ -30,7 +30,7 @@ class GZESignUpMoreViewController: UIViewController {
 
         log.debug("\(self) init")
         // Do any additional setup after loading the view.
-        viewModel.birthday <~ birthdayDatePicker.reactive.dates
+        viewModel.birthday <~ birthdayTextField.reactive.continuousTextValues
         viewModel.gender <~ genderTextField.reactive.continuousTextValues
         viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.height <~ heightTextField.reactive.continuousTextValues
