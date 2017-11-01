@@ -45,18 +45,22 @@
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	    <key>NSAllowsArbitraryLoads</key>
-	    <true/>
-	    <key>NSExceptionDomains</key>
-	    <dict>
-	        <key>example.com</key>
-	        <dict>
-	            <key>NSExceptionAllowsInsecureHTTPLoads</key>
-	            <true/>
-	            <key>NSIncludesSubdomains</key>
-	            <true/>
-	        </dict>
-	    </dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>example.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Pick a photo from your library as your profile image</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Take a photo for your profile image</string>
 </dict>
 </plist>

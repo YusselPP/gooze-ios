@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import ALCameraViewController
 
 class GZESignUpPhotoViewController: UIViewController {
 
@@ -38,6 +39,24 @@ class GZESignUpPhotoViewController: UIViewController {
         super.viewDidLoad()
 
         log.debug("\(self) init")
+
+        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
+            // Do something with your image here.
+            self?.photoImageView.image = image
+            self?.dismiss(animated: true, completion: nil)
+        }
+
+        present(cameraViewController, animated: true, completion: nil)
+
+
+        /// Provides an image picker wrapped inside a UINavigationController instance
+//        let imagePickerViewController = CameraViewController.imagePickerViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
+//            // Do something with your image here.
+//            // If cropping is enabled this image will be the cropped version
+//
+//            self?.dismiss(animated: true, completion: nil)
+//        }
+
 
         imageContainerView.clipsToBounds = true
 

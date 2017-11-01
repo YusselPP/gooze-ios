@@ -13,6 +13,7 @@ target 'Gooze' do
   pod 'LoopBack', :git => 'https://github.com/strongloop/loopback-sdk-ios.git'
   pod 'SwiftOverlays', '~> 3.0.0'
   pod 'Alamofire', '~> 4.5'
+  pod 'ALCameraViewController', '~> 2.0.3'
 
   target 'GoozeTests' do
     inherit! :search_paths
