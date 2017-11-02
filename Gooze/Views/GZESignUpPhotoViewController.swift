@@ -9,42 +9,44 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import Result
 import ALCameraViewController
 import iCarousel
 
 class GZESignUpPhotoViewController: UIViewController {
-
-    struct Blur {
-        let show = MutableProperty<Bool>(false)
-        let width = MutableProperty<Float>(20)
-        let height = MutableProperty<Float>(20)
-        let opacity = MutableProperty<Float>(1)
-    }
 
     var viewModel: GZESignUpViewModel!
 
     var signUpErrorsObserver: Disposable?
     var signUpValuesObserver: Disposable?
 
-    let blur = Blur()
-
     var selectedImageButton: UIButton?
 
-    @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var imageContainerView: UIView!
-    // @IBOutlet weak var alphaSlider: UISlider!
-    @IBOutlet weak var blurEffectView: UIVisualEffectView!
-    // @IBOutlet weak var widthSlider: UISlider!
-    // @IBOutlet weak var heightSlider: UISlider!
+
     @IBOutlet weak var saveButton: UIBarButtonItem!
 
+    @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var editButtonView: UIView!
+    @IBOutlet weak var carousel: GZECarouselUIView!
+    @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var blurEffectView: UIVisualEffectView!
+
+    // @IBOutlet weak var alphaSlider: UISlider!
+    // @IBOutlet weak var widthSlider: UISlider!
+    // @IBOutlet weak var heightSlider: UISlider
+
     @IBOutlet weak var image1Button: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
+
+
+        // Two way binding example
+        // textField.text <~ viewModel.title.producer
+        // viewModel.title <~ textField.textValues
+        photoImageView.reactive.makeBindingTarget { $0.image = $1 } <~ carousel.selectedImage
 
         selectedImageButton = image1Button
         photoImageView.image = selectedImageButton?.backgroundImage(for: .normal)
@@ -108,8 +110,12 @@ class GZESignUpPhotoViewController: UIViewController {
 
             log.debug("camera controller handler")
             // Do something with your image here.
-            self?.photoImageView.image = image
-            self?.selectedImageButton?.setBackgroundImage(image, for: .normal)
+            // self?.photoImageView.image = image
+            // self?.selectedImageButton?.setBackgroundImage(image, for: .normal)
+            self?.carousel.selectedImage.value = image
+            if let imageView = self?.carousel.currentItemView as? UIImageView {
+                imageView.image = image
+            }
             self?.dismiss(animated: true, completion: nil)
         }
 
@@ -122,11 +128,6 @@ class GZESignUpPhotoViewController: UIViewController {
         sender.view!.center = CGPoint(x: sender.view!.center.x + translation.x, y: sender.view!.center.y + translation.y)
         
         sender.setTranslation(CGPoint.zero, in: self.view)
-    }
-
-    @IBAction func imageTapped(_ sender: UIButton) {
-        selectedImageButton = sender
-        photoImageView.image = sender.backgroundImage(for: .normal)
     }
 
     override func didReceiveMemoryWarning() {

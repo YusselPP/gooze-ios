@@ -29,6 +29,14 @@ class GZESignUpViewModel {
     let languages = MutableProperty<String?>("")
     let interestedIn = MutableProperty<String?>("")
 
+    let photos = [
+        MutableProperty<UIImage?>(nil),
+        MutableProperty<UIImage?>(nil),
+        MutableProperty<UIImage?>(nil),
+        MutableProperty<UIImage?>(nil),
+        MutableProperty<UIImage?>(nil)
+    ]
+
 
     var saveAction: Action<Void, GZEUser, GZERepositoryError> {
         if let saveAction = _saveAction {

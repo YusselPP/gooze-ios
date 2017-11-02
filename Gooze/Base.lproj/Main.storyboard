@@ -371,62 +371,19 @@
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XV1-l3-ykz">
                                 <rect key="frame" x="0.0" y="372" width="320" height="200"/>
                                 <subviews>
-                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="976-5V-3K1">
-                                        <rect key="frame" x="8" y="78" width="70" height="80"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    </imageView>
-                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iAu-kd-771">
-                                        <rect key="frame" x="86" y="78" width="70" height="80"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    </imageView>
-                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24n-Qt-EGK">
-                                        <rect key="frame" x="164" y="78" width="70" height="80"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    </imageView>
-                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BnD-vo-Emx">
-                                        <rect key="frame" x="242" y="78" width="70" height="80"/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9HY-9i-xTK">
-                                        <rect key="frame" x="8" y="33" width="70" height="37"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button"/>
-                                        <connections>
-                                            <action selector="imageTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="8VI-Uu-USq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ogy-c9-M9L">
-                                        <rect key="frame" x="86" y="33" width="70" height="37"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button"/>
-                                        <connections>
-                                            <action selector="imageTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="U5m-uZ-D6f"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lkQ-KP-p7g">
-                                        <rect key="frame" x="164" y="33" width="70" height="37"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button"/>
-                                        <connections>
-                                            <action selector="imageTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="kKa-s9-bcf"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vcf-dc-Ue6">
-                                        <rect key="frame" x="242" y="33" width="70" height="37"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button"/>
-                                        <connections>
-                                            <action selector="imageTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="ZSx-7h-5od"/>
-                                        </connections>
-                                    </button>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zpW-6A-lHe" customClass="GZECarouselUIView" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="87" width="304" height="82"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="k3s-uO-8dD"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="BnD-vo-Emx" secondAttribute="trailing" constant="8" id="36Y-13-HnP"/>
                                     <constraint firstAttribute="height" constant="200" id="3lF-3p-Lyp"/>
-                                    <constraint firstItem="976-5V-3K1" firstAttribute="leading" secondItem="XV1-l3-ykz" secondAttribute="leading" constant="8" id="DQC-Ax-LsJ"/>
-                                    <constraint firstItem="24n-Qt-EGK" firstAttribute="leading" secondItem="iAu-kd-771" secondAttribute="trailing" constant="8" id="OvN-FZ-RoM"/>
-                                    <constraint firstItem="BnD-vo-Emx" firstAttribute="leading" secondItem="24n-Qt-EGK" secondAttribute="trailing" constant="8" id="hs0-Ik-Dzz"/>
-                                    <constraint firstItem="iAu-kd-771" firstAttribute="leading" secondItem="976-5V-3K1" secondAttribute="trailing" constant="8" id="pmb-Ie-dV1"/>
+                                    <constraint firstItem="zpW-6A-lHe" firstAttribute="leading" secondItem="XV1-l3-ykz" secondAttribute="leading" constant="8" id="FZI-g5-zoa"/>
+                                    <constraint firstAttribute="bottom" secondItem="zpW-6A-lHe" secondAttribute="bottom" constant="8" id="TkH-2u-Mye"/>
+                                    <constraint firstAttribute="trailing" secondItem="zpW-6A-lHe" secondAttribute="trailing" constant="8" id="VGW-qG-sSt"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -447,8 +404,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="blurEffectView" destination="VIu-Wa-AWy" id="Jz6-Y2-Esc"/>
+                        <outlet property="carousel" destination="zpW-6A-lHe" id="DJH-nP-e6a"/>
                         <outlet property="editButtonView" destination="MLo-Oz-9ew" id="olx-Na-5Jl"/>
-                        <outlet property="image1Button" destination="9HY-9i-xTK" id="9ii-WU-exF"/>
                         <outlet property="imageContainerView" destination="dO2-in-Qrd" id="UU9-Aj-It7"/>
                         <outlet property="photoImageView" destination="4hT-lE-ril" id="PLG-Pv-gw9"/>
                         <outlet property="saveButton" destination="ueT-4a-Aly" id="IeQ-nh-8CZ"/>
