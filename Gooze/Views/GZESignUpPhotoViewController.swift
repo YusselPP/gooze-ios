@@ -42,17 +42,17 @@ class GZESignUpPhotoViewController: UIViewController {
 
         log.debug("\(self) init")
 
+        carousel.dataSource = viewModel.self
 
         // Two way binding example
         // textField.text <~ viewModel.title.producer
         // viewModel.title <~ textField.textValues
-        photoImageView.reactive.makeBindingTarget { $0.image = $1 } <~ carousel.selectedImage
-
-        selectedImageButton = image1Button
-        photoImageView.image = selectedImageButton?.backgroundImage(for: .normal)
+        photoImageView.reactive.image <~ carousel.selectedImage
+        if carousel.currentItemIndex >= 0 {
+            carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value
+        }
 
         editButtonView.layer.cornerRadius = 5
-
 
         imageContainerView.clipsToBounds = true
 
@@ -109,17 +109,24 @@ class GZESignUpPhotoViewController: UIViewController {
         let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
 
             log.debug("camera controller handler")
-            // Do something with your image here.
-            // self?.photoImageView.image = image
-            // self?.selectedImageButton?.setBackgroundImage(image, for: .normal)
+
             self?.carousel.selectedImage.value = image
-            if let imageView = self?.carousel.currentItemView as? UIImageView {
-                imageView.image = image
+            if
+                let index = self?.carousel.currentItemIndex,
+                index >= 0,
+                let currView = self?.carousel.currentItemView as? UIImageView
+            {
+                self?.viewModel.photos[index].value = image
+                currView.image = image
             }
             self?.dismiss(animated: true, completion: nil)
         }
 
         present(cameraViewController, animated: true, completion: nil)
+    }
+
+    @IBAction func addPhoto(_ sender: UIButton) {
+        carousel.appendPhoto(nil)
     }
 
     @IBAction func blurPan(_ sender: UIPanGestureRecognizer) {

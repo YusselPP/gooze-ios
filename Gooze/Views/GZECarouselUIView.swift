@@ -10,15 +10,14 @@ import UIKit
 import ReactiveSwift
 import iCarousel
 
-class GZECarouselUIView: iCarousel, iCarouselDelegate, iCarouselDataSource {
+class GZECarouselUIView: iCarousel, iCarouselDelegate {
 
-    var images: [UIImage?] =  Array(repeating: #imageLiteral(resourceName: "default-profile-pic"), count: 5)
     var selectedImage = MutableProperty<UIImage?>(nil)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         delegate = self
-        dataSource = self
+        // dataSource = self
         type = .linear
         contentMode = .scaleToFill
         bounces = false
@@ -28,65 +27,33 @@ class GZECarouselUIView: iCarousel, iCarouselDelegate, iCarouselDataSource {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         delegate = self
-        dataSource = self
+        // dataSource = self
         type = .linear
         contentMode = .scaleToFill
         bounces = false
         log.debug("\(self) init")
     }
 
-    func setImage(_ image: UIImage?, at index: Int) {
-
-        // if index >
-        // images[index] = image
-        
-    }
-
-    func appendImage(_ image: UIImage?) {
-        images.append(image)
-    }
-
-    func numberOfItems(in carousel: iCarousel) -> Int {
-        return images.count
-    }
-
-    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
-
-        var itemView: UIImageView
-
-        //reuse view if available, otherwise create a new view
-        if let view = view as? UIImageView {
-            itemView = view
-        } else {
-            //don't do anything specific to the index within
-            //this `if ... else` statement because the view will be
-            //recycled and used with other index values later
-            itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-            itemView.image = images[index]
-            itemView.contentMode = .scaleToFill
+    func appendPhoto(_ image: UIImage?) {
+        if let vm = dataSource as? GZESignUpViewModel {
+            vm.photos.append(MutableProperty(image))
+            insertItem(at: vm.photos.count - 1, animated: true)
         }
+    }
 
-        log.debug("item showed \(index)")
-        return itemView
+    func removePhoto(_ image: UIImage?, at index: Int) {
+        if let vm = dataSource as? GZESignUpViewModel {
+            vm.photos.remove(at: index)
+            removeItem(at: index, animated: true)
+        }
     }
 
     func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
         if let imageView = carousel.currentItemView as? UIImageView {
             selectedImage.value = imageView.image
         }
+        log.debug("current index: \(carousel.currentItemIndex)")
     }
-
-//    func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
-//        if (option == .spacing) {
-//            return value * 0.5
-//        }
-//        return value
-//    }
-
-//    func carousel(_ carousel: iCarousel, didSelectItemAt index: Int) {
-//        log.debug("selected \(index)")
-//        selectedImage.value = images[index]
-//    }
 
     // MARK: Deinitializers
     deinit {
