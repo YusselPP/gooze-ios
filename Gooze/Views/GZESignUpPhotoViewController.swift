@@ -31,11 +31,6 @@ class GZESignUpPhotoViewController: UIViewController {
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var blurEffectView: UIVisualEffectView!
 
-    // @IBOutlet weak var alphaSlider: UISlider!
-    // @IBOutlet weak var widthSlider: UISlider!
-    // @IBOutlet weak var heightSlider: UISlider
-
-    @IBOutlet weak var image1Button: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,10 +38,6 @@ class GZESignUpPhotoViewController: UIViewController {
         log.debug("\(self) init")
 
         carousel.dataSource = viewModel.self
-
-        // Two way binding example
-        // textField.text <~ viewModel.title.producer
-        // viewModel.title <~ textField.textValues
         photoImageView.reactive.image <~ carousel.selectedImage
         if carousel.currentItemIndex >= 0 {
             carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value
@@ -58,7 +49,7 @@ class GZESignUpPhotoViewController: UIViewController {
 
         blurEffectView.layer.cornerRadius = 20
         blurEffectView.layer.masksToBounds = true
-        // blurEffectView.alpha = CGFloat(alphaSlider.value)
+
 
         let panGesture = UIPanGestureRecognizer(target: self, action:(#selector(GZESignUpPhotoViewController.blurPan(_:))))
         blurEffectView.addGestureRecognizer(panGesture)
@@ -81,8 +72,6 @@ class GZESignUpPhotoViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // widthSlider.maximumValue = Float(photoImageView.bounds.width)
-        // heightSlider.maximumValue = Float(photoImageView.bounds.height)
         setViewSize(blurEffectView, CGFloat(50), CGFloat(50))
     }
 
@@ -93,40 +82,20 @@ class GZESignUpPhotoViewController: UIViewController {
         signUpErrorsObserver?.dispose()
     }
 
-//    @IBAction func blurHeightSliderChanged(_ sender: UISlider) {
-//        setViewSize(blurEffectView, CGFloat(sender.value), blurEffectView.frame.height)
-//    }
-//
-//    @IBAction func blurWidthSliderChanged(_ sender: UISlider) {
-//        setViewSize(blurEffectView, blurEffectView.frame.width, CGFloat(sender.value))
-//    }
-//
-//    @IBAction func alphaSliderChanged(_ sender: UISlider) {
-//        blurEffectView.alpha = CGFloat(sender.value)
-//    }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: Actions
+
     @IBAction func editPhotoButtonTapped(_ sender: UIButton) {
-
-        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
-
-            log.debug("camera controller handler")
-
-            self?.carousel.selectedImage.value = image
-            if
-                let index = self?.carousel.currentItemIndex,
-                index >= 0,
-                let currView = self?.carousel.currentItemView as? UIImageView
-            {
-                self?.viewModel.photos[index].value = image
-                currView.image = image
-            }
-            self?.dismiss(animated: true, completion: nil)
-        }
-
-        present(cameraViewController, animated: true, completion: nil)
+        editPhoto()
     }
 
     @IBAction func addPhoto(_ sender: UIButton) {
         carousel.appendPhoto(nil)
+        editPhoto()
     }
 
     @IBAction func blurPan(_ sender: UIPanGestureRecognizer) {
@@ -137,16 +106,43 @@ class GZESignUpPhotoViewController: UIViewController {
         sender.setTranslation(CGPoint.zero, in: self.view)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     func setViewSize(_ view: UIView, _ width: CGFloat, _ heigth: CGFloat) -> Void {
         let frame = view.frame
         view.frame = CGRect(x: frame.minX, y: frame.minY, width: width, height: heigth)
     }
-    
+
+    func editPhoto() {
+        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
+
+            log.debug("camera controller handler")
+
+            guard let this = self else {
+                log.error("self was dispossed before calling handler")
+                return
+            }
+
+            if image != nil {
+
+                let index = this.carousel.currentItemIndex
+
+                if
+                    let currView = this.carousel.currentItemView as? UIImageView,
+                    index >= 0
+                {
+                    this.carousel.selectedImage.value = image
+                    this.viewModel.photos[index].value = image
+                    currView.image = image
+                }
+            } else {
+                log.debug("Empty image received")
+            }
+
+            this.dismiss(animated: true, completion: nil)
+        }
+
+        present(cameraViewController, animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation

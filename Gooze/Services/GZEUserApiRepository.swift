@@ -176,6 +176,40 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
+    func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZERepositoryError> {
+
+        return SignalProducer<GZEUser, GZERepositoryError> { [weak self] sink, disposable in
+
+            guard let this = self else {
+                log.error("Unable to complete the task. Self has been disposed.")
+                sink.send(error: .UnexpectedError)
+                sink.sendInterrupted()
+                return
+            }
+
+            disposable.add {
+                log.debug("signUp SignalProducer disposed")
+            }
+
+            this.create(user)
+                .then(this.login(user.email, user.password))
+                .then({ (s: SignalProducer<GZEUser, GZERepositoryError>) -> (SignalProducer<GZEUser, GZERepositoryError>) in
+
+                    //if let photos = user.photos {
+                        return this.uploadPhotos(user.photos.map { $0..image })
+                    //} else {
+                    //    return SignalProducer.empty
+                    //}
+                })
+        }
+    }
+
+    func uploadPhotos(_ images: [UIImage?]) -> SignalProducer<GZEUser, GZERepositoryError> {
+        return SignalProducer.empty
+    }
+
+    // MARK: Response handler
+
     func createResponseHandler<T>(sink: Observer<T, GZERepositoryError>, createInstance: @escaping (JSON) -> T?) -> (DataResponse<Any>) -> Void {
 
         return { response in

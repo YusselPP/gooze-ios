@@ -56,23 +56,22 @@ class GZEUser: Glossy {
     }
 
     struct Photo: Glossy {
-        let image: String
-        let blocked: Bool
+        var url: String?
+        var blocked: Bool?
+        var image: UIImage?
+
+        init(image: UIImage?) {
+            self.image = image
+        }
 
         init?(json: JSON) {
-            guard
-                let image: String = "image" <~~ json,
-                let blocked: Bool = "blocked" <~~ json else {
-
-                    return nil
-            }
-            self.image = image
-            self.blocked = blocked
+            self.url = "url" <~~ json
+            self.blocked = "blocked" <~~ json
         }
 
         func toJSON() -> JSON? {
             return jsonify([
-                "image" ~~> self.image,
+                "url" ~~> self.url,
                 "blocked" ~~> self.blocked
                 ])
         }

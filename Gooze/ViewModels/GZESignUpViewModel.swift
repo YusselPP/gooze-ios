@@ -82,6 +82,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         if let interestedIn = interestedIn.value {
             user.interestedIn = [interestedIn]
         }
+        user.photos = photos.map { GZEUser.Photo(image: $0.value) }
         log.debug(user)
     }
 
@@ -99,10 +100,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         if let view = view as? UIImageView {
             itemView = view
         } else {
-            //don't do anything specific to the index within
-            //this `if ... else` statement because the view will be
-            //recycled and used with other index values later
-            itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+            itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 150))
             itemView.image = photos[index].value
             itemView.contentMode = .scaleToFill
         }
@@ -111,24 +109,24 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         return itemView
     }
 
-    func numberOfPlaceholders(in carousel: iCarousel) -> Int {
-        return 5 - photos.count
-    }
-
-    func carousel(_ carousel: iCarousel, placeholderViewAt index: Int, reusing view: UIView?) -> UIView {
-        var itemView: UIImageView
-        //reuse view if available, otherwise create a new view
-        if let view = view as? UIImageView {
-            itemView = view
-        } else {
-            itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-            itemView.image = #imageLiteral(resourceName: "default-profile-pic")
-            itemView.contentMode = .scaleToFill
-        }
-
-        log.debug("item showed \(index)")
-        return itemView
-    }
+//    func numberOfPlaceholders(in carousel: iCarousel) -> Int {
+//        return 5 - photos.count
+//    }
+//
+//    func carousel(_ carousel: iCarousel, placeholderViewAt index: Int, reusing view: UIView?) -> UIView {
+//        var itemView: UIImageView
+//        //reuse view if available, otherwise create a new view
+//        if let view = view as? UIImageView {
+//            itemView = view
+//        } else {
+//            itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+//            itemView.image = #imageLiteral(resourceName: "default-profile-pic")
+//            itemView.contentMode = .scaleToFill
+//        }
+//
+//        log.debug("item showed \(index)")
+//        return itemView
+//    }
 
     // MARK: Deinitializers
     deinit {
