@@ -178,6 +178,19 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZERepositoryError> {
 
+        return create(user)
+            .then(login(user.email, user.password))
+            .then({ () -> (SignalProducer<GZEUser, GZERepositoryError>) in
+
+                if let photos = user.photos {
+                    return uploadPhotos(photos.map { $0.image })
+                } else {
+                    return SignalProducer.empty
+                }
+            }())
+    }
+
+    func uploadPhotos(_ images: [UIImage?]) -> SignalProducer<GZEUser, GZERepositoryError> {
         return SignalProducer<GZEUser, GZERepositoryError> { [weak self] sink, disposable in
 
             guard let this = self else {
@@ -191,21 +204,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 log.debug("signUp SignalProducer disposed")
             }
 
-            this.create(user)
-                .then(this.login(user.email, user.password))
-                .then({ (s: SignalProducer<GZEUser, GZERepositoryError>) -> (SignalProducer<GZEUser, GZERepositoryError>) in
-
-                    //if let photos = user.photos {
-                        return this.uploadPhotos(user.photos.map { $0..image })
-                    //} else {
-                    //    return SignalProducer.empty
-                    //}
-                })
         }
-    }
-
-    func uploadPhotos(_ images: [UIImage?]) -> SignalProducer<GZEUser, GZERepositoryError> {
-        return SignalProducer.empty
     }
 
     // MARK: Response handler
