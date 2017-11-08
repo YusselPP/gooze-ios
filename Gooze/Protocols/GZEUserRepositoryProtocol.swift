@@ -16,4 +16,5 @@ protocol GZEUserRepositoryProtocol {
     func delete(byId id: String) -> SignalProducer<Bool, GZERepositoryError>
     func find(byId id: String) -> SignalProducer<GZEUser, GZERepositoryError>
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZERepositoryError>
+    func signUp(_ user: GZEUser) -> SignalProducer<GZEFile, GZERepositoryError>
 }

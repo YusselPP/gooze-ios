@@ -62,6 +62,7 @@ class GZESignUpPhotoViewController: UIViewController {
 
         signUpValuesObserver = viewModel.saveAction.values.observeValues { [unowned self] res in
             self.displayMessage("Gooze", "User saved")
+            log.debug(res)
         }
 
         signUpErrorsObserver = viewModel.saveAction.errors.observeValues { [unowned self] (err: Error) in
