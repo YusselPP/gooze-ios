@@ -8,9 +8,10 @@
 
 import Foundation
 import Gloss
-import LoopBack
 import Alamofire
 import ReactiveSwift
+import Validator
+import Localize_Swift
 
 
 class GZEUser: Glossy {
@@ -176,6 +177,98 @@ class GZEUser: Glossy {
             Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(self.createdAt),
             Encoder.encode(dateForKey: "updatedAt", dateFormatter: GZEApi.dateFormatter)(self.updatedAt),
         ])
+    }
+
+    // MARK: Validation
+
+    enum Validation {
+
+        case username
+        case email
+        case password
+
+        case birthday
+        case gender
+        case weight
+        case height
+        case origin
+        case phrase
+
+        case language
+        case interestedIn
+
+        case registerCode
+        case invitedBy
+
+        var fieldName: String {
+            switch self {
+            case .username:
+                return "user.username.fieldName".localized()
+            case .email:
+                return "user.email.fieldName".localized()
+            case .password:
+                return "user.password.fieldName".localized()
+
+            case .birthday:
+                return "user.birthday.fieldName".localized()
+            case .gender:
+                return "user.gender.fieldName".localized()
+            case .weight:
+                return "user.weight.fieldName".localized()
+            case .height:
+                return "user.height.fieldName".localized()
+            case .origin:
+                return "user.origin.fieldName".localized()
+            case .phrase:
+                return "user.phrase.fieldName".localized()
+
+            case .language:
+                return "user.language.fieldName".localized()
+            case .interestedIn:
+                return "user.interestedIn.fieldName".localized()
+
+            case .registerCode:
+                return "user.registerCode.fieldName".localized()
+            case .invitedBy:
+                return "user.invitedBy.fieldName".localized()
+            }
+        }
+
+        func stringRule() -> ValidationRuleSet<String>? {
+
+            var ruleSet = ValidationRuleSet<String>()
+
+            switch self {
+            case .username:
+
+                ruleSet.add(rule: ValidationRuleRequired(error: GZEValidationError.required(fieldName: fieldName)))
+                ruleSet.add(rule: ValidationRuleLength(min: 4, error: GZEValidationError.lengthMin(fieldName: fieldName, min: 4)))
+                ruleSet.add(rule: ValidationRuleLength(max: 128, error: GZEValidationError.lengthMax(fieldName: fieldName, max: 128)))
+            case .email:
+                ruleSet.add(rule: ValidationRuleRequired(error: GZEValidationError.required(fieldName: fieldName)))
+                ruleSet.add(rule: ValidationRulePattern(pattern: EmailValidationPattern.standard, error: GZEValidationError.invalidEmail))
+            case .password:
+                ruleSet.add(rule: ValidationRuleRequired(error: GZEValidationError.required(fieldName: fieldName)))
+
+//            case .birthday:
+//            case .gender:
+//            case .weight:
+//            case .height:
+//            case .origin:
+//            case .phrase:
+//
+//            case .language:
+//            case .interestedIn:
+//            
+//            case .registerCode:
+//            case .invitedBy:
+            default:
+                log.warning("\(self) doesn't have string rules defined")
+                return nil
+            }
+
+            return ruleSet
+        }
     }
 
     // MARK: Deinitializers

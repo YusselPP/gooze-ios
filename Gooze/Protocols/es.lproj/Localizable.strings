@@ -1,0 +1,13 @@
+/* 
+  Localized.strings
+  Gooze
+
+  Created by Yussel Paredes on 11/10/17.
+  Copyright © 2017 Gooze. All rights reserved.
+*/
+
+// GZEValidationError
+"validation.required"="Ingresa tu %@";
+"validation.invalidEmail"="Ingresa un correo electrónico válido";
+"validation.lengthMin"="El campo %@ debe tener al menos %d caracteres";
+"validation.lengthMax"="El campo %@ debe tener máximo %d caracteres";

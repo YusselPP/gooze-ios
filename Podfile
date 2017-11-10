@@ -10,11 +10,11 @@ target 'Gooze' do
   pod 'Localize-Swift', '~> 2.0'
   pod 'SwiftyBeaver'
   pod 'Gloss', '~> 1.2.0'
-  pod 'LoopBack', :git => 'https://github.com/strongloop/loopback-sdk-ios.git'
   pod 'SwiftOverlays', '~> 3.0.0'
   pod 'Alamofire', '~> 4.5'
   pod 'ALCameraViewController', '~> 2.0.3'
   pod 'iCarousel', '~> 1.8.3'
+  pod 'Validator'
 
   target 'GoozeTests' do
     inherit! :search_paths

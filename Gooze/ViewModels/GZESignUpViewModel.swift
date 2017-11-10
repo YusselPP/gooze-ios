@@ -9,6 +9,7 @@
 import Foundation
 import ReactiveSwift
 import iCarousel
+import Validator
 
 class GZESignUpViewModel: NSObject, iCarouselDataSource {
 
@@ -31,6 +32,20 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
     let interestedIn = MutableProperty<String?>("")
 
     var photos = [MutableProperty<UIImage?>]()
+
+
+    enum validationRule {
+        case username
+
+        var stringRules: ValidationRuleSet<String>? {
+            switch self {
+            case .username:
+                return GZEUser.Validation.username.stringRule()
+            default:
+                return nil
+            }
+        }
+    }
 
 
     var saveAction: Action<Void, GZEFile, GZERepositoryError> {

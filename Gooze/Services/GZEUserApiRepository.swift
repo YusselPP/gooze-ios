@@ -11,7 +11,6 @@ import Localize_Swift
 import ReactiveSwift
 import Result
 import Gloss
-import LoopBack
 import Alamofire
 
 class GZEUserApiRepository: GZEUserRepositoryProtocol {

@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import Validator
 
 class GZESignUpBasicViewController: UIViewController {
 
@@ -28,6 +29,18 @@ class GZESignUpBasicViewController: UIViewController {
         viewModel.username <~ usernameTextField.reactive.continuousTextValues
         viewModel.email <~ emailTextField.reactive.continuousTextValues
         viewModel.password <~ passwordTextField.reactive.continuousTextValues
+
+        usernameTextField.validationRules = GZESignUpViewModel.validationRule.username.stringRules
+        usernameTextField.validationHandler = { result in
+            switch result {
+            case .valid:
+                print("valid!")
+            case .invalid(let failureErrors):
+                let messages = failureErrors.map { $0.localizedDescription }.joined(separator: "\n")
+                print("invalid!", messages)
+            }
+        }
+        usernameTextField.validateOnEditingEnd(enabled: true)
     }
 
     override func didReceiveMemoryWarning() {

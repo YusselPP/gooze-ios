@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Gooze
+
+  Created by Yussel Paredes on 11/10/17.
+  Copyright © 2017 Gooze. All rights reserved.
+*/
+
+// GZEUser
+"user.username.fieldName"="username";
+"user.email.fieldName"="email";
+"user.password.fieldName"="password";
+"user.birthday.fieldName"="birthday";
+"user.gender.fieldName"="gender";
+"user.weight.fieldName"="weight";
+"user.height.fieldName"="height";
+"user.origin.fieldName"="origin";
+"user.phrase.fieldName"="phrase";
+"user.language.fieldName"="language";
+"user.interestedIn.fieldName"="interests";
+"user.registerCode.fieldName"="register code";
+"user.invitedBy.fieldName"="invited by";
