@@ -34,7 +34,7 @@ class GZEStorageApiRepository {
             Alamofire.upload(multipartFormData: { multipartFormData in
                 for file in files {
                     if file != nil {
-                        multipartFormData.append(file!, withName: "image")
+                        multipartFormData.append(file!, withName: "image", fileName: "swift_file.jpeg", mimeType: "image/jpeg")
                     }
                 }
 //                for (key, value) in parameters {

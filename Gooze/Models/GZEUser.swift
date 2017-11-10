@@ -127,7 +127,7 @@ class GZEUser: Glossy {
 
         self.languages = "languages" <~~ json
         self.interestedIn = "interestedIn" <~~ json
-        self.photos = "photos" <~~ json
+        // self.photos = "photos" <~~ json
 
         self.currentLocation = "currentLocation" <~~ json
         self.registerCode = "registerCode" <~~ json
@@ -162,7 +162,7 @@ class GZEUser: Glossy {
 
             "languages" ~~> self.languages,
             "interestedIn" ~~> self.interestedIn,
-            "photos" ~~> self.photos,
+            // "photos" ~~> self.photos,
 
             "currentLocation" ~~> self.currentLocation,
             "registerCode" ~~> self.registerCode,

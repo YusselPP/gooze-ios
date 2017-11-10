@@ -185,7 +185,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 if let photos = user.photos {
                     return GZEStorageApiRepository().uploadFiles(photos.map {
                         if let image = $0.image {
-                            return UIImagePNGRepresentation(image)
+                            return UIImageJPEGRepresentation(image, 1)
                         } else {
                             return nil
                         }

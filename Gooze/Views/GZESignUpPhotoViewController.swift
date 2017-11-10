@@ -29,7 +29,6 @@ class GZESignUpPhotoViewController: UIViewController {
     @IBOutlet weak var editButtonView: UIView!
     @IBOutlet weak var carousel: GZECarouselUIView!
     @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var blurEffectView: UIVisualEffectView!
 
 
     override func viewDidLoad() {
@@ -46,13 +45,6 @@ class GZESignUpPhotoViewController: UIViewController {
         editButtonView.layer.cornerRadius = 5
 
         imageContainerView.clipsToBounds = true
-
-        blurEffectView.layer.cornerRadius = 20
-        blurEffectView.layer.masksToBounds = true
-
-
-        let panGesture = UIPanGestureRecognizer(target: self, action:(#selector(GZESignUpPhotoViewController.blurPan(_:))))
-        blurEffectView.addGestureRecognizer(panGesture)
 
         saveButton.reactive.pressed = CocoaAction(viewModel.saveAction)
     }
@@ -72,8 +64,6 @@ class GZESignUpPhotoViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        setViewSize(blurEffectView, CGFloat(50), CGFloat(50))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -99,21 +89,12 @@ class GZESignUpPhotoViewController: UIViewController {
         editPhoto()
     }
 
-    @IBAction func blurPan(_ sender: UIPanGestureRecognizer) {
-        let translation = sender.translation(in: self.view)
-
-        sender.view!.center = CGPoint(x: sender.view!.center.x + translation.x, y: sender.view!.center.y + translation.y)
-        
-        sender.setTranslation(CGPoint.zero, in: self.view)
-    }
-
-
-    func setViewSize(_ view: UIView, _ width: CGFloat, _ heigth: CGFloat) -> Void {
-        let frame = view.frame
-        view.frame = CGRect(x: frame.minX, y: frame.minY, width: width, height: heigth)
-    }
-
     func editPhoto() {
+        guard let currentView = carousel.currentItemView as? UIImageView else {
+            log.warning("Carousel view not selected")
+            return
+        }
+
         let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
 
             log.debug("camera controller handler")
@@ -123,23 +104,38 @@ class GZESignUpPhotoViewController: UIViewController {
                 return
             }
 
-            if image != nil {
-
-                let index = this.carousel.currentItemIndex
-
-                if
-                    let currView = this.carousel.currentItemView as? UIImageView,
-                    index >= 0
-                {
-                    this.carousel.selectedImage.value = image
-                    this.viewModel.photos[index].value = image
-                    currView.image = image
-                }
-            } else {
+            guard let image = image else {
                 log.debug("Empty image received")
+                this.dismiss(animated: true, completion: nil)
+                return
+            }
+
+            guard let compressedImage = GZEImageHelper.compressImage(image) else {
+                log.error("Unable to compress the image")
+                this.dismiss(animated: true, completion: nil)
+                return
+            }
+
+            let blurViewController = GZEBlurViewController(image: compressedImage)
+
+            blurViewController.onCompletion = { blurredImage in
+
+                defer {
+                    this.dismiss(animated: true, completion: nil)
+                }
+
+                guard let blurredImage = blurredImage else {
+                    log.debug("Empty image received")
+                    return
+                }
+
+                this.carousel.selectedImage.value = blurredImage
+                this.viewModel.photos[this.carousel.currentItemIndex].value = blurredImage
+                currentView.image = blurredImage
             }
 
             this.dismiss(animated: true, completion: nil)
+            this.present(blurViewController, animated: true, completion: nil)
         }
 
         present(cameraViewController, animated: true, completion: nil)

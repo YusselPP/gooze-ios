@@ -20,10 +20,15 @@
 		8D572DBB1F9D352F00B824FA /* GZEUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBA1F9D352F00B824FA /* GZEUser.swift */; };
 		8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBC1F9D468C00B824FA /* GZEApi.swift */; };
 		8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */; };
+		8D6C8D511FB418D200EDBC69 /* GZEImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6C8D501FB418D200EDBC69 /* GZEImageHelper.swift */; };
 		8DA28BE71FA1659B00EE1362 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA28BE61FA1659B00EE1362 /* ViewController.swift */; };
 		8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */; };
 		8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */; };
 		8DC972B61FA59E02004E7511 /* CompleteUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DC972B51FA59E02004E7511 /* CompleteUser.json */; };
+		8DD035301FB5143C008EBEAD /* GZEBlurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD0352E1FB5143C008EBEAD /* GZEBlurViewController.swift */; };
+		8DD035311FB5143C008EBEAD /* GZEBlurViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DD0352F1FB5143C008EBEAD /* GZEBlurViewController.xib */; };
+		8DD035331FB55105008EBEAD /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD035321FB55105008EBEAD /* UIImageView+Extension.swift */; };
+		8DD035351FB5C0D8008EBEAD /* GZEUserStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD035341FB5C0D8008EBEAD /* GZEUserStrings.swift */; };
 		8DEC4E201FA57A1000B5EA8E /* GZEUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEC4E1F1FA57A1000B5EA8E /* GZEUserTests.swift */; };
 		8DF1BE461FA824B800FFE02F /* GZEAccesToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF1BE451FA824B800FFE02F /* GZEAccesToken.swift */; };
 		8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720911F9B9B6700485566 /* AppDelegate.swift */; };
@@ -85,10 +90,15 @@
 		8D572DBA1F9D352F00B824FA /* GZEUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUser.swift; sourceTree = "<group>"; };
 		8D572DBC1F9D468C00B824FA /* GZEApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApi.swift; sourceTree = "<group>"; };
 		8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserRepositoryProtocol.swift; sourceTree = "<group>"; };
+		8D6C8D501FB418D200EDBC69 /* GZEImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEImageHelper.swift; sourceTree = "<group>"; };
 		8DA28BE61FA1659B00EE1362 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZESignUpViewModel.swift; sourceTree = "<group>"; };
 		8DC972B51FA59E02004E7511 /* CompleteUser.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CompleteUser.json; sourceTree = "<group>"; };
+		8DD0352E1FB5143C008EBEAD /* GZEBlurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBlurViewController.swift; sourceTree = "<group>"; };
+		8DD0352F1FB5143C008EBEAD /* GZEBlurViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZEBlurViewController.xib; sourceTree = "<group>"; };
+		8DD035321FB55105008EBEAD /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		8DD035341FB5C0D8008EBEAD /* GZEUserStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserStrings.swift; sourceTree = "<group>"; };
 		8DEC4E1F1FA57A1000B5EA8E /* GZEUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserTests.swift; sourceTree = "<group>"; };
 		8DF1BE451FA824B800FFE02F /* GZEAccesToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAccesToken.swift; sourceTree = "<group>"; };
 		8DF7208E1F9B9B6700485566 /* Gooze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gooze.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */,
+				8DD035321FB55105008EBEAD /* UIImageView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -272,6 +283,8 @@
 				F0E067F21FA2528400AE59BE /* GZESignUpMoreViewController.swift */,
 				F0E067F41FA2529F00AE59BE /* GZESignUpPhotoViewController.swift */,
 				F0CA6DBE1FAB6385009C1746 /* GZECarouselUIView.swift */,
+				8DD0352E1FB5143C008EBEAD /* GZEBlurViewController.swift */,
+				8DD0352F1FB5143C008EBEAD /* GZEBlurViewController.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -304,6 +317,8 @@
 				8D572DBC1F9D468C00B824FA /* GZEApi.swift */,
 				8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */,
 				8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */,
+				8D6C8D501FB418D200EDBC69 /* GZEImageHelper.swift */,
+				8DD035341FB5C0D8008EBEAD /* GZEUserStrings.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -450,6 +465,7 @@
 				8DF720CB1F9BA4C500485566 /* Debug.plist in Resources */,
 				8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */,
 				8DF7209C1F9B9B6700485566 /* Assets.xcassets in Resources */,
+				8DD035311FB5143C008EBEAD /* GZEBlurViewController.xib in Resources */,
 				F0EE89161FA7C577001D194C /* Localizable.strings in Resources */,
 				8D572DB71F9D1B8300B824FA /* Staging.plist in Resources */,
 				F0DDECDE1FA1079100450B2D /* Localizable.strings in Resources */,
@@ -656,11 +672,14 @@
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
 				8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */,
 				8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */,
+				8D6C8D511FB418D200EDBC69 /* GZEImageHelper.swift in Sources */,
 				8D14B3641FB2BB41005CE9A9 /* GZEFile.swift in Sources */,
 				8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */,
 				8DF1BE461FA824B800FFE02F /* GZEAccesToken.swift in Sources */,
+				8DD035351FB5C0D8008EBEAD /* GZEUserStrings.swift in Sources */,
 				8DA28BE71FA1659B00EE1362 /* ViewController.swift in Sources */,
 				8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */,
+				8DD035301FB5143C008EBEAD /* GZEBlurViewController.swift in Sources */,
 				F0E067F31FA2528400AE59BE /* GZESignUpMoreViewController.swift in Sources */,
 				F0E067F61FA274B500AE59BE /* GZESignUpPhotoViewController.swift in Sources */,
 				8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */,
@@ -669,6 +688,7 @@
 				F0CA6DBF1FAB6385009C1746 /* GZECarouselUIView.swift in Sources */,
 				F0EE89131FA7A48B001D194C /* GZEApiError.swift in Sources */,
 				F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */,
+				8DD035331FB55105008EBEAD /* UIImageView+Extension.swift in Sources */,
 				F0DDECE41FA1295600450B2D /* GZESearchGoozeViewModel.swift in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,
 				F0E067F11FA2525D00AE59BE /* GZESignUpBasicViewController.swift in Sources */,

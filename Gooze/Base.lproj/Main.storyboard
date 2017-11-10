@@ -100,15 +100,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Usuario" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6eX-MY-EaI">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Usuario" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6eX-MY-EaI">
                                 <rect key="frame" x="70" y="154" width="180" height="30"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="fhJ-9l-Hel"/>
                                     <constraint firstAttribute="height" constant="30" id="rfW-v8-aSd"/>
                                 </constraints>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Correo electrónico" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H7a-eX-2Up">
@@ -320,27 +320,6 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                                         <color key="backgroundColor" red="0.11259449273347855" green="0.1180293932557106" blue="0.12941113114356995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
-                                    <visualEffectView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VIu-Wa-AWy">
-                                        <rect key="frame" x="135" y="127" width="50" height="50"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="76C-aU-hD0">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xth-oD-1xx">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="VvF-s5-FWp">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    </view>
-                                                    <vibrancyEffect>
-                                                        <blurEffect style="light"/>
-                                                    </vibrancyEffect>
-                                                </visualEffectView>
-                                            </subviews>
-                                        </view>
-                                        <blurEffect style="regular"/>
-                                    </visualEffectView>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MLo-Oz-9ew">
                                         <rect key="frame" x="272" y="8" width="26" height="26"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -359,9 +338,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="VIu-Wa-AWy" firstAttribute="centerX" secondItem="dO2-in-Qrd" secondAttribute="centerX" id="FNI-B6-REE"/>
                                     <constraint firstAttribute="trailing" secondItem="4hT-lE-ril" secondAttribute="trailing" id="L7X-jv-wp7"/>
-                                    <constraint firstItem="VIu-Wa-AWy" firstAttribute="centerY" secondItem="dO2-in-Qrd" secondAttribute="centerY" id="TTG-dR-XDX"/>
                                     <constraint firstItem="4hT-lE-ril" firstAttribute="leading" secondItem="dO2-in-Qrd" secondAttribute="leading" id="fIu-sF-PKt"/>
                                     <constraint firstItem="4hT-lE-ril" firstAttribute="top" secondItem="dO2-in-Qrd" secondAttribute="top" id="i4j-oJ-RTb"/>
                                     <constraint firstAttribute="bottom" secondItem="4hT-lE-ril" secondAttribute="bottom" id="sRm-ly-2rP"/>
@@ -410,7 +387,6 @@
                         <barButtonItem key="rightBarButtonItem" title="Guardar" id="ueT-4a-Aly"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="blurEffectView" destination="VIu-Wa-AWy" id="Jz6-Y2-Esc"/>
                         <outlet property="carousel" destination="zpW-6A-lHe" id="DJH-nP-e6a"/>
                         <outlet property="editButtonView" destination="MLo-Oz-9ew" id="olx-Na-5Jl"/>
                         <outlet property="imageContainerView" destination="dO2-in-Qrd" id="UU9-Aj-It7"/>
@@ -419,11 +395,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Jp-4V-1S0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="7Mk-oZ-aZH">
-                    <connections>
-                        <action selector="blurPan:" destination="66d-od-zfu" id="2vQ-76-nPg"/>
-                    </connections>
-                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="4419.375" y="-780.63380281690138"/>
         </scene>
