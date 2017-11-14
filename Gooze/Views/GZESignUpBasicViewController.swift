@@ -21,6 +21,7 @@ class GZESignUpBasicViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
 
+    @IBOutlet weak var usernameFeedbackLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,13 +32,12 @@ class GZESignUpBasicViewController: UIViewController {
         viewModel.password <~ passwordTextField.reactive.continuousTextValues
 
         usernameTextField.validationRules = GZESignUpViewModel.validationRule.username.stringRules
-        usernameTextField.validationHandler = { result in
+        usernameTextField.validationHandler = { [weak self] result in
             switch result {
             case .valid:
                 print("valid!")
             case .invalid(let failureErrors):
-                let messages = failureErrors.map { $0.localizedDescription }.joined(separator: "\n")
-                print("invalid!", messages)
+                self?.usernameFeedbackLabel.text = failureErrors.first?.localizedDescription
             }
         }
         usernameTextField.validateOnEditingEnd(enabled: true)

@@ -34,6 +34,8 @@ class GZEBlurViewController: UIViewController {
     @IBOutlet weak var bottomRightVButton: UIButton!
     @IBOutlet weak var bottomRightHButton: UIButton!
 
+    @IBOutlet weak var applyButton: UIBarButtonItem!
+    
     init(image: UIImage) {
         self.image = image
         super.init(nibName: "GZEBlurViewController", bundle: nil)
@@ -48,6 +50,8 @@ class GZEBlurViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        applyButton.title = Labels.BlurView.applyButtonTitle.localizedDescription
+
         resultImageView.image = image
 
         blurEffectView.addGestureRecognizer(createGestureRecognizer())

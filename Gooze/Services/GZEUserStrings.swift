@@ -22,6 +22,10 @@ enum Labels {
         case displayOkTitle
     }
 
+    enum BlurView {
+        case applyButtonTitle
+    }
+
     case login
 }
 
@@ -36,6 +40,15 @@ extension Labels.Login {
             return "label.login.signUpButtonTitle".localized()
         case .displayOkTitle:
             return "label.login.displayOkTitle".localized()
+        }
+    }
+}
+
+extension Labels.BlurView {
+    public var localizedDescription: String {
+        switch self {
+        case .applyButtonTitle:
+            return "label.blurView.applyButtonTitle".localized()
         }
     }
 }

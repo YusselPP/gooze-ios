@@ -90,11 +90,6 @@ class GZESignUpPhotoViewController: UIViewController {
     }
 
     func editPhoto() {
-        guard let currentView = carousel.currentItemView as? UIImageView else {
-            log.warning("Carousel view not selected")
-            return
-        }
-
         let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
 
             log.debug("camera controller handler")
@@ -126,6 +121,11 @@ class GZESignUpPhotoViewController: UIViewController {
 
                 guard let blurredImage = blurredImage else {
                     log.debug("Empty image received")
+                    return
+                }
+
+                guard let currentView = this.carousel.currentItemView as? UIImageView else {
+                    log.warning("Carousel view not selected")
                     return
                 }
 

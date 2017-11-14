@@ -118,7 +118,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         } else {
             itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 150))
             itemView.image = photos[index].value
-            itemView.contentMode = .scaleToFill
+            itemView.contentMode = .scaleAspectFit
         }
 
         log.debug("item showed \(index)")
