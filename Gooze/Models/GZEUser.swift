@@ -240,15 +240,13 @@ class GZEUser: Glossy {
 
             switch self {
             case .username:
-
-                ruleSet.add(rule: ValidationRuleRequired(error: GZEValidationError.required(fieldName: fieldName)))
-                ruleSet.add(rule: ValidationRuleLength(min: 4, error: GZEValidationError.lengthMin(fieldName: fieldName, min: 4)))
+                ruleSet.add(rule: ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: fieldName)))
                 ruleSet.add(rule: ValidationRuleLength(max: 128, error: GZEValidationError.lengthMax(fieldName: fieldName, max: 128)))
             case .email:
-                ruleSet.add(rule: ValidationRuleRequired(error: GZEValidationError.required(fieldName: fieldName)))
+                ruleSet.add(rule: ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: fieldName)))
                 ruleSet.add(rule: ValidationRulePattern(pattern: EmailValidationPattern.standard, error: GZEValidationError.invalidEmail))
             case .password:
-                ruleSet.add(rule: ValidationRuleRequired(error: GZEValidationError.required(fieldName: fieldName)))
+                ruleSet.add(rule: ValidationRuleLength(min: 8, error: GZEValidationError.lengthMin(fieldName: fieldName, min: 8)))
 
 //            case .birthday:
 //            case .gender:

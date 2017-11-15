@@ -17,32 +17,39 @@ class GZESignUpBasicViewController: UIViewController {
 
     let basicToMoreSignUpSegueId = "basicToMoreSignUpSegue"
 
-    @IBOutlet weak var usernameTextField: UITextField!
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var usernameTextField: GZETextField!
+    @IBOutlet weak var emailTextField: GZETextField!
+    @IBOutlet weak var passwordTextField: GZETextField!
 
     @IBOutlet weak var usernameFeedbackLabel: UILabel!
+    @IBOutlet weak var emailFeedbackLabel: UILabel!
+    @IBOutlet weak var passwordFeedbackLabel: UILabel!
+    
+    @IBOutlet weak var nextButton: UIBarButtonItem!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
-        // Do any additional setup after loading the view.
-        viewModel.username <~ usernameTextField.reactive.continuousTextValues
-        viewModel.email <~ emailTextField.reactive.continuousTextValues
-        viewModel.password <~ passwordTextField.reactive.continuousTextValues
 
+        nextButton.reactive.isEnabled <~ viewModel.isBasicNextButtonEnabled
+
+        usernameTextField.model = viewModel.username
         usernameTextField.validationRules = GZESignUpViewModel.validationRule.username.stringRules
-        usernameTextField.validationHandler = { [weak self] result in
-            switch result {
-            case .valid:
-                self?.usernameFeedbackLabel.text = nil
-            case .invalid(let failureErrors):
-                log.debug(failureErrors)
-                self?.usernameFeedbackLabel.textColor = .red
-                self?.usernameFeedbackLabel.text = failureErrors.first?.localizedDescription
-            }
-        }
+        usernameTextField.validationFeedbackLabel = usernameFeedbackLabel
         usernameTextField.validateOnEditingEnd(enabled: true)
+
+        emailTextField.model = viewModel.email
+        emailTextField.validationRules = GZESignUpViewModel.validationRule.email.stringRules
+        emailTextField.validationFeedbackLabel = emailFeedbackLabel
+        emailTextField.validateOnEditingEnd(enabled: true)
+
+        passwordTextField.model = viewModel.password
+        passwordTextField.validationRules = GZESignUpViewModel.validationRule.password.stringRules
+        passwordTextField.validationFeedbackLabel = passwordFeedbackLabel
+        passwordTextField.validateOnEditingEnd(enabled: true)
+
+        // TODO: Disable next button when invalid data is given
     }
 
     override func didReceiveMemoryWarning() {

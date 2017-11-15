@@ -7,16 +7,48 @@
 //
 
 import UIKit
+import ReactiveSwift
 
-class GZETextField: UIView {
-
+class GZETextField: UITextField {
     
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
+    var validationFeedbackLabel: UILabel?
+    var model: MutableProperty<String?>?
+    var isNextButtonEnabled: MutableProperty<Bool>?
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        log.debug("\(self) init")
+        initProperties()
+    }
+
+    func initProperties() {
+        layer.cornerRadius = 5
+        layer.borderWidth = 0
+        layer.borderColor = UIColor.red.cgColor
+
+        validationHandler = { [weak self] result in
+            switch result {
+            case .valid:
+                self?.validationFeedbackLabel?.text = nil
+                self?.layer.borderWidth = 0
+                self?.isNextButtonEnabled?.value = true
+            case .invalid(let failureErrors):
+                log.debug(failureErrors)
+                self?.layer.borderWidth = 1
+                self?.validationFeedbackLabel?.text = failureErrors.first?.localizedDescription
+                self?.isNextButtonEnabled?.value = false
+            }
+        }
+
+        reactive.continuousTextValues.observeValues { [weak self] in
+            self?.model?.value = $0
+            self?.validationFeedbackLabel?.text = nil
+            self?.layer.borderWidth = 0
+        }
+    }
+
+    // MARK: Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
+    }
 }

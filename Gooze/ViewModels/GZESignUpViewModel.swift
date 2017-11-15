@@ -21,6 +21,8 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
     let email = MutableProperty<String?>("")
     let password = MutableProperty<String?>("")
 
+    let isBasicNextButtonEnabled = MutableProperty<Bool>(false)
+
     // additional data
     let birthday = MutableProperty<String?>("")
     let gender = MutableProperty<String?>("")
@@ -36,13 +38,17 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
 
     enum validationRule {
         case username
+        case email
+        case password
 
         var stringRules: ValidationRuleSet<String>? {
             switch self {
             case .username:
                 return GZEUser.Validation.username.stringRule()
-            default:
-                return nil
+            case .email:
+                return GZEUser.Validation.email.stringRule()
+            case .password:
+                return GZEUser.Validation.password.stringRule()
             }
         }
     }
@@ -71,7 +77,6 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         return Action<Void, GZEFile, GZEError>{[weak self] in
             guard let strongSelf = self else { return SignalProducer.empty }
             strongSelf.fillUser()
-            // return strongSelf.userRepository.create(strongSelf.user)
             return strongSelf.userRepository.signUp(strongSelf.user)
         }
     }
@@ -124,25 +129,6 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         log.debug("item showed \(index)")
         return itemView
     }
-
-//    func numberOfPlaceholders(in carousel: iCarousel) -> Int {
-//        return 5 - photos.count
-//    }
-//
-//    func carousel(_ carousel: iCarousel, placeholderViewAt index: Int, reusing view: UIView?) -> UIView {
-//        var itemView: UIImageView
-//        //reuse view if available, otherwise create a new view
-//        if let view = view as? UIImageView {
-//            itemView = view
-//        } else {
-//            itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-//            itemView.image = #imageLiteral(resourceName: "default-profile-pic")
-//            itemView.contentMode = .scaleToFill
-//        }
-//
-//        log.debug("item showed \(index)")
-//        return itemView
-//    }
 
     // MARK: Deinitializers
     deinit {
