@@ -23,6 +23,7 @@ class GZELoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var forgotPasswordButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,7 @@ class GZELoginViewController: UIViewController {
         // Button titles
         loginButton.setTitle(viewModel.loginButtonTitle, for: .normal)
         signUpButton.setTitle(viewModel.signUpButtonTitle, for: .normal)
+        forgotPasswordButton.setTitle(viewModel.forgotPasswordButtonTitle, for: .normal)
 
 
         // Bindings
@@ -74,11 +76,9 @@ class GZELoginViewController: UIViewController {
     func onLogin(user: GZEAccesToken) -> Void {
 
         hideLoading()
-
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
         if
-            let navController = mainStoryboard.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
+            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
             let viewController = navController.viewControllers.first as? GZESearchGoozeViewController {
 
             loginSuccesObserver?.dispose()
@@ -88,7 +88,7 @@ class GZELoginViewController: UIViewController {
             setRootController(controller: navController)
         } else {
             log.error("Unable to instantiate SearchGoozeNavController")
-            displayMessage("Unexpected error", "Please contact support")
+            displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)
         }
     }
 

@@ -14,6 +14,7 @@ class GZELoginViewModel {
     let viewTitle = "vm.login.loginViewTitle".localized()
     let loginButtonTitle = "vm.login.loginButtonTitle".localized()
     let signUpButtonTitle = "vm.login.signUpButtonTitle".localized()
+    let forgotPasswordButtonTitle = "vm.login.forgotPassword".localized()
     let displayOkTitle = "vm.login.alertOkButtonTitle".localized()
 
     let userRepository: GZEUserRepositoryProtocol
