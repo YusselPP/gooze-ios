@@ -8,23 +8,20 @@
 
 import Foundation
 import ReactiveSwift
-import Result
-import ReactiveCocoa
 
 class GZELoginViewModel {
 
-    let viewTitle = "Login".localized()
-    let loginButtonTitle = "Login".localized()
-    let signUpButtonTitle = "Sign up".localized()
-    let displayOkTitle = "Ok".localized()
+    let viewTitle = "vm.login.loginViewTitle".localized()
+    let loginButtonTitle = "vm.login.loginButtonTitle".localized()
+    let signUpButtonTitle = "vm.login.signUpButtonTitle".localized()
+    let displayOkTitle = "vm.login.alertOkButtonTitle".localized()
 
     let userRepository: GZEUserRepositoryProtocol
-
 
     let email = MutableProperty<String?>("")
     let password = MutableProperty<String?>("")
 
-    var loginAction: Action<Void, GZEAccesToken, GZERepositoryError> {
+    var loginAction: Action<Void, GZEAccesToken, GZEError> {
         if let loginAction = _loginAction {
             return loginAction
         }
@@ -32,9 +29,7 @@ class GZELoginViewModel {
         return _loginAction!
     }
 
-    private var _loginAction: Action<Void, GZEAccesToken, GZERepositoryError>?
-
-
+    private var _loginAction: Action<Void, GZEAccesToken, GZEError>?
 
     // Mark: Initializers
     init(_ userRepository: GZEUserRepositoryProtocol) {
@@ -51,9 +46,9 @@ class GZELoginViewModel {
         return GZESignUpViewModel(userRepository)
     }
 
-    private func createLoginAction() -> Action<Void, GZEAccesToken, GZERepositoryError> {
+    private func createLoginAction() -> Action<Void, GZEAccesToken, GZEError> {
         log.debug("Creating login action")
-        return Action<Void, GZEAccesToken, GZERepositoryError>{[weak self] in
+        return Action<Void, GZEAccesToken, GZEError>{[weak self] in
             guard let strongSelf = self else { return SignalProducer.empty }
             return strongSelf.userRepository.login(strongSelf.email.value, strongSelf.password.value)
         }

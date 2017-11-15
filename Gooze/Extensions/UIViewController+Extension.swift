@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftOverlays
 
 extension UIViewController {
 
@@ -22,5 +23,13 @@ extension UIViewController {
                 window.rootViewController = controller
             }, completion: nil)
         }
+    }
+
+    func showLoading() {
+        SwiftOverlays.showBlockingWaitOverlay()
+    }
+
+    func hideLoading() {
+        SwiftOverlays.removeAllBlockingOverlays()
     }
 }

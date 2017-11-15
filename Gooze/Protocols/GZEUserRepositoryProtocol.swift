@@ -11,10 +11,10 @@ import ReactiveSwift
 
 protocol GZEUserRepositoryProtocol {
 
-    func create(_ user: GZEUser) -> SignalProducer<GZEUser, GZERepositoryError>
-    func update(_ user: GZEUser) -> SignalProducer<GZEUser, GZERepositoryError>
-    func delete(byId id: String) -> SignalProducer<Bool, GZERepositoryError>
-    func find(byId id: String) -> SignalProducer<GZEUser, GZERepositoryError>
-    func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZERepositoryError>
-    func signUp(_ user: GZEUser) -> SignalProducer<GZEFile, GZERepositoryError>
+    func create(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
+    func update(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
+    func delete(byId id: String) -> SignalProducer<Bool, GZEError>
+    func find(byId id: String) -> SignalProducer<GZEUser, GZEError>
+    func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
+    func signUp(_ user: GZEUser) -> SignalProducer<GZEFile, GZEError>
 }

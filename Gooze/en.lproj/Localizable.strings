@@ -28,5 +28,11 @@
 "user.registerCode.fieldName"="register code";
 "user.invitedBy.fieldName"="invited by";
 
+// ViewModel/GZELoginViewController
+"vm.login.loginViewTitle"="Login";
+"vm.login.loginButtonTitle"="Login";
+"vm.login.signUpButtonTitle"="Sign up";
+"vm.login.alertOkButtonTitle"="Ok";
+
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Apply";

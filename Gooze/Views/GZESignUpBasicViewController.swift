@@ -35,8 +35,10 @@ class GZESignUpBasicViewController: UIViewController {
         usernameTextField.validationHandler = { [weak self] result in
             switch result {
             case .valid:
-                print("valid!")
+                self?.usernameFeedbackLabel.text = nil
             case .invalid(let failureErrors):
+                log.debug(failureErrors)
+                self?.usernameFeedbackLabel.textColor = .red
                 self?.usernameFeedbackLabel.text = failureErrors.first?.localizedDescription
             }
         }

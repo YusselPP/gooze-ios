@@ -48,14 +48,14 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
     }
 
 
-    var saveAction: Action<Void, GZEFile, GZERepositoryError> {
+    var saveAction: Action<Void, GZEFile, GZEError> {
         if let saveAction = _saveAction {
             return saveAction
         }
         _saveAction = createSaveAction()
         return _saveAction!
     }
-    private var _saveAction: Action<Void, GZEFile, GZERepositoryError>?
+    private var _saveAction: Action<Void, GZEFile, GZEError>?
 
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
@@ -66,9 +66,9 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         log.debug("\(self) init")
     }
 
-    private func createSaveAction() -> Action<Void, GZEFile, GZERepositoryError> {
+    private func createSaveAction() -> Action<Void, GZEFile, GZEError> {
         log.debug("Creating save action")
-        return Action<Void, GZEFile, GZERepositoryError>{[weak self] in
+        return Action<Void, GZEFile, GZEError>{[weak self] in
             guard let strongSelf = self else { return SignalProducer.empty }
             strongSelf.fillUser()
             // return strongSelf.userRepository.create(strongSelf.user)

@@ -42,9 +42,11 @@
 "user.registerCode.fieldName"="código de registro";
 "user.invitedBy.fieldName"="invitado por";
 
-// Views/GZELoginViewController
-"Login"="Entrar";
-"Sign up"="Registrar";
+// ViewModel/GZELoginViewController
+"vm.login.loginViewTitle"="Inicio de sesión";
+"vm.login.loginButtonTitle"="Entrar";
+"vm.login.signUpButtonTitle"="Registrar";
+"vm.login.alertOkButtonTitle"="Ok";
 
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Aplicar";

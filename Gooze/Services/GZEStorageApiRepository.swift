@@ -17,8 +17,8 @@ class GZEStorageApiRepository {
         log.debug("\(self) init")
     }
 
-    func uploadFiles(_ files: [Data?]) -> SignalProducer<GZEFile, GZERepositoryError> {
-        return SignalProducer<GZEFile, GZERepositoryError> { [weak self] sink, disposable in
+    func uploadFiles(_ files: [Data?]) -> SignalProducer<GZEFile, GZEError> {
+        return SignalProducer<GZEFile, GZEError> { [weak self] sink, disposable in
 
 //            guard let this = self else {
 //                log.error("Unable to complete the task. Self has been disposed.")
@@ -52,7 +52,7 @@ class GZEStorageApiRepository {
                     }
                 case .failure(let error):
                     log.error(error)
-                    sink.send(error: .UnexpectedError)
+                    sink.send(error: .repository(error: .UnexpectedError))
                     sink.sendCompleted()
                 }
             })

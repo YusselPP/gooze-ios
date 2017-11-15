@@ -14,6 +14,7 @@ enum GZEValidationError: Error {
     case invalidEmail
     case lengthMin(fieldName: String, min: Int)
     case lengthMax(fieldName: String, max: Int)
+    
 }
 
 extension GZEValidationError: LocalizedError {
@@ -37,7 +38,6 @@ extension GZEValidationError: LocalizedError {
             message = "validation.lengthMax".localized()
             message = String(format: message, fieldName, max)
         }
-
         return message
     }
 }

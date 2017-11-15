@@ -7,11 +7,8 @@
 //
 
 import UIKit
-import Localize_Swift
 import ReactiveSwift
 import ReactiveCocoa
-import SwiftOverlays
-
 
 class GZELoginViewController: UIViewController {
 
@@ -22,7 +19,6 @@ class GZELoginViewController: UIViewController {
 
     let signUpSegueId = "signUpSegue"
 
-    @IBOutlet weak var feedbackLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -32,7 +28,6 @@ class GZELoginViewController: UIViewController {
         super.viewDidLoad()
 
         log.debug("\(self) init")
-        // Do any additional setup after loading the view.
 
         // Button titles
         loginButton.setTitle(viewModel.loginButtonTitle, for: .normal)
@@ -43,18 +38,15 @@ class GZELoginViewController: UIViewController {
         viewModel.email <~ emailTextField.reactive.continuousTextValues
         viewModel.password <~ passwordTextField.reactive.continuousTextValues
 
-        loginButton.reactive.pressed = CocoaAction(viewModel.loginAction) { _ in
-            SwiftOverlays.showBlockingWaitOverlay()
+        loginButton.reactive.pressed = CocoaAction(viewModel.loginAction) {
+            [weak self] _ in
+
+            self?.showLoading()
         }
 
         loginSuccesObserver = viewModel.loginAction.values.observeValues(onLogin)
 
-        loginErrorObserver = viewModel.loginAction.errors.observeValues {[weak self] err in
-
-            SwiftOverlays.removeAllBlockingOverlays()
-            guard let strongSelf = self else { return }
-            strongSelf.displayMessage(strongSelf.viewModel.viewTitle, err.localizedDescription)
-        }
+        loginErrorObserver = viewModel.loginAction.errors.observeValues(onLoginError)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -81,7 +73,7 @@ class GZELoginViewController: UIViewController {
 
     func onLogin(user: GZEAccesToken) -> Void {
 
-        SwiftOverlays.removeAllBlockingOverlays()
+        hideLoading()
 
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
@@ -98,6 +90,11 @@ class GZELoginViewController: UIViewController {
             log.error("Unable to instantiate SearchGoozeNavController")
             displayMessage("Unexpected error", "Please contact support")
         }
+    }
+
+    func onLoginError(err: GZEError) {
+        hideLoading()
+        displayMessage(viewModel.viewTitle, err.localizedDescription)
     }
 
     // MARK: - Navigation
