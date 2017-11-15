@@ -5,7 +5,48 @@
   Created by Yussel on 10/21/17.
   Copyright © 2017 Gooze. All rights reserved.
 */
+// GoozeApi/GZEApiError
+"username"="usuario";
+"email"="correo electrónico";
+"password"="contraseña";
+"birthday"="fecha de nacimiento";
+
+"can\'t be blank"="no puede estar vacio";
+"is not a valid date"="no es una fecha valida";
+"Invalid password"="no puede estar vacio";
+
 // Protocols/GZEUserApiRepositoryError
 "Unknown error"="Error desconcido";
+
+// Protocols/GZEValidationError
+"validation.required"="Ingresa tu %@";
+"validation.invalidEmail"="Ingresa un correo electrónico válido";
+"validation.lengthMin"="El campo %@ debe tener al menos %d caracteres";
+"validation.lengthMax"="El campo %@ debe tener máximo %d caracteres";
+
 // Services/GZEUserApiRepository
 "email and password are required"="Ingresa tu correo electrónico y contraseña";
+
+// Models/GZEUser
+"user.username.fieldName"="usuario";
+"user.email.fieldName"="correo electrónico";
+"user.password.fieldName"="contraseña";
+"user.birthday.fieldName"="fecha de nacimiento";
+"user.gender.fieldName"="género";
+"user.weight.fieldName"="peso";
+"user.height.fieldName"="altura";
+"user.origin.fieldName"="origen";
+"user.phrase.fieldName"="frase";
+"user.language.fieldName"="idioma";
+"user.interestedIn.fieldName"="interés";
+"user.registerCode.fieldName"="código de registro";
+"user.invitedBy.fieldName"="invitado por";
+
+// Views/GZELoginViewController
+"Login"="Entrar";
+"Sign up"="Registrar";
+
+// Views/GZEBlurViewController
+"label.blurView.applyButtonTitle"="Aplicar";
+
+

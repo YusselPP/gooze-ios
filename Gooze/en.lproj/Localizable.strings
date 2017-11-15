@@ -5,3 +5,28 @@
   Created by Yussel on 10/21/17.
   Copyright © 2017 Gooze. All rights reserved.
 */
+
+// Protocols/GZEValidationError
+"validation.required"="Enter your %@";
+"validation.invalidEmail"="Enter a valid email";
+"validation.lengthMin"="The field %@ must be a minimum of %d characters";
+"validation.lengthMax"="The field %@ must be a maximum of %d characters";
+
+
+// Models/GZEUser
+"user.username.fieldName"="username";
+"user.email.fieldName"="email";
+"user.password.fieldName"="password";
+"user.birthday.fieldName"="birthday";
+"user.gender.fieldName"="gender";
+"user.weight.fieldName"="weight";
+"user.height.fieldName"="height";
+"user.origin.fieldName"="origin";
+"user.phrase.fieldName"="phrase";
+"user.language.fieldName"="language";
+"user.interestedIn.fieldName"="interests";
+"user.registerCode.fieldName"="register code";
+"user.invitedBy.fieldName"="invited by";
+
+// Views/GZEBlurViewController
+"label.blurView.applyButtonTitle"="Apply";
