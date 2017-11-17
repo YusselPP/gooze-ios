@@ -11,7 +11,7 @@ import ReactiveSwift
 import iCarousel
 import Validator
 
-class GZESignUpViewModel: NSObject, iCarouselDataSource {
+class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource {
 
     let userRepository: GZEUserRepositoryProtocol
     let user: GZEUser
@@ -24,8 +24,8 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
     let isBasicNextButtonEnabled = MutableProperty<Bool>(false)
 
     // additional data
-    let birthday = MutableProperty<String?>("")
-    let gender = MutableProperty<String?>("")
+    let birthday = MutableProperty<Date?>(nil)
+    let gender = MutableProperty<GZEUser.Gender?>(nil)
     let weight = MutableProperty<String?>("")
     let height = MutableProperty<String?>("")
     let origin = MutableProperty<String?>("")
@@ -35,6 +35,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
 
     var photos = [MutableProperty<UIImage?>]()
 
+    let genders: [GZEUser.Gender?]
 
     enum validationRule {
         case username
@@ -67,6 +68,11 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
         self.user = GZEUser()
+
+        var genders: [GZEUser.Gender?] = GZEUser.Gender.array
+        genders.insert(nil, at: 0)
+        self.genders = genders
+
         super.init()
 
         log.debug("\(self) init")
@@ -88,10 +94,10 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
         user.password = password.value
 
         if let birthday = birthday.value {
-            user.birthday = DateFormatter().date(from: birthday)
+            user.birthday = birthday
         }
         if let gender = gender.value {
-            user.gender = GZEUser.Gender(rawValue: gender)
+            user.gender = gender
         }
         user.weight = (weight.value as NSString?)?.floatValue
         user.height = (height.value as NSString?)?.floatValue
@@ -104,7 +110,8 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
             user.interestedIn = [interestedIn]
         }
         user.photos = photos.map { GZEUser.Photo(image: $0.value) }
-        log.debug(user)
+
+        log.debug(user.toJSON() as Any)
     }
 
     // MARK: iCarousel data source protocol
@@ -128,6 +135,16 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource {
 
         log.debug("item showed \(index)")
         return itemView
+    }
+
+    // MARK: genderPicker data source protocol
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return genders.count
     }
 
     // MARK: Deinitializers

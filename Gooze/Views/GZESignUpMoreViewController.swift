@@ -10,34 +10,50 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class GZESignUpMoreViewController: UIViewController {
+class GZESignUpMoreViewController: UIViewController, UIPickerViewDelegate {
 
     var viewModel: GZESignUpViewModel!
 
     let moreToPhotoSignUpSegueId = "moreToPhotoSignUpSegue"
 
-    @IBOutlet weak var birthdayTextField: UITextField!
-    @IBOutlet weak var genderTextField: UITextField!
-    @IBOutlet weak var weightTextField: UITextField!
-    @IBOutlet weak var heightTextField: UITextField!
-    @IBOutlet weak var originTextField: UITextField!
-    @IBOutlet weak var phraseTextField: UITextField!
-    @IBOutlet weak var languagesTextField: UITextField!
-    @IBOutlet weak var interestedInTextField: UITextField!
-    
+    @IBOutlet weak var birthdayTextField: GZETextField!
+    @IBOutlet weak var genderTextField: GZETextField!
+    @IBOutlet weak var weightTextField: GZETextField!
+    @IBOutlet weak var heightTextField: GZETextField!
+    @IBOutlet weak var originTextField: GZETextField!
+    @IBOutlet weak var phraseTextField: GZETextField!
+    @IBOutlet weak var languagesTextField: GZETextField!
+    @IBOutlet weak var interestedInTextField: GZETextField!
+
+    let birthdayPicker = UIDatePicker()
+    let genderPicker = UIPickerView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
-        // Do any additional setup after loading the view.
-        viewModel.birthday <~ birthdayTextField.reactive.continuousTextValues
-        viewModel.gender <~ genderTextField.reactive.continuousTextValues
+
+        // viewModel.gender <~ genderTextField.reactive.continuousTextValues
         viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.height <~ heightTextField.reactive.continuousTextValues
         viewModel.origin <~ originTextField.reactive.continuousTextValues
         viewModel.phrase <~ phraseTextField.reactive.continuousTextValues
         viewModel.languages <~ languagesTextField.reactive.continuousTextValues
         viewModel.interestedIn <~ interestedInTextField.reactive.continuousTextValues
+
+        birthdayTextField.reactive.text <~ birthdayPicker.reactive.dates.map { [weak self] in
+            self?.viewModel.birthday.value = $0
+            return GZEDateHelper.dateFormatter.string(from: $0)
+        }
+
+        birthdayPicker.datePickerMode = .date
+        birthdayPicker.maximumDate = Date()
+        birthdayTextField.inputView = birthdayPicker
+
+
+        genderPicker.dataSource = viewModel
+        genderPicker.delegate = self
+        genderTextField.inputView = genderPicker
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,6 +74,18 @@ class GZESignUpMoreViewController: UIViewController {
 
             viewController.viewModel = viewModel
         }
+    }
+
+    // MARK: UIPickerDelegate
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return viewModel.genders[row]?.rawValue
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        log.debug("picker view, selected row: \(row), gender: \(String(describing: viewModel.genders[row]))")
+        viewModel.gender.value = viewModel.genders[row]
+        genderTextField.text = viewModel.gender.value?.rawValue
     }
 
     // MARK: Deinitializers

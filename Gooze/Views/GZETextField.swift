@@ -13,7 +13,7 @@ class GZETextField: UITextField {
     
     var validationFeedbackLabel: UILabel?
     var model: MutableProperty<String?>?
-    var isNextButtonEnabled: MutableProperty<Bool>?
+    var isValid = MutableProperty<Bool>(true)
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -31,12 +31,12 @@ class GZETextField: UITextField {
             case .valid:
                 self?.validationFeedbackLabel?.text = nil
                 self?.layer.borderWidth = 0
-                self?.isNextButtonEnabled?.value = true
+                self?.isValid.value = true
             case .invalid(let failureErrors):
                 log.debug(failureErrors)
                 self?.layer.borderWidth = 1
                 self?.validationFeedbackLabel?.text = failureErrors.first?.localizedDescription
-                self?.isNextButtonEnabled?.value = false
+                self?.isValid.value = false
             }
         }
 

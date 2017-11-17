@@ -20,6 +20,16 @@ class GZEUser: Glossy {
         case male = "male"
         case female = "female"
         case other = "other"
+
+        static var array: [Gender] {
+            var a: [Gender] = []
+            switch Gender.male {
+            case .male: a.append(.male); fallthrough
+            case .female: a.append(.female); fallthrough
+            case .other: a.append(.other);
+            }
+            return a
+        }
     }
 
     enum Status: String {

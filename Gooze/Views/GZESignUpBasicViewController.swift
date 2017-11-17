@@ -32,24 +32,32 @@ class GZESignUpBasicViewController: UIViewController {
 
         log.debug("\(self) init")
 
-        nextButton.reactive.isEnabled <~ viewModel.isBasicNextButtonEnabled
+        // nextButton.reactive.isEnabled <~ viewModel.isBasicNextButtonEnabled
 
         usernameTextField.model = viewModel.username
         usernameTextField.validationRules = GZESignUpViewModel.validationRule.username.stringRules
         usernameTextField.validationFeedbackLabel = usernameFeedbackLabel
-        usernameTextField.validateOnEditingEnd(enabled: true)
+        // usernameTextField.validateOnEditingEnd(enabled: true)
 
         emailTextField.model = viewModel.email
         emailTextField.validationRules = GZESignUpViewModel.validationRule.email.stringRules
         emailTextField.validationFeedbackLabel = emailFeedbackLabel
-        emailTextField.validateOnEditingEnd(enabled: true)
+        //emailTextField.validateOnEditingEnd(enabled: true)
 
         passwordTextField.model = viewModel.password
         passwordTextField.validationRules = GZESignUpViewModel.validationRule.password.stringRules
         passwordTextField.validationFeedbackLabel = passwordFeedbackLabel
-        passwordTextField.validateOnEditingEnd(enabled: true)
+        // passwordTextField.validateOnEditingEnd(enabled: true)
 
-        // TODO: Disable next button when invalid data is given
+        usernameTextField.isValid.producer
+            .and(emailTextField.isValid.producer)
+            .and(passwordTextField.isValid.producer)
+            .startWithValues { [weak self] val in
+
+            self?.viewModel.isBasicNextButtonEnabled.value = val
+        }
+
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,6 +68,13 @@ class GZESignUpBasicViewController: UIViewController {
 
     
     // MARK: - Navigation
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == basicToMoreSignUpSegueId {
+            validate()
+            return viewModel.isBasicNextButtonEnabled.value
+        }
+        return true
+    }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,6 +86,12 @@ class GZESignUpBasicViewController: UIViewController {
 
             viewController.viewModel = viewModel
         }
+    }
+
+    func validate() {
+        usernameTextField.validate()
+        emailTextField.validate()
+        passwordTextField.validate()
     }
 
 
