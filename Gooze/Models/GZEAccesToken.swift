@@ -16,6 +16,13 @@ struct GZEAccesToken: Glossy {
     let userId: String
     let created: Date
 
+    init(id: String, ttl: Int, userId: String, created: Date) {
+        self.id = id
+        self.ttl = ttl
+        self.userId = userId
+        self.created = created
+    }
+
     init?(json: JSON) {
         guard
             let id: String = "id" <~~ json,

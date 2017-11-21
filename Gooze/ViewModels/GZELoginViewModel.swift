@@ -47,9 +47,15 @@ class GZELoginViewModel {
         return GZESignUpViewModel(userRepository)
     }
 
+    func getRegisterCodeViewModel() -> GZERegisterCodeViewModel {
+        return GZERegisterCodeViewModel(userRepository)
+    }
+
     private func createLoginAction() -> Action<Void, GZEAccesToken, GZEError> {
         log.debug("Creating login action")
         return Action<Void, GZEAccesToken, GZEError>{[weak self] in
+
+            // return SignalProducer<GZEAccesToken, GZEError>(value: GZEAccesToken(id: "", ttl: 0, userId: "", created: Date()))
             guard let strongSelf = self else { return SignalProducer.empty }
             return strongSelf.userRepository.login(strongSelf.email.value, strongSelf.password.value)
         }

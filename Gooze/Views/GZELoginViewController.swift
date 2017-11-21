@@ -18,6 +18,7 @@ class GZELoginViewController: UIViewController {
     var loginErrorObserver: Disposable?
 
     let signUpSegueId = "signUpSegue"
+    let registerCodeSegueId = "registerCodeSegue"
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -73,17 +74,25 @@ class GZELoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func signUpButtonTapped(_ sender: UIButton) {
+
+        if GZEAppConfig.useRegisterCode {
+            performSegue(withIdentifier: registerCodeSegueId, sender: self)
+        } else {
+            performSegue(withIdentifier: signUpSegueId, sender: self)
+        }
+    }
+
     func onLogin(user: GZEAccesToken) -> Void {
 
         hideLoading()
         
         if
             let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
-            let viewController = navController.viewControllers.first as? GZESearchGoozeViewController {
+            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
 
             loginSuccesObserver?.dispose()
             loginErrorObserver?.dispose()
-            viewController.viewModel = GZESearchGoozeViewModel()
 
             setRootController(controller: navController)
         } else {
@@ -105,9 +114,16 @@ class GZELoginViewController: UIViewController {
         // Pass the selected object to the new view controller.
         if
             segue.identifier == signUpSegueId,
-            let viewController = segue.destination as? GZESignUpBasicViewController {
+            let viewController = segue.destination as? GZESignUpBasicViewController
+        {
 
             viewController.viewModel = viewModel.getSignUpViewModel()
+
+        } else if
+            segue.identifier == registerCodeSegueId,
+            let viewController = segue.destination as? GZERegisterCodeViewController
+        {
+            viewController.viewModel = viewModel.getRegisterCodeViewModel()
         }
     }
 

@@ -140,7 +140,7 @@ class GZEBlurViewController: UIViewController {
         let ciMaskImage = CIImage(image: blurMask)
 
         filter.setDefaults()
-        filter.setValue(20.0, forKey: kCIInputRadiusKey)
+        filter.setValue(15.0, forKey: kCIInputRadiusKey)
         filter.setValue(ciImage, forKey: kCIInputImageKey)
         filter.setValue(ciMaskImage, forKey: "inputMask")
 

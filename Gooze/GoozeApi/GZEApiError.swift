@@ -15,12 +15,14 @@ struct GZEApiError: Glossy {
     let statusCode: Int?
     let name: String?
     let message: String?
+    let code: String?
     let details: GZEApiErrorDetail?
 
     init?(json: JSON) {
         self.statusCode = "statusCode" <~~ json
         self.name = "name" <~~ json
         self.message = "message" <~~ json
+        self.code = "code" <~~ json
         self.details = "details" <~~ json
     }
 

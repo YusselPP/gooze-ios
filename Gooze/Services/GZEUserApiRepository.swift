@@ -15,10 +15,6 @@ import Validator
 
 class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
-    enum ErrorMessage: String {
-        case UserPassword = "email and password are required"
-    }
-
     init() {
         log.debug("\(self) init")
     }

@@ -19,63 +19,54 @@ class GZEAppConfig {
     private static var _environment: Environments?
 
     static var environment: Environments {
-        get {
-            var config: String?
+        var config: String?
 
-            if _environment != nil {
-                return _environment!
-            }
-
-            config = Bundle.main.object(forInfoDictionaryKey: "Config") as? String
-
-            switch config {
-            case .some(Environments.debug.rawValue):
-                _environment = .debug
-            case .some(Environments.staging.rawValue):
-                _environment = .staging
-            case .some(Environments.release.rawValue):
-                _environment = .release
-            default:
-                _environment = .debug
-                NSLog("Config = $(CONFIGURATION) property not defined in Info.plist. Using defaults")
-            }
-
-            NSLog("Using \(_environment!.rawValue) environment")
-
+        if _environment != nil {
             return _environment!
         }
+
+        config = Bundle.main.object(forInfoDictionaryKey: "Config") as? String
+
+        switch config {
+        case .some(Environments.debug.rawValue):
+            _environment = .debug
+        case .some(Environments.staging.rawValue):
+            _environment = .staging
+        case .some(Environments.release.rawValue):
+            _environment = .release
+        default:
+            _environment = .debug
+            NSLog("Config = $(CONFIGURATION) property not defined in Info.plist. Using defaults")
+        }
+
+        NSLog("Using \(_environment!.rawValue) environment")
+
+        return _environment!
     }
 
     static var logLevel: String {
-        get {
-            return getValue("LogLevel", defaultValue: "error")
-        }
+        return getValue("LogLevel", defaultValue: "error")
     }
 
     static var logAppID: String {
-        get {
-            return getValue("LogAppID", defaultValue: "")
-        }
+        return getValue("LogAppID", defaultValue: "")
     }
 
     static var logAppSecret: String {
-        get {
-            return getValue("LogAppSecret", defaultValue: "")
-        }
+        return getValue("LogAppSecret", defaultValue: "")
     }
 
     static var logAppKey: String {
-        get {
-            return getValue("LogAppKey", defaultValue: "")
-        }
+        return getValue("LogAppKey", defaultValue: "")
     }
 
     static var goozeApiUrl: String {
-        get {
-            return getValue("GoozeApiUrl", defaultValue: "http://localhost:3000/api")
-        }
+        return getValue("GoozeApiUrl", defaultValue: "http://localhost:3000/api")
     }
 
+    static var useRegisterCode: Bool {
+        return getValue("useRegisterCode", defaultValue: true)
+    }
 
 
     // Mark: Load config file
@@ -94,6 +85,11 @@ class GZEAppConfig {
             return
         }
         config = appConfig;
+    }
+
+    // TODO: Implement loading remote configurations
+    static func loadRemote() {
+
     }
 
 

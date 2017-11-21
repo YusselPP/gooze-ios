@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>GoozeApiUrl</key>
-	<string>http://localhost:3000/api</string>
+	<string>http://075f92d2.ngrok.io/api</string>
 	<key>LogLevel</key>
 	<string>debug</string>
 	<key>LogAppID</key>

@@ -54,6 +54,9 @@ class GZESignUpMoreViewController: UIViewController, UIPickerViewDelegate {
         genderPicker.dataSource = viewModel
         genderPicker.delegate = self
         genderTextField.inputView = genderPicker
+
+        // TODO: Validate numbers
+        // TODO: validate interests
     }
 
     override func didReceiveMemoryWarning() {

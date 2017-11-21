@@ -37,3 +37,5 @@
 
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Apply";
+
+"login failed"="Invalid username or password";
