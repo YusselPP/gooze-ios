@@ -66,13 +66,13 @@ class GZEChooseModeViewController: UIViewController {
     func showHelp(_ show: Bool) {
         UIView.animate(withDuration: 0.5) { [unowned self] in
             if show == true {
-                self.bottomConstraint.constant = self.view.frame.height / 2 + 40
+                self.bottomConstraint.constant = self.view.frame.height / 2
                 self.goozeHelpLabel.alpha = 1
                 self.clientHelpLabel.alpha = 1
                 self.closeHelpButton.customView?.alpha = 1
                 self.showHelpButton.alpha = 0
             } else {
-                self.bottomConstraint.constant = self.view.frame.height / 4 + 40
+                self.bottomConstraint.constant = self.view.frame.height / 4
                 self.goozeHelpLabel.alpha = 0
                 self.clientHelpLabel.alpha = 0
                 self.closeHelpButton.customView?.alpha = 0

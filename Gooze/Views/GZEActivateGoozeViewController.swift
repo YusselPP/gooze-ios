@@ -83,16 +83,14 @@ class GZEActivateGoozeViewController: UIViewController {
     @IBAction func enableGoozeButtonTapped(_ sender: UIButton) {
         let coord = mapView.centerCoordinate
 
-        var message = "ACTIVO POR: \(timeSlider.value) hrs\nRANGO: \(distanceSlider.value) kms\nLAT: \(round(coord.latitude * 1000)/1000)\nLNG: \(round(coord.longitude * 1000)/1000)"
-
-        log.debug(mapView.userLocation.location)
+        var message = "ACTIVO POR: \(timeSlider.value) hrs\nRANGO: \(distanceSlider.value) kms\nLAT: \(coord.latitude)\nLNG: \(coord.longitude)"
 
         let location = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
-            log.debug(placemarks)
-            log.debug(error)
+
             if let error = error {
                 // An error occurred during geocoding.
+                log.error(error)
                 self?.displayMessage("No se pudo obtener la ubicación", error.localizedDescription)
             }
             else {

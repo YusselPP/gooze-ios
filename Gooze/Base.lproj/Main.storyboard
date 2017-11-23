@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DG4-Ue-xVF">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DG4-Ue-xVF">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,11 +27,11 @@
                         <viewControllerLayoutGuide type="bottom" id="MHZ-m2-D39"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="889-jd-Zop">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Register code" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TxA-ii-1iN">
-                                <rect key="frame" x="70" y="237" width="180" height="30"/>
+                                <rect key="frame" x="70" y="269" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="7Ey-Zo-fSV"/>
@@ -43,7 +42,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" red="0.12415105849999999" green="0.12993165849999999" blue="0.14508575200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="TxA-ii-1iN" firstAttribute="centerY" secondItem="889-jd-Zop" secondAttribute="centerY" id="Ybv-eT-mZR"/>
                             <constraint firstItem="TxA-ii-1iN" firstAttribute="centerX" secondItem="889-jd-Zop" secondAttribute="centerX" id="wAP-wv-4K3"/>
@@ -73,11 +72,11 @@
                         <viewControllerLayoutGuide type="bottom" id="x5G-qV-cTP"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="123admin" borderStyle="roundedRect" placeholder="Contraseña" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xb8-Nb-vVJ">
-                                <rect key="frame" x="70" y="235" width="180" height="30"/>
+                                <rect key="frame" x="70" y="299" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="1Tl-jE-Oy7"/>
@@ -88,14 +87,14 @@
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aDE-lK-3ND">
-                                <rect key="frame" x="134" y="441" width="52" height="30"/>
+                                <rect key="frame" x="134" y="505" width="52" height="30"/>
                                 <state key="normal" title="Sign up"/>
                                 <connections>
                                     <action selector="signUpButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Cqz-OO-oeM"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="admin@gooze.com" borderStyle="roundedRect" placeholder="Usuario" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="377-6E-sYW">
-                                <rect key="frame" x="70" y="190" width="180" height="30"/>
+                                <rect key="frame" x="70" y="254" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="acl-RB-DmU"/>
@@ -106,14 +105,14 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="3OG-e3-b10">
-                                <rect key="frame" x="110" y="30" width="100" height="120"/>
+                                <rect key="frame" x="110" y="94" width="100" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="nQN-yB-7Xg"/>
                                     <constraint firstAttribute="height" constant="120" id="od5-kX-vls"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KEk-yY-cfW">
-                                <rect key="frame" x="70" y="347" width="180" height="35"/>
+                                <rect key="frame" x="70" y="411" width="180" height="35"/>
                                 <color key="backgroundColor" red="0.1803921568627451" green="0.80784313725490198" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="2ey-RJ-OgK"/>
@@ -129,12 +128,12 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yWi-1C-LMU">
-                                <rect key="frame" x="102.5" y="295" width="115" height="27"/>
+                                <rect key="frame" x="102.5" y="359" width="115" height="27"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <state key="normal" title="Forgot my password"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="o" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ujF-MB-s47">
-                                <rect key="frame" x="155.5" y="408" width="9" height="18"/>
+                                <rect key="frame" x="155.5" y="472" width="9" height="18"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                 </accessibility>
@@ -146,7 +145,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qnw-DL-nzJ">
-                                <rect key="frame" x="73.5" y="417" width="75" height="2"/>
+                                <rect key="frame" x="73.5" y="481" width="75" height="2"/>
                                 <color key="backgroundColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="AdH-ps-rfb"/>
@@ -154,7 +153,7 @@
                                 </constraints>
                             </view>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xVD-hl-nRW">
-                                <rect key="frame" x="171.5" y="417" width="75" height="2"/>
+                                <rect key="frame" x="171.5" y="481" width="75" height="2"/>
                                 <color key="backgroundColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="O8R-0l-GQx"/>
@@ -209,11 +208,11 @@
                         <viewControllerLayoutGuide type="bottom" id="o5p-I1-8dJ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8t7-vt-l8m">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Correo electrónico" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H7a-eX-2Up" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="70" y="100" width="180" height="30"/>
+                                <rect key="frame" x="70" y="164" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="T6Z-u1-MJw"/>
@@ -224,7 +223,7 @@
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Usuario" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6eX-MY-EaI" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="70" y="60" width="180" height="30"/>
+                                <rect key="frame" x="70" y="124" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="fhJ-9l-Hel"/>
@@ -235,7 +234,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZjZ-QN-DXN">
-                                <rect key="frame" x="70" y="95" width="180" height="0.0"/>
+                                <rect key="frame" x="70" y="159" width="180" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="180" id="UFs-UQ-3Z3"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="m88-x2-f3A"/>
@@ -245,7 +244,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="way-mq-JyA">
-                                <rect key="frame" x="70" y="135" width="180" height="0.0"/>
+                                <rect key="frame" x="70" y="199" width="180" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="180" id="0Hu-Bt-Y8Q"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="lqZ-rk-4x2"/>
@@ -255,7 +254,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1uE-EQ-5Br">
-                                <rect key="frame" x="70" y="175" width="180" height="0.0"/>
+                                <rect key="frame" x="70" y="239" width="180" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="UcL-8f-Pmm"/>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="180" id="bvT-jf-KFX"/>
@@ -265,7 +264,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Contraseña" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="grg-n3-sB7" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="70" y="140" width="180" height="30"/>
+                                <rect key="frame" x="70" y="204" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="AjG-lG-eam"/>
@@ -276,7 +275,7 @@
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="ZjZ-QN-DXN" firstAttribute="centerX" secondItem="8t7-vt-l8m" secondAttribute="centerX" id="6eq-VD-qaT"/>
@@ -323,10 +322,10 @@
                         <viewControllerLayoutGuide type="bottom" id="wQh-iF-nBV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="WmD-1J-wx2">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Interasado en" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sjZ-nD-feW" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Interasado en" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sjZ-nD-feW" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="439" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -337,7 +336,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Género" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IzF-2J-7wJ" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Género" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IzF-2J-7wJ" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="229" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -348,7 +347,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Peso" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aup-w3-dhk" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Peso" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aup-w3-dhk" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="264" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -359,7 +358,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Estatura" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qFq-V0-P2L" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Estatura" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qFq-V0-P2L" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="299" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -370,7 +369,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Lugar de origen" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="a0p-LU-Ioz" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Lugar de origen" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="a0p-LU-Ioz" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="334" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -381,7 +380,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Frase" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NbQ-Eg-dPE" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Frase" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NbQ-Eg-dPE" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="369" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -392,7 +391,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="lenguas" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZHg-0t-tuz" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="lenguas" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZHg-0t-tuz" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="404" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -403,7 +402,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Fecha de nacimiento" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OkN-dk-6fx" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Fecha de nacimiento" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OkN-dk-6fx" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="70" y="194" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -466,11 +465,11 @@
                         <viewControllerLayoutGuide type="bottom" id="gqe-F9-hQo"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="x1W-Q7-wWL">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dO2-in-Qrd">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="304"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4hT-lE-ril">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
@@ -510,9 +509,9 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XV1-l3-ykz">
-                                <rect key="frame" x="0.0" y="304" width="320" height="200"/>
+                                <rect key="frame" x="0.0" y="368" width="320" height="200"/>
                                 <subviews>
-                                    <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zpW-6A-lHe" customClass="GZECarouselUIView" customModule="Gooze" customModuleProvider="target">
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zpW-6A-lHe" customClass="GZECarouselUIView" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="8" y="110" width="304" height="82"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -585,14 +584,14 @@
                         <viewControllerLayoutGuide type="bottom" id="cAx-OH-86K"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="LPF-YG-LAa">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="1Uq-Kh-1Uj">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PH3-zt-MvS">
-                                <rect key="frame" x="70" y="414" width="180" height="35"/>
+                                <rect key="frame" x="70" y="478" width="180" height="35"/>
                                 <color key="backgroundColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="feV-ia-4ZV"/>
@@ -617,14 +616,14 @@
                                 </connections>
                             </button>
                             <view alpha="0.58999999999999997" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uEP-GW-QrN">
-                                <rect key="frame" x="0.0" y="459" width="320" height="45"/>
+                                <rect key="frame" x="0.0" y="523" width="320" height="45"/>
                                 <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Q4T-av-28m"/>
                                 </constraints>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="80a-Wx-iQm">
-                                <rect key="frame" x="54" y="459" width="198" height="46"/>
+                                <rect key="frame" x="54" y="523" width="198" height="46"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="aZv-ZE-MC2"/>
                                 </constraints>
@@ -635,14 +634,14 @@
                                 </connections>
                             </slider>
                             <view alpha="0.51000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OYR-Ad-JXG">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="45"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Wbd-Og-9P4"/>
                                 </constraints>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="QGV-rv-vPK">
-                                <rect key="frame" x="62" y="0.0" width="190" height="46"/>
+                                <rect key="frame" x="62" y="64" width="190" height="46"/>
                                 <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="zam-QP-S56"/>
@@ -655,14 +654,14 @@
                                 </connections>
                             </slider>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navigation-icon" translatesAutoresizingMaskIntoConstraints="NO" id="6SB-GO-3Wb">
-                                <rect key="frame" x="20" y="12" width="24" height="24"/>
+                                <rect key="frame" x="20" y="76" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="DFo-xG-Ego"/>
                                     <constraint firstAttribute="height" constant="24" id="L3T-sj-YL0"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NeT-Hf-MSf">
-                                <rect key="frame" x="255" y="0.0" width="60" height="45"/>
+                                <rect key="frame" x="255" y="64" width="60" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="ZYu-DE-QUM"/>
                                     <constraint firstAttribute="width" constant="60" id="fgR-xC-QEW"/>
@@ -671,7 +670,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1.5 hrs" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5rg-Hu-enC">
-                                <rect key="frame" x="255" y="459" width="60" height="45"/>
+                                <rect key="frame" x="255" y="523" width="60" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="Px7-za-JkB"/>
                                     <constraint firstAttribute="height" constant="45" id="qlK-Ma-fDq"/>
@@ -681,7 +680,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pin-w-shadow" translatesAutoresizingMaskIntoConstraints="NO" id="vL6-Ko-X92">
-                                <rect key="frame" x="152.5" y="200" width="55" height="52"/>
+                                <rect key="frame" x="148" y="268" width="55" height="52"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="55" id="FeD-Km-c1B"/>
                                     <constraint firstAttribute="height" constant="52" id="fyN-rz-Tnu"/>
@@ -692,7 +691,7 @@
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="cAx-OH-86K" firstAttribute="top" secondItem="1Uq-Kh-1Uj" secondAttribute="bottom" id="211-9l-E56"/>
-                            <constraint firstItem="vL6-Ko-X92" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" constant="20" id="2af-5h-kPP"/>
+                            <constraint firstItem="vL6-Ko-X92" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" constant="16" id="2af-5h-kPP"/>
                             <constraint firstAttribute="trailing" secondItem="NeT-Hf-MSf" secondAttribute="trailing" constant="5" id="5WK-D3-61F"/>
                             <constraint firstItem="80a-Wx-iQm" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leadingMargin" constant="40" id="GGg-ld-rGW"/>
                             <constraint firstItem="5rg-Hu-enC" firstAttribute="leading" secondItem="80a-Wx-iQm" secondAttribute="trailing" constant="5" id="GmV-Kg-diZ"/>
@@ -706,7 +705,7 @@
                             <constraint firstItem="1Uq-Kh-1Uj" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="bSI-e8-Lry"/>
                             <constraint firstItem="QGV-rv-vPK" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="ePM-y7-FZn"/>
                             <constraint firstItem="uEP-GW-QrN" firstAttribute="top" secondItem="PH3-zt-MvS" secondAttribute="bottom" constant="10" id="frd-kH-Hp1"/>
-                            <constraint firstItem="vL6-Ko-X92" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" constant="-26" id="hkh-I3-ijy"/>
+                            <constraint firstItem="vL6-Ko-X92" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" constant="10" id="hkh-I3-ijy"/>
                             <constraint firstItem="QGV-rv-vPK" firstAttribute="leading" secondItem="6SB-GO-3Wb" secondAttribute="trailing" constant="20" id="jSf-Kn-pvU"/>
                             <constraint firstItem="uEP-GW-QrN" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leading" id="jbp-aN-NNk"/>
                             <constraint firstItem="PH3-zt-MvS" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" id="nhI-gr-6Yl"/>
@@ -747,7 +746,7 @@
                         <viewControllerLayoutGuide type="bottom" id="yl3-H7-mYq"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ar9-1k-Nx6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -765,11 +764,11 @@
                         <viewControllerLayoutGuide type="bottom" id="8i2-yi-jtN"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="tN4-i1-7xc">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3A-St-6Vf">
-                                <rect key="frame" x="274" y="444" width="30" height="45"/>
+                                <rect key="frame" x="274" y="508" width="30" height="45"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="28"/>
                                 <state key="normal" title="?"/>
                                 <connections>
@@ -882,7 +881,7 @@
             <objects>
                 <navigationController storyboardIdentifier="SearchGoozeNavController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yoJ-Tt-J3u" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="aiZ-GA-T9n">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aiZ-GA-T9n">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -906,7 +905,7 @@
             <objects>
                 <navigationController storyboardIdentifier="LoginNavController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DG4-Ue-xVF" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="5a5-93-DFD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5a5-93-DFD">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -914,7 +913,9 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="VIG-vL-FDD">
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="UzI-l7-Yhb"/>
@@ -932,7 +933,7 @@
         <image name="pin-w-shadow" width="95" height="86"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vVb-3U-XOw"/>
+        <segue reference="Lsk-jR-YPn"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
