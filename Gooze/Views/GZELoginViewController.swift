@@ -94,6 +94,8 @@ class GZELoginViewController: UIViewController {
             loginSuccesObserver?.dispose()
             loginErrorObserver?.dispose()
 
+            viewController.viewModel = viewModel.getChooseModeViewModel()
+
             setRootController(controller: navController)
         } else {
             log.error("Unable to instantiate SearchGoozeNavController")

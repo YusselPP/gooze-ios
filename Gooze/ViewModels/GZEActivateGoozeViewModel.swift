@@ -1,14 +1,14 @@
 //
-//  GZESearchGoozeViewModel.swift
+//  GZEActivateGoozeViewModel.swift
 //  Gooze
 //
-//  Created by Yussel Paredes on 10/25/17.
+//  Created by Yussel on 11/22/17.
 //  Copyright © 2017 Gooze. All rights reserved.
 //
 
 import Foundation
 
-class GZESearchGoozeViewModel {
+class GZEActivateGoozeViewModel {
 
     let userRepository: GZEUserRepositoryProtocol
 

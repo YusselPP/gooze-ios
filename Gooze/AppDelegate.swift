@@ -64,6 +64,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         UINavigationBar.appearance().isTranslucent = false
 
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+
         // UITextField.appearance().backgroundColor = .black
         // UITextField.appearance().textColor = .white
         // UITextField.appearance().tintColor = UIColor(red: 44/255, green: 198/255, blue: 159/255, alpha: 1)

@@ -40,7 +40,7 @@ class GZELoginViewModel {
 
 
     func getSearchGoozeViewModel() -> GZESearchGoozeViewModel {
-        return GZESearchGoozeViewModel()
+        return GZESearchGoozeViewModel(userRepository)
     }
 
     func getSignUpViewModel() -> GZESignUpViewModel {
@@ -49,6 +49,10 @@ class GZELoginViewModel {
 
     func getRegisterCodeViewModel() -> GZERegisterCodeViewModel {
         return GZERegisterCodeViewModel(userRepository)
+    }
+
+    func getChooseModeViewModel() -> GZEChooseModeViewModel {
+        return GZEChooseModeViewModel(userRepository)
     }
 
     private func createLoginAction() -> Action<Void, GZEAccesToken, GZEError> {

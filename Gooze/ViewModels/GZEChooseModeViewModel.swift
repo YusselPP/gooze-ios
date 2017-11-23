@@ -1,14 +1,14 @@
 //
-//  GZESearchGoozeViewModel.swift
+//  GZEChooseModeViewModel.swift
 //  Gooze
 //
-//  Created by Yussel Paredes on 10/25/17.
+//  Created by Yussel on 11/22/17.
 //  Copyright © 2017 Gooze. All rights reserved.
 //
 
 import Foundation
 
-class GZESearchGoozeViewModel {
+class GZEChooseModeViewModel {
 
     let userRepository: GZEUserRepositoryProtocol
 
@@ -17,7 +17,15 @@ class GZESearchGoozeViewModel {
 
         log.debug("\(self) init")
     }
-    
+
+    func getSearchGoozeViewModel() -> GZESearchGoozeViewModel {
+        return GZESearchGoozeViewModel(userRepository)
+    }
+
+    func getActivateGoozeViewModel() -> GZEActivateGoozeViewModel {
+        return GZEActivateGoozeViewModel(userRepository)
+    }
+
     // MARK: Deinitializers
     deinit {
         log.debug("\(self) disposed")

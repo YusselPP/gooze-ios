@@ -10,7 +10,10 @@ import UIKit
 
 class GZEChooseModeViewController: UIViewController {
 
+    var viewModel: GZEChooseModeViewModel!
+
     let searchGoozeSegueId = "searchGoozeSegueId"
+    let activateGoozeSegueId = "activateGoozeSegueId"
 
     @IBOutlet weak var gooze: UIButton!
     @IBOutlet weak var client: UIButton!
@@ -21,6 +24,8 @@ class GZEChooseModeViewController: UIViewController {
     @IBOutlet weak var goozeHelpLabel: UILabel!
     @IBOutlet weak var clientHelpLabel: UILabel!
 
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,6 +34,12 @@ class GZEChooseModeViewController: UIViewController {
         goozeHelpLabel.alpha = 0
         clientHelpLabel.alpha = 0
         closeHelpButton.customView?.alpha = 0
+
+        bottomConstraint.constant = view.frame.height / 8
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,7 +48,7 @@ class GZEChooseModeViewController: UIViewController {
     }
     
     @IBAction func goozeButtonTapped(_ sender: Any) {
-
+        performSegue(withIdentifier: activateGoozeSegueId, sender: self)
     }
 
     @IBAction func clientButtonTapped(_ sender: Any) {
@@ -53,22 +64,21 @@ class GZEChooseModeViewController: UIViewController {
     }
 
     func showHelp(_ show: Bool) {
-        UIView.animate(withDuration: 0.3) { [weak self] in
-
-            log.debug(show)
+        UIView.animate(withDuration: 0.5) { [unowned self] in
             if show == true {
-                log.debug("show")
-                self?.goozeHelpLabel.alpha = 1
-                self?.clientHelpLabel.alpha = 1
-                self?.closeHelpButton.customView?.alpha = 1
-                self?.showHelpButton.alpha = 0
+                self.bottomConstraint.constant = self.view.frame.height / 2 + 40
+                self.goozeHelpLabel.alpha = 1
+                self.clientHelpLabel.alpha = 1
+                self.closeHelpButton.customView?.alpha = 1
+                self.showHelpButton.alpha = 0
             } else {
-                log.debug("hide")
-                self?.goozeHelpLabel.alpha = 0
-                self?.clientHelpLabel.alpha = 0
-                self?.closeHelpButton.customView?.alpha = 0
-                self?.showHelpButton.alpha = 1
+                self.bottomConstraint.constant = self.view.frame.height / 4 + 40
+                self.goozeHelpLabel.alpha = 0
+                self.clientHelpLabel.alpha = 0
+                self.closeHelpButton.customView?.alpha = 0
+                self.showHelpButton.alpha = 1
             }
+            self.view.layoutIfNeeded()
         }
     }
 
@@ -78,13 +88,20 @@ class GZEChooseModeViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if
-            segue.identifier == searchGoozeSegueId,
-            let viewController = segue.destination as? GZESearchGoozeViewController
-        {
+        if segue.identifier == searchGoozeSegueId {
 
-            viewController.viewModel = GZESearchGoozeViewModel()
+            if let viewController = segue.destination as? GZESearchGoozeViewController {
+                viewController.viewModel = viewModel.getSearchGoozeViewModel()
+            } else {
+                log.error("Unable to instantiate GZESearchGoozeViewController")
+            }
+        } else if segue.identifier == activateGoozeSegueId {
 
+            if let viewController = segue.destination as? GZEActivateGoozeViewController {
+                viewController.viewModel = viewModel.getActivateGoozeViewModel()
+            } else {
+                log.error("Unable to instantiate GZESearchGoozeViewController")
+            }
         }
     }
 
