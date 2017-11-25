@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -86,7 +86,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="Pyx-RP-Rxb">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="123admin" borderStyle="roundedRect" placeholder="Contraseña" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xb8-Nb-vVJ">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="123admin" borderStyle="roundedRect" placeholder="Contraseña" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xb8-Nb-vVJ">
                                 <rect key="frame" x="70" y="255" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -97,14 +97,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aDE-lK-3ND">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aDE-lK-3ND">
                                 <rect key="frame" x="134" y="461" width="52" height="30"/>
                                 <state key="normal" title="Sign up"/>
                                 <connections>
                                     <action selector="signUpButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Cqz-OO-oeM"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="admin@gooze.com" borderStyle="roundedRect" placeholder="Usuario" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="377-6E-sYW">
+                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="admin@gooze.com" borderStyle="roundedRect" placeholder="Usuario" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="377-6E-sYW">
                                 <rect key="frame" x="70" y="210" width="180" height="30"/>
                                 <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -115,14 +115,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="3OG-e3-b10">
-                                <rect key="frame" x="110" y="50" width="100" height="120"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="nQN-yB-7Xg"/>
-                                    <constraint firstAttribute="height" constant="120" id="od5-kX-vls"/>
-                                </constraints>
-                            </imageView>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KEk-yY-cfW">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KEk-yY-cfW">
                                 <rect key="frame" x="70" y="367" width="180" height="35"/>
                                 <color key="backgroundColor" red="0.1803921568627451" green="0.80784313725490198" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -138,12 +131,12 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yWi-1C-LMU">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yWi-1C-LMU">
                                 <rect key="frame" x="102.5" y="315" width="115" height="27"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <state key="normal" title="Forgot my password"/>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="o" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ujF-MB-s47">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="o" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ujF-MB-s47">
                                 <rect key="frame" x="155.5" y="428" width="9" height="18"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
@@ -155,7 +148,7 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qnw-DL-nzJ">
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qnw-DL-nzJ">
                                 <rect key="frame" x="73.5" y="437" width="75" height="2"/>
                                 <color key="backgroundColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -163,12 +156,34 @@
                                     <constraint firstAttribute="height" constant="2" id="qr6-2V-pB2"/>
                                 </constraints>
                             </view>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xVD-hl-nRW">
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xVD-hl-nRW">
                                 <rect key="frame" x="171.5" y="437" width="75" height="2"/>
                                 <color key="backgroundColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="O8R-0l-GQx"/>
                                     <constraint firstAttribute="height" constant="2" id="zLI-hy-5XV"/>
+                                </constraints>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TOQ-Yk-8SQ">
+                                <rect key="frame" x="115" y="20" width="91" height="198"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="FX4-Yp-EPL">
+                                        <rect key="frame" x="0.0" y="0.0" width="91" height="145"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="llB-Bf-u77">
+                                        <rect key="frame" x="0.0" y="145" width="91" height="33"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="FX4-Yp-EPL" firstAttribute="top" secondItem="TOQ-Yk-8SQ" secondAttribute="top" id="HKb-vv-fCy"/>
+                                    <constraint firstAttribute="width" constant="91" id="R23-jC-eOJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="FX4-Yp-EPL" secondAttribute="trailing" id="S0Q-Wd-yPc"/>
+                                    <constraint firstItem="FX4-Yp-EPL" firstAttribute="leading" secondItem="TOQ-Yk-8SQ" secondAttribute="leading" id="Wdt-oW-qdU"/>
+                                    <constraint firstItem="llB-Bf-u77" firstAttribute="leading" secondItem="TOQ-Yk-8SQ" secondAttribute="leading" id="YeE-Y6-z1u"/>
+                                    <constraint firstItem="llB-Bf-u77" firstAttribute="top" secondItem="FX4-Yp-EPL" secondAttribute="bottom" id="aWL-bn-qpo"/>
+                                    <constraint firstAttribute="height" constant="198" id="dUf-xU-MHA"/>
+                                    <constraint firstAttribute="bottom" secondItem="llB-Bf-u77" secondAttribute="bottom" constant="20" id="nhU-8D-Ck9"/>
+                                    <constraint firstAttribute="trailing" secondItem="llB-Bf-u77" secondAttribute="trailing" id="zql-ZR-CQk"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -177,15 +192,12 @@
                         <constraints>
                             <constraint firstItem="Pyx-RP-Rxb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="0PB-p0-ngU"/>
                             <constraint firstItem="ujF-MB-s47" firstAttribute="leadingMargin" secondItem="Qnw-DL-nzJ" secondAttribute="trailing" constant="15" id="3ag-1b-O5B"/>
-                            <constraint firstItem="3OG-e3-b10" firstAttribute="top" secondItem="Dlw-mc-1b0" secondAttribute="bottom" constant="30" id="490-WN-cpa"/>
                             <constraint firstItem="yWi-1C-LMU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="4EA-4m-32g"/>
                             <constraint firstItem="xVD-hl-nRW" firstAttribute="top" secondItem="KEk-yY-cfW" secondAttribute="bottom" constant="35" id="6S8-8T-1Wd"/>
                             <constraint firstItem="aDE-lK-3ND" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7a7-lX-P2H"/>
-                            <constraint firstItem="3OG-e3-b10" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Bv7-eI-ege"/>
                             <constraint firstAttribute="trailing" secondItem="Pyx-RP-Rxb" secondAttribute="trailing" id="Gfs-SC-71K"/>
                             <constraint firstItem="KEk-yY-cfW" firstAttribute="top" secondItem="yWi-1C-LMU" secondAttribute="bottom" constant="25" id="JNW-2v-I7W"/>
                             <constraint firstItem="ujF-MB-s47" firstAttribute="top" secondItem="KEk-yY-cfW" secondAttribute="bottom" constant="26" id="Le8-aS-8TH"/>
-                            <constraint firstItem="377-6E-sYW" firstAttribute="top" secondItem="3OG-e3-b10" secondAttribute="bottom" constant="40" id="MYH-hx-rP9"/>
                             <constraint firstItem="yWi-1C-LMU" firstAttribute="top" secondItem="xb8-Nb-vVJ" secondAttribute="bottom" constant="30" id="RH1-1H-5ua"/>
                             <constraint firstAttribute="bottom" secondItem="Pyx-RP-Rxb" secondAttribute="bottom" id="YZJ-HS-Qzh"/>
                             <constraint firstItem="xVD-hl-nRW" firstAttribute="leading" secondItem="ujF-MB-s47" secondAttribute="trailingMargin" constant="15" id="a7r-nq-fry"/>
@@ -792,7 +804,7 @@
         <!--Choose Mode View Controller-->
         <scene sceneID="30W-cc-vhp">
             <objects>
-                <viewController id="tCW-re-8dM" customClass="GZEChooseModeViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chooseModeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tCW-re-8dM" customClass="GZEChooseModeViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Oim-XG-3UJ"/>
                         <viewControllerLayoutGuide type="bottom" id="8i2-yi-jtN"/>
@@ -921,6 +933,7 @@
     <resources>
         <image name="camera-white-icon" width="52" height="40"/>
         <image name="gooze-logo-1" width="252" height="307"/>
+        <image name="gooze-text" width="160" height="50"/>
         <image name="main-background" width="750" height="1334"/>
         <image name="navigation-icon" width="40" height="39"/>
         <image name="pin-w-shadow" width="95" height="86"/>

@@ -116,9 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func setUpInitialController() {
-        if
-            let navController = window?.rootViewController as? UINavigationController,
-            let loginController = navController.viewControllers.first as? GZELoginViewController {
+        if let loginController = window?.rootViewController as? GZELoginViewController {
 
             // Set up initial view model
             loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())

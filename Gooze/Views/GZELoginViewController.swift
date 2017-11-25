@@ -87,16 +87,14 @@ class GZELoginViewController: UIViewController {
 
         hideLoading()
         
-        if
-            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
-            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
+        if let viewController = storyboard?.instantiateViewController(withIdentifier: "chooseModeViewController") as? GZEChooseModeViewController {
 
             loginSuccesObserver?.dispose()
             loginErrorObserver?.dispose()
 
             viewController.viewModel = viewModel.getChooseModeViewModel()
 
-            setRootController(controller: navController)
+            setRootController(controller: viewController)
         } else {
             log.error("Unable to instantiate SearchGoozeNavController")
             displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)

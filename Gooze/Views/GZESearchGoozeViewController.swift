@@ -44,13 +44,11 @@ class GZESearchGoozeViewController: UIViewController {
 
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
-        if
-            let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
-            let loginController = navController.viewControllers.first as? GZELoginViewController {
+        if let loginController = mainStoryboard.instantiateViewController(withIdentifier: "GZELoginViewController") as? GZELoginViewController {
 
             // Set up initial view model
             loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
-            setRootController(controller: navController)
+            setRootController(controller: loginController)
         } else {
             log.error("Unable to instantiate InitialViewController")
             displayMessage("Unexpected error", "Please contact support")
