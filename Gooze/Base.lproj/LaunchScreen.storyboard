@@ -29,10 +29,10 @@
                                 <rect key="frame" x="127.5" y="233.5" width="120" height="200"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="uuL-NN-R5N">
-                                        <rect key="frame" x="0.0" y="0.0" width="120" height="130"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="120" height="132"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="k90-VM-uBb">
-                                        <rect key="frame" x="0.0" y="130" width="120" height="50"/>
+                                        <rect key="frame" x="0.0" y="132" width="120" height="50"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
@@ -42,7 +42,7 @@
                                     <constraint firstItem="k90-VM-uBb" firstAttribute="top" secondItem="uuL-NN-R5N" secondAttribute="bottom" id="VhX-JJ-ajx"/>
                                     <constraint firstItem="k90-VM-uBb" firstAttribute="leading" secondItem="kSd-Mh-mRi" secondAttribute="leading" id="c4K-OD-Yxv"/>
                                     <constraint firstItem="uuL-NN-R5N" firstAttribute="top" secondItem="kSd-Mh-mRi" secondAttribute="top" id="uOX-mb-ja4"/>
-                                    <constraint firstAttribute="bottom" secondItem="k90-VM-uBb" secondAttribute="bottom" constant="20" id="wAL-OK-AVE"/>
+                                    <constraint firstAttribute="bottom" secondItem="k90-VM-uBb" secondAttribute="bottom" multiplier="1.1" id="wAL-OK-AVE"/>
                                 </constraints>
                             </view>
                         </subviews>

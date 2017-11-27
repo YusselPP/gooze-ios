@@ -32,17 +32,47 @@ extension UIViewController {
     func hideLoading() {
         SwiftOverlays.removeAllBlockingOverlays()
     }
-}
 
-extension UIButton {
+    func registerForKeyboarNotifications(observer: Any, didShowSelector: Selector, willHideSelector: Selector) {
 
-    @IBInspectable var borderColor: UIColor? {
-        get {
-            return UIColor(cgColor: layer.borderColor!)
-        }
-        set {
-            layer.borderColor = newValue?.cgColor
+        let notifications = NotificationCenter.default
+        notifications.addObserver(observer, selector: didShowSelector, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+
+        notifications.addObserver(observer, selector: willHideSelector, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+
+    func addKeyboardInsetAndScroll(scrollView: UIScrollView, activeField: UIView?, notification: Notification) {
+        let info = notification.userInfo
+
+        if let kbSize = info?[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+
+            var contentInset = scrollView.contentInset
+            contentInset.bottom = kbSize.height
+            scrollView.contentInset = contentInset
+            scrollView.scrollIndicatorInsets = contentInset
+
+            //let kbOffset = CGPoint(x: 0, y: kbSize.height)
+
+            //UIView.animate(withDuration: 0.25) {
+            //    scrollView.contentOffset = kbOffset
+            //}
+
+            var aRect : CGRect = self.view.frame
+            aRect.size.height -= kbSize.height
+            if let activeField = activeField {
+                if (!aRect.contains(activeField.frame)) {
+                    let scrollTo = CGRect(x: activeField.frame.origin.x, y: activeField.frame.origin.y + 100, width: activeField.frame.width, height: activeField.frame.height+100)
+
+                    scrollView.scrollRectToVisible(scrollTo, animated: false)
+                }
+            }
         }
     }
 
+    func removeKeyboardInset(scrollView: UIScrollView) {
+        let contentInsets = UIEdgeInsets.zero
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+    }
 }
+
