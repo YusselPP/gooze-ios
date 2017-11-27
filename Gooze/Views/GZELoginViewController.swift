@@ -20,22 +20,19 @@ class GZELoginViewController: UIViewController {
     let signUpSegueId = "signUpSegue"
     let registerCodeSegueId = "registerCodeSegue"
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var signUpButton: UIButton!
-    @IBOutlet weak var forgotPasswordButton: UIButton!
+    let emailTextField = UITextField()
+    let passwordTextField = UITextField()
+    let loginButton = UIButton()
+    let signUpButton = UIButton()
+    let forgotPasswordButton = UIButton()
+    @IBOutlet weak var doubleCtrlView: GZEDoubleCtrlView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        // Button titles
-        loginButton.setTitle(viewModel.loginButtonTitle, for: .normal)
-        signUpButton.setTitle(viewModel.signUpButtonTitle, for: .normal)
-        forgotPasswordButton.setTitle(viewModel.forgotPasswordButtonTitle, for: .normal)
-
+        setupInterfaceObjects()
 
         // Bindings
         viewModel.email <~ emailTextField.reactive.continuousTextValues
@@ -81,6 +78,16 @@ class GZELoginViewController: UIViewController {
         } else {
             performSegue(withIdentifier: signUpSegueId, sender: self)
         }
+    }
+
+    func setupInterfaceObjects() {
+        // Button titles
+        loginButton.setTitle(viewModel.loginButtonTitle.uppercased(), for: .normal)
+        signUpButton.setTitle(viewModel.signUpButtonTitle.uppercased(), for: .normal)
+        forgotPasswordButton.setTitle(viewModel.forgotPasswordButtonTitle, for: .normal)
+
+        doubleCtrlView.topCtrlView = loginButton
+        doubleCtrlView.bottomCtrlView = signUpButton
     }
 
     func onLogin(user: GZEAccesToken) -> Void {
