@@ -51,19 +51,13 @@ extension UIViewController {
             scrollView.contentInset = contentInset
             scrollView.scrollIndicatorInsets = contentInset
 
-            //let kbOffset = CGPoint(x: 0, y: kbSize.height)
-
-            //UIView.animate(withDuration: 0.25) {
-            //    scrollView.contentOffset = kbOffset
-            //}
-
             var aRect : CGRect = self.view.frame
             aRect.size.height -= kbSize.height
             if let activeField = activeField {
                 if (!aRect.contains(activeField.frame)) {
-                    let scrollTo = CGRect(x: activeField.frame.origin.x, y: activeField.frame.origin.y + 100, width: activeField.frame.width, height: activeField.frame.height+100)
-
-                    scrollView.scrollRectToVisible(scrollTo, animated: false)
+                    UIView.animate(withDuration: 0.25) {
+                        scrollView.scrollRectToVisible(activeField.frame, animated: false)
+                    }
                 }
             }
         }

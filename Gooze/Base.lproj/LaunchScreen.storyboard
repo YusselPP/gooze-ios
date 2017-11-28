@@ -26,7 +26,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kSd-Mh-mRi">
-                                <rect key="frame" x="127.5" y="233.5" width="120" height="200"/>
+                                <rect key="frame" x="127.5" y="200" width="120" height="200"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="uuL-NN-R5N">
                                         <rect key="frame" x="0.0" y="0.0" width="120" height="132"/>
@@ -50,7 +50,7 @@
                         <constraints>
                             <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ACh-YE-488"/>
                             <constraint firstItem="kSd-Mh-mRi" firstAttribute="width" secondItem="hMo-lp-76O" secondAttribute="width" multiplier="0.32" id="EYz-uo-xfw"/>
-                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Fkq-o2-595"/>
+                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="0.9" id="Fkq-o2-595"/>
                             <constraint firstAttribute="bottom" secondItem="hMo-lp-76O" secondAttribute="bottom" id="S7s-Y6-cMs"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="Z9J-1y-3rM"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="ZVf-31-QVr"/>

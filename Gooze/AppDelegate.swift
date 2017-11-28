@@ -59,10 +59,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // TODO: Move to a service
         // Override point for customization after application launch.
-        UINavigationBar.appearance().barTintColor = GZEConstants.Color.mainBackground
-        UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-        UINavigationBar.appearance().isTranslucent = true
+        //UINavigationBar.appearance().barTintColor = GZEConstants.Color.mainBackground
+        //UINavigationBar.appearance().tintColor = UIColor.white
+        //UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        //UINavigationBar.appearance().isTranslucent = true
 
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
@@ -116,7 +116,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func setUpInitialController() {
-        if let loginController = window?.rootViewController as? GZELoginViewController {
+        if
+            let navController = window?.rootViewController as? UINavigationController,
+            let loginController = navController.viewControllers.first as? GZELoginViewController
+        {
 
             // Set up initial view model
             loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())

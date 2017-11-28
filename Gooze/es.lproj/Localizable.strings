@@ -32,9 +32,15 @@
 
 // ViewModel/GZELoginViewController
 "vm.login.loginViewTitle"="Inicio de sesión";
-"vm.login.loginButtonTitle"="Entrar";
-"vm.login.signUpButtonTitle"="Registrar";
+
+"vm.login.loginButtonTitle"="Iniciar sesión";
+"vm.login.signUpButtonTitle"="Registro";
+
 "vm.login.forgotPassword"="Olvidé mi contraseña";
+
+"vm.login.usernameLabel"="Usuario";
+"vm.login.passwordLabel"="Contraseña";
+
 "vm.login.alertOkButtonTitle"="Ok";
 
 // Views/GZEBlurViewController

@@ -12,11 +12,6 @@ import ReactiveCocoa
 
 class GZEDoubleCtrlView: UIView {
 
-    let topView = UIView()
-    let bottomView = UIView()
-    let separatorView = UIView()
-    let underlineLabel = UILabel()
-
     var topCtrlView: UIView? {
         willSet(newCtrlView) { topCtrlViewWillSet(newCtrlView) }
     }
@@ -24,9 +19,6 @@ class GZEDoubleCtrlView: UIView {
         willSet(newCtrlView) { bottomCtrlViewWillSet(newCtrlView) }
     }
 
-    var underlineLabelObserver: Disposable?
-
-    var separatorWidthConstraint: NSLayoutConstraint
     var separatorWidth: CGFloat = 100 {
         didSet {
             separatorWidthConstraint.constant = separatorWidth
@@ -40,6 +32,15 @@ class GZEDoubleCtrlView: UIView {
     var topViewTappedHandler: ((UITapGestureRecognizer) -> ())?
     var bottomViewTappedHandler: ((UITapGestureRecognizer) -> ())?
 
+    
+    private let topView = UIView()
+    private let bottomView = UIView()
+    private let separatorView = UIView()
+    private let underlineLabel = UILabel()
+    private var underlineLabelObserver: Disposable?
+    private var separatorWidthConstraint: NSLayoutConstraint
+
+
     required init?(coder aDecoder: NSCoder) {
         separatorWidthConstraint = separatorView.widthAnchor.constraint(equalToConstant: separatorWidth)
 
@@ -48,8 +49,6 @@ class GZEDoubleCtrlView: UIView {
         topView.translatesAutoresizingMaskIntoConstraints = false
         topView.isUserInteractionEnabled = true
         topView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(GZEDoubleCtrlView.viewTapped(sender:))))
-
-
 
         bottomView.translatesAutoresizingMaskIntoConstraints = false
         bottomView.isUserInteractionEnabled = true
@@ -105,21 +104,26 @@ class GZEDoubleCtrlView: UIView {
         if newCtrlView == self.topCtrlView { return }
 
         if let oldCtrlView = self.topCtrlView {
-            // oldCtrlView.removeFromSuperview()
-            removeAnimated(oldCtrlView)
+
+            removeAnimated(oldCtrlView, superView: topView)
+
+            if oldCtrlView is UITextField {
+                underlineLabel.removeFromSuperview()
+                underlineLabelObserver?.dispose()
+            }
+
         }
 
         if let topCtrlView = newCtrlView {
 
             topCtrlView.translatesAutoresizingMaskIntoConstraints = false
-            topCtrlView.bounds.size.height = 21
 
-            // topView.addSubview(topCtrlView)
             addAnimated(topCtrlView, superView: topView)
 
             topView.leadingAnchor.constraint(equalTo: topCtrlView.leadingAnchor).isActive = true
             topView.trailingAnchor.constraint(equalTo: topCtrlView.trailingAnchor).isActive = true
             topView.bottomAnchor.constraint(equalTo: topCtrlView.bottomAnchor, constant: 9).isActive = true
+            topCtrlView.heightAnchor.constraint(equalToConstant: 21).isActive = true
 
             if let textDisplay = topCtrlView as? TextDisplay {
                 textDisplay.setAlignment(.center)
@@ -129,17 +133,22 @@ class GZEDoubleCtrlView: UIView {
 
             if let topCtrlText = topCtrlView as? UITextField {
 
-                underlineLabelObserver = underlineLabel.reactive.text <~ topCtrlText.reactive.continuousTextValues
+                underlineLabelObserver = topCtrlText.reactive.continuousTextValues.observeValues() { [weak self] in
+                    if topCtrlText.isSecureTextEntry {
+                        if let len = $0?.count {
+                            self?.underlineLabel.text = String(repeating: "V", count: len)
+                        } else {
+                            self?.underlineLabel.text = $0
+                        }
+                    } else  {
+                        self?.underlineLabel.text = $0
+                    }
+                }
 
                 topView.addSubview(underlineLabel)
 
                 topView.bottomAnchor.constraint(equalTo: underlineLabel.bottomAnchor).isActive = true
                 topView.centerXAnchor.constraint(equalTo: underlineLabel.centerXAnchor).isActive = true
-
-            } else {
-
-                underlineLabel.removeFromSuperview()
-                underlineLabelObserver?.dispose()
             }
         }
     }
@@ -148,15 +157,14 @@ class GZEDoubleCtrlView: UIView {
         if newCtrlView == self.bottomCtrlView { return }
 
         if let oldCtrlView = self.bottomCtrlView {
-            // oldCtrlView.removeFromSuperview()
-            removeAnimated(oldCtrlView)
+
+            removeAnimated(oldCtrlView, superView: bottomView)
         }
 
         if let bottomCtrlView = newCtrlView {
 
             bottomCtrlView.translatesAutoresizingMaskIntoConstraints = false
 
-            // bottomView.addSubview(bottomCtrlView)
             addAnimated(bottomCtrlView, superView: bottomView)
 
             bottomView.leadingAnchor.constraint(equalTo: bottomCtrlView.leadingAnchor).isActive = true
@@ -185,12 +193,13 @@ class GZEDoubleCtrlView: UIView {
         }
     }
 
-    func removeAnimated(_ view: UIView) {
-        view.isUserInteractionEnabled = false
+    func removeAnimated(_ view: UIView, superView: UIView) {
+        superView.isUserInteractionEnabled = false
         UIView.animate(withDuration: animationsDuration, animations: {
             view.alpha = 0
         }) { _ in
             view.removeFromSuperview()
+            superView.isUserInteractionEnabled = true
         }
     }
 
