@@ -15,27 +15,36 @@ class GZEChooseModeViewController: UIViewController {
     let searchGoozeSegueId = "searchGoozeSegueId"
     let activateGoozeSegueId = "activateGoozeSegueId"
 
+    let closeHelpButton = UIBarButtonItem()
+    let logoutButton = GZELogoutButton()
+
+
     @IBOutlet weak var gooze: UIButton!
     @IBOutlet weak var client: UIButton!
 
-    @IBOutlet weak var closeHelpButton: UIBarButtonItem!
     @IBOutlet weak var showHelpButton: UIButton!
 
     @IBOutlet weak var goozeHelpLabel: UILabel!
     @IBOutlet weak var clientHelpLabel: UILabel!
 
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var separator: UIView!
+
+    @IBOutlet weak var middleYConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomYConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        goozeHelpLabel.alpha = 0
-        clientHelpLabel.alpha = 0
-        closeHelpButton.customView?.alpha = 0
+        logoutButton.target = self
+        logoutButton.action = #selector(logoutButtonTapped(_:))
 
-        bottomConstraint.constant = view.frame.height / 8
+        closeHelpButton.title = "X"
+        closeHelpButton.target = self
+        closeHelpButton.action = #selector(closeHelpButtonTapped(_:))
+
+        showHelp(false)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -59,24 +68,28 @@ class GZEChooseModeViewController: UIViewController {
         showHelp(true)
     }
 
-    @IBAction func closeHelpButtonTapped(_ sender: UIButton) {
+    func closeHelpButtonTapped(_ sender: UIButton) {
         showHelp(false)
     }
 
     func showHelp(_ show: Bool) {
         UIView.animate(withDuration: 0.5) { [unowned self] in
             if show == true {
-                self.bottomConstraint.constant = self.view.frame.height / 2
+                self.bottomYConstraint.isActive = false
+                self.middleYConstraint.isActive = true
                 self.goozeHelpLabel.alpha = 1
                 self.clientHelpLabel.alpha = 1
                 self.closeHelpButton.customView?.alpha = 1
                 self.showHelpButton.alpha = 0
+                self.navigationItem.leftBarButtonItem = self.closeHelpButton
             } else {
-                self.bottomConstraint.constant = self.view.frame.height / 4
+                self.middleYConstraint.isActive = false
+                self.bottomYConstraint.isActive = true
                 self.goozeHelpLabel.alpha = 0
                 self.clientHelpLabel.alpha = 0
                 self.closeHelpButton.customView?.alpha = 0
                 self.showHelpButton.alpha = 1
+                self.navigationItem.leftBarButtonItem = self.logoutButton
             }
             self.view.layoutIfNeeded()
         }
@@ -94,6 +107,7 @@ class GZEChooseModeViewController: UIViewController {
                 viewController.viewModel = viewModel.getSearchGoozeViewModel()
             } else {
                 log.error("Unable to instantiate GZESearchGoozeViewController")
+                displayMessage(nil, GZERepositoryError.UnexpectedError.localizedDescription)
             }
         } else if segue.identifier == activateGoozeSegueId {
 
@@ -101,6 +115,7 @@ class GZEChooseModeViewController: UIViewController {
                 viewController.viewModel = viewModel.getActivateGoozeViewModel()
             } else {
                 log.error("Unable to instantiate GZESearchGoozeViewController")
+                displayMessage(nil, GZERepositoryError.UnexpectedError.localizedDescription)
             }
         }
     }

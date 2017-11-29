@@ -10,6 +10,7 @@
 		5D013931672FCA4D16CB7BB1 /* Pods_GoozeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */; };
 		615DA239FA3CF4C00BF3948F /* Pods_Gooze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89160AC4FDEE198C99719CCF /* Pods_Gooze.framework */; };
 		7A967A10E39F3A51B91D40E1 /* Pods_GoozeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */; };
+		8D01C4661FCE97CD00B53ED8 /* GZELogoutButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01C4651FCE97CD00B53ED8 /* GZELogoutButton.swift */; };
 		8D0551F81FC0164900BC3915 /* GZERegisterCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0551F71FC0164900BC3915 /* GZERegisterCodeViewController.swift */; };
 		8D0551FA1FC0175400BC3915 /* GZERegisterCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0551F91FC0175400BC3915 /* GZERegisterCodeViewModel.swift */; };
 		8D14B3621FB2B919005CE9A9 /* GZEStorageApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */; };
@@ -93,6 +94,7 @@
 		228D2956DF4ECD20CD97E61A /* Pods-GoozeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		599D824A0D69C6202B4F3677 /* Pods-GoozeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoozeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		89160AC4FDEE198C99719CCF /* Pods_Gooze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gooze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D01C4651FCE97CD00B53ED8 /* GZELogoutButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELogoutButton.swift; sourceTree = "<group>"; };
 		8D0551F71FC0164900BC3915 /* GZERegisterCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERegisterCodeViewController.swift; sourceTree = "<group>"; };
 		8D0551F91FC0175400BC3915 /* GZERegisterCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERegisterCodeViewModel.swift; sourceTree = "<group>"; };
 		8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEStorageApiRepository.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				8DD0352F1FB5143C008EBEAD /* GZEBlurViewController.xib */,
 				8DBAABE31FB8A12C00B15142 /* GZETextField.swift */,
 				8D7970281FC91ADE0022B96F /* GZEDoubleCtrlView.swift */,
+				8D01C4651FCE97CD00B53ED8 /* GZELogoutButton.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -713,6 +716,7 @@
 				8DA575AD1FC3D6470001CE2A /* GZEChooseModeViewController.swift in Sources */,
 				8D14B3621FB2B919005CE9A9 /* GZEStorageApiRepository.swift in Sources */,
 				8DF27B021FCD12BE00C85545 /* UIButton+Extension.swift in Sources */,
+				8D01C4661FCE97CD00B53ED8 /* GZELogoutButton.swift in Sources */,
 				8DB367811FCB46DB0079181F /* TextDisplayProtocol.swift in Sources */,
 				8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */,
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,

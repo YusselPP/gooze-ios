@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Localize_Swift
 
 class GZEChooseModeViewModel {
 

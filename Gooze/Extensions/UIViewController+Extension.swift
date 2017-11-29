@@ -11,8 +11,8 @@ import SwiftOverlays
 
 extension UIViewController {
 
-    func displayMessage(_ title: String, _ message: String) -> Void {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    func displayMessage(_ title: String?, _ message: String) -> Void {
+        let alert = UIAlertController(title: title ?? "Gooze", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
         present(alert, animated: true)
     }
@@ -31,6 +31,21 @@ extension UIViewController {
 
     func hideLoading() {
         SwiftOverlays.removeAllBlockingOverlays()
+    }
+
+    func logoutButtonTapped(_ sender: Any) {
+
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+
+        if let loginController = mainStoryboard.instantiateViewController(withIdentifier: "GZELoginViewController") as? GZELoginViewController {
+
+            // Set up initial view model
+            loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
+            setRootController(controller: loginController)
+        } else {
+            log.error("Unable to instantiate InitialViewController")
+            displayMessage("Unexpected error", "Please contact support")
+        }
     }
 
     func registerForKeyboarNotifications(observer: Any, didShowSelector: Selector, willHideSelector: Selector) {

@@ -721,7 +721,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="1Uq-Kh-1Uj">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PH3-zt-MvS">
                                 <rect key="frame" x="70" y="478" width="180" height="35"/>
@@ -767,14 +767,14 @@
                                 </connections>
                             </slider>
                             <view alpha="0.51000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OYR-Ad-JXG">
-                                <rect key="frame" x="0.0" y="20" width="320" height="45"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="45"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Wbd-Og-9P4"/>
                                 </constraints>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="QGV-rv-vPK">
-                                <rect key="frame" x="62" y="20" width="190" height="46"/>
+                                <rect key="frame" x="62" y="64" width="190" height="46"/>
                                 <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="zam-QP-S56"/>
@@ -787,14 +787,14 @@
                                 </connections>
                             </slider>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="navigation-icon" translatesAutoresizingMaskIntoConstraints="NO" id="6SB-GO-3Wb">
-                                <rect key="frame" x="20" y="32" width="24" height="24"/>
+                                <rect key="frame" x="20" y="76" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="DFo-xG-Ego"/>
                                     <constraint firstAttribute="height" constant="24" id="L3T-sj-YL0"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NeT-Hf-MSf">
-                                <rect key="frame" x="255" y="20" width="60" height="45"/>
+                                <rect key="frame" x="255" y="64" width="60" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="ZYu-DE-QUM"/>
                                     <constraint firstAttribute="width" constant="60" id="fgR-xC-QEW"/>
@@ -852,11 +852,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ySk-tW-HUT">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="VV8-fC-vAR">
-                            <connections>
-                                <action selector="logoutButtonTapped:" destination="zf8-kb-SHu" id="2Dl-h8-bC3"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="VV8-fC-vAR"/>
                     </navigationItem>
                     <connections>
                         <outlet property="distanceLabel" destination="NeT-Hf-MSf" id="mEa-SV-AtE"/>
@@ -868,7 +864,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5c-ka-Vea" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2796" y="58"/>
+            <point key="canvasLocation" x="3193.125" y="57.04225352112676"/>
         </scene>
         <!--Search Gooze View Controller-->
         <scene sceneID="02R-FS-ZYz">
@@ -886,12 +882,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KqX-sB-YjX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2796" y="704"/>
+            <point key="canvasLocation" x="3193.125" y="703.52112676056333"/>
         </scene>
         <!--Choose Mode View Controller-->
         <scene sceneID="30W-cc-vhp">
             <objects>
-                <viewController storyboardIdentifier="chooseModeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tCW-re-8dM" customClass="GZEChooseModeViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chooseModeViewController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tCW-re-8dM" customClass="GZEChooseModeViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Oim-XG-3UJ"/>
                         <viewControllerLayoutGuide type="bottom" id="8i2-yi-jtN"/>
@@ -911,8 +907,8 @@
                                     <action selector="helpButtonTapped:" destination="tCW-re-8dM" eventType="touchUpInside" id="BlG-6o-r3g"/>
                                 </connections>
                             </button>
-                            <button verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="top" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dj3-dc-j9d">
-                                <rect key="frame" x="56" y="387" width="208" height="50"/>
+                            <button verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dj3-dc-j9d">
+                                <rect key="frame" x="56" y="430.5" width="208" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="BXq-hW-lLa"/>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="60" id="Fg1-AC-inS"/>
@@ -923,28 +919,28 @@
                                     <action selector="clientButtonTapped:" destination="tCW-re-8dM" eventType="touchUpInside" id="JoO-Oe-yTk"/>
                                 </connections>
                             </button>
-                            <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EC7-XV-tIm">
-                                <rect key="frame" x="85" y="382" width="150" height="1"/>
+                            <view verifyAmbiguity="off" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EC7-XV-tIm">
+                                <rect key="frame" x="85" y="425.5" width="150" height="1"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="CMM-5X-DfX"/>
                                     <constraint firstAttribute="width" constant="150" id="yJz-vZ-Ulc"/>
                                 </constraints>
                             </view>
-                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="El usuario aparecera como Gooze y podrá ser contactado para una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uiB-fm-VWO">
-                                <rect key="frame" x="56" y="246" width="208" height="21"/>
+                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El usuario aparecera como Gooze y podrá ser contactado para una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uiB-fm-VWO">
+                                <rect key="frame" x="56" y="267.5" width="208" height="64"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="El usuario visualizará los Gooze disponibles para generar una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S7w-Wt-0lF">
-                                <rect key="frame" x="56" y="462" width="208" height="21"/>
+                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El usuario visualizará los Gooze disponibles para generar una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S7w-Wt-0lF">
+                                <rect key="frame" x="56" y="520.5" width="208" height="21"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4R3-xH-B3d">
-                                <rect key="frame" x="56" y="326" width="208" height="50"/>
+                            <button verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4R3-xH-B3d">
+                                <rect key="frame" x="56" y="371.5" width="208" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="4eG-L9-7en"/>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="60" id="op5-4J-t2c"/>
@@ -965,6 +961,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="S7w-Wt-0lF" secondAttribute="trailing" constant="40" id="COi-7k-gQ6"/>
                             <constraint firstItem="S7w-Wt-0lF" firstAttribute="top" secondItem="dj3-dc-j9d" secondAttribute="bottom" constant="40" id="MVJ-Fn-1XM"/>
                             <constraint firstItem="g2y-pr-bda" firstAttribute="top" secondItem="tN4-i1-7xc" secondAttribute="top" id="MvV-gp-3OO"/>
+                            <constraint firstItem="EC7-XV-tIm" firstAttribute="centerY" secondItem="tN4-i1-7xc" secondAttribute="centerY" multiplier="1.5" id="P9q-lV-EZ5"/>
                             <constraint firstItem="EC7-XV-tIm" firstAttribute="top" secondItem="4R3-xH-B3d" secondAttribute="bottom" constant="4" id="REX-iA-dAq"/>
                             <constraint firstAttribute="trailing" secondItem="g2y-pr-bda" secondAttribute="trailing" id="Wvd-Ym-idD"/>
                             <constraint firstItem="g2y-pr-bda" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leading" id="YeN-gb-VZN"/>
@@ -978,35 +975,25 @@
                             <constraint firstItem="4R3-xH-B3d" firstAttribute="top" secondItem="uiB-fm-VWO" secondAttribute="bottom" constant="40" id="kF8-Og-QDU"/>
                             <constraint firstItem="dj3-dc-j9d" firstAttribute="top" secondItem="EC7-XV-tIm" secondAttribute="bottom" constant="4" id="kc7-Ic-NzZ"/>
                             <constraint firstItem="4R3-xH-B3d" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" constant="40" id="pOy-zZ-brT"/>
-                            <constraint firstItem="8i2-yi-jtN" firstAttribute="top" relation="greaterThanOrEqual" secondItem="EC7-XV-tIm" secondAttribute="bottom" constant="60" id="vzu-Ke-isa"/>
+                            <constraint firstItem="EC7-XV-tIm" firstAttribute="centerY" secondItem="tN4-i1-7xc" secondAttribute="centerY" id="t6l-72-Yww"/>
                             <constraint firstItem="dj3-dc-j9d" firstAttribute="centerX" secondItem="tN4-i1-7xc" secondAttribute="centerX" id="w2m-AG-eDU"/>
                             <constraint firstItem="uiB-fm-VWO" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" constant="40" id="xgv-Uo-qGa"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="t6l-72-Yww"/>
+                            </mask>
+                        </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="r0m-MF-Lxw">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="k4q-6J-dPC">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="adP-o6-xjx">
-                                <rect key="frame" x="16" y="0.0" width="46" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="24"/>
-                                <state key="normal" title="X"/>
-                                <connections>
-                                    <action selector="closeHelpButtonTapped:" destination="tCW-re-8dM" eventType="touchUpInside" id="ObY-jh-f9S"/>
-                                </connections>
-                            </button>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <action selector="closeHelpButtonTapped:" destination="tCW-re-8dM" id="7Zr-3T-8Ef"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="r0m-MF-Lxw"/>
                     <connections>
-                        <outlet property="bottomConstraint" destination="vzu-Ke-isa" id="kkr-u9-IK4"/>
+                        <outlet property="bottomYConstraint" destination="P9q-lV-EZ5" id="HIL-iN-ZT2"/>
                         <outlet property="client" destination="dj3-dc-j9d" id="KAg-hM-Jr0"/>
                         <outlet property="clientHelpLabel" destination="S7w-Wt-0lF" id="jnK-Xo-hkc"/>
-                        <outlet property="closeHelpButton" destination="k4q-6J-dPC" id="NQJ-em-wrA"/>
                         <outlet property="gooze" destination="4R3-xH-B3d" id="YaT-mX-To2"/>
                         <outlet property="goozeHelpLabel" destination="uiB-fm-VWO" id="gku-oc-Ho8"/>
+                        <outlet property="middleYConstraint" destination="t6l-72-Yww" id="Hsv-VX-7ql"/>
+                        <outlet property="separator" destination="EC7-XV-tIm" id="9nn-2r-ZX2"/>
                         <outlet property="showHelpButton" destination="M3A-St-6Vf" id="adC-KJ-4gV"/>
                         <segue destination="zf8-kb-SHu" kind="show" identifier="activateGoozeSegueId" id="VMc-sU-E36"/>
                         <segue destination="N0a-Um-Bnh" kind="show" identifier="searchGoozeSegueId" id="Jym-Z4-VXv"/>
@@ -1014,12 +1001,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FS9-NF-P4Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2013.75" y="302.11267605633805"/>
+            <point key="canvasLocation" x="2411.25" y="302.11267605633805"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="J4K-6w-nWO">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="du4-Q0-thu" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="LoginNavController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="du4-Q0-thu" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Hex-79-9Ch">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
@@ -1033,6 +1020,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mn5-md-EaL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1763" y="-782"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="PAv-I6-aFy">
+            <objects>
+                <navigationController storyboardIdentifier="SearchGoozeNavController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fqh-tX-u5t" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Bat-H4-wgq">
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="tCW-re-8dM" kind="relationship" relationship="rootViewController" id="5ZQ-3e-Jw7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pz3-r6-HkS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1620" y="302"/>
         </scene>
     </scenes>
     <resources>

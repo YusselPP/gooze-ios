@@ -39,21 +39,6 @@ class GZESearchGoozeViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    @IBAction func logoutButtonTapped(_ sender: Any) {
-
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        if let loginController = mainStoryboard.instantiateViewController(withIdentifier: "GZELoginViewController") as? GZELoginViewController {
-
-            // Set up initial view model
-            loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
-            setRootController(controller: loginController)
-        } else {
-            log.error("Unable to instantiate InitialViewController")
-            displayMessage("Unexpected error", "Please contact support")
-        }
-    }
 
     /*
     // MARK: - Navigation
