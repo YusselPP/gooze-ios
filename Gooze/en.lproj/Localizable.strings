@@ -6,6 +6,9 @@
   Copyright © 2017 Gooze. All rights reserved.
 */
 
+// Protocols/GZEUserApiRepositoryError
+"error.repository.authRequired"="Login to continue";
+
 // Protocols/GZEValidationError
 "validation.required"="Enter your %@";
 "validation.invalidEmail"="Enter a valid email";
@@ -40,6 +43,10 @@
 "vm.login.passwordLabel"="Password";
 
 "vm.login.alertOkButtonTitle"="Ok";
+
+// ViewModel/GZEActivateGoozeViewModel
+"vm.activate.activateButtonTitle"="Activate gooze";
+"vm.activate.searchButtonTitle"="Search gooze";
 
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Apply";

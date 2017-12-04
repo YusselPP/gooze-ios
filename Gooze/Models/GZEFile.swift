@@ -10,10 +10,11 @@ import Foundation
 import Gloss
 
 class GZEFile: Glossy {
-    var name: String?
-    var sizeBytes: Int?
-    var container: String?
-    var type: String?
+    var name: String
+    var sizeBytes: Int
+    var container: String
+    var type: String
+
     var data: Data?
 
     var accessTime: Date?
@@ -22,12 +23,33 @@ class GZEFile: Glossy {
     // modified its content or attributes
     var changeTime: Date?
 
+    var persisted = false
+
+    init(name: String, size: Int, container: String, type: String, data: Data?){
+        self.name = name
+        self.sizeBytes = size
+        self.container = container
+        self.type = type
+
+        self.data = data
+    }
 
     required init?(json: JSON) {
-        self.name = "name" <~~ json
-        self.sizeBytes = "size" <~~ json
-        self.container = "container" <~~ json
-        self.type = "type" <~~ json
+
+        guard
+            let name: String = "name" <~~ json,
+            let sizeBytes: Int = "size" <~~ json,
+            let container: String = "container" <~~ json,
+            let type: String = "type" <~~ json
+        else {
+            log.error("GZEFile init failed due to missing required fields.")
+            return nil
+        }
+        
+        self.name = name
+        self.sizeBytes = sizeBytes
+        self.container = container
+        self.type = type
 
 
         self.accessTime = Decoder.decode(dateForKey: "atime", dateFormatter: GZEApi.dateFormatter)(json)

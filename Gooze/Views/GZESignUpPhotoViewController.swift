@@ -39,7 +39,7 @@ class GZESignUpPhotoViewController: UIViewController {
         carousel.dataSource = viewModel.self
         photoImageView.reactive.image <~ carousel.selectedImage
         if carousel.currentItemIndex >= 0 {
-            carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value
+            carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value?.image
         }
 
         editButtonView.layer.cornerRadius = 5
@@ -130,7 +130,7 @@ class GZESignUpPhotoViewController: UIViewController {
                 }
 
                 this.carousel.selectedImage.value = blurredImage
-                this.viewModel.photos[this.carousel.currentItemIndex].value = blurredImage
+                this.viewModel.photos[this.carousel.currentItemIndex].value?.image = blurredImage
                 currentView.image = blurredImage
             }
 

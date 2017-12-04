@@ -43,16 +43,22 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
         setupBindings()
 
+        showLoginScene()
+
+        emailTextField.text = "admin@gooze.com"
+        passwordTextField.text = "123admin"
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
         registerForKeyboarNotifications(
             observer: self,
             didShowSelector: #selector(keyboardShown(notification:)),
             willHideSelector: #selector(keyboardWillHide(notification:))
         )
+    }
 
-        showLoginScene()
-
-        emailTextField.text = "admin@gooze.com"
-        passwordTextField.text = "123admin"
+    override func viewWillDisappear(_ animated: Bool) {
+        deregisterFromKeyboardNotifications(observer: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -210,6 +216,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         navigationItem.setLeftBarButton(backButton, animated: true)
         backButton.action = #selector(showLoginScene)
 
+        doubleCtrlView.separatorWidth = 0
         doubleCtrlView.topCtrlView = emailTextField
         doubleCtrlView.bottomCtrlView = usernameLabel
 
@@ -226,6 +233,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         navigationItem.setLeftBarButton(backButton, animated: true)
         backButton.action = #selector(showUsernameScene)
 
+        doubleCtrlView.separatorWidth = 0
         doubleCtrlView.topCtrlView = passwordTextField
         doubleCtrlView.bottomCtrlView = passwordLabel
 
@@ -253,6 +261,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: Deinitializers
     deinit {
+        emailTextField.delegate = nil
+        passwordTextField.delegate = nil
         log.debug("\(self) disposed")
     }
 }

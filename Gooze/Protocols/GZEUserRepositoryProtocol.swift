@@ -8,6 +8,7 @@
 
 import Foundation
 import ReactiveSwift
+import Gloss
 
 protocol GZEUserRepositoryProtocol {
 
@@ -15,6 +16,7 @@ protocol GZEUserRepositoryProtocol {
     func update(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func delete(byId id: String) -> SignalProducer<Bool, GZEError>
     func find(byId id: String) -> SignalProducer<GZEUser, GZEError>
+    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float) -> SignalProducer<[GZEUser], GZEError>
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
-    func signUp(_ user: GZEUser) -> SignalProducer<GZEFile, GZEError>
+    func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
 }

@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -744,9 +745,6 @@
                                         <color key="value" red="0.1803921568627451" green="0.80784313725490198" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="enableGoozeButtonTapped:" destination="zf8-kb-SHu" eventType="touchUpInside" id="VRC-1v-NVF"/>
-                                </connections>
                             </button>
                             <view alpha="0.58999999999999997" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uEP-GW-QrN">
                                 <rect key="frame" x="0.0" y="523" width="320" height="45"/>
@@ -773,7 +771,7 @@
                                     <constraint firstAttribute="height" constant="45" id="Wbd-Og-9P4"/>
                                 </constraints>
                             </view>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="QGV-rv-vPK">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="QGV-rv-vPK">
                                 <rect key="frame" x="62" y="64" width="190" height="46"/>
                                 <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <constraints>
@@ -793,7 +791,7 @@
                                     <constraint firstAttribute="height" constant="24" id="L3T-sj-YL0"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="31 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NeT-Hf-MSf">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="25 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NeT-Hf-MSf">
                                 <rect key="frame" x="255" y="64" width="60" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="ZYu-DE-QUM"/>
@@ -802,7 +800,7 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1.5 hrs" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5rg-Hu-enC">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 hrs" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5rg-Hu-enC">
                                 <rect key="frame" x="255" y="523" width="60" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="Px7-za-JkB"/>
@@ -819,6 +817,12 @@
                                     <constraint firstAttribute="height" constant="52" id="fyN-rz-Tnu"/>
                                 </constraints>
                             </imageView>
+                            <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="77d-Ws-eC5" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="120" y="130.5" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="77d-Ws-eC5" secondAttribute="height" multiplier="1:1" id="NhF-dW-vck"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -826,10 +830,12 @@
                             <constraint firstItem="cAx-OH-86K" firstAttribute="top" secondItem="1Uq-Kh-1Uj" secondAttribute="bottom" id="211-9l-E56"/>
                             <constraint firstItem="vL6-Ko-X92" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" constant="16" id="2af-5h-kPP"/>
                             <constraint firstAttribute="trailing" secondItem="NeT-Hf-MSf" secondAttribute="trailing" constant="5" id="5WK-D3-61F"/>
+                            <constraint firstItem="77d-Ws-eC5" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" multiplier="0.6" id="9VU-Kn-6oV"/>
                             <constraint firstItem="80a-Wx-iQm" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leadingMargin" constant="40" id="GGg-ld-rGW"/>
                             <constraint firstItem="5rg-Hu-enC" firstAttribute="leading" secondItem="80a-Wx-iQm" secondAttribute="trailing" constant="5" id="GmV-Kg-diZ"/>
                             <constraint firstItem="cAx-OH-86K" firstAttribute="top" secondItem="80a-Wx-iQm" secondAttribute="bottom" id="Laz-rC-Wzg"/>
                             <constraint firstItem="NeT-Hf-MSf" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="Lff-Zp-Pbj"/>
+                            <constraint firstItem="77d-Ws-eC5" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" id="Ll9-00-EZA"/>
                             <constraint firstItem="1Uq-Kh-1Uj" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leading" id="Pen-Yk-mh1"/>
                             <constraint firstItem="6SB-GO-3Wb" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" constant="12" id="Pty-vP-eMU"/>
                             <constraint firstItem="OYR-Ad-JXG" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="QHR-nx-4Vt"/>
@@ -851,38 +857,20 @@
                             <constraint firstAttribute="bottom" secondItem="5rg-Hu-enC" secondAttribute="bottom" id="ztQ-Ox-kS6"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="ySk-tW-HUT">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="VV8-fC-vAR"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="ySk-tW-HUT"/>
                     <connections>
+                        <outlet property="activateGoozeButton" destination="PH3-zt-MvS" id="i2B-FP-lZ0"/>
                         <outlet property="distanceLabel" destination="NeT-Hf-MSf" id="mEa-SV-AtE"/>
                         <outlet property="distanceSlider" destination="QGV-rv-vPK" id="b23-cq-7GC"/>
                         <outlet property="mapView" destination="1Uq-Kh-1Uj" id="9pU-wk-iT5"/>
                         <outlet property="timeLabel" destination="5rg-Hu-enC" id="zJC-Ma-N8h"/>
                         <outlet property="timeSlider" destination="80a-Wx-iQm" id="YBx-mt-0mG"/>
+                        <outlet property="userBalloon" destination="77d-Ws-eC5" id="UUh-vp-Qb0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5c-ka-Vea" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3193.125" y="57.04225352112676"/>
-        </scene>
-        <!--Search Gooze View Controller-->
-        <scene sceneID="02R-FS-ZYz">
-            <objects>
-                <viewController id="N0a-Um-Bnh" customClass="GZESearchGoozeViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Zjz-LK-l3M"/>
-                        <viewControllerLayoutGuide type="bottom" id="yl3-H7-mYq"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ar9-1k-Nx6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KqX-sB-YjX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3193.125" y="703.52112676056333"/>
+            <point key="canvasLocation" x="3204.375" y="301.05633802816902"/>
         </scene>
         <!--Choose Mode View Controller-->
         <scene sceneID="30W-cc-vhp">
@@ -996,7 +984,6 @@
                         <outlet property="separator" destination="EC7-XV-tIm" id="9nn-2r-ZX2"/>
                         <outlet property="showHelpButton" destination="M3A-St-6Vf" id="adC-KJ-4gV"/>
                         <segue destination="zf8-kb-SHu" kind="show" identifier="activateGoozeSegueId" id="VMc-sU-E36"/>
-                        <segue destination="N0a-Um-Bnh" kind="show" identifier="searchGoozeSegueId" id="Jym-Z4-VXv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FS9-NF-P4Y" userLabel="First Responder" sceneMemberID="firstResponder"/>

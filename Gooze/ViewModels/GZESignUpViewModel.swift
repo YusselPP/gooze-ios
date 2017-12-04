@@ -33,7 +33,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     let languages = MutableProperty<String?>("")
     let interestedIn = MutableProperty<String?>("")
 
-    var photos = [MutableProperty<UIImage?>]()
+    var photos = [MutableProperty<GZEUser.Photo?>]()
 
     let genders: [GZEUser.Gender?]
 
@@ -55,14 +55,14 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     }
 
 
-    var saveAction: Action<Void, GZEFile, GZEError> {
+    var saveAction: Action<Void, GZEUser, GZEError> {
         if let saveAction = _saveAction {
             return saveAction
         }
         _saveAction = createSaveAction()
         return _saveAction!
     }
-    private var _saveAction: Action<Void, GZEFile, GZEError>?
+    private var _saveAction: Action<Void, GZEUser, GZEError>?
 
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
@@ -78,9 +78,9 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
         log.debug("\(self) init")
     }
 
-    private func createSaveAction() -> Action<Void, GZEFile, GZEError> {
+    private func createSaveAction() -> Action<Void, GZEUser, GZEError> {
         log.debug("Creating save action")
-        return Action<Void, GZEFile, GZEError>{[weak self] in
+        return Action<Void, GZEUser, GZEError>{[weak self] in
             guard let strongSelf = self else { return SignalProducer.empty }
             strongSelf.fillUser()
             return strongSelf.userRepository.signUp(strongSelf.user)
@@ -109,7 +109,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
         if let interestedIn = interestedIn.value {
             user.interestedIn = [interestedIn]
         }
-        user.photos = photos.map { GZEUser.Photo(image: $0.value) }
+        user.photos = photos.flatMap { $0.value }
 
         log.debug(user.toJSON() as Any)
     }
@@ -129,7 +129,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
             itemView = view
         } else {
             itemView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 150))
-            itemView.image = photos[index].value
+            itemView.image = photos[index].value?.image
             itemView.contentMode = .scaleAspectFit
         }
 

@@ -12,7 +12,7 @@ class GZEChooseModeViewController: UIViewController {
 
     var viewModel: GZEChooseModeViewModel!
 
-    let searchGoozeSegueId = "searchGoozeSegueId"
+    var goozeScene = GZEActivateGoozeViewController.Scene.search
     let activateGoozeSegueId = "activateGoozeSegueId"
 
     let closeHelpButton = UIBarButtonItem()
@@ -57,11 +57,13 @@ class GZEChooseModeViewController: UIViewController {
     }
     
     @IBAction func goozeButtonTapped(_ sender: Any) {
+        goozeScene = .activate
         performSegue(withIdentifier: activateGoozeSegueId, sender: self)
     }
 
     @IBAction func clientButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: searchGoozeSegueId, sender: self)
+        goozeScene = .search
+        performSegue(withIdentifier: activateGoozeSegueId, sender: self)
     }
 
     @IBAction func helpButtonTapped(_ sender: UIButton) {
@@ -101,20 +103,13 @@ class GZEChooseModeViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if segue.identifier == searchGoozeSegueId {
-
-            if let viewController = segue.destination as? GZESearchGoozeViewController {
-                viewController.viewModel = viewModel.getSearchGoozeViewModel()
-            } else {
-                log.error("Unable to instantiate GZESearchGoozeViewController")
-                displayMessage(nil, GZERepositoryError.UnexpectedError.localizedDescription)
-            }
-        } else if segue.identifier == activateGoozeSegueId {
+        if segue.identifier == activateGoozeSegueId {
 
             if let viewController = segue.destination as? GZEActivateGoozeViewController {
                 viewController.viewModel = viewModel.getActivateGoozeViewModel()
+                viewController.scene = goozeScene
             } else {
-                log.error("Unable to instantiate GZESearchGoozeViewController")
+                log.error("Unable to instantiate GZEActivateGoozeViewController")
                 displayMessage(nil, GZERepositoryError.UnexpectedError.localizedDescription)
             }
         }

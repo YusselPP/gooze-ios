@@ -9,35 +9,124 @@
 import UIKit
 import MapKit
 import AddressBookUI
+import ReactiveSwift
+import ReactiveCocoa
 
-class GZEActivateGoozeViewController: UIViewController {
+class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     var viewModel: GZEActivateGoozeViewModel!
 
     let geocoder = CLGeocoder()
     let locationManager = CLLocationManager()
 
-    @IBOutlet weak var mapView: MKMapView!
+    var activateGoozeAction: CocoaAction<UIButton>!
+    var searchGoozeAction: CocoaAction<UIButton>!
+
+    enum Scene {
+        case activate
+        case search
+    }
+    var scene = Scene.search
+    var isInitialPositionSet = false
+    var userAnnotations = [GZEUserAnnotation]()
+
+    @IBOutlet weak var mapView: MKMapView! {
+        didSet {
+            mapView.delegate = self
+        }
+    }
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
 
     @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var timeSlider: UISlider!
+    @IBOutlet weak var activateGoozeButton: UIButton!
+    @IBOutlet weak var userBalloon: GZEUserBalloon!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
-        // Do any additional setup after loading the view.
+
         locationManager.requestAlwaysAuthorization()
         mapView.showsUserLocation = true
-        setDistanceText(distanceSlider.value)
-        setTimeText(timeSlider.value)
+
+        userBalloon.imageView.image = #imageLiteral(resourceName: "Unknown")
+
+        viewModel.radiusDistance <~ distanceSlider.reactive.values
+        viewModel.activeTime <~ timeSlider.reactive.values
+
+        distanceLabel.reactive.text <~ viewModel.radiusDistance.map { "\($0) km" }
+        timeLabel.reactive.text <~ viewModel.activeTime.map { "\($0) hrs" }
+
+        activateGoozeAction = CocoaAction(viewModel.activateGoozeAction)
+        searchGoozeAction = CocoaAction(viewModel.searchGoozeAction)
+
+        viewModel.searchGoozeAction.values.observeValues { [unowned self] users in
+            self.mapView.removeAnnotations(self.userAnnotations)
+            self.userAnnotations.removeAll(keepingCapacity: true)
+            for user in users {
+                self.userAnnotations.append(GZEUserAnnotation(title: user.username!, locationName: user.id!, discipline: "discipline", coordinate: user.currentLocation!.toCoreLocationCoordinate2D()))
+            }
+
+            self.userBalloon.setVisible(users.count > 0)
+
+            self.mapView.addAnnotations(self.userAnnotations)
+        }
+
+        switch scene {
+        case .activate:
+            showActivateScene()
+        case .search:
+            showSearchScene()
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+
+    func showActivateScene() {
+        
+        activateGoozeButton.setTitle(viewModel.activateButtonTitle, for: .normal)
+        activateGoozeButton.reactive.pressed = activateGoozeAction
+    }
+
+    func showSearchScene() {
+        activateGoozeButton.setTitle(viewModel.searchButtonTitle, for: .normal)
+        activateGoozeButton.reactive.pressed = searchGoozeAction
+    }
+
+    // MARK: - UIActions
+
+    @IBAction func distanceSliderChanged(_ sender: UISlider) {
+        let step: Float = 1
+        let roundedValue = round(sender.value / step) * step
+        sender.value = roundedValue
+    }
+
+    @IBAction func timeSliderChanged(_ sender: UISlider) {
+        let step: Float = 0.5
+        let roundedValue = round(sender.value / step) * step
+        sender.value = roundedValue
+    }
+
+    // MARK: - Map Delegate
+
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        log.debug("Map region changed. Center=[\(mapView.centerCoordinate)]")
+        viewModel.currentLocation.value = mapView.centerCoordinate
+    }
+
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+
+        if isInitialPositionSet { return }
+
+        log.debug("User location updated: \(mapView.userLocation.coordinate)")
+        mapView.setRegion(MKCoordinateRegionMake(mapView.userLocation.coordinate, MKCoordinateSpanMake(0.1, 0.1)), animated: true)
+        isInitialPositionSet = true
     }
 
     /*
@@ -49,64 +138,10 @@ class GZEActivateGoozeViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
-    @IBAction func distanceSliderChanged(_ sender: UISlider) {
-        let step: Float = 1
-        let roundedValue = round(sender.value / step) * step
-        sender.value = roundedValue
-        setDistanceText(sender.value)
-    }
-
-    @IBAction func timeSliderChanged(_ sender: UISlider) {
-        let step: Float = 0.5
-        let roundedValue = round(sender.value / step) * step
-        sender.value = roundedValue
-        setTimeText(sender.value)
-    }
-
-    @IBAction func enableGoozeButtonTapped(_ sender: UIButton) {
-        let coord = mapView.centerCoordinate
-
-        var message = "ACTIVO POR: \(timeSlider.value) hrs\nRANGO: \(distanceSlider.value) kms\nLAT: \(coord.latitude)\nLNG: \(coord.longitude)"
-
-        let location = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
-        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
-
-            if let error = error {
-                // An error occurred during geocoding.
-                log.error(error)
-                self?.displayMessage("No se pudo obtener la ubicación", error.localizedDescription)
-            }
-            else {
-
-                let firstLocation = placemarks?[0]
-
-                if  let dic = firstLocation?.addressDictionary {
-
-                    let subtitle = ABCreateStringWithAddressDictionary(dic, false)
-                    message = "LUGAR: \(subtitle.description)\n" + message
-                }
-
-                self?.displayMessage("Gooze", message)
-            }
-
-        }
-
-    }
-
-    @IBAction func unwindToSearchGooze(segue: UIStoryboardSegue) {
-        log.debug("unwindToSearchGooze")
-    }
-
-    func setDistanceText(_ value: Float) {
-        distanceLabel.text = "\(value) km"
-    }
-
-    func setTimeText(_ value: Float) {
-        timeLabel.text = "\(value) hrs"
-    }
 
     // MARK: Deinitializers
     deinit {
+        mapView.delegate = nil
         log.debug("\(self) disposed")
     }
 }

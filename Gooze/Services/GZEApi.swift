@@ -8,7 +8,8 @@
 
 import Foundation
 import Alamofire
-
+import Gloss
+import ReactiveSwift
 
 class GZEApi {
 
@@ -23,6 +24,7 @@ class GZEApi {
     static var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         return dateFormatter
     }
 
@@ -57,6 +59,51 @@ class GZEApi {
         }
         log.debug("Token stored: \(jsonTokenString)")
         UserDefaults.standard.set(jsonTokenString, forKey: GZEApi.tokenKey)
+    }
+
+    // MARK: Response handler
+
+    static func createResponseHandler<T, U>(sink: Observer<T, GZEError>, createInstance: @escaping (U) -> T?) -> (DataResponse<Any>) -> Void {
+
+        return { response in
+
+            log.debug("Request: \(String(describing: response.request))")   // original url request
+            log.debug("Request headers: \(String(describing: response.request?.allHTTPHeaderFields))")   // original url request
+            log.debug("Response: \(String(describing: response.response))") // http url response
+
+            switch response.result {
+            case .success(let value):
+                log.debug("Response value: \(value)")
+
+                if
+                    let resultJSON = value as? JSON,
+                    let errorJSON = resultJSON["error"] as? JSON,
+                    let error = GZEApiError(json: errorJSON)
+                {
+                    log.error(error)
+                    sink.send(error: .repository(error: .GZEApiError(error: error)))
+                    sink.sendCompleted()
+                    return
+                } else if let resultJSON = value as? U {
+                    if let resultInstance = createInstance(resultJSON) {
+                        sink.send(value: resultInstance)
+                    } else {
+                        log.error("Unable to cast response object to: \(T.self)")
+                        sink.send(error: .repository(error: .UnexpectedError))
+                    }
+                } else {
+                    log.error("Unexpected response type. Expecting \(U.self)")
+                    sink.send(error: .repository(error: .UnexpectedError))
+                }
+
+                sink.sendCompleted()
+
+            case .failure(let error):
+                log.error(error)
+                sink.send(error: .repository(error: .NetworkError(error: error)))
+                sink.sendCompleted()
+            }
+        }
     }
 
 

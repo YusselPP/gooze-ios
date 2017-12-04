@@ -56,6 +56,13 @@ extension UIViewController {
         notifications.addObserver(observer, selector: willHideSelector, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
+    func deregisterFromKeyboardNotifications(observer: Any) {
+
+        let notifications = NotificationCenter.default
+        notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+
     func addKeyboardInsetAndScroll(scrollView: UIScrollView, activeField: UIView?, notification: Notification) {
         let info = notification.userInfo
 

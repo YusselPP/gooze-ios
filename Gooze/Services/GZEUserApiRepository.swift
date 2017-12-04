@@ -15,6 +15,8 @@ import Validator
 
 class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
+    let storageRepository = GZEStorageApiRepository()
+
     init() {
         log.debug("\(self) init")
     }
@@ -23,14 +25,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func create(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
-        return SignalProducer<GZEUser, GZEError> { [weak self] sink, disposable in
-
-            guard let this = self else {
-                log.error("Unable to complete the task. Self has been disposed.")
-                sink.send(error: .repository(error: .UnexpectedError))
-                sink.sendInterrupted()
-                return
-            }
+        return SignalProducer<GZEUser, GZEError> { sink, disposable in
 
             disposable.add {
                 log.debug("create SignalProducer disposed")
@@ -46,26 +41,19 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             }
 
             Alamofire.request(GZEUserRouter.createUser(parameters: userJSON))
-                .responseJSON(completionHandler: this.createResponseHandler(sink: sink, createInstance: GZEUser.init))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
         }
     }
 
     func update(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
-        return SignalProducer<GZEUser, GZEError> { [weak self] sink, disposable in
-
-            guard let this = self else {
-                log.error("Unable to complete the task. Self has been disposed.")
-                sink.send(error: .repository(error: .UnexpectedError))
-                sink.sendInterrupted()
-                return
-            }
+        return SignalProducer<GZEUser, GZEError> { sink, disposable in
 
             disposable.add {
-                log.debug("SignalProducer disposed")
+                log.debug("update SignalProducer disposed")
             }
 
-            log.debug("trying to create user")
+            log.debug("trying to update user")
 
             guard let userJSON = user.toJSON() else {
                 log.error("Unable to serialize the user")
@@ -74,21 +62,21 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 return
             }
 
-            Alamofire.request(GZEUserRouter.createUser(parameters: userJSON))
-                .responseJSON(completionHandler: this.createResponseHandler(sink: sink, createInstance: GZEUser.init))
+            guard let userId = user.id else {
+                log.error("The user instance must have an id in order to update it")
+                sink.send(error: .repository(error: .UnexpectedError))
+                sink.sendInterrupted()
+                return
+            }
+
+            Alamofire.request(GZEUserRouter.updateUser(id: userId, parameters: userJSON))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
         }
     }
 
     func delete(byId id: String) -> SignalProducer<Bool, GZEError> {
 
-        return SignalProducer<Bool, GZEError> { [weak self] sink, disposable in
-
-            guard let this = self else {
-                log.error("Unable to complete the task. Self has been disposed.")
-                sink.send(error: .repository(error: .UnexpectedError))
-                sink.sendInterrupted()
-                return
-            }
+        return SignalProducer<Bool, GZEError> { sink, disposable in
 
             disposable.add {
                 log.debug("find SignalProducer disposed")
@@ -102,7 +90,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
             let params = ["id": id]
             Alamofire.request(GZEUserRouter.login(parameters: params))
-                .responseJSON(completionHandler: this.createResponseHandler(sink: sink, createInstance: { _ in
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
                     return true
                 }))
         }
@@ -111,15 +99,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func find(byId id: String) -> SignalProducer<GZEUser, GZEError> {
 
-        return SignalProducer<GZEUser, GZEError> { [weak self] sink, disposable in
-
-            guard let this = self else {
-                log.error("Unable to complete the task. Self has been disposed.")
-                sink.send(error: .repository(error: .UnexpectedError))
-                sink.sendInterrupted()
-                return
-            }
-
+        return SignalProducer<GZEUser, GZEError> { sink, disposable in
             disposable.add {
                 log.debug("find SignalProducer disposed")
             }
@@ -132,7 +112,29 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
             let params = ["id": id]
             Alamofire.request(GZEUserRouter.login(parameters: params))
-                .responseJSON(completionHandler: this.createResponseHandler(sink: sink, createInstance: GZEUser.init))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
+        }
+    }
+
+    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float) -> SignalProducer<[GZEUser], GZEError> {
+        return SignalProducer<[GZEUser], GZEError> { sink, disposable in
+
+            disposable.add {
+                log.debug("find byLocation SignalProducer disposed")
+            }
+
+            log.debug("trying to find users by location")
+
+            guard let locationJSON = location.toJSON() else {
+                log.error("Unable to serialize the location")
+                sink.send(error: .repository(error: .UnexpectedError))
+                sink.sendInterrupted()
+                return
+            }
+
+            let params = ["location": locationJSON, "maxDistance": maxDistance] as [String : Any]
+            Alamofire.request(GZEUserRouter.findByLocation(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: [GZEUser].from))
         }
     }
 
@@ -157,7 +159,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             case .valid:
                 let params = ["email": email!, "password": password!]
                 Alamofire.request(GZEUserRouter.login(parameters: params))
-                    .responseJSON(completionHandler: this.createResponseHandler(sink: sink, createInstance: { json in
+                    .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
                         let accessToken = GZEAccesToken(json: json)
                         if accessToken != nil {
                             GZEApi.instance.setToken(accessToken!)
@@ -176,24 +178,73 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
-    func signUp(_ user: GZEUser) -> SignalProducer<GZEFile, GZEError> {
+    func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
+        var responseUser: GZEUser!
 
-        return create(user)
+        return (
+            create(user)
+            .flatMap(FlattenStrategy.latest, transform: { aUser -> SignalProducer<GZEUser, GZEError> in
+                responseUser = aUser
+
+                return SignalProducer<GZEUser, GZEError> { sink, disposable in
+
+                    sink.send(value: responseUser)
+                    sink.sendCompleted()
+                }
+            })
             .then(login(user.email, user.password))
-            .then({ () -> (SignalProducer<GZEFile, GZEError>) in
+            .then({ () -> (SignalProducer<[GZEFile], GZEError>) in
 
                 if let photos = user.photos {
-                    return GZEStorageApiRepository().uploadFiles(photos.map {
-                        if let image = $0.image {
-                            return UIImageJPEGRepresentation(image, 1)
+                    return storageRepository.uploadFiles(photos.enumerated().flatMap { (index, photo) in
+
+                        var imageData: Data?
+
+                        if let image = photo.image {
+
+                            imageData = UIImageJPEGRepresentation(image, 1)
+
+                            return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: "picture", type: "image/jpeg", data: imageData)
                         } else {
                             return nil
                         }
-                    })
+                    }, container: "picture")
                 } else {
                     return SignalProducer.empty
                 }
             }())
+            .flatMap(FlattenStrategy.latest, transform: { files -> SignalProducer<GZEUser, GZEError> in
+                
+                return SignalProducer<GZEUser, GZEError> { sink, disposable in
+
+                    for (index, file) in files.enumerated() {
+                        log.debug(file.toJSON() as Any)
+                        log.debug(user.toJSON() as Any)
+
+                        responseUser.photos![index].name = file.name
+                        responseUser.photos![index].container = file.container
+                        responseUser.photos![index].url = "/containers/\(file.container)/download/\(file.name)"
+                        responseUser.photos![index].blocked = false
+                    }
+
+                    sink.send(value: responseUser)
+                    sink.sendCompleted()
+                }
+            })
+            .flatMap(FlattenStrategy.latest) { [weak self] (aUser) -> SignalProducer<GZEUser, GZEError> in
+
+                guard let this = self else {
+                    log.error("Unable to complete the task. Self has been disposed.")
+                    return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                }
+
+                let user = GZEUser()
+                user.id = responseUser.id
+                user.photos = aUser.photos
+
+                return this.update(user)
+            }
+        )
     }
 
     private let emailRule = ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: GZEUser.Validation.email.fieldName))
@@ -206,50 +257,6 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         log.debug(result)
 
         return result
-    }
-
-    // MARK: Response handler
-
-    func createResponseHandler<T>(sink: Observer<T, GZEError>, createInstance: @escaping (JSON) -> T?) -> (DataResponse<Any>) -> Void {
-
-        return { response in
-
-            log.debug("Request: \(String(describing: response.request))")   // original url request
-            log.debug("Request headers: \(String(describing: response.request?.allHTTPHeaderFields))")   // original url request
-            log.debug("Response: \(String(describing: response.response))") // http url response
-
-            switch response.result {
-            case .success(let value):
-                log.debug("Response value: \(value)")
-
-                if let resultJSON = value as? JSON {
-                    if
-                        let errorJSON = resultJSON["error"] as? JSON,
-                        let error = GZEApiError(json: errorJSON) {
-
-                        log.error(error)
-                        sink.send(error: .repository(error: .GZEApiError(error: error)))
-                        sink.sendCompleted()
-                        return
-                    } else if let resultInstance = createInstance(resultJSON) {
-                        sink.send(value: resultInstance)
-                    } else {
-                        log.error("Unable to cast response object to: \(T.self)")
-                        sink.send(error: .repository(error: .UnexpectedError))
-                    }
-                } else {
-                    log.error("Unexpected response type. Expecting JSON")
-                    sink.send(error: .repository(error: .UnexpectedError))
-                }
-
-                sink.sendCompleted()
-
-            case .failure(let error):
-                log.error(error)
-                sink.send(error: .repository(error: .NetworkError(error: error)))
-                sink.sendCompleted()
-            }
-        }
     }
 
 

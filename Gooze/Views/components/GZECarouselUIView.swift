@@ -36,7 +36,7 @@ class GZECarouselUIView: iCarousel, iCarouselDelegate {
 
     func appendPhoto(_ image: UIImage?) {
         if let vm = dataSource as? GZESignUpViewModel {
-            vm.photos.append(MutableProperty(image))
+            vm.photos.append(MutableProperty(GZEUser.Photo(image: image)))
             let newIndex = vm.photos.count - 1
             insertItem(at: newIndex, animated: true)
             scrollToItem(at: newIndex, animated: true)

@@ -13,6 +13,7 @@ enum GZERepositoryError: Error {
     case BadRequest(message: String)
     case ModelNotFound
     case InvalidResponseFormat
+    case AuthRequired
 
     case UnexpectedError
 
@@ -29,6 +30,10 @@ extension GZERepositoryError: LocalizedError {
             return "Model not found"
         case .InvalidResponseFormat:
             return "Invalid response format"
+        case .AuthRequired:
+            return "error.repository.authRequired".localized()
+
+
         case .UnexpectedError:
             return "Unexpected Error".localized()
 

@@ -12,6 +12,7 @@ import Alamofire
 import ReactiveSwift
 import Validator
 import Localize_Swift
+import CoreLocation
 
 
 class GZEUser: Glossy {
@@ -43,13 +44,23 @@ class GZEUser: Glossy {
     }
 
     struct GeoPoint: Glossy {
-        let lat: Float
-        let lng: Float
+        let lat: Double
+        let lng: Double
+
+        init(lat: Double, lng: Double) {
+            self.lat = lat
+            self.lng = lng
+        }
+
+        init(CLCoord: CLLocationCoordinate2D) {
+            self.lat = CLCoord.latitude
+            self.lng = CLCoord.longitude
+        }
 
         init?(json: JSON) {
             guard
-                let lat: Float = "lat" <~~ json,
-                let lng: Float = "lng" <~~ json else {
+                let lat: Double = "lat" <~~ json,
+                let lng: Double = "lng" <~~ json else {
 
                 return nil
             }
@@ -64,9 +75,15 @@ class GZEUser: Glossy {
                 "lng" ~~> self.lng
             ])
         }
+
+        func toCoreLocationCoordinate2D() -> CLLocationCoordinate2D {
+            return CLLocationCoordinate2D(latitude: self.lat, longitude: self.lng)
+        }
     }
 
     struct Photo: Glossy {
+        var name: String?
+        var container: String?
         var url: String?
         var blocked: Bool?
         var image: UIImage?
@@ -76,12 +93,16 @@ class GZEUser: Glossy {
         }
 
         init?(json: JSON) {
+            self.name = "name" <~~ json
+            self.container = "container" <~~ json
             self.url = "url" <~~ json
             self.blocked = "blocked" <~~ json
         }
 
         func toJSON() -> JSON? {
             return jsonify([
+                "name" ~~> self.name,
+                "container" ~~> self.container,
                 "url" ~~> self.url,
                 "blocked" ~~> self.blocked
                 ])
@@ -107,6 +128,8 @@ class GZEUser: Glossy {
     var photos: [Photo]?
 
     var currentLocation: GeoPoint?
+    var activeUntil: Date?
+
     var registerCode: String?
     var invitedBy: String?
 
@@ -138,9 +161,11 @@ class GZEUser: Glossy {
 
         self.languages = "languages" <~~ json
         self.interestedIn = "interestedIn" <~~ json
-        // self.photos = "photos" <~~ json
+        self.photos = "photos" <~~ json
 
         self.currentLocation = "currentLocation" <~~ json
+        self.activeUntil = Decoder.decode(dateForKey: "activeUntil", dateFormatter: GZEApi.dateFormatter)(json)
+
         self.registerCode = "registerCode" <~~ json
         self.invitedBy = "invitedBy" <~~ json
 
@@ -159,7 +184,7 @@ class GZEUser: Glossy {
 
     func toJSON() -> JSON? {
         return jsonify([
-            "id" ~~> self.id,
+            // "id" ~~> self.id,
 
             "username" ~~> self.username,
             "email" ~~> self.email,
@@ -173,9 +198,11 @@ class GZEUser: Glossy {
 
             "languages" ~~> self.languages,
             "interestedIn" ~~> self.interestedIn,
-            // "photos" ~~> self.photos,
+            "photos" ~~> self.photos,
 
             "currentLocation" ~~> self.currentLocation,
+            Encoder.encode(dateForKey: "activeUntil", dateFormatter: GZEApi.dateFormatter)(self.activeUntil),
+
             "registerCode" ~~> self.registerCode,
             "invitedBy" ~~> self.invitedBy,
 

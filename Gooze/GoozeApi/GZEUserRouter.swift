@@ -15,6 +15,8 @@ enum GZEUserRouter: URLRequestConvertible {
     case updateUser(id: String, parameters: Parameters)
     case destroyUser(id: String)
 
+    case findByLocation(parameters: Parameters)
+
     case login(parameters: Parameters)
     case logout
     case reset(parameters: Parameters)
@@ -31,7 +33,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .reset,
              .resetPassword:
             return .post
-        case .readUser:
+        case .readUser,
+             .findByLocation:
             return .get
         case .updateUser:
             return .patch
@@ -48,6 +51,10 @@ enum GZEUserRouter: URLRequestConvertible {
              .updateUser(let id, _),
              .destroyUser(let id):
             return "\(GZEUserRouter.route)/\(id)"
+
+        case .findByLocation:
+            return "\(GZEUserRouter.route)/findByLocation"
+
         case .login:
             return "\(GZEUserRouter.route)/login"
         case .logout:
@@ -67,6 +74,17 @@ enum GZEUserRouter: URLRequestConvertible {
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.httpMethod = method.rawValue
 
+
+        // Auth
+        switch self {
+        case .updateUser,
+             .findByLocation:
+            urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
+        default:
+            break
+        }
+
+
         switch self {
         case .createUser(let parameters),
              .updateUser(_, let parameters),
@@ -74,6 +92,10 @@ enum GZEUserRouter: URLRequestConvertible {
              .reset(let parameters),
              .resetPassword(let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+
+        case .findByLocation(let parameters):
+            urlRequest = try URLEncoding.queryString.encode(urlRequest, with: parameters)
+
         default:
             break
         }

@@ -8,6 +8,8 @@
 
 // Protocols/GZEUserApiRepositoryError
 "Unknown error"="Error desconcido";
+"Unexpected Error"="Error inesperado";
+"error.repository.authRequired"="Inicia sesión para continuar";
 
 // Protocols/GZEValidationError
 "validation.required"="Ingresa tu %@";
@@ -43,9 +45,12 @@
 
 "vm.login.alertOkButtonTitle"="Ok";
 
+// ViewModel/GZEActivateGoozeViewModel
+"vm.activate.activateButtonTitle"="Activar gooze";
+"vm.activate.searchButtonTitle"="Buscar gooze";
+
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Aplicar";
-
 
 // GoozeApi/GZEApiError
 "username"="usuario";
