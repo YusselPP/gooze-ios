@@ -84,7 +84,7 @@ class GZEUser: Glossy {
     struct Photo: Glossy {
         var name: String?
         var container: String?
-        var url: String?
+        var url: String? 
         var blocked: Bool?
         var image: UIImage?
 
@@ -106,6 +106,16 @@ class GZEUser: Glossy {
                 "url" ~~> self.url,
                 "blocked" ~~> self.blocked
                 ])
+        }
+
+        var urlRequest: URLRequest? {
+            get {
+                if let url = self.url {
+                    return try? GZEUserRouter.photo(url: url).asURLRequest()
+                } else {
+                    return nil
+                }
+            }
         }
     }
 

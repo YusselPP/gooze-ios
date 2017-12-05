@@ -8,7 +8,6 @@
 
 import UIKit
 import MapKit
-import AddressBookUI
 import ReactiveSwift
 import ReactiveCocoa
 
@@ -28,7 +27,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
     var scene = Scene.search
     var isInitialPositionSet = false
-    var userAnnotations = [GZEUserAnnotation]()
+
+    var userBalloons = [GZEUserBalloon]()
 
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
@@ -40,8 +40,18 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var distanceSlider: UISlider!
     @IBOutlet weak var timeSlider: UISlider!
+
     @IBOutlet weak var activateGoozeButton: UIButton!
-    @IBOutlet weak var userBalloon: GZEUserBalloon!
+
+    @IBOutlet weak var userBalloon1: GZEUserBalloon!
+    @IBOutlet weak var userBalloon2: GZEUserBalloon!
+    @IBOutlet weak var userBalloon3: GZEUserBalloon!
+    @IBOutlet weak var userBalloon4: GZEUserBalloon!
+    @IBOutlet weak var userBalloon5: GZEUserBalloon!
+
+    @IBOutlet weak var distanceView: UIView!
+    @IBOutlet weak var timeView: UIView!
+    @IBOutlet weak var navIcon: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +61,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         locationManager.requestAlwaysAuthorization()
         mapView.showsUserLocation = true
 
-        userBalloon.imageView.image = #imageLiteral(resourceName: "Unknown")
+        userBalloons.append(userBalloon1)
+        userBalloons.append(userBalloon2)
+        userBalloons.append(userBalloon3)
+        userBalloons.append(userBalloon4)
+        userBalloons.append(userBalloon5)
 
         viewModel.radiusDistance <~ distanceSlider.reactive.values
         viewModel.activeTime <~ timeSlider.reactive.values
@@ -63,15 +77,18 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         searchGoozeAction = CocoaAction(viewModel.searchGoozeAction)
 
         viewModel.searchGoozeAction.values.observeValues { [unowned self] users in
-            self.mapView.removeAnnotations(self.userAnnotations)
-            self.userAnnotations.removeAll(keepingCapacity: true)
-            for user in users {
-                self.userAnnotations.append(GZEUserAnnotation(title: user.username!, locationName: user.id!, discipline: "discipline", coordinate: user.currentLocation!.toCoreLocationCoordinate2D()))
+
+            self.userBalloons.forEach { $0.setVisible(false) }
+
+            for (index, user) in users.enumerated() {
+
+                if let urlRequest = user.photos?.first?.urlRequest {
+                    self.userBalloons[index].setImage(urlRequest: urlRequest)
+                    self.userBalloons[index].rating = 4.5
+                } else {
+                    log.error("Failed to set image url for user id=[\(String(describing: user.id))]")
+                }
             }
-
-            self.userBalloon.setVisible(users.count > 0)
-
-            self.mapView.addAnnotations(self.userAnnotations)
         }
 
         switch scene {
@@ -92,11 +109,29 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         
         activateGoozeButton.setTitle(viewModel.activateButtonTitle, for: .normal)
         activateGoozeButton.reactive.pressed = activateGoozeAction
+
+        distanceView.isHidden = true
+        distanceLabel.isHidden = true
+        distanceSlider.isHidden = true
+        navIcon.isHidden = true
+
+        timeView.isHidden = false
+        timeLabel.isHidden = false
+        timeSlider.isHidden = false
     }
 
     func showSearchScene() {
         activateGoozeButton.setTitle(viewModel.searchButtonTitle, for: .normal)
         activateGoozeButton.reactive.pressed = searchGoozeAction
+
+        distanceView.isHidden = false
+        distanceLabel.isHidden = false
+        distanceSlider.isHidden = false
+        navIcon.isHidden = false
+
+        timeView.isHidden = true
+        timeLabel.isHidden = true
+        timeSlider.isHidden = true
     }
 
     // MARK: - UIActions

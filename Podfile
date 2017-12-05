@@ -12,9 +12,11 @@ target 'Gooze' do
   pod 'Gloss', '~> 1.2.0'
   pod 'SwiftOverlays', '~> 3.0.0'
   pod 'Alamofire', '~> 4.5'
+  pod 'AlamofireImage', '~> 3.3'
   pod 'ALCameraViewController', '~> 2.0.3'
   pod 'iCarousel', '~> 1.8.3'
   pod 'Validator'
+  pod 'Cosmos', '~> 11.0'
 
   target 'GoozeTests' do
     inherit! :search_paths

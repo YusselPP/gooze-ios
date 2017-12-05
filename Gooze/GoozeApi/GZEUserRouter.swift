@@ -22,6 +22,8 @@ enum GZEUserRouter: URLRequestConvertible {
     case reset(parameters: Parameters)
     case resetPassword(parameters: Parameters)
 
+    case photo(url: String)
+
     static let baseURLString = GZEAppConfig.goozeApiUrl
     static let route = "GoozeUsers"
 
@@ -34,7 +36,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .resetPassword:
             return .post
         case .readUser,
-             .findByLocation:
+             .findByLocation,
+             .photo:
             return .get
         case .updateUser:
             return .patch
@@ -63,6 +66,9 @@ enum GZEUserRouter: URLRequestConvertible {
             return "\(GZEUserRouter.route)/reset"
         case .resetPassword:
             return "\(GZEUserRouter.route)/resetPassword"
+
+        case .photo(let url):
+            return url
         }
     }
 
@@ -78,7 +84,8 @@ enum GZEUserRouter: URLRequestConvertible {
         // Auth
         switch self {
         case .updateUser,
-             .findByLocation:
+             .findByLocation,
+             .photo:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         default:
             break

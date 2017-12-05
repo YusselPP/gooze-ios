@@ -823,6 +823,30 @@
                                     <constraint firstAttribute="width" secondItem="77d-Ws-eC5" secondAttribute="height" multiplier="1:1" id="NhF-dW-vck"/>
                                 </constraints>
                             </view>
+                            <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AmF-ix-bj1" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="16" y="222" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="AmF-ix-bj1" secondAttribute="height" multiplier="1:1" id="tue-m9-ENH"/>
+                                </constraints>
+                            </view>
+                            <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PwI-nA-N7q" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="224" y="222" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="PwI-nA-N7q" secondAttribute="height" multiplier="1:1" id="Csa-b2-ZTx"/>
+                                </constraints>
+                            </view>
+                            <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gRo-ng-x7o" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="191" y="364" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="gRo-ng-x7o" secondAttribute="height" multiplier="1:1" id="Zth-mb-Lr0"/>
+                                </constraints>
+                            </view>
+                            <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="US3-n8-PGT" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="56" y="353" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="US3-n8-PGT" secondAttribute="height" multiplier="1:1" id="qaP-Tv-9Zl"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -830,27 +854,35 @@
                             <constraint firstItem="cAx-OH-86K" firstAttribute="top" secondItem="1Uq-Kh-1Uj" secondAttribute="bottom" id="211-9l-E56"/>
                             <constraint firstItem="vL6-Ko-X92" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" constant="16" id="2af-5h-kPP"/>
                             <constraint firstAttribute="trailing" secondItem="NeT-Hf-MSf" secondAttribute="trailing" constant="5" id="5WK-D3-61F"/>
-                            <constraint firstItem="77d-Ws-eC5" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" multiplier="0.6" id="9VU-Kn-6oV"/>
+                            <constraint firstItem="US3-n8-PGT" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" multiplier="1.5" id="8u3-4z-tp5"/>
+                            <constraint firstItem="77d-Ws-eC5" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" multiplier="0.5" id="9VU-Kn-6oV"/>
                             <constraint firstItem="80a-Wx-iQm" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leadingMargin" constant="40" id="GGg-ld-rGW"/>
                             <constraint firstItem="5rg-Hu-enC" firstAttribute="leading" secondItem="80a-Wx-iQm" secondAttribute="trailing" constant="5" id="GmV-Kg-diZ"/>
+                            <constraint firstItem="PwI-nA-N7q" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" multiplier="0.92" id="HHz-MF-8ux"/>
                             <constraint firstItem="cAx-OH-86K" firstAttribute="top" secondItem="80a-Wx-iQm" secondAttribute="bottom" id="Laz-rC-Wzg"/>
                             <constraint firstItem="NeT-Hf-MSf" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="Lff-Zp-Pbj"/>
                             <constraint firstItem="77d-Ws-eC5" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" id="Ll9-00-EZA"/>
+                            <constraint firstItem="AmF-ix-bj1" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" multiplier="0.92" id="PG2-I1-PAP"/>
                             <constraint firstItem="1Uq-Kh-1Uj" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leading" id="Pen-Yk-mh1"/>
                             <constraint firstItem="6SB-GO-3Wb" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" constant="12" id="Pty-vP-eMU"/>
                             <constraint firstItem="OYR-Ad-JXG" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="QHR-nx-4Vt"/>
                             <constraint firstAttribute="trailing" secondItem="OYR-Ad-JXG" secondAttribute="trailing" id="Scg-FB-oCl"/>
+                            <constraint firstItem="PwI-nA-N7q" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" multiplier="1.6" id="TKA-NA-A44"/>
                             <constraint firstItem="NeT-Hf-MSf" firstAttribute="leading" secondItem="QGV-rv-vPK" secondAttribute="trailing" constant="5" id="VBU-vO-b92"/>
                             <constraint firstItem="1Uq-Kh-1Uj" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="bSI-e8-Lry"/>
                             <constraint firstItem="QGV-rv-vPK" firstAttribute="top" secondItem="0E6-b3-6z2" secondAttribute="bottom" id="ePM-y7-FZn"/>
                             <constraint firstItem="uEP-GW-QrN" firstAttribute="top" secondItem="PH3-zt-MvS" secondAttribute="bottom" constant="10" id="frd-kH-Hp1"/>
+                            <constraint firstItem="gRo-ng-x7o" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" multiplier="1.5" id="glW-SA-uK8"/>
                             <constraint firstItem="vL6-Ko-X92" firstAttribute="centerY" secondItem="LPF-YG-LAa" secondAttribute="centerY" constant="10" id="hkh-I3-ijy"/>
                             <constraint firstItem="QGV-rv-vPK" firstAttribute="leading" secondItem="6SB-GO-3Wb" secondAttribute="trailing" constant="20" id="jSf-Kn-pvU"/>
                             <constraint firstItem="uEP-GW-QrN" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leading" id="jbp-aN-NNk"/>
                             <constraint firstItem="PH3-zt-MvS" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" id="nhI-gr-6Yl"/>
                             <constraint firstItem="OYR-Ad-JXG" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leading" id="r0m-RB-eSY"/>
                             <constraint firstItem="cAx-OH-86K" firstAttribute="top" secondItem="uEP-GW-QrN" secondAttribute="bottom" id="rer-x8-eaS"/>
+                            <constraint firstItem="gRo-ng-x7o" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" multiplier="1.4" id="s6p-L6-8In"/>
                             <constraint firstAttribute="trailing" secondItem="1Uq-Kh-1Uj" secondAttribute="trailing" id="uF9-CI-3DE"/>
+                            <constraint firstItem="US3-n8-PGT" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" multiplier="0.6" id="uJ7-Xi-C8i"/>
+                            <constraint firstItem="AmF-ix-bj1" firstAttribute="centerX" secondItem="LPF-YG-LAa" secondAttribute="centerX" multiplier="0.4" id="vUC-nB-fNR"/>
                             <constraint firstItem="5rg-Hu-enC" firstAttribute="trailing" secondItem="LPF-YG-LAa" secondAttribute="trailing" constant="-5" id="xce-uo-8Hn"/>
                             <constraint firstAttribute="trailing" secondItem="uEP-GW-QrN" secondAttribute="trailing" id="yrE-yx-Unl"/>
                             <constraint firstItem="6SB-GO-3Wb" firstAttribute="leading" secondItem="LPF-YG-LAa" secondAttribute="leading" constant="20" id="zWc-ja-wYa"/>
@@ -862,10 +894,17 @@
                         <outlet property="activateGoozeButton" destination="PH3-zt-MvS" id="i2B-FP-lZ0"/>
                         <outlet property="distanceLabel" destination="NeT-Hf-MSf" id="mEa-SV-AtE"/>
                         <outlet property="distanceSlider" destination="QGV-rv-vPK" id="b23-cq-7GC"/>
+                        <outlet property="distanceView" destination="OYR-Ad-JXG" id="WV7-2t-Z8n"/>
                         <outlet property="mapView" destination="1Uq-Kh-1Uj" id="9pU-wk-iT5"/>
+                        <outlet property="navIcon" destination="6SB-GO-3Wb" id="Ts7-6Z-Bwx"/>
                         <outlet property="timeLabel" destination="5rg-Hu-enC" id="zJC-Ma-N8h"/>
                         <outlet property="timeSlider" destination="80a-Wx-iQm" id="YBx-mt-0mG"/>
-                        <outlet property="userBalloon" destination="77d-Ws-eC5" id="UUh-vp-Qb0"/>
+                        <outlet property="timeView" destination="uEP-GW-QrN" id="kAZ-Dm-eKD"/>
+                        <outlet property="userBalloon1" destination="77d-Ws-eC5" id="9A0-1p-aGM"/>
+                        <outlet property="userBalloon2" destination="AmF-ix-bj1" id="m8h-iP-4Mt"/>
+                        <outlet property="userBalloon3" destination="PwI-nA-N7q" id="olB-px-6VB"/>
+                        <outlet property="userBalloon4" destination="US3-n8-PGT" id="lvO-Yc-41r"/>
+                        <outlet property="userBalloon5" destination="gRo-ng-x7o" id="bdl-vO-DSM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5c-ka-Vea" userLabel="First Responder" sceneMemberID="firstResponder"/>

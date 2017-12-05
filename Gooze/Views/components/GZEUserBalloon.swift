@@ -7,17 +7,24 @@
 //
 
 import UIKit
+import Cosmos
+import AlamofireImage
 
 class GZEUserBalloon: UIView {
 
-    var imageUrl: String?
-    var rating: Float?
+    var rating: Double = 0 {
+        didSet {
+            starsView.rating = rating
+        }
+    }
 
     var imageView = UIImageView()
-    var ratingView = UIView()
 
-    var imageViewHeightConstraint: NSLayoutConstraint!
-    var imageViewWidthConstraint: NSLayoutConstraint!
+    private var ratingView = UIView()
+    var starsView = CosmosView()
+
+    private var imageViewHeightConstraint: NSLayoutConstraint!
+    private var imageViewWidthConstraint: NSLayoutConstraint!
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -27,12 +34,24 @@ class GZEUserBalloon: UIView {
         
         // Set image view
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
 
         // Set rating View
+        ratingView.backgroundColor = .white
         ratingView.translatesAutoresizingMaskIntoConstraints = false
 
+        starsView.settings.starSize = 17
+        starsView.settings.starMargin = 1
+        starsView.settings.fillMode = .precise
+        starsView.settings.updateOnTouch = false
+        starsView.settings.filledColor = GZEConstants.Color.mainGreen
+        starsView.settings.emptyBorderColor = GZEConstants.Color.mainGreen
+        starsView.settings.filledBorderColor = GZEConstants.Color.mainGreen
+        starsView.translatesAutoresizingMaskIntoConstraints = false
+
+        ratingView.addSubview(starsView)
         addSubview(imageView)
         addSubview(ratingView)
 
@@ -62,6 +81,12 @@ class GZEUserBalloon: UIView {
         layer.cornerRadius = bounds.width / 2
     }
 
+    func setImage(urlRequest: URLRequest){
+        imageView.af_setImage(withURLRequest: urlRequest, completion: { [weak self] _ in
+            self?.setVisible(true)
+        })
+    }
+
     func setVisible(_ visible: Bool) {
         UIView.animate(withDuration: 0.3, animations: { [unowned self] in
             if visible {
@@ -82,6 +107,10 @@ class GZEUserBalloon: UIView {
         trailingAnchor.constraint(equalTo: ratingView.trailingAnchor).isActive = true
 
         imageView.bottomAnchor.constraint(equalTo: ratingView.topAnchor).isActive = true
-        imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
+        // imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
+
+        ratingView.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        ratingView.centerXAnchor.constraint(equalTo: starsView.centerXAnchor).isActive = true
+        ratingView.centerYAnchor.constraint(equalTo: starsView.centerYAnchor, constant: 2).isActive = true
     }
 }
