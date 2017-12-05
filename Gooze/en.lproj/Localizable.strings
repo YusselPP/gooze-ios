@@ -9,12 +9,13 @@
 // Protocols/GZEUserApiRepositoryError
 "error.repository.authRequired"="Login to continue";
 
+
+
 // Protocols/GZEValidationError
 "validation.required"="Enter your %@";
 "validation.invalidEmail"="Enter a valid email";
 "validation.lengthMin"="The field %@ must be a minimum of %d characters";
 "validation.lengthMax"="The field %@ must be a maximum of %d characters";
-
 
 // Models/GZEUser
 "user.username.fieldName"="username";
@@ -44,6 +45,12 @@
 
 "vm.login.alertOkButtonTitle"="Ok";
 
+// ViewModel/GZEChooseModeViewModel
+"vm.chooseMode.goozeHelpText"="You will appear as a Gooze and you can be reached for a date";
+"vm.chooseMode.clientHelpText"="You can search an available Gooze for having a date";
+"vm.chooseMode.beButtonTitle"="Be";
+"vm.chooseMode.searchButtonTitle"="Search";
+
 // ViewModel/GZEActivateGoozeViewModel
 "vm.activate.activateButtonTitle"="Activate gooze";
 "vm.activate.searchButtonTitle"="Search gooze";
@@ -52,3 +59,14 @@
 "label.blurView.applyButtonTitle"="Apply";
 
 "login failed"="Invalid username or password";
+
+
+
+
+
+
+
+
+
+
+

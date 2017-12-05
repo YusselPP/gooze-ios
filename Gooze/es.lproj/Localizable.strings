@@ -45,6 +45,12 @@
 
 "vm.login.alertOkButtonTitle"="Ok";
 
+// ViewModel/GZEChooseModeViewModel
+"vm.chooseMode.goozeHelpText"="Aparecerás como Gooze y podrás ser contactado para una cita";
+"vm.chooseMode.clientHelpText"="Podrás buscar un Gooze disponible para establecer una cita";
+"vm.chooseMode.beButtonTitle"="Ser";
+"vm.chooseMode.searchButtonTitle"="Buscar";
+
 // ViewModel/GZEActivateGoozeViewModel
 "vm.activate.activateButtonTitle"="Activar gooze";
 "vm.activate.searchButtonTitle"="Buscar gooze";

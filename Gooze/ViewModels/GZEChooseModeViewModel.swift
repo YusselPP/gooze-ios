@@ -13,6 +13,11 @@ class GZEChooseModeViewModel {
 
     let userRepository: GZEUserRepositoryProtocol
 
+    let goozeHelpLabelText = "vm.chooseMode.goozeHelpText".localized()
+    let clientHelpLabelText = "vm.chooseMode.clientHelpText".localized()
+    let beButtonTitle = "vm.chooseMode.beButtonTitle".localized()
+    let searchButtonTitle = "vm.chooseMode.searchButtonTitle".localized()
+
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
 

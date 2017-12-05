@@ -18,19 +18,18 @@ class GZEChooseModeViewController: UIViewController {
     let closeHelpButton = UIBarButtonItem()
     let logoutButton = GZELogoutButton()
 
-
-    @IBOutlet weak var gooze: UIButton!
-    @IBOutlet weak var client: UIButton!
+    let beButton = UIButton()
+    let searchButton = UIButton()
 
     @IBOutlet weak var showHelpButton: UIButton!
 
     @IBOutlet weak var goozeHelpLabel: UILabel!
     @IBOutlet weak var clientHelpLabel: UILabel!
 
-    @IBOutlet weak var separator: UIView!
-
     @IBOutlet weak var middleYConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomYConstraint: NSLayoutConstraint!
+
+    @IBOutlet weak var doubleCtrlView: GZEDoubleCtrlView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +43,28 @@ class GZEChooseModeViewController: UIViewController {
         closeHelpButton.target = self
         closeHelpButton.action = #selector(closeHelpButtonTapped(_:))
 
+        goozeHelpLabel.text = viewModel.goozeHelpLabelText
+        clientHelpLabel.text = viewModel.clientHelpLabelText
+
+        beButton.enableAnimationOnPressed()
+        searchButton.enableAnimationOnPressed()
+
+        beButton.setTitle(viewModel.beButtonTitle.uppercased(), for: .normal)
+        searchButton.setTitle(viewModel.searchButtonTitle.uppercased(), for: .normal)
+
+        beButton.addTarget(self, action: #selector(beButtonTapped(_:)), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped(_:)), for: .touchUpInside)
+
+        doubleCtrlView.topViewTappedHandler = { [unowned self] _ in
+            self.beButton.sendActions(for: .touchUpInside)
+        }
+        doubleCtrlView.bottomViewTappedHandler = { [unowned self] _ in
+            self.searchButton.sendActions(for: .touchUpInside)
+        }
+
+        doubleCtrlView.topCtrlView = beButton
+        doubleCtrlView.bottomCtrlView = searchButton
+
         showHelp(false)
     }
 
@@ -56,12 +77,12 @@ class GZEChooseModeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func goozeButtonTapped(_ sender: Any) {
+    func beButtonTapped(_ sender: Any) {
         goozeScene = .activate
         performSegue(withIdentifier: activateGoozeSegueId, sender: self)
     }
 
-    @IBAction func clientButtonTapped(_ sender: Any) {
+    func searchButtonTapped(_ sender: Any) {
         goozeScene = .search
         performSegue(withIdentifier: activateGoozeSegueId, sender: self)
     }

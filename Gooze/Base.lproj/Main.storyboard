@@ -926,6 +926,21 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="g2y-pr-bda">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
+                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El usuario aparecera como Gooze y podrá ser contactado para una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uiB-fm-VWO">
+                                <rect key="frame" x="16" y="298.5" width="288" height="42.5"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El usuario visualizará los Gooze disponibles para generar una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S7w-Wt-0lF">
+                                <rect key="frame" x="16" y="511.5" width="288" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r4b-bH-wrM" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="341" width="320" height="170"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3A-St-6Vf">
                                 <rect key="frame" x="274" y="508" width="30" height="45"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="28"/>
@@ -934,93 +949,40 @@
                                     <action selector="helpButtonTapped:" destination="tCW-re-8dM" eventType="touchUpInside" id="BlG-6o-r3g"/>
                                 </connections>
                             </button>
-                            <button verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dj3-dc-j9d">
-                                <rect key="frame" x="56" y="430.5" width="208" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="BXq-hW-lLa"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="60" id="Fg1-AC-inS"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
-                                <state key="normal" title="BUSCAR"/>
-                                <connections>
-                                    <action selector="clientButtonTapped:" destination="tCW-re-8dM" eventType="touchUpInside" id="JoO-Oe-yTk"/>
-                                </connections>
-                            </button>
-                            <view verifyAmbiguity="off" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EC7-XV-tIm">
-                                <rect key="frame" x="85" y="425.5" width="150" height="1"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="CMM-5X-DfX"/>
-                                    <constraint firstAttribute="width" constant="150" id="yJz-vZ-Ulc"/>
-                                </constraints>
-                            </view>
-                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El usuario aparecera como Gooze y podrá ser contactado para una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uiB-fm-VWO">
-                                <rect key="frame" x="56" y="267.5" width="208" height="64"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El usuario visualizará los Gooze disponibles para generar una cita" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S7w-Wt-0lF">
-                                <rect key="frame" x="56" y="520.5" width="208" height="21"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button verifyAmbiguity="ignoreSizes" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4R3-xH-B3d">
-                                <rect key="frame" x="56" y="371.5" width="208" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="4eG-L9-7en"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="60" id="op5-4J-t2c"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
-                                <state key="normal" title="SER"/>
-                                <connections>
-                                    <action selector="goozeButtonTapped:" destination="tCW-re-8dM" eventType="touchUpInside" id="6PD-p0-0Oj"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="M3A-St-6Vf" secondAttribute="bottom" constant="15" id="5Pw-1d-ENv"/>
                             <constraint firstItem="M3A-St-6Vf" firstAttribute="trailing" secondItem="tN4-i1-7xc" secondAttribute="trailingMargin" id="6mY-oa-2ih"/>
                             <constraint firstAttribute="bottom" secondItem="g2y-pr-bda" secondAttribute="bottom" id="88c-8R-f0f"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="uiB-fm-VWO" secondAttribute="trailing" constant="40" id="9as-8R-eKD"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="S7w-Wt-0lF" secondAttribute="trailing" constant="40" id="COi-7k-gQ6"/>
-                            <constraint firstItem="S7w-Wt-0lF" firstAttribute="top" secondItem="dj3-dc-j9d" secondAttribute="bottom" constant="40" id="MVJ-Fn-1XM"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="uiB-fm-VWO" secondAttribute="trailing" id="9as-8R-eKD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="S7w-Wt-0lF" secondAttribute="trailing" id="COi-7k-gQ6"/>
+                            <constraint firstItem="r4b-bH-wrM" firstAttribute="height" secondItem="tN4-i1-7xc" secondAttribute="height" multiplier="0.3" id="F8m-kk-5dy"/>
+                            <constraint firstItem="r4b-bH-wrM" firstAttribute="centerY" secondItem="tN4-i1-7xc" secondAttribute="centerY" id="JMb-pT-9s8"/>
                             <constraint firstItem="g2y-pr-bda" firstAttribute="top" secondItem="tN4-i1-7xc" secondAttribute="top" id="MvV-gp-3OO"/>
-                            <constraint firstItem="EC7-XV-tIm" firstAttribute="centerY" secondItem="tN4-i1-7xc" secondAttribute="centerY" multiplier="1.5" id="P9q-lV-EZ5"/>
-                            <constraint firstItem="EC7-XV-tIm" firstAttribute="top" secondItem="4R3-xH-B3d" secondAttribute="bottom" constant="4" id="REX-iA-dAq"/>
+                            <constraint firstItem="r4b-bH-wrM" firstAttribute="top" secondItem="uiB-fm-VWO" secondAttribute="bottom" id="SE3-PP-S7D"/>
                             <constraint firstAttribute="trailing" secondItem="g2y-pr-bda" secondAttribute="trailing" id="Wvd-Ym-idD"/>
                             <constraint firstItem="g2y-pr-bda" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leading" id="YeN-gb-VZN"/>
-                            <constraint firstItem="S7w-Wt-0lF" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" constant="40" id="Z6M-jj-f67"/>
-                            <constraint firstItem="4R3-xH-B3d" firstAttribute="centerX" secondItem="tN4-i1-7xc" secondAttribute="centerX" id="ed5-hf-RaL"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="4R3-xH-B3d" secondAttribute="trailing" constant="40" id="fpW-u4-DZx"/>
-                            <constraint firstItem="EC7-XV-tIm" firstAttribute="centerX" secondItem="tN4-i1-7xc" secondAttribute="centerX" id="hW4-ue-SCf"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="dj3-dc-j9d" secondAttribute="trailing" constant="40" id="ibD-Qx-WXX"/>
-                            <constraint firstItem="dj3-dc-j9d" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" constant="40" id="juq-Xx-vPc"/>
-                            <constraint firstItem="uiB-fm-VWO" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Oim-XG-3UJ" secondAttribute="bottom" constant="10" id="jvV-Zn-usE"/>
-                            <constraint firstItem="4R3-xH-B3d" firstAttribute="top" secondItem="uiB-fm-VWO" secondAttribute="bottom" constant="40" id="kF8-Og-QDU"/>
-                            <constraint firstItem="dj3-dc-j9d" firstAttribute="top" secondItem="EC7-XV-tIm" secondAttribute="bottom" constant="4" id="kc7-Ic-NzZ"/>
-                            <constraint firstItem="4R3-xH-B3d" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" constant="40" id="pOy-zZ-brT"/>
-                            <constraint firstItem="EC7-XV-tIm" firstAttribute="centerY" secondItem="tN4-i1-7xc" secondAttribute="centerY" id="t6l-72-Yww"/>
-                            <constraint firstItem="dj3-dc-j9d" firstAttribute="centerX" secondItem="tN4-i1-7xc" secondAttribute="centerX" id="w2m-AG-eDU"/>
-                            <constraint firstItem="uiB-fm-VWO" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" constant="40" id="xgv-Uo-qGa"/>
+                            <constraint firstItem="S7w-Wt-0lF" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" id="Z6M-jj-f67"/>
+                            <constraint firstItem="r4b-bH-wrM" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leading" id="fJE-Ud-MNF"/>
+                            <constraint firstItem="S7w-Wt-0lF" firstAttribute="top" secondItem="r4b-bH-wrM" secondAttribute="bottom" id="sCI-cA-Gd6"/>
+                            <constraint firstAttribute="trailing" secondItem="r4b-bH-wrM" secondAttribute="trailing" id="tr2-5I-34d"/>
+                            <constraint firstItem="r4b-bH-wrM" firstAttribute="centerY" secondItem="tN4-i1-7xc" secondAttribute="centerY" multiplier="1.5" id="xRg-uo-I23"/>
+                            <constraint firstItem="uiB-fm-VWO" firstAttribute="leading" secondItem="tN4-i1-7xc" secondAttribute="leadingMargin" id="xgv-Uo-qGa"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="t6l-72-Yww"/>
+                                <exclude reference="JMb-pT-9s8"/>
                             </mask>
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="r0m-MF-Lxw"/>
                     <connections>
-                        <outlet property="bottomYConstraint" destination="P9q-lV-EZ5" id="HIL-iN-ZT2"/>
-                        <outlet property="client" destination="dj3-dc-j9d" id="KAg-hM-Jr0"/>
+                        <outlet property="bottomYConstraint" destination="xRg-uo-I23" id="94B-Oz-Vkt"/>
                         <outlet property="clientHelpLabel" destination="S7w-Wt-0lF" id="jnK-Xo-hkc"/>
-                        <outlet property="gooze" destination="4R3-xH-B3d" id="YaT-mX-To2"/>
+                        <outlet property="doubleCtrlView" destination="r4b-bH-wrM" id="4Gz-YL-Jft"/>
                         <outlet property="goozeHelpLabel" destination="uiB-fm-VWO" id="gku-oc-Ho8"/>
-                        <outlet property="middleYConstraint" destination="t6l-72-Yww" id="Hsv-VX-7ql"/>
-                        <outlet property="separator" destination="EC7-XV-tIm" id="9nn-2r-ZX2"/>
+                        <outlet property="middleYConstraint" destination="JMb-pT-9s8" id="OWG-Ku-zIu"/>
                         <outlet property="showHelpButton" destination="M3A-St-6Vf" id="adC-KJ-4gV"/>
                         <segue destination="zf8-kb-SHu" kind="show" identifier="activateGoozeSegueId" id="VMc-sU-E36"/>
                     </connections>
