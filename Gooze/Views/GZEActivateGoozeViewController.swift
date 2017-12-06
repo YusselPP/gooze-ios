@@ -20,15 +20,21 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     var activateGoozeAction: CocoaAction<UIButton>!
     var searchGoozeAction: CocoaAction<UIButton>!
+    var allResultsAction: CocoaAction<UIButton>!
 
     enum Scene {
         case activate
         case search
+        case allResults
     }
     var scene = Scene.search
     var isInitialPositionSet = false
 
     var userBalloons = [GZEUserBalloon]()
+    var loadCompleteCount = 0
+    var searchAnimationEnabled = false
+
+    let MAX_RESULTS_ON_MAP = 5
 
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
@@ -53,6 +59,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var timeView: UIView!
     @IBOutlet weak var navIcon: UIImageView!
 
+    @IBOutlet weak var searchingRadiusView: UIImageView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -75,26 +83,30 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         activateGoozeAction = CocoaAction(viewModel.activateGoozeAction)
         searchGoozeAction = CocoaAction(viewModel.searchGoozeAction)
+        allResultsAction = CocoaAction(viewModel.searchGoozeAction) { _ in
+
+        }
 
         viewModel.searchGoozeAction.values.observeValues { [unowned self] users in
-
-            self.userBalloons.forEach { $0.setVisible(false) }
-
-            for (index, user) in users.enumerated() {
-
-                if let urlRequest = user.photos?.first?.urlRequest {
-                    self.userBalloons[index].setImage(urlRequest: urlRequest)
-                    self.userBalloons[index].rating = 4.5
-                } else {
-                    log.error("Failed to set image url for user id=[\(String(describing: user.id))]")
-                }
+            switch self.scene {
+            case .search:
+                self.searchAnimationEnabled = true
+                self.startSearchAnimation()
+                self.showResultsOnMap(users)
+            case .allResults:
+                self.showResultsOnList(users)
+            default: break
             }
+        }
+
+        viewModel.searchGoozeAction.errors.observeValues { [weak self] in
+            self?.displayMessage("Gooze", $0.localizedDescription)
         }
 
         switch scene {
         case .activate:
             showActivateScene()
-        case .search:
+        default:
             showSearchScene()
         }
     }
@@ -121,6 +133,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func showSearchScene() {
+        viewModel.searchLimit.value = MAX_RESULTS_ON_MAP
+
         activateGoozeButton.setTitle(viewModel.searchButtonTitle, for: .normal)
         activateGoozeButton.reactive.pressed = searchGoozeAction
 
@@ -132,6 +146,81 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         timeView.isHidden = true
         timeLabel.isHidden = true
         timeSlider.isHidden = true
+    }
+
+    func showSearchResultsScene() {
+        viewModel.searchLimit.value = 50
+
+        activateGoozeButton.setTitle(viewModel.allResultsButtonTitle, for: .normal)
+        activateGoozeButton.reactive.pressed = searchGoozeAction
+    }
+
+    func showResultsOnMap(_ users: [GZEUser]) {
+        self.userBalloons.forEach { $0.setVisible(false) }
+
+        loadCompleteCount = 0
+
+        let limit = min(users.count, MAX_RESULTS_ON_MAP)
+
+        for index in 0..<limit {
+
+            let user = users[index]
+
+            if let urlRequest = user.profilePic?.urlRequest {
+                self.userBalloons[index].setImage(urlRequest: urlRequest) { [weak self] in
+                    self?.loadCompleteCount += 1
+
+                    if self?.loadCompleteCount == limit {
+                        self?.stopSearchAnimation()
+                    }
+                }
+                self.userBalloons[index].rating = 4.5
+            } else {
+                self.loadCompleteCount += 1
+
+                if self.loadCompleteCount == limit {
+                    self.stopSearchAnimation()
+                }
+                self.userBalloons[index].setVisible(true)
+                log.error("Failed to set image url for user id=[\(String(describing: user.id))]")
+            }
+        }
+    }
+
+    func showResultsOnList(_ users: [GZEUser]) {
+
+    }
+
+    func startSearchAnimation() {
+        let scale: CGFloat = 30
+
+        let scaledTransform = searchingRadiusView.transform.scaledBy(x: scale, y: scale)
+        let originalTransform = searchingRadiusView.transform
+
+        UIView.animate(withDuration: 1, animations: { [weak self] in
+
+            guard let this = self else {
+                return
+            }
+
+            this.searchingRadiusView.transform = scaledTransform
+        }, completion: { [weak self] _ in
+
+            guard let this = self else {
+                return
+            }
+            
+            this.searchingRadiusView.transform = originalTransform
+
+            if this.searchAnimationEnabled {
+                this.startSearchAnimation()
+            }
+        })
+
+    }
+
+    func stopSearchAnimation() {
+        searchAnimationEnabled = false
     }
 
     // MARK: - UIActions

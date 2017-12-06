@@ -149,6 +149,10 @@ class GZEUser: Glossy {
     var createdAt: Date?
     var updatedAt: Date?
 
+    var profilePic: Photo? {
+        return photos?.first
+    }
+
     init() {
         log.debug("\(self) init")
     }

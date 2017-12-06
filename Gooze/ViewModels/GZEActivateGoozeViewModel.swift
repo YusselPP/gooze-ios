@@ -17,9 +17,11 @@ class GZEActivateGoozeViewModel {
     let currentLocation = MutableProperty<CLLocationCoordinate2D>(CLLocationCoordinate2D())
     let activeTime = MutableProperty<Float>(1)
     let radiusDistance = MutableProperty<Float>(1)
+    let searchLimit = MutableProperty<Int>(5)
 
     let activateButtonTitle = "vm.activate.activateButtonTitle".localized()
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()
+    let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
 
     var activateGoozeAction: Action<Void, GZEUser, GZEError> {
         if let activateGoozeAction = _activateGoozeAction {
@@ -72,7 +74,7 @@ class GZEActivateGoozeViewModel {
         return Action<Void, [GZEUser], GZEError>{[weak self] in
             guard let this = self else { return SignalProducer.empty }
 
-            return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.currentLocation.value), maxDistance: this.radiusDistance.value)
+            return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.currentLocation.value), maxDistance: this.radiusDistance.value, limit: this.searchLimit.value)
         }
     }
     

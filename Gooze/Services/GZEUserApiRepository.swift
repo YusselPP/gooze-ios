@@ -116,7 +116,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
-    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float) -> SignalProducer<[GZEUser], GZEError> {
+    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int = 5) -> SignalProducer<[GZEUser], GZEError> {
         return SignalProducer<[GZEUser], GZEError> { sink, disposable in
 
             disposable.add {
@@ -132,7 +132,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 return
             }
 
-            let params = ["location": locationJSON, "maxDistance": maxDistance] as [String : Any]
+            let params = ["location": locationJSON, "maxDistance": maxDistance, "limit": limit] as [String : Any]
             Alamofire.request(GZEUserRouter.findByLocation(parameters: params))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { jsonArray in
 

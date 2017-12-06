@@ -81,9 +81,10 @@ class GZEUserBalloon: UIView {
         layer.cornerRadius = bounds.width / 2
     }
 
-    func setImage(urlRequest: URLRequest){
+    func setImage(urlRequest: URLRequest, completion: ( () -> ())? = nil){
         imageView.af_setImage(withURLRequest: urlRequest, completion: { [weak self] _ in
             self?.setVisible(true)
+            completion?()
         })
     }
 

@@ -65,7 +65,7 @@ class GZEChooseModeViewController: UIViewController {
         doubleCtrlView.topCtrlView = beButton
         doubleCtrlView.bottomCtrlView = searchButton
 
-        showHelp(false)
+        showHelp(false, duration: 0)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -95,8 +95,8 @@ class GZEChooseModeViewController: UIViewController {
         showHelp(false)
     }
 
-    func showHelp(_ show: Bool) {
-        UIView.animate(withDuration: 0.5) { [unowned self] in
+    func showHelp(_ show: Bool, duration: TimeInterval = 0.5) {
+        UIView.animate(withDuration: duration) { [unowned self] in
             if show == true {
                 self.bottomYConstraint.isActive = false
                 self.middleYConstraint.isActive = true
