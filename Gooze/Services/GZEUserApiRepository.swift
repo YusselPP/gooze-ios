@@ -134,7 +134,10 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
             let params = ["location": locationJSON, "maxDistance": maxDistance] as [String : Any]
             Alamofire.request(GZEUserRouter.findByLocation(parameters: params))
-                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: [GZEUser].from))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { jsonArray in
+
+                    return [GZEUser].from(jsonArray: jsonArray)
+                }))
         }
     }
 

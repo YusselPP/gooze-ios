@@ -135,7 +135,8 @@ class GZEDoubleCtrlView: UIView {
 
                 underlineLabelObserver = topCtrlText.reactive.continuousTextValues.observeValues() { [weak self] in
                     if topCtrlText.isSecureTextEntry {
-                        if let len = $0?.count {
+                        // if let len = $0?.count { // swift 3 error
+                        if let len = $0?.characters.count {
                             self?.underlineLabel.text = String(repeating: "V", count: len)
                         } else {
                             self?.underlineLabel.text = $0

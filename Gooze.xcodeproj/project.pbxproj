@@ -61,6 +61,7 @@
 		8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720D21F9BA5B000485566 /* Localizable.strings */; };
 		8DF720D61F9BA8F900485566 /* GZELoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */; };
 		F00355181FB61244004C778C /* GZEValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00355171FB61244004C778C /* GZEValidationError.swift */; };
+		F0B4DF2D1FD76883002E4F18 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B4DF2C1FD76883002E4F18 /* Dictionary+Extension.swift */; };
 		F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */; };
 		F0CA6DBF1FAB6385009C1746 /* GZECarouselUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA6DBE1FAB6385009C1746 /* GZECarouselUIView.swift */; };
 		F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DDECE11FA1290C00450B2D /* GZESearchGoozeViewController.swift */; };
@@ -159,6 +160,7 @@
 		A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoozeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F00355171FB61244004C778C /* GZEValidationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZEValidationError.swift; sourceTree = "<group>"; };
 		F06601825C56AA9D2A670CC1 /* Pods-Gooze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gooze.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Gooze/Pods-Gooze.debug.xcconfig"; sourceTree = "<group>"; };
+		F0B4DF2C1FD76883002E4F18 /* Dictionary+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZEUserRouter.swift; sourceTree = "<group>"; };
 		F0CA6DBE1FAB6385009C1746 /* GZECarouselUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZECarouselUIView.swift; sourceTree = "<group>"; };
 		F0DDECE11FA1290C00450B2D /* GZESearchGoozeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZESearchGoozeViewController.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */,
 				8DB367801FCB46DB0079181F /* TextDisplayProtocol.swift */,
 				8D358AC31FBBF75F00F261DC /* ValidatorAliases.swift */,
+				F0B4DF2C1FD76883002E4F18 /* Dictionary+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -760,6 +763,7 @@
 				F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */,
 				F0CA6DBF1FAB6385009C1746 /* GZECarouselUIView.swift in Sources */,
 				F0EE89131FA7A48B001D194C /* GZEApiError.swift in Sources */,
+				F0B4DF2D1FD76883002E4F18 /* Dictionary+Extension.swift in Sources */,
 				8D9711B31FC307D200E98F95 /* GZEConstants.swift in Sources */,
 				8DBAABE41FB8A12C00B15142 /* GZETextField.swift in Sources */,
 				F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */,
