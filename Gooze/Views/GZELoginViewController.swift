@@ -50,6 +50,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         registerForKeyboarNotifications(
             observer: self,
             didShowSelector: #selector(keyboardShown(notification:)),
@@ -58,6 +59,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         deregisterFromKeyboardNotifications(observer: self)
     }
 

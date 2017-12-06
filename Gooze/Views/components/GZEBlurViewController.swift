@@ -7,32 +7,45 @@
 //
 
 import UIKit
+import ReactiveSwift
+import ReactiveCocoa
 
 public typealias GZEBlurViewCompletion = (UIImage?) -> Void
 
 class GZEBlurViewController: UIViewController {
 
     var image: UIImage
-    var resultImage: UIImage?
-
     var onCompletion: GZEBlurViewCompletion?
 
-    let filter = CIFilter(name: "CIMaskedVariableBlur")!
+    var isBlurInitiliazed = false
+
     let ciContext = CIContext(options: nil)
+
+    let filter = CIFilter(name: "CIMaskedVariableBlur")!
+
+    var blurRadius: Float = 15 {
+        didSet {
+            filter.setValue(blurRadius, forKey: kCIInputRadiusKey)
+        }
+    }
+
+    var resultImage: UIImage? {
+        didSet {
+            var ciImage: CIImage?
+            if let resultImage = self.resultImage {
+                ciImage = CIImage(image: resultImage)
+            }
+            filter.setValue(ciImage, forKey: kCIInputImageKey)
+        }
+    }
 
     let minimumBlurSize = CGSize(width: 60, height: 60)
 
+    var heightConstraint: NSLayoutConstraint!
+
     @IBOutlet weak var resultImageView: UIImageView!
-    @IBOutlet weak var blurEffectView: UIVisualEffectView!
-    
-    @IBOutlet weak var topLeftVButton: UIButton!
-    @IBOutlet weak var topLeftHButton: UIButton!
-    @IBOutlet weak var topRightVButton: UIButton!
-    @IBOutlet weak var topRightHButton: UIButton!
-    @IBOutlet weak var bottomLeftVButton: UIButton!
-    @IBOutlet weak var bottomLeftHButton: UIButton!
-    @IBOutlet weak var bottomRightVButton: UIButton!
-    @IBOutlet weak var bottomRightHButton: UIButton!
+    @IBOutlet weak var blurEffectView: UIView!
+    @IBOutlet weak var blurRadiusSlider: UISlider!
 
     @IBOutlet weak var applyButton: UIBarButtonItem!
     
@@ -52,18 +65,36 @@ class GZEBlurViewController: UIViewController {
         // Do any additional setup after loading the view.
         applyButton.title = Labels.BlurView.applyButtonTitle.localizedDescription
 
-        resultImageView.image = image
+
+        blurRadiusSlider.reactive.values.debounce(0.3, on: QueueScheduler.main).observeValues { [weak self] in
+            self?.blurRadius = $0
+            self?.drawBlur()
+        }
+
+        blurRadius = 15
+        resultImage = image
+        resultImageView.image = resultImage
+
+        blurEffectView.layer.borderWidth = 1
+        blurEffectView.layer.borderColor = UIColor.white.cgColor
+        blurEffectView.layer.cornerRadius = blurEffectView.frame.size.width / 2
 
         blurEffectView.addGestureRecognizer(createGestureRecognizer())
+        blurEffectView.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(blurPinched(_:))))
 
-        topLeftVButton.addGestureRecognizer(createGestureRecognizer())
-        topLeftHButton.addGestureRecognizer(createGestureRecognizer())
-        topRightVButton.addGestureRecognizer(createGestureRecognizer())
-        topRightHButton.addGestureRecognizer(createGestureRecognizer())
-        bottomLeftVButton.addGestureRecognizer(createGestureRecognizer())
-        bottomLeftHButton.addGestureRecognizer(createGestureRecognizer())
-        bottomRightVButton.addGestureRecognizer(createGestureRecognizer())
-        bottomRightHButton.addGestureRecognizer(createGestureRecognizer())
+        //heightConstraint = blurEffectView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, multiplier: 0.2)
+        heightConstraint = blurEffectView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120)
+        heightConstraint.isActive = true
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        drawBlur()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        drawBlur()
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,48 +102,51 @@ class GZEBlurViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
-        if let button = gestureRecognizer.view as? UIButton {
-            if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-                let translation = gestureRecognizer.translation(in: self.view)
+    func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
 
-                let frame = blurEffectView.frame
-                var newFrame: CGRect
+        let scale = gestureRecognizer.scale
 
-                switch button {
-                case topLeftHButton, topLeftVButton:
-                    newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y + translation.y, width: frame.size.width - translation.x, height: frame.size.height - translation.y)
-                case topRightHButton, topRightVButton:
-                    newFrame = CGRect(x: frame.origin.x, y: frame.origin.y + translation.y, width: frame.size.width + translation.x, height: frame.size.height - translation.y)
-                case bottomLeftHButton, bottomLeftVButton:
-                    newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y, width: frame.size.width - translation.x, height: frame.size.height + translation.y)
-                case bottomRightHButton, bottomRightVButton:
-                    newFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width + translation.x, height: frame.size.height + translation.y)
-                default:
-                    newFrame = CGRect.zero
-                }
-
-                let minimumFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y, width: max(newFrame.size.width, minimumBlurSize.width), height: max(newFrame.size.height, minimumBlurSize.height))
-                blurEffectView.frame = minimumFrame
-
-                gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
-            }
-        } else {
-            if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-                let translation = gestureRecognizer.translation(in: self.view)
-
-                gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
-                gestureRecognizer.setTranslation(CGPoint(x: 0, y: 0), in: self.view)
-            }
+        guard let view = gestureRecognizer.view else {
+            log.debug("Gesture doesn't have a view")
+            return
         }
+
+        log.debug(view.transform)
+        log.debug(scale)
+
+        let transform = view.transform.scaledBy(x: scale, y: scale)
+
+        guard transform.a >= 1 else {
+            log.debug("Reached min size")
+            return
+        }
+
+        view.transform = transform
+        gestureRecognizer.scale = 1
+
+        drawBlur()
     }
-    
+
+    func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
+
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let translation = gestureRecognizer.translation(in: self.view)
+
+            gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
+            gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+        }
+
+        drawBlur()
+    }
+
     @IBAction func revertButtonTapped(_ sender: UIBarButtonItem) {
-        resultImageView.image = image
+        resultImage = image
+        drawBlur()
     }
 
     @IBAction func applyButtonTapped(_ sender: UIBarButtonItem) {
-        resultImageView.image = drawBlur(on: resultImageView.image)
+        resultImage = resultImageView.image
+        drawBlur()
     }
 
     @IBAction func doneButtonTapped(_ sender: UIBarButtonItem) {
@@ -120,63 +154,53 @@ class GZEBlurViewController: UIViewController {
     }
 
     func close() {
-        onCompletion?(resultImageView.image)
+        onCompletion?(resultImage)
     }
 
-    func drawBlur(on image: UIImage?) -> UIImage? {
+    func drawBlur() {
 
-        guard let image = resultImageView.image else {
+        guard let image = resultImage else {
             log.debug("No image to draw")
-            return nil
+            return
         }
 
         guard let blurMask = createBlurMask(for: image) else {
             log.error("Failed to create blur mask")
             displayMessage("Error", "Failed to apply blur effect")
-            return nil
+            return
         }
 
-        let ciImage = CIImage(image: image)
         let ciMaskImage = CIImage(image: blurMask)
 
-        filter.setDefaults()
-        filter.setValue(15.0, forKey: kCIInputRadiusKey)
-        filter.setValue(ciImage, forKey: kCIInputImageKey)
         filter.setValue(ciMaskImage, forKey: "inputMask")
 
         guard
-            let outputImage = filter.outputImage,
-            let resultCIImage = ciContext.createCGImage(outputImage, from: CGRect(origin: .zero, size: image.size))
+            let outputImage = filter.outputImage
+            , let resultCIImage = ciContext.createCGImage(outputImage, from: CGRect(origin: .zero, size: image.size))
         else {
             log.error("Failed to create blurred image")
             displayMessage("Error", "Failed to apply blur effect")
-            return nil
+            return
         }
 
-        return UIImage(cgImage: resultCIImage)
+        resultImageView.image = UIImage(cgImage: resultCIImage)
     }
+
 
     func createBlurMask(for image: UIImage) -> UIImage? {
         UIGraphicsBeginImageContext(image.size)
         let context = UIGraphicsGetCurrentContext()!
         context.setFillColor(UIColor.white.cgColor)
 
-        let imageFrame = resultImageView.imageFrame()
         let blurFrame = blurEffectView.frame
+        let imageFrame = resultImageView.imageFrame()
         let scale = resultImageView.imageScale()
-
-        log.debug("image.size: \(image.size)")
-
-        log.debug("image.frame: \(imageFrame)")
-        log.debug("blur.frame: \(blurFrame)")
-
 
         let scaledBlurFrame = CGRect(x: (blurFrame.minX - imageFrame.minX) / scale, y: (blurFrame.minY - imageFrame.minY) / scale, width: blurFrame.width / scale, height: blurFrame.height / scale)
 
-        log.debug("scaledBlur.frame: \(scaledBlurFrame)")
-
-        context.addRect(scaledBlurFrame)
+        context.addEllipse(in: scaledBlurFrame)
         context.drawPath(using: .fill)
+
         let blurMask = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return blurMask
@@ -185,16 +209,6 @@ class GZEBlurViewController: UIViewController {
     func createGestureRecognizer() -> UIPanGestureRecognizer {
         return UIPanGestureRecognizer(target: self, action: #selector(blurPan))
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK: Deinitializers
     deinit {

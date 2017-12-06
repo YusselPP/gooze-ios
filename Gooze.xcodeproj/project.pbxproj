@@ -38,7 +38,6 @@
 		8DAE96541FC6868200E56740 /* GZEChooseModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAE96531FC6868200E56740 /* GZEChooseModeViewModel.swift */; };
 		8DB367811FCB46DB0079181F /* TextDisplayProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB367801FCB46DB0079181F /* TextDisplayProtocol.swift */; };
 		8DBAABE41FB8A12C00B15142 /* GZETextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBAABE31FB8A12C00B15142 /* GZETextField.swift */; };
-		8DC321F61FD516440068630D /* GZEUserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC321F51FD516440068630D /* GZEUserAnnotation.swift */; };
 		8DC321F81FD51FC90068630D /* GZEUserBalloon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC321F71FD51FC90068630D /* GZEUserBalloon.swift */; };
 		8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */; };
 		8DC972B61FA59E02004E7511 /* CompleteUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DC972B51FA59E02004E7511 /* CompleteUser.json */; };
@@ -127,7 +126,6 @@
 		8DAE96531FC6868200E56740 /* GZEChooseModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChooseModeViewModel.swift; sourceTree = "<group>"; };
 		8DB367801FCB46DB0079181F /* TextDisplayProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDisplayProtocol.swift; sourceTree = "<group>"; };
 		8DBAABE31FB8A12C00B15142 /* GZETextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZETextField.swift; sourceTree = "<group>"; };
-		8DC321F51FD516440068630D /* GZEUserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserAnnotation.swift; sourceTree = "<group>"; };
 		8DC321F71FD51FC90068630D /* GZEUserBalloon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserBalloon.swift; sourceTree = "<group>"; };
 		8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZESignUpViewModel.swift; sourceTree = "<group>"; };
 		8DC972B51FA59E02004E7511 /* CompleteUser.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CompleteUser.json; sourceTree = "<group>"; };
@@ -248,7 +246,6 @@
 				8DBAABE31FB8A12C00B15142 /* GZETextField.swift */,
 				8D7970281FC91ADE0022B96F /* GZEDoubleCtrlView.swift */,
 				8D01C4651FCE97CD00B53ED8 /* GZELogoutButton.swift */,
-				8DC321F51FD516440068630D /* GZEUserAnnotation.swift */,
 				8DC321F71FD51FC90068630D /* GZEUserBalloon.swift */,
 			);
 			path = components;
@@ -750,7 +747,6 @@
 				8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */,
 				8DAE96521FC6860500E56740 /* GZEActivateGoozeViewController.swift in Sources */,
 				8DD035301FB5143C008EBEAD /* GZEBlurViewController.swift in Sources */,
-				8DC321F61FD516440068630D /* GZEUserAnnotation.swift in Sources */,
 				F0E067F31FA2528400AE59BE /* GZESignUpMoreViewController.swift in Sources */,
 				F0E067F61FA274B500AE59BE /* GZESignUpPhotoViewController.swift in Sources */,
 				8D0551FA1FC0175400BC3915 /* GZERegisterCodeViewModel.swift in Sources */,
