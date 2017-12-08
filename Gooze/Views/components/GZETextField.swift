@@ -15,8 +15,16 @@ class GZETextField: UITextField {
     var model: MutableProperty<String?>?
     var isValid = MutableProperty<Bool>(true)
 
+    init() {
+        super.init(frame: CGRect.zero)
+
+        log.debug("\(self) init")
+        initProperties()
+    }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+
         log.debug("\(self) init")
         initProperties()
     }

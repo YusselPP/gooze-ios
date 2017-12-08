@@ -13,11 +13,24 @@ class GZERegisterCodeViewController: UIViewController {
     var viewModel: GZERegisterCodeViewModel!
 
     let signUpSegueId = "signUpSegue"
+
+    let codeTextField = GZETextField()
+    let codeLabel = UILabel()
     
+    @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+
+        codeLabel.text = "Código de registro".uppercased()
+
+        dblCtrlView.separatorWidth = 150
+        dblCtrlView.topCtrlView = codeTextField
+        dblCtrlView.bottomCtrlView = codeLabel
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        // registerForKeyboarNotifications(observer: self, didShowSelector: #selector(), willHideSelector: #selector())
     }
 
     override func didReceiveMemoryWarning() {
