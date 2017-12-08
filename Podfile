@@ -16,7 +16,8 @@ target 'Gooze' do
   pod 'ALCameraViewController', '~> 2.0.3'
   pod 'iCarousel', '~> 1.8.3'
   pod 'Validator'
-  pod 'Cosmos', '~> 11.0'
+  # pod 'Cosmos', '~> 11.0'
+  pod 'FloatRatingView', '~> 2.0.0'
 
   target 'GoozeTests' do
     inherit! :search_paths

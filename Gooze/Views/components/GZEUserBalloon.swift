@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import Cosmos
 import AlamofireImage
+import FloatRatingView
 
 class GZEUserBalloon: UIView {
 
-    var rating: Double = 0 {
+    var rating: Float = 0 {
         didSet {
             starsView.rating = rating
         }
@@ -21,7 +21,7 @@ class GZEUserBalloon: UIView {
     var imageView = UIImageView()
 
     private var ratingView = UIView()
-    var starsView = CosmosView()
+    var starsView = FloatRatingView()
 
     private var imageViewHeightConstraint: NSLayoutConstraint!
     private var imageViewWidthConstraint: NSLayoutConstraint!
@@ -34,6 +34,7 @@ class GZEUserBalloon: UIView {
         
         // Set image view
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .white
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -42,14 +43,14 @@ class GZEUserBalloon: UIView {
         ratingView.backgroundColor = .white
         ratingView.translatesAutoresizingMaskIntoConstraints = false
 
-        starsView.settings.starSize = 17
-        starsView.settings.starMargin = 1
-        starsView.settings.fillMode = .precise
-        starsView.settings.updateOnTouch = false
-        starsView.settings.filledColor = GZEConstants.Color.mainGreen
-        starsView.settings.emptyBorderColor = GZEConstants.Color.mainGreen
-        starsView.settings.filledBorderColor = GZEConstants.Color.mainGreen
+
+        starsView.fullImage = #imageLiteral(resourceName: "full-star")
+        starsView.emptyImage = #imageLiteral(resourceName: "empty-star")
+        starsView.floatRatings = true
+        starsView.editable = false
+        starsView.contentMode = .scaleAspectFit
         starsView.translatesAutoresizingMaskIntoConstraints = false
+
 
         ratingView.addSubview(starsView)
         addSubview(imageView)
@@ -108,10 +109,15 @@ class GZEUserBalloon: UIView {
         trailingAnchor.constraint(equalTo: ratingView.trailingAnchor).isActive = true
 
         imageView.bottomAnchor.constraint(equalTo: ratingView.topAnchor).isActive = true
-        // imageView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.8).isActive = true
+
 
         ratingView.heightAnchor.constraint(equalToConstant: 28).isActive = true
+
+
+        starsView.widthAnchor.constraint(equalTo: ratingView.widthAnchor, multiplier: 0.65).isActive = true
+        starsView.heightAnchor.constraint(equalTo: ratingView.heightAnchor, multiplier: 0.65).isActive = true
+
         ratingView.centerXAnchor.constraint(equalTo: starsView.centerXAnchor).isActive = true
-        ratingView.centerYAnchor.constraint(equalTo: starsView.centerYAnchor, constant: 2).isActive = true
+        ratingView.centerYAnchor.constraint(equalTo: starsView.centerYAnchor).isActive = true
     }
 }

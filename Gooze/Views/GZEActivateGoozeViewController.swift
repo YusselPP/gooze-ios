@@ -36,6 +36,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     let MAX_RESULTS_ON_MAP = 5
 
+    var backButton = UIBarButtonItem()
+
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
@@ -69,6 +71,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         locationManager.requestAlwaysAuthorization()
         mapView.showsUserLocation = true
 
+        backButton.target = self
+        backButton.image = #imageLiteral(resourceName: "icons8-back-50")
+        navigationItem.setLeftBarButton(backButton, animated: false)
+
         userBalloons.append(userBalloon1)
         userBalloons.append(userBalloon2)
         userBalloons.append(userBalloon3)
@@ -82,9 +88,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         timeLabel.reactive.text <~ viewModel.activeTime.map { "\($0) hrs" }
 
         activateGoozeAction = CocoaAction(viewModel.activateGoozeAction)
-        searchGoozeAction = CocoaAction(viewModel.searchGoozeAction)
-        allResultsAction = CocoaAction(viewModel.searchGoozeAction) { _ in
-
+        searchGoozeAction = CocoaAction(viewModel.searchGoozeAction) { [unowned self] _ in
+            self.showSearchResultsScene()
+        }
+        allResultsAction = CocoaAction(viewModel.searchGoozeAction) { [unowned self] _ in
+            self.showAllResultsScene()
         }
 
         viewModel.searchGoozeAction.values.observeValues { [unowned self] users in
@@ -146,6 +154,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         timeView.isHidden = true
         timeLabel.isHidden = true
         timeSlider.isHidden = true
+
+        backButton.action = #selector(previousController)
     }
 
     func showSearchResultsScene() {
@@ -153,6 +163,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         activateGoozeButton.setTitle(viewModel.allResultsButtonTitle, for: .normal)
         activateGoozeButton.reactive.pressed = searchGoozeAction
+
+        distanceView.isHidden = true
+        distanceLabel.isHidden = true
+        distanceSlider.isHidden = true
+        navIcon.isHidden = true
+
+        backButton.action = #selector(showSearchScene)
+    }
+
+    func showAllResultsScene() {
+        
     }
 
     func showResultsOnMap(_ users: [GZEUser]) {
@@ -160,11 +181,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         loadCompleteCount = 0
 
+        if users.count == 0 {
+            self.stopSearchAnimation()
+        }
+
         let limit = min(users.count, MAX_RESULTS_ON_MAP)
 
         for index in 0..<limit {
 
             let user = users[index]
+
+            self.userBalloons[index].rating = 4.5
 
             if let urlRequest = user.profilePic?.urlRequest {
                 self.userBalloons[index].setImage(urlRequest: urlRequest) { [weak self] in
@@ -174,7 +201,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                         self?.stopSearchAnimation()
                     }
                 }
-                self.userBalloons[index].rating = 4.5
+
             } else {
                 self.loadCompleteCount += 1
 
@@ -262,6 +289,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
      // Pass the selected object to the new view controller.
      }
      */
+
+    func previousController() {
+        navigationController?.popViewController(animated: true)
+    }
 
     // MARK: Deinitializers
     deinit {
