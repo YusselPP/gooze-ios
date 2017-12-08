@@ -111,11 +111,11 @@ class GZEUserBalloon: UIView {
         imageView.bottomAnchor.constraint(equalTo: ratingView.topAnchor).isActive = true
 
 
-        ratingView.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        ratingView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2).isActive = true
 
 
-        starsView.widthAnchor.constraint(equalTo: ratingView.widthAnchor, multiplier: 0.65).isActive = true
-        starsView.heightAnchor.constraint(equalTo: ratingView.heightAnchor, multiplier: 0.65).isActive = true
+        starsView.widthAnchor.constraint(equalTo: ratingView.widthAnchor, multiplier: 0.5).isActive = true
+        starsView.heightAnchor.constraint(equalTo: ratingView.heightAnchor, multiplier: 0.5).isActive = true
 
         ratingView.centerXAnchor.constraint(equalTo: starsView.centerXAnchor).isActive = true
         ratingView.centerYAnchor.constraint(equalTo: starsView.centerYAnchor).isActive = true

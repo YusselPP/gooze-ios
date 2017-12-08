@@ -37,13 +37,17 @@ extension UIViewController {
 
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
-        if let loginController = mainStoryboard.instantiateViewController(withIdentifier: "GZELoginViewController") as? GZELoginViewController {
+
+        if
+            let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
+            let loginController = navController.viewControllers.first as? GZELoginViewController {
+        // if let loginController = mainStoryboard.instantiateViewController(withIdentifier: "GZELoginViewController") as? GZELoginViewController {
 
             // Set up initial view model
             loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
-            setRootController(controller: loginController)
+            setRootController(controller: navController)
         } else {
-            log.error("Unable to instantiate InitialViewController")
+            log.error("Unable to instantiate LoginNavController")
             displayMessage("Unexpected error", "Please contact support")
         }
     }

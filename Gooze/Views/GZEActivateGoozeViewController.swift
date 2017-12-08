@@ -31,7 +31,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     var isInitialPositionSet = false
 
     var userBalloons = [GZEUserBalloon]()
-    var loadCompleteCount = 0
     var searchAnimationEnabled = false
 
     let MAX_RESULTS_ON_MAP = 5
@@ -138,6 +137,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         timeView.isHidden = false
         timeLabel.isHidden = false
         timeSlider.isHidden = false
+
+        backButton.action = #selector(previousController)
     }
 
     func showSearchScene() {
@@ -156,6 +157,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         timeSlider.isHidden = true
 
         backButton.action = #selector(previousController)
+
+        hideResultsOnMap()
     }
 
     func showSearchResultsScene() {
@@ -177,17 +180,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func showResultsOnMap(_ users: [GZEUser]) {
-        self.userBalloons.forEach { $0.setVisible(false) }
-
-        loadCompleteCount = 0
+        hideResultsOnMap()
 
         if users.count == 0 {
             self.stopSearchAnimation()
         }
 
-        let limit = min(users.count, MAX_RESULTS_ON_MAP)
+        var loadCompleteCount = 0
 
-        for index in 0..<limit {
+        let resultsLimit = min(users.count, MAX_RESULTS_ON_MAP)
+
+        for index in 0..<resultsLimit {
 
             let user = users[index]
 
@@ -195,23 +198,27 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
             if let urlRequest = user.profilePic?.urlRequest {
                 self.userBalloons[index].setImage(urlRequest: urlRequest) { [weak self] in
-                    self?.loadCompleteCount += 1
+                    loadCompleteCount += 1
 
-                    if self?.loadCompleteCount == limit {
+                    if loadCompleteCount == resultsLimit {
                         self?.stopSearchAnimation()
                     }
                 }
 
             } else {
-                self.loadCompleteCount += 1
+                loadCompleteCount += 1
 
-                if self.loadCompleteCount == limit {
+                if loadCompleteCount == resultsLimit {
                     self.stopSearchAnimation()
                 }
                 self.userBalloons[index].setVisible(true)
                 log.error("Failed to set image url for user id=[\(String(describing: user.id))]")
             }
         }
+    }
+
+    func hideResultsOnMap() {
+        self.userBalloons.forEach { $0.setVisible(false) }
     }
 
     func showResultsOnList(_ users: [GZEUser]) {
