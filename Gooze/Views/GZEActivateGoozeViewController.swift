@@ -179,6 +179,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         
     }
 
+    func setSlider() {
+
+    }
+
     func showResultsOnMap(_ users: [GZEUser]) {
         hideResultsOnMap()
 

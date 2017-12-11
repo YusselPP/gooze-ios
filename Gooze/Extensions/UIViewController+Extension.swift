@@ -81,7 +81,7 @@ extension UIViewController {
             aRect.size.height -= kbSize.height
             if let activeField = activeField {
                 if (!aRect.contains(activeField.frame)) {
-                    UIView.animate(withDuration: 0.25) {
+                    UIView.animate(withDuration: 0.35) {
                         scrollView.scrollRectToVisible(activeField.frame, animated: false)
                     }
                 }
