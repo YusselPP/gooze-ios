@@ -31,6 +31,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
     var backButton = UIBarButtonItem()
 
+    @IBOutlet weak var logoView: UIView!
     @IBOutlet weak var doubleCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -201,6 +202,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         navigationItem.setLeftBarButton(nil, animated: true)
         backButton.action = nil
 
+        logoView.alpha = 1
+
         doubleCtrlView.separatorWidth = 130
         doubleCtrlView.topCtrlView = loginButton
         doubleCtrlView.bottomCtrlView = signUpButton
@@ -217,6 +220,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     func showUsernameScene() {
         navigationItem.setLeftBarButton(backButton, animated: true)
         backButton.action = #selector(showLoginScene)
+
+        logoView.alpha = 0
 
         doubleCtrlView.separatorWidth = 0
         doubleCtrlView.topCtrlView = emailTextField
@@ -235,6 +240,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         navigationItem.setLeftBarButton(backButton, animated: true)
         backButton.action = #selector(showUsernameScene)
 
+        logoView.alpha = 0
+        
         doubleCtrlView.separatorWidth = 0
         doubleCtrlView.topCtrlView = passwordTextField
         doubleCtrlView.bottomCtrlView = passwordLabel

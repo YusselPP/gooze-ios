@@ -300,6 +300,7 @@
                     <navigationItem key="navigationItem" id="Lhq-h3-sGt"/>
                     <connections>
                         <outlet property="doubleCtrlView" destination="9e2-Dw-qta" id="ZAv-X2-LU8"/>
+                        <outlet property="logoView" destination="aPd-bt-XyP" id="Fgb-96-UfE"/>
                         <outlet property="scrollView" destination="8A7-k9-CmG" id="F6d-Rv-x22"/>
                         <segue destination="cxv-R3-Bhb" kind="show" identifier="registerCodeSegue" id="mYB-Wd-Tvt"/>
                         <segue destination="S19-gD-Gha" kind="show" identifier="signUpSegue" id="akO-BX-PMh"/>
