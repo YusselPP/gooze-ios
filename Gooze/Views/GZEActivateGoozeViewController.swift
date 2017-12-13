@@ -13,27 +13,31 @@ import ReactiveCocoa
 
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
-    var viewModel: GZEActivateGoozeViewModel!
-
-    let geocoder = CLGeocoder()
-    let locationManager = CLLocationManager()
-
-    var activateGoozeAction: CocoaAction<UIButton>!
-    var searchGoozeAction: CocoaAction<UIButton>!
-    var allResultsAction: CocoaAction<UIButton>!
-
     enum Scene {
         case activate
         case search
         case allResults
     }
+
+    let MAX_RESULTS_ON_MAP = 5
+
+    let geocoder = CLGeocoder()
+    let locationManager = CLLocationManager()
+
+    var viewModel: GZEActivateGoozeViewModel!
+
+    var activateGoozeAction: CocoaAction<UIButton>!
+    var searchGoozeAction: CocoaAction<UIButton>!
+    var allResultsAction: CocoaAction<UIButton>!
+
     var scene = Scene.search
     var isInitialPositionSet = false
 
+    var sliderPostfix = "km"
+    var sliderStep: Float = 1
+
     var userBalloons = [GZEUserBalloon]()
     var searchAnimationEnabled = false
-
-    let MAX_RESULTS_ON_MAP = 5
 
     var backButton = UIBarButtonItem()
 
@@ -42,11 +46,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             mapView.delegate = self
         }
     }
-    @IBOutlet weak var distanceLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-
-    @IBOutlet weak var distanceSlider: UISlider!
-    @IBOutlet weak var timeSlider: UISlider!
+    @IBOutlet weak var sliderLabel: UILabel!
+    @IBOutlet weak var topSlider: UISlider!
 
     @IBOutlet weak var activateGoozeButton: UIButton!
 
@@ -57,7 +58,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var userBalloon5: GZEUserBalloon!
 
     @IBOutlet weak var distanceView: UIView!
-    @IBOutlet weak var timeView: UIView!
     @IBOutlet weak var navIcon: UIImageView!
 
     @IBOutlet weak var searchingRadiusView: UIImageView!
@@ -74,17 +74,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         backButton.image = #imageLiteral(resourceName: "icons8-back-50")
         navigationItem.setLeftBarButton(backButton, animated: false)
 
+        searchingRadiusView.alpha = 0
+
         userBalloons.append(userBalloon1)
         userBalloons.append(userBalloon2)
         userBalloons.append(userBalloon3)
         userBalloons.append(userBalloon4)
         userBalloons.append(userBalloon5)
 
-        viewModel.radiusDistance <~ distanceSlider.reactive.values
-        viewModel.activeTime <~ timeSlider.reactive.values
+        viewModel.sliderValue <~ topSlider.reactive.values
 
-        distanceLabel.reactive.text <~ viewModel.radiusDistance.map { "\($0) km" }
-        timeLabel.reactive.text <~ viewModel.activeTime.map { "\($0) hrs" }
+        sliderLabel.reactive.text <~ viewModel.sliderValue.map { [unowned self] in "\($0) \(self.sliderPostfix)" }
 
         activateGoozeAction = CocoaAction(viewModel.activateGoozeAction)
         searchGoozeAction = CocoaAction(viewModel.searchGoozeAction) { [unowned self] _ in
@@ -110,6 +110,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             self?.displayMessage("Gooze", $0.localizedDescription)
         }
 
+        setupSlider()
+
         switch scene {
         case .activate:
             showActivateScene()
@@ -129,14 +131,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         activateGoozeButton.setTitle(viewModel.activateButtonTitle, for: .normal)
         activateGoozeButton.reactive.pressed = activateGoozeAction
 
-        distanceView.isHidden = true
-        distanceLabel.isHidden = true
-        distanceSlider.isHidden = true
-        navIcon.isHidden = true
-
-        timeView.isHidden = false
-        timeLabel.isHidden = false
-        timeSlider.isHidden = false
+        distanceView.isHidden = false
+        sliderLabel.isHidden = false
+        topSlider.isHidden = false
+        navIcon.isHidden = false
 
         backButton.action = #selector(previousController)
     }
@@ -148,13 +146,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         activateGoozeButton.reactive.pressed = searchGoozeAction
 
         distanceView.isHidden = false
-        distanceLabel.isHidden = false
-        distanceSlider.isHidden = false
+        sliderLabel.isHidden = false
+        topSlider.isHidden = false
         navIcon.isHidden = false
-
-        timeView.isHidden = true
-        timeLabel.isHidden = true
-        timeSlider.isHidden = true
 
         backButton.action = #selector(previousController)
 
@@ -168,8 +162,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         activateGoozeButton.reactive.pressed = searchGoozeAction
 
         distanceView.isHidden = true
-        distanceLabel.isHidden = true
-        distanceSlider.isHidden = true
+        sliderLabel.isHidden = true
+        topSlider.isHidden = true
         navIcon.isHidden = true
 
         backButton.action = #selector(showSearchScene)
@@ -177,10 +171,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func showAllResultsScene() {
         
-    }
-
-    func setSlider() {
-
     }
 
     func showResultsOnMap(_ users: [GZEUser]) {
@@ -230,10 +220,12 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func startSearchAnimation() {
-        let scale: CGFloat = 30
+        let scale: CGFloat = max(view.bounds.width, view.bounds.height) / 8
 
         let scaledTransform = searchingRadiusView.transform.scaledBy(x: scale, y: scale)
         let originalTransform = searchingRadiusView.transform
+
+        searchingRadiusView.alpha = 1
 
         UIView.animate(withDuration: 1, animations: { [weak self] in
 
@@ -242,6 +234,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             }
 
             this.searchingRadiusView.transform = scaledTransform
+            this.searchingRadiusView.alpha = 0
         }, completion: { [weak self] _ in
 
             guard let this = self else {
@@ -249,6 +242,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             }
             
             this.searchingRadiusView.transform = originalTransform
+            this.searchingRadiusView.alpha = 1
 
             if this.searchAnimationEnabled {
                 this.startSearchAnimation()
@@ -259,19 +253,31 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func stopSearchAnimation() {
         searchAnimationEnabled = false
+        searchingRadiusView.alpha = 0
+    }
+
+    func setupSlider() {
+        if self.scene == .activate {
+            sliderPostfix = "hrs"
+            sliderStep = 0.5
+
+            topSlider.maximumValue = 5
+            topSlider.value = 1
+            viewModel.sliderValue.value = 1
+        } else {
+            sliderPostfix = "kms"
+            sliderStep = 1
+
+            topSlider.maximumValue = 50
+            topSlider.value = 1
+            viewModel.sliderValue.value = 1
+        }
     }
 
     // MARK: - UIActions
 
-    @IBAction func distanceSliderChanged(_ sender: UISlider) {
-        let step: Float = 1
-        let roundedValue = round(sender.value / step) * step
-        sender.value = roundedValue
-    }
-
-    @IBAction func timeSliderChanged(_ sender: UISlider) {
-        let step: Float = 0.5
-        let roundedValue = round(sender.value / step) * step
+    @IBAction func topSliderChanged(_ sender: UISlider) {
+        let roundedValue = round(sender.value / sliderStep) * sliderStep
         sender.value = roundedValue
     }
 
