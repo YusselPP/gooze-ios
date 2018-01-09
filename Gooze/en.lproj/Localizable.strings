@@ -18,19 +18,26 @@
 "validation.lengthMax"="The field %@ must be a maximum of %d characters";
 
 // Models/GZEUser
-"user.username.fieldName"="username";
-"user.email.fieldName"="email";
-"user.password.fieldName"="password";
-"user.birthday.fieldName"="birthday";
-"user.gender.fieldName"="gender";
-"user.weight.fieldName"="weight";
-"user.height.fieldName"="height";
-"user.origin.fieldName"="origin";
-"user.phrase.fieldName"="phrase";
-"user.language.fieldName"="language";
-"user.interestedIn.fieldName"="interests";
-"user.registerCode.fieldName"="register code";
-"user.invitedBy.fieldName"="invited by";
+"user.username.fieldName"="Username";
+"user.email.fieldName"="Email";
+"user.password.fieldName"="Password";
+"user.birthday.fieldName"="Birthday";
+"user.gender.fieldName"="Gender";
+"user.weight.fieldName"="Weight";
+"user.height.fieldName"="Height";
+"user.origin.fieldName"="Origin";
+"user.phrase.fieldName"="Phrase";
+"user.language.fieldName"="Language";
+"user.interestedIn.fieldName"="Interests";
+"user.registerCode.fieldName"="Register code";
+"user.invitedBy.fieldName"="Invited by";
+
+// ViewModel/GZESignUpBasicViewController
+"vm.signUp.viewTitle"="Sign up";
+"vm.signUp.facebookSignUpButtonTitle"="Sign up with Facebook";
+"vm.signUp.createProfileText"="Create profile";
+"vm.signUp.skipProfileText"="Skip";
+"vm.signUp.success"="Successfully registered!";
 
 // ViewModel/GZELoginViewController
 "vm.login.loginViewTitle"="Login";

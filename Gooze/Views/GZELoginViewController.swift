@@ -54,7 +54,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidAppear(animated)
         registerForKeyboarNotifications(
             observer: self,
-            didShowSelector: #selector(keyboardShown(notification:)),
+            willShowSelector: #selector(keyboardWillShow(notification:)),
             willHideSelector: #selector(keyboardWillHide(notification:))
         )
     }
@@ -194,7 +194,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
             segue.identifier == registerCodeSegueId,
             let viewController = segue.destination as? GZERegisterCodeViewController
         {
-            viewController.viewModel = viewModel.getRegisterCodeViewModel()
+            viewController.viewModel = viewModel.getSignUpViewModel()
         }
     }
 
@@ -256,8 +256,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: KeyboardNotifications
 
-    func keyboardShown(notification: Notification) {
-        log.debug("keyboard shown")
+    func keyboardWillShow(notification: Notification) {
+        log.debug("keyboard will show")
         (doubleCtrlView.bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
         addKeyboardInsetAndScroll(scrollView: scrollView, activeField: doubleCtrlView, notification: notification)
     }

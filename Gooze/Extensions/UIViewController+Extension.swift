@@ -52,25 +52,37 @@ extension UIViewController {
         }
     }
 
-    func registerForKeyboarNotifications(observer: Any, didShowSelector: Selector, willHideSelector: Selector) {
+    func registerForKeyboarNotifications(observer: Any, willShowSelector: Selector, willHideSelector: Selector) {
 
         let notifications = NotificationCenter.default
-        notifications.addObserver(observer, selector: didShowSelector, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-
+        // notifications.addObserver(observer, selector: didShowSelector, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         notifications.addObserver(observer, selector: willHideSelector, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notifications.addObserver(observer, selector: willShowSelector, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
 
     func deregisterFromKeyboardNotifications(observer: Any) {
 
         let notifications = NotificationCenter.default
-        notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        // notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
 
     func addKeyboardInsetAndScroll(scrollView: UIScrollView, activeField: UIView?, notification: Notification) {
-        let info = notification.userInfo
 
-        if let kbSize = info?[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+
+        if
+            let info = notification.userInfo,
+            let kbSize = info[UIKeyboardFrameEndUserInfoKey] as? CGRect
+        {
+            let duration = info[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.35
+            let curve = UIViewAnimationCurve(
+                rawValue: info[UIKeyboardAnimationCurveUserInfoKey] as? Int ?? UIViewAnimationCurve.linear.rawValue
+            )
+            let options = curve?.toOptions() ?? UIViewAnimationOptions.curveLinear
+
+            log.debug(curve as Any)
+            log.debug(options)
 
             var contentInset = scrollView.contentInset
             contentInset.bottom = kbSize.height
@@ -81,9 +93,9 @@ extension UIViewController {
             aRect.size.height -= kbSize.height
             if let activeField = activeField {
                 if (!aRect.contains(activeField.frame)) {
-                    UIView.animate(withDuration: 0.35) {
+                    UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
                         scrollView.scrollRectToVisible(activeField.frame, animated: false)
-                    }
+                    }, completion: nil)
                 }
             }
         }

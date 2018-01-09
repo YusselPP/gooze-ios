@@ -21,8 +21,11 @@ class GZEDoubleCtrlView: UIView {
 
     var separatorWidth: CGFloat = 100 {
         didSet {
+            log.debug("Resizing separator: \(separatorWidth)")
             separatorWidthConstraint.constant = separatorWidth
-            layoutIfNeeded()
+            UIView.animate(withDuration: animationsDuration) { [weak self] in
+                self?.layoutIfNeeded()
+            }
         }
     }
 

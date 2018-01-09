@@ -18,19 +18,26 @@
 "validation.lengthMax"="El campo %@ debe tener máximo %d caracteres";
 
 // Models/GZEUser
-"user.username.fieldName"="usuario";
-"user.email.fieldName"="correo electrónico";
-"user.password.fieldName"="contraseña";
-"user.birthday.fieldName"="fecha de nacimiento";
-"user.gender.fieldName"="género";
-"user.weight.fieldName"="peso";
-"user.height.fieldName"="altura";
-"user.origin.fieldName"="origen";
-"user.phrase.fieldName"="frase";
-"user.language.fieldName"="idioma";
-"user.interestedIn.fieldName"="interés";
-"user.registerCode.fieldName"="código de registro";
-"user.invitedBy.fieldName"="invitado por";
+"user.username.fieldName"="Usuario";
+"user.email.fieldName"="Correo electrónico";
+"user.password.fieldName"="Contraseña";
+"user.birthday.fieldName"="Fecha de nacimiento";
+"user.gender.fieldName"="Género";
+"user.weight.fieldName"="Peso";
+"user.height.fieldName"="Altura";
+"user.origin.fieldName"="Origen";
+"user.phrase.fieldName"="Frase";
+"user.language.fieldName"="Idioma";
+"user.interestedIn.fieldName"="Interés";
+"user.registerCode.fieldName"="Código de registro";
+"user.invitedBy.fieldName"="Invitado por";
+
+// ViewModel/GZESignUpBasicViewController
+"vm.signUp.viewTitle"="Registro";
+"vm.signUp.facebookSignUpButtonTitle"="Registar con facebook";
+"vm.signUp.createProfileText"="Crear perfil";
+"vm.signUp.skipProfileText"="Saltar";
+"vm.signUp.success"="¡Registro exitoso!";
 
 // ViewModel/GZELoginViewController
 "vm.login.loginViewTitle"="Inicio de sesión";

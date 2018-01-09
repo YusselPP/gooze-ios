@@ -59,7 +59,7 @@ class GZETestViewController: UIViewController, UITextFieldDelegate {
 
         registerForKeyboarNotifications(
             observer: self,
-            didShowSelector: #selector(GZETestViewController.keyboardShown(notification:)),
+            willShowSelector: #selector(GZETestViewController.keyboardShown(notification:)),
             willHideSelector: #selector(GZETestViewController.keyboardWillHide(notification:))
         )
 

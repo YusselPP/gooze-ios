@@ -16,10 +16,31 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     let userRepository: GZEUserRepositoryProtocol
     let user: GZEUser
 
+    let usernameLabelText = GZEUser.Validation.username.fieldName
+    let emailLabelText = GZEUser.Validation.email.fieldName
+    let passwordLabelText = GZEUser.Validation.password.fieldName
+    let registerCodeLabelText = GZEUser.Validation.registerCode.fieldName
+
+    let phraseLabelText = GZEUser.Validation.phrase.fieldName
+    let genderLabelText = GZEUser.Validation.gender.fieldName
+    let birthdayLabelText = GZEUser.Validation.birthday.fieldName
+    let heightLabelText = GZEUser.Validation.height.fieldName
+    let weightLabelText = GZEUser.Validation.weight.fieldName
+    let originLabelText = GZEUser.Validation.origin.fieldName
+    let languageLabelText = GZEUser.Validation.language.fieldName
+    let interestsLabelText = GZEUser.Validation.interestedIn.fieldName
+
+    let viewTitle = "vm.signUp.viewTitle".localized()
+    let facebookSignUp = "vm.signUp.facebookSignUpButtonTitle".localized()
+    let createProfileText = "vm.signUp.createProfileText".localized()
+    let skipProfileText = "vm.signUp.skipProfileText".localized()
+    let successfulSignUp = "vm.signUp.success".localized()
+
     // basic sign up
     let username = MutableProperty<String?>("")
     let email = MutableProperty<String?>("")
     let password = MutableProperty<String?>("")
+    let registerCode = MutableProperty<String?>("")
 
     let isBasicNextButtonEnabled = MutableProperty<Bool>(false)
 

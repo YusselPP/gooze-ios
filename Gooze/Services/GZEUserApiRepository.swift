@@ -198,7 +198,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             .then(login(user.email, user.password))
             .then({ () -> (SignalProducer<[GZEFile], GZEError>) in
 
-                if let photos = user.photos {
+                if let photos = user.photos, photos.count > 0 {
                     return storageRepository.uploadFiles(photos.enumerated().flatMap { (index, photo) in
 
                         var imageData: Data?
@@ -213,7 +213,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                         }
                     }, container: "picture")
                 } else {
-                    return SignalProducer.empty
+                    return SignalProducer.init(value: [GZEFile]())
                 }
             }())
             .flatMap(FlattenStrategy.latest, transform: { files -> SignalProducer<GZEUser, GZEError> in

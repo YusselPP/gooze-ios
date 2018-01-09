@@ -10,6 +10,10 @@ import UIKit
 
 extension UIButton {
 
+    func removeAllTargets() {
+        removeTarget(nil, action: nil, for: .allEvents)
+    }
+
     func enableAnimationOnPressed() {
         addTarget(self, action: #selector(handleButtonPressedAnimation(_:)), for: .touchUpInside)
     }
