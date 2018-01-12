@@ -35,6 +35,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var profileImageView: UIImageView!
 
+    @IBOutlet weak var saveButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

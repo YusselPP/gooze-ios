@@ -267,6 +267,10 @@
                                                     <constraint firstAttribute="width" secondItem="aot-uf-DTC" secondAttribute="height" multiplier="32:11" id="JaP-Ot-3Tx"/>
                                                 </constraints>
                                             </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aAw-J3-Lhi">
+                                                <rect key="frame" x="254" y="548" width="56" height="30"/>
+                                                <state key="normal" title="Guardar"/>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="s75-Qo-WNT" secondAttribute="trailing" constant="10" id="6Yz-S8-72C"/>
@@ -280,6 +284,7 @@
                                             <constraint firstItem="ncm-nO-qGJ" firstAttribute="top" secondItem="7dG-jg-Se2" secondAttribute="bottom" constant="8" id="GfA-e6-Jhj"/>
                                             <constraint firstAttribute="trailing" secondItem="f84-C9-1rK" secondAttribute="trailing" constant="10" id="H2i-aa-41C"/>
                                             <constraint firstItem="lPV-Fn-VPs" firstAttribute="top" secondItem="u7D-UY-3ik" secondAttribute="bottom" constant="25" id="HuJ-S9-wjJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="aAw-J3-Lhi" secondAttribute="trailing" constant="10" id="Jvt-y7-vaS"/>
                                             <constraint firstItem="u7D-UY-3ik" firstAttribute="top" secondItem="Fxf-KV-xlD" secondAttribute="bottom" constant="8" id="KXr-05-7FD"/>
                                             <constraint firstAttribute="trailing" secondItem="aot-uf-DTC" secondAttribute="trailing" id="MX9-xO-y0V"/>
                                             <constraint firstItem="lPV-Fn-VPs" firstAttribute="leading" secondItem="P9F-hy-S2v" secondAttribute="leading" constant="10" id="OLm-E2-aBO"/>
@@ -301,6 +306,7 @@
                                             <constraint firstItem="f84-C9-1rK" firstAttribute="leading" secondItem="P9F-hy-S2v" secondAttribute="leading" constant="10" id="qJA-ip-Zni"/>
                                             <constraint firstItem="KCl-Tg-zlh" firstAttribute="centerX" secondItem="P9F-hy-S2v" secondAttribute="centerX" id="rah-wL-Bzb"/>
                                             <constraint firstAttribute="trailing" secondItem="lPV-Fn-VPs" secondAttribute="trailing" constant="10" id="smK-Qh-KET"/>
+                                            <constraint firstAttribute="bottom" secondItem="aAw-J3-Lhi" secondAttribute="bottom" constant="8" id="so7-64-lAf"/>
                                             <constraint firstItem="aot-uf-DTC" firstAttribute="top" secondItem="KCl-Tg-zlh" secondAttribute="bottom" constant="16" id="ufW-tX-jHS"/>
                                             <constraint firstItem="s75-Qo-WNT" firstAttribute="leading" secondItem="P9F-hy-S2v" secondAttribute="leading" constant="10" id="zcZ-qx-0Jm"/>
                                             <constraint firstItem="0me-qO-LLu" firstAttribute="top" secondItem="lPV-Fn-VPs" secondAttribute="bottom" constant="8" id="zzD-Id-8kH"/>
@@ -344,6 +350,7 @@
                         <outlet property="originTextField" destination="f84-C9-1rK" id="GUc-d9-0HG"/>
                         <outlet property="phraseTextField" destination="Fxf-KV-xlD" id="RDh-qN-L5W"/>
                         <outlet property="profileImageView" destination="aot-uf-DTC" id="IEy-dF-maz"/>
+                        <outlet property="saveButton" destination="aAw-J3-Lhi" id="wtN-bi-slI"/>
                         <outlet property="scrollView" destination="jgt-hf-4Co" id="ljb-rO-ZEL"/>
                         <outlet property="usernameLabel" destination="wRD-Ba-vpg" id="iNu-BU-G8f"/>
                         <outlet property="weightTextField" destination="ncm-nO-qGJ" id="ovF-DE-fEA"/>
