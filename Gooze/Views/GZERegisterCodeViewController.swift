@@ -111,6 +111,10 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    func save() {
+        saveAction.execute(nextBarButton)
+    }
+
     func onSaveSuccess(user: GZEUser) {
         hideLoading()
         showSignupSuccessScene()
@@ -235,7 +239,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         scene = .password
 
         backButton.action = #selector(showEmailScene)
-        nextBarButton.action = #selector(showSignupSuccessScene)
+        nextBarButton.action = #selector(save)
 
         topTextField.returnKeyType = .send
         topTextField.keyboardType = .default
@@ -335,7 +339,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             showPasswordScene()
             //return false
         case .password:
-            saveAction.execute(nextBarButton)
+            save()
             //return false
         default:
             log.debug("Text field without return action")

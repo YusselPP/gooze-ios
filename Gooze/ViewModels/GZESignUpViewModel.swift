@@ -37,22 +37,22 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     let successfulSignUp = "vm.signUp.success".localized()
 
     // basic sign up
-    let username = MutableProperty<String?>("")
-    let email = MutableProperty<String?>("")
-    let password = MutableProperty<String?>("")
-    let registerCode = MutableProperty<String?>("")
+    let username = MutableProperty<String?>(nil)
+    let email = MutableProperty<String?>(nil)
+    let password = MutableProperty<String?>(nil)
+    let registerCode = MutableProperty<String?>(nil)
 
     let isBasicNextButtonEnabled = MutableProperty<Bool>(false)
 
     // additional data
     let birthday = MutableProperty<Date?>(nil)
     let gender = MutableProperty<GZEUser.Gender?>(nil)
-    let weight = MutableProperty<String?>("")
-    let height = MutableProperty<String?>("")
-    let origin = MutableProperty<String?>("")
-    let phrase = MutableProperty<String?>("")
-    let languages = MutableProperty<String?>("")
-    let interestedIn = MutableProperty<String?>("")
+    let weight = MutableProperty<String?>(nil)
+    let height = MutableProperty<String?>(nil)
+    let origin = MutableProperty<String?>(nil)
+    let phrase = MutableProperty<String?>(nil)
+    let languages = MutableProperty<String?>(nil)
+    let interestedIn = MutableProperty<String?>(nil)
 
     var photos = [MutableProperty<GZEUser.Photo?>]()
 
@@ -85,6 +85,15 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     }
     private var _saveAction: Action<Void, GZEUser, GZEError>?
 
+    var updateAction: Action<Void, GZEUser, GZEError> {
+        if let updateAction = _updateAction {
+            return updateAction
+        }
+        _updateAction = createUpdateAction()
+        return _updateAction!
+    }
+    private var _updateAction: Action<Void, GZEUser, GZEError>?
+
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
@@ -105,6 +114,24 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
             guard let strongSelf = self else { return SignalProducer.empty }
             strongSelf.fillUser()
             return strongSelf.userRepository.signUp(strongSelf.user)
+        }
+    }
+
+    private func createUpdateAction() -> Action<Void, GZEUser, GZEError> {
+        log.debug("Creating update action")
+        return Action<Void, GZEUser, GZEError>{[weak self] in
+            guard let this = self else { return SignalProducer.empty }
+
+            guard let userId = GZEApi.instance.accessToken?.userId else {
+                return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+            }
+
+            this.fillUser()
+            this.user.id = userId
+
+            log.debug("User data = \(this.user.toJSON() as Any)")
+
+            return this.userRepository.update(this.user)
         }
     }
 
