@@ -123,6 +123,11 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        log.debug("View Will Transition to size: \(size)")
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

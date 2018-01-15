@@ -27,20 +27,29 @@ class GZESignUpPhotoViewController: UIViewController {
 
     @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var editButtonView: UIView!
-    @IBOutlet weak var carousel: GZECarouselUIView!
+    // @IBOutlet weak var carousel: GZECarouselUIView!
     @IBOutlet weak var photoImageView: UIImageView!
 
+    @IBOutlet weak var superviewTrailingImageContainerTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var viewTopImageContainerBottomConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var viewLeadingSuperviewLeadingConstrint: NSLayoutConstraint!
+    @IBOutlet weak var viewHeightConstraint: NSLayoutConstraint!
+
+    @IBOutlet weak var imageContainerTrailingViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var superViewBottomImageContainerBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var superviewTopViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var viewWidthConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        carousel.dataSource = viewModel.self
-        photoImageView.reactive.image <~ carousel.selectedImage
-        if carousel.currentItemIndex >= 0 {
-            carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value?.image
-        }
+        //carousel.dataSource = viewModel.self
+        //photoImageView.reactive.image <~ carousel.selectedImage
+        //if carousel.currentItemIndex >= 0 {
+        //    carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value?.image
+        //}
 
         editButtonView.layer.cornerRadius = 5
 
@@ -51,6 +60,8 @@ class GZESignUpPhotoViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+
 
         signUpValuesObserver = viewModel.saveAction.values.observeValues { [unowned self] res in
             self.displayMessage("Gooze", "User saved")
@@ -64,6 +75,7 @@ class GZESignUpPhotoViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        setLayout()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -71,6 +83,13 @@ class GZESignUpPhotoViewController: UIViewController {
 
         signUpValuesObserver?.dispose()
         signUpErrorsObserver?.dispose()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        log.debug("View Will Transition to size: \(size)")
+
+        setLayout(size)
     }
 
     override func didReceiveMemoryWarning() {
@@ -85,7 +104,7 @@ class GZESignUpPhotoViewController: UIViewController {
     }
 
     @IBAction func addPhoto(_ sender: UIButton) {
-        carousel.appendPhoto(nil)
+        //carousel.appendPhoto(nil)
         editPhoto()
     }
 
@@ -124,14 +143,14 @@ class GZESignUpPhotoViewController: UIViewController {
                     return
                 }
 
-                guard let currentView = this.carousel.currentItemView as? UIImageView else {
-                    log.warning("Carousel view not selected")
-                    return
-                }
+                //guard let currentView = this.carousel.currentItemView as? UIImageView else {
+                 //   log.warning("Carousel view not selected")
+                //    return
+                //}
 
-                this.carousel.selectedImage.value = blurredImage
-                this.viewModel.photos[this.carousel.currentItemIndex].value?.image = blurredImage
-                currentView.image = blurredImage
+                //this.carousel.selectedImage.value = blurredImage
+                //this.viewModel.photos[this.carousel.currentItemIndex].value?.image = blurredImage
+                //currentView.image = blurredImage
             }
 
             this.dismiss(animated: true, completion: nil)
@@ -139,6 +158,45 @@ class GZESignUpPhotoViewController: UIViewController {
         }
 
         present(cameraViewController, animated: true, completion: nil)
+    }
+
+    func setLayout(_ size: CGSize? = nil) {
+        var viewSize: CGSize
+        if size == nil {
+            viewSize = view.bounds.size
+        } else {
+            viewSize = size!
+        }
+
+        if viewSize.width > viewSize.height {
+            setLandscapeLayout()
+        } else {
+            setPortraitLayout()
+        }
+    }
+
+    func setPortraitLayout() {
+        imageContainerTrailingViewLeadingConstraint.isActive = false
+        superViewBottomImageContainerBottomConstraint.isActive = false
+        superviewTopViewTopConstraint.isActive = false
+        viewWidthConstraint.isActive = false
+
+        superviewTrailingImageContainerTrailingConstraint.isActive = true
+        viewTopImageContainerBottomConstraint.isActive = true
+        viewLeadingSuperviewLeadingConstrint.isActive = true
+        viewHeightConstraint.isActive = true
+    }
+
+    func setLandscapeLayout() {
+        superviewTrailingImageContainerTrailingConstraint.isActive = false
+        viewTopImageContainerBottomConstraint.isActive = false
+        viewLeadingSuperviewLeadingConstrint.isActive = false
+        viewHeightConstraint.isActive = false
+
+        imageContainerTrailingViewLeadingConstraint.isActive = true
+        superViewBottomImageContainerBottomConstraint.isActive = true
+        superviewTopViewTopConstraint.isActive = true
+        viewWidthConstraint.isActive = true
     }
 
     /*
