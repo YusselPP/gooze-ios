@@ -114,6 +114,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         )
         //NotificationCenter.default.addObserver(self, selector: #selector(deviceRotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
 
+        profileImageView.image = viewModel.photos.first?.value?.image
+
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -164,7 +166,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     func onupdateSuccess(user: GZEUser) {
         hideLoading()
-        displayMessage(viewModel.viewTitle, "Sign up successful")
+        displayMessage(viewModel.viewTitle, "Perfil actualizado")
     }
 
     func onupdateError(error: GZEError) {

@@ -22,6 +22,9 @@ class GZESignUpPhotoViewController: UIViewController {
 
     var selectedImageButton: UIButton?
 
+    var currentPhotoNum = -1
+
+    var photoImageViews: [UIImageView] = []
 
     @IBOutlet weak var saveButton: UIBarButtonItem!
 
@@ -29,6 +32,16 @@ class GZESignUpPhotoViewController: UIViewController {
     @IBOutlet weak var editButtonView: UIView!
     // @IBOutlet weak var carousel: GZECarouselUIView!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var photoImageView2: UIImageView!
+    @IBOutlet weak var photoImageView3: UIImageView!
+    @IBOutlet weak var photoImageView4: UIImageView!
+    @IBOutlet weak var photoImageView5: UIImageView!
+
+    @IBOutlet weak var editButton2: UIButton!
+    @IBOutlet weak var editButton3: UIButton!
+    @IBOutlet weak var editButton4: UIButton!
+    @IBOutlet weak var editButton5: UIButton!
+
 
     @IBOutlet weak var superviewTrailingImageContainerTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var viewTopImageContainerBottomConstraint: NSLayoutConstraint!
@@ -50,25 +63,30 @@ class GZESignUpPhotoViewController: UIViewController {
         //if carousel.currentItemIndex >= 0 {
         //    carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value?.image
         //}
+        photoImageViews.append(photoImageView)
+        photoImageViews.append(photoImageView2)
+        photoImageViews.append(photoImageView3)
+        photoImageViews.append(photoImageView4)
+        photoImageViews.append(photoImageView5)
 
         editButtonView.layer.cornerRadius = 5
 
         imageContainerView.clipsToBounds = true
 
-        saveButton.reactive.pressed = CocoaAction(viewModel.saveAction)
+        saveButton.reactive.pressed = CocoaAction(viewModel.savePhotosAction)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        viewModel.photos.enumerated().forEach { photoImageViews[$0.offset].image = $0.element.value?.image }
 
-
-        signUpValuesObserver = viewModel.saveAction.values.observeValues { [unowned self] res in
+        signUpValuesObserver = viewModel.savePhotosAction.values.observeValues { [unowned self] res in
             self.displayMessage("Gooze", "User saved")
             log.debug(res)
         }
 
-        signUpErrorsObserver = viewModel.saveAction.errors.observeValues { [unowned self] (err: Error) in
+        signUpErrorsObserver = viewModel.savePhotosAction.errors.observeValues { [unowned self] (err: Error) in
             self.displayMessage("Error", err.localizedDescription)
         }
     }
@@ -105,6 +123,9 @@ class GZESignUpPhotoViewController: UIViewController {
 
     @IBAction func addPhoto(_ sender: UIButton) {
         //carousel.appendPhoto(nil)
+
+        viewModel.photos.append(MutableProperty(GZEUser.Photo(image: nil)))
+        currentPhotoNum = viewModel.photos.count - 1
         editPhoto()
     }
 
@@ -148,8 +169,14 @@ class GZESignUpPhotoViewController: UIViewController {
                 //    return
                 //}
 
+                guard this.currentPhotoNum >= 0 else {
+                    log.warning("Invalid photo number")
+                    return
+                }
+
                 //this.carousel.selectedImage.value = blurredImage
-                //this.viewModel.photos[this.carousel.currentItemIndex].value?.image = blurredImage
+                this.viewModel.photos[this.currentPhotoNum].value?.image = blurredImage
+                this.photoImageViews[this.currentPhotoNum].image = blurredImage
                 //currentView.image = blurredImage
             }
 

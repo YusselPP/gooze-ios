@@ -180,6 +180,60 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             }
         }
     }
+    //TODO: delete overwritten photos
+    func savePhotos(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
+
+            if let photos = user.photos, photos.count > 0 {
+                return storageRepository.uploadFiles(photos.enumerated().flatMap { (index, photo) in
+
+                    var imageData: Data?
+
+                    if let image = photo.image {
+
+                        imageData = UIImageJPEGRepresentation(image, 1)
+
+                        return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: "picture", type: "image/jpeg", data: imageData)
+                    } else {
+                        return nil
+                    }
+                }, container: "picture")
+                .flatMap(FlattenStrategy.latest, transform: { files -> SignalProducer<GZEUser, GZEError> in
+
+                    return SignalProducer<GZEUser, GZEError> { sink, disposable in
+
+                        for (index, file) in files.enumerated() {
+                            log.debug(file.toJSON() as Any)
+                            log.debug(user.toJSON() as Any)
+
+                            user.photos![index].name = file.name
+                            user.photos![index].container = file.container
+                            user.photos![index].url = "/containers/\(file.container)/download/\(file.name)"
+                            user.photos![index].blocked = false
+                        }
+
+                        sink.send(value: user)
+                        sink.sendCompleted()
+                    }
+                })
+                .flatMap(FlattenStrategy.latest) { [weak self] (aUser) -> SignalProducer<GZEUser, GZEError> in
+
+                    guard let this = self else {
+                        log.error("Unable to complete the task. Self has been disposed.")
+                        return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                    }
+
+                    let user = GZEUser()
+                    user.id = aUser.id
+                    user.photos = aUser.photos
+
+                    return this.update(user)
+                }
+
+            } else {
+                return SignalProducer.empty
+            }
+
+    }
 
     func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
         var responseUser: GZEUser!

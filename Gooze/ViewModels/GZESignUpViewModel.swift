@@ -94,6 +94,15 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     }
     private var _updateAction: Action<Void, GZEUser, GZEError>?
 
+    var savePhotosAction: Action<Void, GZEUser, GZEError> {
+        if let savePhotosAction = _savePhotosAction {
+            return savePhotosAction
+        }
+        _savePhotosAction = createSavePhotosAction()
+        return _savePhotosAction!
+    }
+    private var _savePhotosAction: Action<Void, GZEUser, GZEError>?
+
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
@@ -132,6 +141,22 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
             log.debug("User data = \(this.user.toJSON() as Any)")
 
             return this.userRepository.update(this.user)
+        }
+    }
+
+    private func createSavePhotosAction() -> Action<Void, GZEUser, GZEError> {
+        log.debug("Creating save photos action")
+        return Action<Void, GZEUser, GZEError>{[weak self] in
+            guard let this = self else { return SignalProducer.empty }
+
+            guard let userId = GZEApi.instance.accessToken?.userId else {
+                return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+            }
+
+            this.fillUser()
+            this.user.id = userId
+
+            return this.userRepository.savePhotos(this.user)
         }
     }
 
