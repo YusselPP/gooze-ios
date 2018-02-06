@@ -32,12 +32,18 @@
 "user.registerCode.fieldName"="Código de registro";
 "user.invitedBy.fieldName"="Invitado por";
 
-// ViewModel/GZESignUpBasicViewController
+// ViewModel/GZESignUpViewModel - GZESignUpBasicViewController
 "vm.signUp.viewTitle"="Registro";
 "vm.signUp.facebookSignUpButtonTitle"="Registar con facebook";
 "vm.signUp.createProfileText"="Crear perfil";
 "vm.signUp.skipProfileText"="Saltar";
 "vm.signUp.success"="¡Registro exitoso!";
+
+// ViewModel/GZESignUpViewModel - GZESignUpPhotoViewController
+"vm.signUp.profilePictureLabel"="Foto de perfil";
+"vm.signUp.searchPictureLabel"="Foto buscador";
+"vm.signUp.blurButtonTitle"="Censurar";
+"vm.signUp.nextButtonTitle"="Siguiente";
 
 // ViewModel/GZELoginViewController
 "vm.login.loginViewTitle"="Inicio de sesión";

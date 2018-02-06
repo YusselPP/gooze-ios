@@ -13,9 +13,10 @@ import Result
 import ALCameraViewController
 import iCarousel
 
-class GZESignUpPhotoViewController: UIViewController {
+class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
-    var viewModel: GZESignUpViewModel!
+    // TODO: Remove asign
+    var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
 
     var signUpErrorsObserver: Disposable?
     var signUpValuesObserver: Disposable?
@@ -26,12 +27,52 @@ class GZESignUpPhotoViewController: UIViewController {
 
     var photoImageViews: [UIImageView] = []
 
+    var scene: Scene = .gallery
+
+    enum Scene {
+        case profilePic
+        case searchPic
+
+        case cameraOrReel
+        case reel
+        case camera
+
+        case gallery
+    }
+
+    var isScrollViewSync = false
+    var initialX: CGFloat = 0
+    var initialY: CGFloat = 0
+
+
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton2: UIButton!
 
     @IBOutlet weak var imageContainerView: UIView!
+    @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var profilePicImageView: UIImageView!
+    @IBOutlet weak var searchPicImageView: UIImageView!
+
+    @IBOutlet weak var backScrollView: UIScrollView! {
+        didSet {
+            backScrollView.delegate = self
+        }
+    }
+    @IBOutlet weak var frontScrollView: UIScrollView! {
+        didSet {
+            frontScrollView.delegate = self
+        }
+    }
+
+
     @IBOutlet weak var editButtonView: UIView!
     // @IBOutlet weak var carousel: GZECarouselUIView!
-    @IBOutlet weak var photoImageView: UIImageView!
+
+
+
+    @IBOutlet weak var photoThumbnailsView: UIView!
+
+
     @IBOutlet weak var photoImageView2: UIImageView!
     @IBOutlet weak var photoImageView3: UIImageView!
     @IBOutlet weak var photoImageView4: UIImageView!
@@ -42,7 +83,13 @@ class GZESignUpPhotoViewController: UIViewController {
     @IBOutlet weak var editButton4: UIButton!
     @IBOutlet weak var editButton5: UIButton!
 
+    @IBOutlet weak var photoLabel: UILabel!
 
+    @IBOutlet weak var blurControlsView: UIView!
+    @IBOutlet weak var blurButton: UIButton!
+    @IBOutlet weak var blurSlider: UISlider!
+
+    // Landscape/Portrait layout constraints
     @IBOutlet weak var superviewTrailingImageContainerTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var viewTopImageContainerBottomConstraint: NSLayoutConstraint!
 
@@ -53,10 +100,46 @@ class GZESignUpPhotoViewController: UIViewController {
     @IBOutlet weak var superViewBottomImageContainerBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var superviewTopViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var viewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomViewWidthConstraint: NSLayoutConstraint!
+
+
+    // Search pic constraints
+    @IBOutlet weak var searchPicLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchPicTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchPicTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchPicBottomConstraint: NSLayoutConstraint!
+
+    @IBAction func blurButtonTapped(_ sender: Any) {
+        logScrollBounds()
+    }
+
+    func logScrollBounds() {
+        log.debug("front scroll: \(frontScrollView.bounds)")
+        log.debug("back scroll: \(backScrollView.bounds)")
+
+        log.debug("profilePicImageView: \(profilePicImageView.bounds)")
+        log.debug("profilePicImage: \(profilePicImageView.imageFrame())")
+
+        log.debug("photoImageView: \(photoImageView.bounds)")
+        log.debug("photoImage: \(photoImageView.imageFrame())")
+    }
+
+    func logScrollOffset() {
+        log.debug("front contentOffset: \(frontScrollView.contentOffset)")
+        log.debug("back contentOffset: \(backScrollView.contentOffset)")
+
+        log.debug("initialX: \(initialX)")
+        log.debug("initialY: \(initialY)")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
+
+        // TODO: SetLayout hero or in viewDidApper to work in landscape mode?????
+        setLayout()
 
         //carousel.dataSource = viewModel.self
         //photoImageView.reactive.image <~ carousel.selectedImage
@@ -71,9 +154,10 @@ class GZESignUpPhotoViewController: UIViewController {
 
         editButtonView.layer.cornerRadius = 5
 
-        imageContainerView.clipsToBounds = true
+        blurButton.setTitle(viewModel.blurButtonTitle, for: .normal)
 
         saveButton.reactive.pressed = CocoaAction(viewModel.savePhotosAction)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -91,9 +175,10 @@ class GZESignUpPhotoViewController: UIViewController {
         }
     }
 
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setLayout()
+        syncScrollViews()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -107,7 +192,19 @@ class GZESignUpPhotoViewController: UIViewController {
         super.viewWillTransition(to: size, with: coordinator)
         log.debug("View Will Transition to size: \(size)")
 
+        isScrollViewSync = false
+
         setLayout(size)
+
+        coordinator.animate(alongsideTransition: nil, completion: {
+            [weak self]_ in
+
+            guard let this = self else {
+                return
+            }
+
+            this.syncScrollViews()
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -200,30 +297,90 @@ class GZESignUpPhotoViewController: UIViewController {
         } else {
             setPortraitLayout()
         }
+
+        if imageContainerView.bounds.width < imageContainerView.bounds.height {
+
+        }
     }
 
     func setPortraitLayout() {
         imageContainerTrailingViewLeadingConstraint.isActive = false
         superViewBottomImageContainerBottomConstraint.isActive = false
         superviewTopViewTopConstraint.isActive = false
-        viewWidthConstraint.isActive = false
+        //viewWidthConstraint.isActive = false
+        bottomViewWidthConstraint.isActive = false
 
         superviewTrailingImageContainerTrailingConstraint.isActive = true
         viewTopImageContainerBottomConstraint.isActive = true
         viewLeadingSuperviewLeadingConstrint.isActive = true
-        viewHeightConstraint.isActive = true
+        //viewHeightConstraint.isActive = true
+        bottomViewHeightConstraint.isActive = true
     }
 
     func setLandscapeLayout() {
         superviewTrailingImageContainerTrailingConstraint.isActive = false
         viewTopImageContainerBottomConstraint.isActive = false
         viewLeadingSuperviewLeadingConstrint.isActive = false
-        viewHeightConstraint.isActive = false
+        //viewHeightConstraint.isActive = false
+        bottomViewHeightConstraint.isActive = false
 
         imageContainerTrailingViewLeadingConstraint.isActive = true
         superViewBottomImageContainerBottomConstraint.isActive = true
         superviewTopViewTopConstraint.isActive = true
-        viewWidthConstraint.isActive = true
+        //viewWidthConstraint.isActive = true
+        bottomViewWidthConstraint.isActive = true
+    }
+
+    func syncScrollViews() {
+        frontScrollView.setZoomScale(imageView: profilePicImageView, animated: false)
+        frontScrollView.centerContent(animated: false)
+
+        backScrollView.setZoomScale(imageView: photoImageView, animated: false)
+        backScrollView.centerContent(animated: false)
+
+        initialX = frontScrollView.contentOffset.x - backScrollView.contentOffset.x
+        initialY = frontScrollView.contentOffset.y - backScrollView.contentOffset.y
+
+        isScrollViewSync = true
+
+        logScrollBounds()
+        logScrollOffset()
+
+    }
+
+    // MARK: - Scenes
+
+    func showProfileScene() {
+        blurControlsView.isHidden = true
+        photoThumbnailsView.isHidden = true
+
+        photoLabel.text = viewModel.profilePictureLabel
+        saveButton2.setTitle(viewModel.nextButtonTitle, for: .normal)
+    }
+
+    // MARK: - UIScrollViewDelegate
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        switch scrollView {
+        default:
+            return scrollView.subviews.first
+        }
+    }
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        if isScrollViewSync && scrollView == backScrollView {
+            frontScrollView.zoomScale = backScrollView.zoomScale
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        if isScrollViewSync && scrollView == backScrollView {
+            frontScrollView.contentOffset.x = backScrollView.contentOffset.x + initialX
+            frontScrollView.contentOffset.y = backScrollView.contentOffset.y + initialY
+        }
+//
+//        log.debug(backScrollView.contentOffset)
+//        log.debug(frontScrollView.contentOffset)
     }
 
     /*

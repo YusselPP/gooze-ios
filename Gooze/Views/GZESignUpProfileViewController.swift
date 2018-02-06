@@ -50,18 +50,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
         lastOrientation = UIDevice.current.orientation
 
-        phraseTextField.delegate = self
-        genderTextField.delegate = self
-        birthdayTextField.delegate = self
-        heightTextField.delegate = self
-        weightTextField.delegate = self
-        originTextField.delegate = self
-        languageTextField.delegate = self
-        interestsTextField.delegate = self
 
-        usernameLabel.reactive.text <~ viewModel.username.map { $0?.uppercased() }
-
-        setTextFieldFormat(phraseTextField, placeholder: viewModel.phraseLabelText)
+        setTextFieldFormat(phraseTextField, placeholder:  viewModel.phraseLabelText.addQuotes() )
         setTextFieldFormat(genderTextField, placeholder: viewModel.genderLabelText)
         setTextFieldFormat(birthdayTextField, placeholder: viewModel.birthdayLabelText)
         setTextFieldFormat(heightTextField, placeholder: viewModel.heightLabelText)
@@ -70,6 +60,11 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         setTextFieldFormat(languageTextField, placeholder: viewModel.languageLabelText)
         setTextFieldFormat(interestsTextField, placeholder: viewModel.interestsLabelText)
 
+        phraseTextField.isHidden = false
+        interestsTextField.returnKeyType = .done
+
+
+        usernameLabel.reactive.text <~ viewModel.username.map { $0?.uppercased() }
         // viewModel.gender <~ genderTextField.reactive.continuousTextValues
         viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.height <~ heightTextField.reactive.continuousTextValues
@@ -91,6 +86,20 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         genderPicker.dataSource = viewModel
         genderPicker.delegate = self
         genderTextField.inputView = genderPicker
+
+        
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        // toolBar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
+        toolBar.sizeToFit()
+
+        let doneButton = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.plain, target: self, action: #selector(showBirthdayScene))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+
+        toolBar.setItems([spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        genderTextField.inputAccessoryView = toolBar
 
         // TODO: Validate numbers
         // TODO: validate interests
@@ -152,6 +161,10 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     }
 
     func setTextFieldFormat(_ textField: UITextField, placeholder: String) {
+        textField.delegate = self
+
+        textField.returnKeyType = .next
+        textField.isHidden = true
         textField.backgroundColor = UIColor.clear
         textField.borderStyle = .none
         textField.textColor = UIColor.white
@@ -178,11 +191,108 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         performSegue(withIdentifier: profileToPhotoEditSegue, sender: nil)
     }
 
+    // MARK: Scenes
+    func showBirthdayScene() {
+        birthdayTextField.isHidden = false
+        birthdayTextField.becomeFirstResponder()
+    }
+
     // MARK: UITextFieldDelegate
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         log.debug("Text editing")
         activeField = textField
+
+        if textField == phraseTextField {
+
+            if let len = phraseTextField.text?.characters.count,
+                len < 2 {
+                textField.text = "".addQuotes()
+            }
+
+            if let newPosition = textField.position(from: textField.endOfDocument, offset: -1) {
+
+                textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+            }
+        }
+
+
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == phraseTextField,
+            let len = phraseTextField.text?.characters.count,
+            len == 2 {
+            textField.text = ""
+        }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        switch textField {
+        case phraseTextField:
+            genderTextField.isHidden = false
+            genderTextField.becomeFirstResponder()
+            return false
+        case genderTextField:
+            showBirthdayScene()
+        case birthdayTextField:
+            heightTextField.isHidden = false
+            heightTextField.becomeFirstResponder()
+        case heightTextField:
+            weightTextField.isHidden = false
+            weightTextField.becomeFirstResponder()
+        case weightTextField:
+            originTextField.isHidden = false
+            originTextField.becomeFirstResponder()
+        case originTextField:
+            languageTextField.isHidden = false
+            languageTextField.becomeFirstResponder()
+        case languageTextField:
+            interestsTextField.isHidden = false
+            interestsTextField.becomeFirstResponder()
+        default:
+            return true
+        }
+
+        return true
+    }
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        if textField != phraseTextField {
+            return true
+        }
+
+        guard let textLen = textField.text?.characters.count else {
+            return true
+        }
+
+        let prefixIntersection = NSIntersectionRange(NSMakeRange(0, 1), range)
+        let postfixIntersection = NSIntersectionRange(NSMakeRange(textLen - 1, textLen), range)
+
+
+        if prefixIntersection.length > 0 || postfixIntersection.length > 0 {
+            return false
+        }
+
+        if range.location == 0 {
+            if let newPosition = textField.position(from: textField.beginningOfDocument, offset: 1) {
+
+                textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+            }
+            return false
+        }
+
+        if range.location == textLen {
+            if let newPosition = textField.position(from: textField.endOfDocument, offset: -1) {
+
+                textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+            }
+            return false
+        }
+
+        return true
     }
 
     // MARK: KeyboardNotifications

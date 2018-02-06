@@ -36,6 +36,11 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     let skipProfileText = "vm.signUp.skipProfileText".localized()
     let successfulSignUp = "vm.signUp.success".localized()
 
+    let profilePictureLabel = "vm.signUp.profilePictureLabel".localized()
+    let searchPictureLabel = "vm.signUp.searchPictureLabel".localized()
+    let blurButtonTitle = "vm.signUp.blurButtonTitle".localized()
+    let nextButtonTitle = "vm.signUp.nextButtonTitle".localized()
+
     // basic sign up
     let username = MutableProperty<String?>(nil)
     let email = MutableProperty<String?>(nil)
