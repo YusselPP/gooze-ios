@@ -27,7 +27,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     var photoImageViews: [UIImageView] = []
 
-    var scene: Scene = .gallery
+    var scene: Scene = .searchPic
 
     enum Scene {
         case profilePic
@@ -40,29 +40,21 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         case gallery
     }
 
-    var isScrollViewSync = false
-    var initialX: CGFloat = 0
-    var initialY: CGFloat = 0
-
 
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var saveButton2: UIButton!
 
     @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var searchPicImageView: UIImageView!
 
     @IBOutlet weak var backScrollView: UIScrollView! {
         didSet {
             backScrollView.delegate = self
         }
     }
-    @IBOutlet weak var frontScrollView: UIScrollView! {
-        didSet {
-            frontScrollView.delegate = self
-        }
-    }
+    @IBOutlet weak var overlayView: UIView!
+    @IBOutlet weak var searchOverlay: UIView!
+    @IBOutlet weak var profileOverlay: UIView!
 
 
     @IBOutlet weak var editButtonView: UIView!
@@ -104,33 +96,25 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var bottomViewWidthConstraint: NSLayoutConstraint!
 
 
-    // Search pic constraints
-    @IBOutlet weak var searchPicLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var searchPicTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var searchPicTopConstraint: NSLayoutConstraint!
-    @IBOutlet weak var searchPicBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchOverlayLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchOverlayTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchOverlayTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchOverlayBottomConstraint: NSLayoutConstraint!
+
 
     @IBAction func blurButtonTapped(_ sender: Any) {
         logScrollBounds()
     }
 
     func logScrollBounds() {
-        log.debug("front scroll: \(frontScrollView.bounds)")
         log.debug("back scroll: \(backScrollView.bounds)")
-
-        log.debug("profilePicImageView: \(profilePicImageView.bounds)")
-        log.debug("profilePicImage: \(profilePicImageView.imageFrame())")
 
         log.debug("photoImageView: \(photoImageView.bounds)")
         log.debug("photoImage: \(photoImageView.imageFrame())")
     }
 
     func logScrollOffset() {
-        log.debug("front contentOffset: \(frontScrollView.contentOffset)")
         log.debug("back contentOffset: \(backScrollView.contentOffset)")
-
-        log.debug("initialX: \(initialX)")
-        log.debug("initialY: \(initialY)")
     }
 
     override func viewDidLoad() {
@@ -138,14 +122,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         log.debug("\(self) init")
 
-        // TODO: SetLayout hero or in viewDidApper to work in landscape mode?????
+        // TODO: SetLayout here or in viewDidApper to work in landscape mode?????
         setLayout()
 
-        //carousel.dataSource = viewModel.self
-        //photoImageView.reactive.image <~ carousel.selectedImage
-        //if carousel.currentItemIndex >= 0 {
-        //    carousel.selectedImage.value = viewModel.photos[carousel.currentItemIndex].value?.image
-        //}
         photoImageViews.append(photoImageView)
         photoImageViews.append(photoImageView2)
         photoImageViews.append(photoImageView3)
@@ -177,11 +156,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        syncScrollViews()
 
-        // TODO: Remove this and try to set the circle mask to the photo view
-        let containerFrame = backScrollView.frame
-        imageContainerView.addSubview(createOverlay(frame: containerFrame, xOffset: backScrollView.bounds.width/2, yOffset: backScrollView.bounds.height/2, radius: backScrollView.bounds.height/2))
+        setOverlay()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -191,13 +167,17 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         signUpErrorsObserver?.dispose()
     }
 
+    override func viewDidLayoutSubviews() {
+        log.debug("Search bounds: \(searchOverlay.bounds)")
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         log.debug("View Will Transition to size: \(size)")
 
-        isScrollViewSync = false
-
         setLayout(size)
+
+        log.debug("Search bounds: \(searchOverlay.bounds)")
 
         coordinator.animate(alongsideTransition: nil, completion: {
             [weak self]_ in
@@ -205,8 +185,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             guard let this = self else {
                 return
             }
-
-            this.syncScrollViews()
+            log.debug("Search bounds: \(this.searchOverlay.bounds)")
+            this.setOverlay()
         })
     }
 
@@ -295,18 +275,21 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             viewSize = size!
         }
 
+        log.debug("viewSize: \(viewSize)")
+        log.debug("Image container bounds: \(imageContainerView.bounds)")
+
         if viewSize.width > viewSize.height {
             setLandscapeLayout()
         } else {
             setPortraitLayout()
         }
 
-        if imageContainerView.bounds.width < imageContainerView.bounds.height {
-
-        }
+        log.debug("Image container bounds: \(imageContainerView.bounds)")
+        log.debug("Search bounds: \(searchOverlay.bounds)")
     }
 
     func setPortraitLayout() {
+        log.debug("Portrait layout set")
         imageContainerTrailingViewLeadingConstraint.isActive = false
         superViewBottomImageContainerBottomConstraint.isActive = false
         superviewTopViewTopConstraint.isActive = false
@@ -321,6 +304,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func setLandscapeLayout() {
+        log.debug("Landscape layout set")
         superviewTrailingImageContainerTrailingConstraint.isActive = false
         viewTopImageContainerBottomConstraint.isActive = false
         viewLeadingSuperviewLeadingConstrint.isActive = false
@@ -334,44 +318,34 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         bottomViewWidthConstraint.isActive = true
     }
 
-    func syncScrollViews() {
-        frontScrollView.setZoomScale(imageView: profilePicImageView, animated: false)
-        frontScrollView.centerContent(animated: false)
+    func setOverlay() {
 
-        backScrollView.setZoomScale(imageView: photoImageView, animated: false)
-        backScrollView.centerContent(animated: false)
+        log.debug("Image container bounds: \(imageContainerView.bounds)")
+        log.debug("Search bounds: \(searchOverlay.bounds)")
+        log.debug("Search bounds: \(searchOverlay.frame)")
 
-        initialX = frontScrollView.contentOffset.x - backScrollView.contentOffset.x
-        initialY = frontScrollView.contentOffset.y - backScrollView.contentOffset.y
-
-        isScrollViewSync = true
-
-        logScrollBounds()
-        logScrollOffset()
-
-    }
-
-    func createOverlay(frame : CGRect, xOffset: CGFloat, yOffset: CGFloat, radius: CGFloat) -> UIView
-    {
-        let overlayView = UIView(frame: frame)
-        overlayView.alpha = 0.45
-        overlayView.backgroundColor = UIColor.white
-
-        // Create a path with the rectangle in it.
         let path = CGMutablePath()
-        path.addArc(center: CGPoint(x: xOffset, y: yOffset), radius: radius, startAngle: 0.0, endAngle: 2 * 3.14, clockwise: false)
-        path.addRect(CGRect(x: 0, y: 0, width: overlayView.frame.width, height: overlayView.frame.height))
+
+        if scene == .profilePic {
+
+        } else if scene == .searchPic {
+            path.addArc(center: searchOverlay.center, radius: min(searchOverlay.frame.width, searchOverlay.frame.height)/2, startAngle: 0.0, endAngle: 2 * 3.14, clockwise: false)
+        } else {
+            overlayView.isHidden = true
+            return
+        }
+
+        overlayView.isHidden = false
+
+        path.addRect(overlayView.bounds)
 
         let maskLayer = CAShapeLayer()
-        //maskLayer.backgroundColor = UIColor.white.cgColor
+        maskLayer.backgroundColor = UIColor.white.cgColor
         maskLayer.path = path;
         maskLayer.fillRule = kCAFillRuleEvenOdd
 
         // Release the path since it's not covered by ARC.
         overlayView.layer.mask = maskLayer
-        overlayView.clipsToBounds = true
-
-        return overlayView
     }
 
     // MARK: - Scenes
@@ -393,20 +367,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        if isScrollViewSync && scrollView == backScrollView {
-            frontScrollView.zoomScale = backScrollView.zoomScale
-        }
+
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-        if isScrollViewSync && scrollView == backScrollView {
-            frontScrollView.contentOffset.x = backScrollView.contentOffset.x + initialX
-            frontScrollView.contentOffset.y = backScrollView.contentOffset.y + initialY
-        }
-//
 //        log.debug(backScrollView.contentOffset)
-//        log.debug(frontScrollView.contentOffset)
     }
 
     /*
