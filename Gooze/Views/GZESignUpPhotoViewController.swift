@@ -157,7 +157,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        // setLayout()
         setOverlay()
+
+        backScrollView.setZoomScale(imageView: photoImageView, animated: false)
+        backScrollView.centerContent(animated: false)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -168,6 +172,12 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     override func viewDidLayoutSubviews() {
+        log.debug("Search bounds: \(searchOverlay.bounds)")
+        super.viewDidLayoutSubviews()
+
+        setOverlayConstraints()
+
+        log.debug("Image container bounds: \(imageContainerView.bounds)")
         log.debug("Search bounds: \(searchOverlay.bounds)")
     }
 
@@ -284,6 +294,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             setPortraitLayout()
         }
 
+
         log.debug("Image container bounds: \(imageContainerView.bounds)")
         log.debug("Search bounds: \(searchOverlay.bounds)")
     }
@@ -318,6 +329,22 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         bottomViewWidthConstraint.isActive = true
     }
 
+    func setOverlayConstraints() {
+        if imageContainerView.bounds.width < imageContainerView.bounds.height {
+            searchOverlayTopConstraint.isActive = false
+            searchOverlayBottomConstraint.isActive = false
+
+            searchOverlayLeadingConstraint.isActive = true
+            searchOverlayTrailingConstraint.isActive = true
+        } else {
+            searchOverlayLeadingConstraint.isActive = false
+            searchOverlayTrailingConstraint.isActive = false
+
+            searchOverlayTopConstraint.isActive = true
+            searchOverlayBottomConstraint.isActive = true
+        }
+    }
+
     func setOverlay() {
 
         log.debug("Image container bounds: \(imageContainerView.bounds)")
@@ -327,7 +354,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         let path = CGMutablePath()
 
         if scene == .profilePic {
-
+            path.addRect(profileOverlay.frame)
         } else if scene == .searchPic {
             path.addArc(center: searchOverlay.center, radius: min(searchOverlay.frame.width, searchOverlay.frame.height)/2, startAngle: 0.0, endAngle: 2 * 3.14, clockwise: false)
         } else {
