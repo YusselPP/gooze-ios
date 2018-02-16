@@ -421,7 +421,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func showProfileScene() {
-
+        backScrollView.isHidden = false
+        overlayView.isHidden = false
+        photoLabel.isHidden = false
 
         photoLabel.text = viewModel.profilePictureLabel
         saveButton2.setTitle(viewModel.nextButtonTitle, for: .normal)
