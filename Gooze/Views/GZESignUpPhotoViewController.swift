@@ -27,7 +27,18 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     var photoImageViews: [UIImageView] = []
 
-    var scene: Scene = .searchPic
+    var mode: Mode = .editProfilePic
+
+    enum Mode {
+        case editProfilePic
+        case editGalleryPic
+    }
+
+    var scene: Scene! {
+        didSet {
+            showCurrentScene()
+        }
+    }
 
     enum Scene {
         case profilePic
@@ -56,10 +67,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var searchOverlay: UIView!
     @IBOutlet weak var profileOverlay: UIView!
 
+    @IBOutlet weak var cameraOrReelView: UIView!
 
     @IBOutlet weak var editButtonView: UIView!
-    // @IBOutlet weak var carousel: GZECarouselUIView!
-
 
 
     @IBOutlet weak var photoThumbnailsView: UIView!
@@ -136,6 +146,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         blurButton.setTitle(viewModel.blurButtonTitle, for: .normal)
 
         saveButton.reactive.pressed = CocoaAction(viewModel.savePhotosAction)
+
+        scene = .cameraOrReel
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -376,10 +389,39 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     // MARK: - Scenes
+    func showCurrentScene() {
 
-    func showProfileScene() {
+        hideAll()
+
+        switch scene! {
+        case .cameraOrReel:
+            showCameraOrReelScene()
+        case .profilePic:
+            showProfileScene()
+        default:
+            showCameraOrReelScene()
+        }
+    }
+
+    func hideAll() {
+        backScrollView.isHidden = true
+        overlayView.isHidden = true
+        cameraOrReelView.isHidden = true
         blurControlsView.isHidden = true
         photoThumbnailsView.isHidden = true
+        photoLabel.isHidden = true
+
+        // TODO: remove buttons
+        editButtonView.isHidden = true
+
+    }
+
+    func showCameraOrReelScene() {
+        cameraOrReelView.isHidden = false
+    }
+
+    func showProfileScene() {
+
 
         photoLabel.text = viewModel.profilePictureLabel
         saveButton2.setTitle(viewModel.nextButtonTitle, for: .normal)
