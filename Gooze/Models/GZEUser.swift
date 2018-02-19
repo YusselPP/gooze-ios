@@ -82,6 +82,8 @@ class GZEUser: Glossy {
     }
 
     struct Photo: Glossy {
+        static let container = "picture"
+
         var name: String?
         var container: String?
         var url: String? 
@@ -149,9 +151,9 @@ class GZEUser: Glossy {
     var createdAt: Date?
     var updatedAt: Date?
 
-    var profilePic: Photo? {
-        return photos?.first
-    }
+    var profilePic: Photo?
+
+    var searchPic: Photo?
 
     init() {
         log.debug("\(self) init")
@@ -176,6 +178,8 @@ class GZEUser: Glossy {
         self.languages = "languages" <~~ json
         self.interestedIn = "interestedIn" <~~ json
         self.photos = "photos" <~~ json
+        self.profilePic = "profilePic" <~~ json
+        self.searchPic = "searchPic" <~~ json
 
         self.currentLocation = "currentLocation" <~~ json
         self.activeUntil = Decoder.decode(dateForKey: "activeUntil", dateFormatter: GZEApi.dateFormatter)(json)
@@ -213,6 +217,8 @@ class GZEUser: Glossy {
             "languages" ~~> self.languages,
             "interestedIn" ~~> self.interestedIn,
             "photos" ~~> self.photos,
+            "profilePic" ~~> self.profilePic,
+            "searchPic" ~~> self.searchPic,
 
             "currentLocation" ~~> self.currentLocation,
             Encoder.encode(dateForKey: "activeUntil", dateFormatter: GZEApi.dateFormatter)(self.activeUntil),

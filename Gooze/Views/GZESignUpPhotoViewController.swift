@@ -15,15 +15,17 @@ import iCarousel
 
 class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
+    var blur: GZEBlur?
     // TODO: Remove asign
     var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
 
-    var signUpErrorsObserver: Disposable?
-    var signUpValuesObserver: Disposable?
+    var saveProfileAction: CocoaAction<UIButton>!
+    var saveSearchAction: CocoaAction<UIButton>!
+    var saveGalleryAction: CocoaAction<UIButton>!
 
     var selectedImageButton: UIButton?
 
-    var currentPhotoNum = -1
+    var currentPhotoNum = 0
 
     var photoImageViews: [UIImageView] = []
 
@@ -45,50 +47,47 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         case searchPic
 
         case cameraOrReel
+        case blur
         case reel
         case camera
 
         case gallery
     }
 
-
-    @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var saveButton2: UIButton!
-
-    @IBOutlet weak var imageContainerView: UIView!
-    @IBOutlet weak var photoImageView: UIImageView!
-
     @IBOutlet weak var backScrollView: UIScrollView! {
         didSet {
             backScrollView.delegate = self
         }
     }
+
+    @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var searchOverlay: UIView!
     @IBOutlet weak var profileOverlay: UIView!
-
     @IBOutlet weak var cameraOrReelView: UIView!
-
+    @IBOutlet weak var blurEffectView: UIView!
     @IBOutlet weak var editButtonView: UIView!
-
-
     @IBOutlet weak var photoThumbnailsView: UIView!
+    @IBOutlet weak var blurControlsView: UIView!
 
-
+    @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var photoImageView2: UIImageView!
     @IBOutlet weak var photoImageView3: UIImageView!
     @IBOutlet weak var photoImageView4: UIImageView!
     @IBOutlet weak var photoImageView5: UIImageView!
 
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+
+    @IBOutlet weak var bottomRightButton: UIButton!
+    @IBOutlet weak var bottomBackButton: UIButton!
     @IBOutlet weak var editButton2: UIButton!
     @IBOutlet weak var editButton3: UIButton!
     @IBOutlet weak var editButton4: UIButton!
     @IBOutlet weak var editButton5: UIButton!
+    @IBOutlet weak var blurButton: UIButton!
 
     @IBOutlet weak var photoLabel: UILabel!
 
-    @IBOutlet weak var blurControlsView: UIView!
-    @IBOutlet weak var blurButton: UIButton!
     @IBOutlet weak var blurSlider: UISlider!
 
     // Landscape/Portrait layout constraints
@@ -111,11 +110,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var searchOverlayTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var searchOverlayBottomConstraint: NSLayoutConstraint!
 
-
-    @IBAction func blurButtonTapped(_ sender: Any) {
-        logScrollBounds()
-    }
-
     func logScrollBounds() {
         log.debug("back scroll: \(backScrollView.bounds)")
 
@@ -132,8 +126,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         log.debug("\(self) init")
 
-        // TODO: SetLayout here or in viewDidApper to work in landscape mode?????
+        // TODO: SetLayout here or in viewDidAppear to work in landscape mode?????
         setLayout()
+        initBlur()
 
         photoImageViews.append(photoImageView)
         photoImageViews.append(photoImageView2)
@@ -143,11 +138,34 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         editButtonView.layer.cornerRadius = 5
 
-        blurButton.setTitle(viewModel.blurButtonTitle, for: .normal)
-
         saveButton.reactive.pressed = CocoaAction(viewModel.savePhotosAction)
 
-        scene = .cameraOrReel
+        saveProfileAction = CocoaAction(viewModel.saveProfilePicAction)
+        { [weak self] _ in
+            self?.showLoading()
+        }
+        saveSearchAction = CocoaAction(viewModel.saveSearchPicAction)
+        { [weak self] _ in
+            self?.showLoading()
+        }
+        saveGalleryAction = CocoaAction(viewModel.savePhotosAction)
+        { [weak self] _ in
+            self?.showLoading()
+        }
+
+        viewModel.saveProfilePicAction.values.observeValues(onSaveProfileSuccess(user:))
+        viewModel.saveProfilePicAction.errors.observeValues(onError(err:))
+        viewModel.saveSearchPicAction.values.observeValues(onSaveSearchSuccess(user:))
+        viewModel.saveSearchPicAction.errors.observeValues(onError(err:))
+        viewModel.savePhotosAction.values.observeValues(onSaveGallerySuccess(user:))
+        viewModel.savePhotosAction.errors.observeValues(onError(err:))
+
+        switch mode {
+        case .editGalleryPic:
+            scene = .gallery
+        case .editProfilePic:
+            scene = .cameraOrReel
+        }
 
     }
 
@@ -155,15 +173,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         super.viewWillAppear(animated)
 
         viewModel.photos.enumerated().forEach { photoImageViews[$0.offset].image = $0.element.value?.image }
-
-        signUpValuesObserver = viewModel.savePhotosAction.values.observeValues { [unowned self] res in
-            self.displayMessage("Gooze", "User saved")
-            log.debug(res)
-        }
-
-        signUpErrorsObserver = viewModel.savePhotosAction.errors.observeValues { [unowned self] (err: Error) in
-            self.displayMessage("Error", err.localizedDescription)
-        }
     }
 
 
@@ -179,9 +188,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
-        signUpValuesObserver?.dispose()
-        signUpErrorsObserver?.dispose()
     }
 
     override func viewDidLayoutSubviews() {
@@ -189,6 +195,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLayoutSubviews()
 
         setOverlayConstraints()
+
+        blur?.draw()
 
         log.debug("Image container bounds: \(imageContainerView.bounds)")
         log.debug("Search bounds: \(searchOverlay.bounds)")
@@ -218,7 +226,27 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: Actions
+    // MARK: - Actions
+    @IBAction func nextButtonTapped(_ sender: Any) {
+        switch scene! {
+        case .profilePic:
+            // TODO: save profile pic
+            scene = .searchPic
+        case .searchPic:
+            // TODO: save search pic and go back to profile
+            break
+        case .blur:
+            switch mode {
+            case .editProfilePic:
+                scene = .profilePic
+            case .editGalleryPic:
+                // TODO: save and go to gallery
+                scene = .gallery
+            }
+        default:
+            break
+        }
+    }
 
     @IBAction func editPhotoButtonTapped(_ sender: UIButton) {
         editPhoto()
@@ -227,13 +255,69 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBAction func addPhoto(_ sender: UIButton) {
         //carousel.appendPhoto(nil)
 
+
         viewModel.photos.append(MutableProperty(GZEUser.Photo(image: nil)))
         currentPhotoNum = viewModel.photos.count - 1
         editPhoto()
     }
 
+    @IBAction func blurButtonTapped(_ sender: Any) {
+        blur?.apply()
+    }
+
+    func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
+
+        let scale = gestureRecognizer.scale
+
+        guard let view = gestureRecognizer.view else {
+            log.debug("Gesture doesn't have a view")
+            return
+        }
+
+        log.debug(view.transform)
+        log.debug(scale)
+
+        let transform = view.transform.scaledBy(x: scale, y: scale)
+
+        guard transform.a >= 1 else {
+            log.debug("Reached min size")
+            return
+        }
+
+        view.transform = transform
+        gestureRecognizer.scale = 1
+
+        blur?.draw()
+    }
+
+    func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
+
+        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+            let translation = gestureRecognizer.translation(in: self.view)
+
+            gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
+            gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+        }
+
+        blur?.draw()
+    }
+
+    func initBlur() {
+        blurButton.setTitle(viewModel.blurButtonTitle, for: .normal)
+        blurSlider.reactive.values.debounce(0.3, on: QueueScheduler.main).observeValues { [weak self] in
+            self?.blur?.radius = $0
+        }
+
+        blurEffectView.layer.borderWidth = 1
+        blurEffectView.layer.borderColor = UIColor.white.cgColor
+        blurEffectView.layer.cornerRadius = blurEffectView.frame.size.width / 2
+
+        blurEffectView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(blurPan(_:))))
+        blurEffectView.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(blurPinched(_:))))
+    }
+
     func editPhoto() {
-        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: true)) { [weak self] image, asset in
+        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: false)) { [weak self] image, asset in
 
             log.debug("camera controller handler")
 
@@ -254,37 +338,36 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
                 return
             }
 
-            let blurViewController = GZEBlurViewController(image: compressedImage)
 
-            blurViewController.onCompletion = { blurredImage in
-
-                defer {
-                    this.dismiss(animated: true, completion: nil)
-                }
-
-                guard let blurredImage = blurredImage else {
-                    log.debug("Empty image received")
-                    return
-                }
-
-                //guard let currentView = this.carousel.currentItemView as? UIImageView else {
-                 //   log.warning("Carousel view not selected")
-                //    return
-                //}
+//            let blurViewController = GZEBlurViewController(image: compressedImage)
+//
+//            blurViewController.onCompletion = { blurredImage in
+//
+//                defer {
+//                    this.dismiss(animated: true, completion: nil)
+//                }
+//
+//                guard let blurredImage = blurredImage else {
+//                    log.debug("Empty image received")
+//                    return
+//                }
 
                 guard this.currentPhotoNum >= 0 else {
                     log.warning("Invalid photo number")
                     return
                 }
 
-                //this.carousel.selectedImage.value = blurredImage
-                this.viewModel.photos[this.currentPhotoNum].value?.image = blurredImage
-                this.photoImageViews[this.currentPhotoNum].image = blurredImage
-                //currentView.image = blurredImage
-            }
+                this.viewModel.photos[this.currentPhotoNum].value?.image = compressedImage
+                this.photoImageViews[this.currentPhotoNum].image = compressedImage
+
+                this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.photoImageView)
+
+
+                this.scene = .blur
+            // }
 
             this.dismiss(animated: true, completion: nil)
-            this.present(blurViewController, animated: true, completion: nil)
+            // this.present(blurViewController, animated: true, completion: nil)
         }
 
         present(cameraViewController, animated: true, completion: nil)
@@ -388,6 +471,25 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         overlayView.layer.mask = maskLayer
     }
 
+    // MARK: - Observer handlers
+    func onSaveProfileSuccess(user: GZEUser) {
+        hideLoading()
+    }
+
+    func onSaveSearchSuccess(user: GZEUser) {
+        hideLoading()
+    }
+
+    func onSaveGallerySuccess(user: GZEUser) {
+        hideLoading()
+        self.displayMessage("Gooze", "User saved")
+    }
+
+    func onError(err: GZEError) {
+        hideLoading()
+        self.displayMessage("Error", err.localizedDescription)
+    }
+
     // MARK: - Scenes
     func showCurrentScene() {
 
@@ -396,8 +498,14 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         switch scene! {
         case .cameraOrReel:
             showCameraOrReelScene()
+        case .blur:
+            showBlurScene()
         case .profilePic:
             showProfileScene()
+        case .searchPic:
+            showSearchScene()
+        case .gallery:
+            showGallery()
         default:
             showCameraOrReelScene()
         }
@@ -410,23 +518,59 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         blurControlsView.isHidden = true
         photoThumbnailsView.isHidden = true
         photoLabel.isHidden = true
+        blurEffectView.isHidden = true
+
+        bottomRightButton.isHidden = true
 
         // TODO: remove buttons
         editButtonView.isHidden = true
 
     }
 
+    func showGallery() {
+        backScrollView.isHidden = false
+        photoThumbnailsView.isHidden = false
+    }
+
     func showCameraOrReelScene() {
         cameraOrReelView.isHidden = false
+    }
+
+    func showBlurScene() {
+        backScrollView.isHidden = false
+        blurControlsView.isHidden = false
+        bottomRightButton.isHidden = false
+        blurEffectView.isHidden = false
+
+        bottomRightButton.setTitle(viewModel.nextButtonTitle, for: .normal)
     }
 
     func showProfileScene() {
         backScrollView.isHidden = false
         overlayView.isHidden = false
         photoLabel.isHidden = false
+        bottomRightButton.isHidden = false
+
+        setOverlay()
+        backScrollView.setZoomScale(imageView: photoImageView, animated: false)
+        backScrollView.centerContent(animated: false)
 
         photoLabel.text = viewModel.profilePictureLabel
-        saveButton2.setTitle(viewModel.nextButtonTitle, for: .normal)
+        bottomRightButton.setTitle(viewModel.nextButtonTitle, for: .normal)
+    }
+
+    func showSearchScene() {
+        backScrollView.isHidden = false
+        overlayView.isHidden = false
+        photoLabel.isHidden = false
+        bottomRightButton.isHidden = false
+
+        setOverlay()
+        backScrollView.setZoomScale(imageView: photoImageView, animated: false)
+        backScrollView.centerContent(animated: false)
+
+        photoLabel.text = viewModel.searchPictureLabel
+        bottomRightButton.setTitle(viewModel.nextButtonTitle, for: .normal)
     }
 
     // MARK: - UIScrollViewDelegate
@@ -455,7 +599,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
     */
 
-    // MARK: Deinitializers
+    // MARK: - Deinitializers
     deinit {
         log.debug("\(self) disposed")
     }

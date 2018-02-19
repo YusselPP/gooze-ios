@@ -1017,7 +1017,7 @@
                                                 </constraints>
                                                 <state key="normal" backgroundImage="camera-white-icon"/>
                                                 <connections>
-                                                    <action selector="editPhotoButtonTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="DM5-Zz-O6m"/>
+                                                    <action selector="addPhoto:" destination="66d-od-zfu" eventType="touchUpInside" id="XQ7-qd-RNc"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ffB-5p-pb4">
@@ -1028,7 +1028,7 @@
                                                 </constraints>
                                                 <state key="normal" backgroundImage="movie-icon"/>
                                                 <connections>
-                                                    <action selector="editPhotoButtonTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="F6t-Jd-VhL"/>
+                                                    <action selector="addPhoto:" destination="66d-od-zfu" eventType="touchUpInside" id="LY9-mG-5cW"/>
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ogr-Fl-3kq">
@@ -1051,6 +1051,13 @@
                                             <constraint firstAttribute="width" constant="42" id="dh6-Py-QLu"/>
                                         </constraints>
                                     </view>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsu-W6-Fua">
+                                        <rect key="frame" x="100" y="92" width="120" height="120"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="tsu-W6-Fua" secondAttribute="height" multiplier="1:1" id="8Bb-kh-ION"/>
+                                            <constraint firstAttribute="height" constant="120" id="CgV-eh-oPJ"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.29999999999999999" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1058,6 +1065,7 @@
                                     <constraint firstItem="n3U-KK-ELb" firstAttribute="leading" secondItem="dO2-in-Qrd" secondAttribute="leading" id="5gc-N0-8Jr"/>
                                     <constraint firstItem="vA2-6o-xIQ" firstAttribute="centerY" secondItem="dO2-in-Qrd" secondAttribute="centerY" id="8Gf-ot-g80"/>
                                     <constraint firstItem="wOa-CL-T0W" firstAttribute="leading" secondItem="dO2-in-Qrd" secondAttribute="leading" id="9Py-iC-aJy"/>
+                                    <constraint firstItem="tsu-W6-Fua" firstAttribute="centerX" secondItem="dO2-in-Qrd" secondAttribute="centerX" id="F1D-Ag-6AA"/>
                                     <constraint firstItem="MLo-Oz-9ew" firstAttribute="top" secondItem="dO2-in-Qrd" secondAttribute="top" constant="10" id="JLN-Z7-qgh"/>
                                     <constraint firstItem="wOa-CL-T0W" firstAttribute="centerY" secondItem="dO2-in-Qrd" secondAttribute="centerY" id="Jdb-XQ-7wd"/>
                                     <constraint firstItem="wOa-CL-T0W" firstAttribute="centerX" secondItem="dO2-in-Qrd" secondAttribute="centerX" id="KJQ-ia-PEn"/>
@@ -1070,6 +1078,7 @@
                                     <constraint firstItem="n3U-KK-ELb" firstAttribute="top" secondItem="dO2-in-Qrd" secondAttribute="top" id="a4m-wZ-NsO"/>
                                     <constraint firstAttribute="trailing" secondItem="MLo-Oz-9ew" secondAttribute="trailing" constant="10" id="cLU-tZ-1TR"/>
                                     <constraint firstItem="GeZ-wd-uBD" firstAttribute="centerY" secondItem="dO2-in-Qrd" secondAttribute="centerY" id="eMG-pP-g3d"/>
+                                    <constraint firstItem="tsu-W6-Fua" firstAttribute="centerY" secondItem="dO2-in-Qrd" secondAttribute="centerY" id="geD-Tu-NWr"/>
                                     <constraint firstItem="B1l-1m-VOV" firstAttribute="leading" secondItem="dO2-in-Qrd" secondAttribute="leading" id="gfY-vx-0o9"/>
                                     <constraint firstItem="wOa-CL-T0W" firstAttribute="top" secondItem="dO2-in-Qrd" secondAttribute="top" id="lhI-T6-HHS"/>
                                     <constraint firstAttribute="bottom" secondItem="B1l-1m-VOV" secondAttribute="bottom" id="mVZ-i9-tpF"/>
@@ -1260,6 +1269,9 @@
                                         <rect key="frame" x="258" y="158" width="52" height="32"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="nextButtonTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="FFh-k5-Cfb"/>
+                                        </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6aJ-Ma-qho">
                                         <rect key="frame" x="10" y="10" width="300" height="30"/>
@@ -1270,7 +1282,7 @@
                                                 <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
                                                 <state key="normal" title="Button"/>
                                                 <connections>
-                                                    <action selector="blurButtonTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="iqC-kK-qDY"/>
+                                                    <action selector="blurButtonTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="sWX-ej-YE0"/>
                                                 </connections>
                                             </button>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15" minValue="1" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="pU0-Sj-avk">
@@ -1294,16 +1306,23 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVc-Ok-mps">
+                                        <rect key="frame" x="10" y="158" width="52" height="32"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="XV1-l3-ykz" firstAttribute="top" secondItem="hpx-ee-uC6" secondAttribute="top" constant="51" id="216-hu-8zz"/>
                                     <constraint firstAttribute="trailing" secondItem="6aJ-Ma-qho" secondAttribute="trailing" constant="10" id="A3R-Ka-X0K"/>
                                     <constraint firstAttribute="width" secondItem="hpx-ee-uC6" secondAttribute="height" multiplier="3:4.8" id="BVj-yz-Tia"/>
                                     <constraint firstAttribute="trailing" secondItem="7NL-6u-bwj" secondAttribute="trailing" constant="10" id="Fxx-g6-acu"/>
+                                    <constraint firstItem="tVc-Ok-mps" firstAttribute="leading" secondItem="hpx-ee-uC6" secondAttribute="leading" constant="10" id="dU4-U3-Hba"/>
                                     <constraint firstAttribute="width" secondItem="hpx-ee-uC6" secondAttribute="height" multiplier="4.8:3" id="iyn-R8-Jf3"/>
                                     <constraint firstAttribute="bottom" secondItem="7NL-6u-bwj" secondAttribute="bottom" constant="10" id="k1h-Dw-Nzu"/>
                                     <constraint firstItem="6aJ-Ma-qho" firstAttribute="leading" secondItem="hpx-ee-uC6" secondAttribute="leading" constant="10" id="k5E-AQ-tIY"/>
                                     <constraint firstAttribute="trailing" secondItem="XV1-l3-ykz" secondAttribute="trailing" constant="5" id="nNy-eC-7FR"/>
+                                    <constraint firstAttribute="bottom" secondItem="tVc-Ok-mps" secondAttribute="bottom" constant="10" id="nhW-Y3-8lr"/>
                                     <constraint firstItem="6aJ-Ma-qho" firstAttribute="top" secondItem="hpx-ee-uC6" secondAttribute="top" constant="10" id="tzj-Zl-wXQ"/>
                                     <constraint firstAttribute="trailing" secondItem="3Bh-nd-CJb" secondAttribute="trailing" constant="15" id="vAu-Id-YIk"/>
                                     <constraint firstItem="3Bh-nd-CJb" firstAttribute="top" secondItem="hpx-ee-uC6" secondAttribute="top" constant="10" id="vyg-pr-0c7"/>
@@ -1349,7 +1368,10 @@
                         <outlet property="backScrollView" destination="B1l-1m-VOV" id="rws-QF-WQm"/>
                         <outlet property="blurButton" destination="q1R-A3-Nh8" id="MQe-hV-RgP"/>
                         <outlet property="blurControlsView" destination="6aJ-Ma-qho" id="XNi-vw-f0Z"/>
+                        <outlet property="blurEffectView" destination="tsu-W6-Fua" id="x7B-Rp-Xcq"/>
                         <outlet property="blurSlider" destination="pU0-Sj-avk" id="s9i-jv-ZWm"/>
+                        <outlet property="bottomBackButton" destination="tVc-Ok-mps" id="YyR-Pg-zwb"/>
+                        <outlet property="bottomRightButton" destination="7NL-6u-bwj" id="JwM-YP-dRP"/>
                         <outlet property="bottomViewHeightConstraint" destination="iyn-R8-Jf3" id="3dV-vo-fkH"/>
                         <outlet property="bottomViewWidthConstraint" destination="BVj-yz-Tia" id="Ilv-Eb-cbK"/>
                         <outlet property="cameraOrReelView" destination="vA2-6o-xIQ" id="x3x-A0-iKp"/>
@@ -1370,7 +1392,6 @@
                         <outlet property="photoThumbnailsView" destination="XV1-l3-ykz" id="Obw-C6-XS5"/>
                         <outlet property="profileOverlay" destination="GeZ-wd-uBD" id="Gyy-ub-UbB"/>
                         <outlet property="saveButton" destination="ueT-4a-Aly" id="IeQ-nh-8CZ"/>
-                        <outlet property="saveButton2" destination="7NL-6u-bwj" id="0zi-Vs-K5H"/>
                         <outlet property="searchOverlay" destination="wOa-CL-T0W" id="eVW-qQ-BOV"/>
                         <outlet property="searchOverlayBottomConstraint" destination="NGI-bX-6il" id="Rih-x1-J2L"/>
                         <outlet property="searchOverlayLeadingConstraint" destination="9Py-iC-aJy" id="sXT-zM-3aL"/>
@@ -1733,7 +1754,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="e66-sX-XQT"/>
-        <segue reference="Lsk-jR-YPn"/>
+        <segue reference="akO-BX-PMh"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

@@ -180,6 +180,115 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             }
         }
     }
+
+    func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
+
+        if var photo = user.profilePic {
+            return storageRepository.uploadFiles([photo].enumerated().flatMap { (index, photo) in
+
+                var imageData: Data?
+
+                if let image = photo.image {
+
+                    imageData = UIImageJPEGRepresentation(image, 1)
+
+                    return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
+                } else {
+                    return nil
+                }
+            }, container: GZEUser.Photo.container)
+                .flatMap(FlattenStrategy.latest, transform: { files -> SignalProducer<GZEUser, GZEError> in
+
+                    return SignalProducer<GZEUser, GZEError> { sink, disposable in
+
+                        for file in files {
+                            log.debug(file.toJSON() as Any)
+                            log.debug(user.toJSON() as Any)
+
+                            photo.name = file.name
+                            photo.container = file.container
+                            photo.url = "/containers/\(file.container)/download/\(file.name)"
+                            photo.blocked = false
+                        }
+
+                        sink.send(value: user)
+                        sink.sendCompleted()
+                    }
+                })
+                .flatMap(FlattenStrategy.latest) { [weak self] (aUser) -> SignalProducer<GZEUser, GZEError> in
+
+                    guard let this = self else {
+                        log.error("Unable to complete the task. Self has been disposed.")
+                        return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                    }
+
+                    let user = GZEUser()
+                    user.id = aUser.id
+                    user.profilePic = aUser.profilePic
+
+                    return this.update(user)
+            }
+
+        } else {
+            return SignalProducer.empty
+        }
+
+    }
+
+    func saveSearchPic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
+
+        if var photo = user.searchPic {
+            return storageRepository.uploadFiles([photo].enumerated().flatMap { (index, photo) in
+
+                var imageData: Data?
+
+                if let image = photo.image {
+
+                    imageData = UIImageJPEGRepresentation(image, 1)
+
+                    return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
+                } else {
+                    return nil
+                }
+            }, container: GZEUser.Photo.container)
+                .flatMap(FlattenStrategy.latest, transform: { files -> SignalProducer<GZEUser, GZEError> in
+
+                    return SignalProducer<GZEUser, GZEError> { sink, disposable in
+
+                        for file in files {
+                            log.debug(file.toJSON() as Any)
+                            log.debug(user.toJSON() as Any)
+
+                            photo.name = file.name
+                            photo.container = file.container
+                            photo.url = "/containers/\(file.container)/download/\(file.name)"
+                            photo.blocked = false
+                        }
+
+                        sink.send(value: user)
+                        sink.sendCompleted()
+                    }
+                })
+                .flatMap(FlattenStrategy.latest) { [weak self] (aUser) -> SignalProducer<GZEUser, GZEError> in
+
+                    guard let this = self else {
+                        log.error("Unable to complete the task. Self has been disposed.")
+                        return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                    }
+
+                    let user = GZEUser()
+                    user.id = aUser.id
+                    user.searchPic = aUser.profilePic
+
+                    return this.update(user)
+            }
+
+        } else {
+            return SignalProducer.empty
+        }
+
+    }
+
     //TODO: delete overwritten photos
     func savePhotos(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
@@ -192,11 +301,11 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                         imageData = UIImageJPEGRepresentation(image, 1)
 
-                        return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: "picture", type: "image/jpeg", data: imageData)
+                        return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
                     } else {
                         return nil
                     }
-                }, container: "picture")
+                }, container: GZEUser.Photo.container)
                 .flatMap(FlattenStrategy.latest, transform: { files -> SignalProducer<GZEUser, GZEError> in
 
                     return SignalProducer<GZEUser, GZEError> { sink, disposable in
@@ -261,11 +370,11 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                             imageData = UIImageJPEGRepresentation(image, 1)
 
-                            return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: "picture", type: "image/jpeg", data: imageData)
+                            return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
                         } else {
                             return nil
                         }
-                    }, container: "picture")
+                    }, container: GZEUser.Photo.container)
                 } else {
                     return SignalProducer.init(value: [GZEFile]())
                 }
