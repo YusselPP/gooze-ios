@@ -15,6 +15,8 @@ import iCarousel
 
 class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
+    // TODO: Remove this imageview
+    @IBOutlet weak var croppedImageView: UIImageView!
     var blur: GZEBlur?
     // TODO: Remove asign
     var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
@@ -52,6 +54,27 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         case camera
 
         case gallery
+    }
+
+    var cropArea: CGRect {
+        let factor: CGFloat = 1 //photoImageView.image!.size.width/imageContainerView.frame.width
+        let scale: CGFloat = 1/backScrollView.zoomScale
+        let imageFrame = photoImageView.imageFrame()
+        let x = (backScrollView.contentOffset.x + profileOverlay.frame.origin.x - imageFrame.origin.x) * scale * factor
+        let y = (backScrollView.contentOffset.y + profileOverlay.frame.origin.y - imageFrame.origin.y) * scale * factor
+        let width = profileOverlay.frame.size.width * scale * factor
+        let height = profileOverlay.frame.size.height * scale * factor
+
+        let resultArea = CGRect(x: x, y: y, width: width, height: height)
+
+        log.debug("factor: \(factor)")
+        log.debug("scale: \(scale)")
+        log.debug("backScrollView.contentOffset: \(backScrollView.contentOffset)")
+        log.debug("profileOverlay.frame: \(profileOverlay.frame)")
+        log.debug("imageFrame: \(imageFrame)")
+        log.debug("resultArea: \(resultArea)")
+
+        return resultArea
     }
 
     @IBOutlet weak var backScrollView: UIScrollView! {
@@ -231,11 +254,18 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         switch scene! {
         case .profilePic:
             // TODO: save profile pic
-            scene = .searchPic
+
+            croppedImageView.image = photoImageView.crop(to: cropArea)
+
+            log.debug("croppedImageView.frame: \(croppedImageView.frame)")
+            log.debug("croppedImageView.imageFrame(): \(croppedImageView.imageFrame())")
+            // 	scene = .searchPic
         case .searchPic:
             // TODO: save search pic and go back to profile
             break
         case .blur:
+            photoImageView.image = blur?.resultImage
+            blur = nil
             switch mode {
             case .editProfilePic:
                 scene = .profilePic
