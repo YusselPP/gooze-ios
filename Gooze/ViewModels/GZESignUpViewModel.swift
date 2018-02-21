@@ -64,6 +64,8 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
 
     var photos = [MutableProperty<GZEUser.Photo?>]()
 
+    let mainImage = MutableProperty<UIImage?>(nil)
+
     let genders: [GZEUser.Gender?]
 
     enum validationRule {

@@ -123,7 +123,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var imageContainerTrailingViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var superViewBottomImageContainerBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var superviewTopViewTopConstraint: NSLayoutConstraint!
-    @IBOutlet weak var viewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomViewWidthConstraint: NSLayoutConstraint!
 
@@ -161,6 +160,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         editButtonView.layer.cornerRadius = 5
 
+        photoImageView.reactive.image <~ viewModel.mainImage
+
         saveButton.reactive.pressed = CocoaAction(viewModel.savePhotosAction)
 
         saveProfileAction = CocoaAction(viewModel.saveProfilePicAction)
@@ -194,8 +195,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        viewModel.photos.enumerated().forEach { photoImageViews[$0.offset].image = $0.element.value?.image }
     }
 
 
@@ -255,16 +254,19 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         case .profilePic:
             // TODO: save profile pic
 
-            croppedImageView.image = photoImageView.crop(to: cropArea)
+            let croppedImage = photoImageView.crop(to: cropArea)
 
-            log.debug("croppedImageView.frame: \(croppedImageView.frame)")
-            log.debug("croppedImageView.imageFrame(): \(croppedImageView.imageFrame())")
+            croppedImageView.image = croppedImage
+
+            viewModel.profilePic.value?.image = croppedImage
+            saveProfileAction.execute(sender)
+
             // 	scene = .searchPic
         case .searchPic:
             // TODO: save search pic and go back to profile
             break
         case .blur:
-            photoImageView.image = blur?.resultImage
+            viewModel.mainImage.value = blur?.resultImage
             blur = nil
             switch mode {
             case .editProfilePic:
@@ -272,6 +274,23 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             case .editGalleryPic:
                 // TODO: save and go to gallery
                 scene = .gallery
+            }
+        default:
+            break
+        }
+    }
+
+    @IBAction func backButtonTapped(_ sender: Any) {
+        switch scene! {
+        case .profilePic:
+            scene = .cameraOrReel
+        case .searchPic:
+            scene = .profilePic
+        case .blur:
+            if let blur = blur, blur.isDirty {
+                blur.revert()
+            } else {
+                scene = .cameraOrReel
             }
         default:
             break
@@ -368,36 +387,17 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
                 return
             }
 
-
-//            let blurViewController = GZEBlurViewController(image: compressedImage)
-//
-//            blurViewController.onCompletion = { blurredImage in
-//
-//                defer {
-//                    this.dismiss(animated: true, completion: nil)
-//                }
-//
-//                guard let blurredImage = blurredImage else {
-//                    log.debug("Empty image received")
-//                    return
-//                }
-
                 guard this.currentPhotoNum >= 0 else {
                     log.warning("Invalid photo number")
                     return
                 }
 
-                this.viewModel.photos[this.currentPhotoNum].value?.image = compressedImage
-                this.photoImageViews[this.currentPhotoNum].image = compressedImage
+            this.viewModel.mainImage.value = compressedImage
 
-                this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.photoImageView)
+            this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.photoImageView, scrollView: this.backScrollView)
 
-
-                this.scene = .blur
-            // }
-
+            this.scene = .blur
             this.dismiss(animated: true, completion: nil)
-            // this.present(blurViewController, animated: true, completion: nil)
         }
 
         present(cameraViewController, animated: true, completion: nil)
@@ -430,13 +430,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         imageContainerTrailingViewLeadingConstraint.isActive = false
         superViewBottomImageContainerBottomConstraint.isActive = false
         superviewTopViewTopConstraint.isActive = false
-        //viewWidthConstraint.isActive = false
         bottomViewWidthConstraint.isActive = false
 
         superviewTrailingImageContainerTrailingConstraint.isActive = true
         viewTopImageContainerBottomConstraint.isActive = true
         viewLeadingSuperviewLeadingConstrint.isActive = true
-        //viewHeightConstraint.isActive = true
         bottomViewHeightConstraint.isActive = true
     }
 
@@ -445,13 +443,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         superviewTrailingImageContainerTrailingConstraint.isActive = false
         viewTopImageContainerBottomConstraint.isActive = false
         viewLeadingSuperviewLeadingConstrint.isActive = false
-        //viewHeightConstraint.isActive = false
         bottomViewHeightConstraint.isActive = false
 
         imageContainerTrailingViewLeadingConstraint.isActive = true
         superViewBottomImageContainerBottomConstraint.isActive = true
         superviewTopViewTopConstraint.isActive = true
-        //viewWidthConstraint.isActive = true
         bottomViewWidthConstraint.isActive = true
     }
 
@@ -612,11 +608,12 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-
+        blur?.draw()
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        log.debug(backScrollView.contentOffset)
+        blur?.draw()
     }
 
     /*

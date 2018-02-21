@@ -11,13 +11,13 @@ import ReactiveSwift
 
 class GZEBlur {
 
-    let ciContext = CIContext(options: nil)
-    let filter = CIFilter(name: "CIMaskedVariableBlur")!
     let error = MutableProperty<String?>(nil)
 
     var resultImageView: UIImageView
     var blurEffectView: UIView
+    var scrollView: UIScrollView?
 
+    var isDirty = false
 
     var image: UIImage? {
         didSet {
@@ -37,13 +37,17 @@ class GZEBlur {
         }
     }
 
+    // Private vars
+    private let ciContext = CIContext(options: nil)
+    private let filter = CIFilter(name: "CIMaskedVariableBlur")!
 
 
-    init(image: UIImage, blurEffectView: UIView, resultImageView: UIImageView) {
+    init(image: UIImage, blurEffectView: UIView, resultImageView: UIImageView, scrollView: UIScrollView? = nil) {
 
         self.image = image
         self.blurEffectView = blurEffectView
         self.resultImageView = resultImageView
+        self.scrollView = scrollView
 
         log.debug("\(self) init")
 
@@ -53,10 +57,12 @@ class GZEBlur {
 
     func apply() {
         resultImage = resultImageView.image
+        isDirty = true
     }
 
     func revert() {
         resultImage = image
+        isDirty = false
     }
 
     func draw() {
@@ -86,6 +92,8 @@ class GZEBlur {
         resultImageView.image = UIImage(cgImage: resultCIImage)
     }
 
+
+    // Private methods
     private func createMask(for image: UIImage) -> UIImage? {
         UIGraphicsBeginImageContext(image.size)
         let context = UIGraphicsGetCurrentContext()!
@@ -94,8 +102,15 @@ class GZEBlur {
         let blurFrame = blurEffectView.frame
         let imageFrame = resultImageView.imageFrame()
         let scale = resultImageView.imageScale()
+        var xOffset: CGFloat = 0
+        var yOffset: CGFloat = 0
 
-        let scaledBlurFrame = CGRect(x: (blurFrame.minX - imageFrame.minX) / scale, y: (blurFrame.minY - imageFrame.minY) / scale, width: blurFrame.width / scale, height: blurFrame.height / scale)
+        if let offset = scrollView?.contentOffset {
+            xOffset = offset.x
+            yOffset = offset.y
+        }
+
+        let scaledBlurFrame = CGRect(x: (blurFrame.minX - imageFrame.minX + xOffset) / scale, y: (blurFrame.minY - imageFrame.minY + yOffset) / scale, width: blurFrame.width / scale, height: blurFrame.height / scale)
 
         context.addEllipse(in: scaledBlurFrame)
         context.drawPath(using: .fill)
@@ -111,12 +126,12 @@ class GZEBlur {
     }
 
     // MARK: - Setters
-    func imageDidSet() {
+    private func imageDidSet() {
         log.debug("image did set \(String(describing: image))")
         resultImage = image
     }
 
-    func resultImageDidSet() {
+    private func resultImageDidSet() {
         log.debug("result image did set \(String(describing: resultImage))")
         var ciImage: CIImage?
         if let resultImage = self.resultImage {
@@ -126,7 +141,7 @@ class GZEBlur {
         draw()
     }
 
-    func radiusDidSet() {
+    private func radiusDidSet() {
         log.debug("radius did set \(String(describing: radius))")
         filter.setValue(radius, forKey: kCIInputRadiusKey)
         draw()
