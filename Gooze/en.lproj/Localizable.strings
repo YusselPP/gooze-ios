@@ -31,6 +31,9 @@
 "user.interestedIn.fieldName"="Interests";
 "user.registerCode.fieldName"="Register code";
 "user.invitedBy.fieldName"="Invited by";
+"user.profilePic.fieldName"="Profile picture";
+"user.searchPic.fieldName"="Search picture";
+"user.galleryPics.fieldName"="Gallery pictures";
 
 // ViewModel/GZESignUpViewModel - GZESignUpBasicViewController
 "vm.signUp.viewTitle"="Sign up";

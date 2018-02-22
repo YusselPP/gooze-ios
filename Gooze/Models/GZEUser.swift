@@ -257,38 +257,51 @@ class GZEUser: Glossy {
         case registerCode
         case invitedBy
 
+        case profilePic
+        case searchPic
+        case galleryPics
+
         var fieldName: String {
+            var key: String
             switch self {
             case .username:
-                return "user.username.fieldName".localized()
+                key = "user.username.fieldName"
             case .email:
-                return "user.email.fieldName".localized()
+                key = "user.email.fieldName"
             case .password:
-                return "user.password.fieldName".localized()
+                key = "user.password.fieldName"
 
             case .birthday:
-                return "user.birthday.fieldName".localized()
+                key = "user.birthday.fieldName"
             case .gender:
-                return "user.gender.fieldName".localized()
+                key = "user.gender.fieldName"
             case .weight:
-                return "user.weight.fieldName".localized()
+                key = "user.weight.fieldName"
             case .height:
-                return "user.height.fieldName".localized()
+                key = "user.height.fieldName"
             case .origin:
-                return "user.origin.fieldName".localized()
+                key = "user.origin.fieldName"
             case .phrase:
-                return "user.phrase.fieldName".localized()
+                key = "user.phrase.fieldName"
 
             case .language:
-                return "user.language.fieldName".localized()
+                key = "user.language.fieldName"
             case .interestedIn:
-                return "user.interestedIn.fieldName".localized()
+                key = "user.interestedIn.fieldName"
 
             case .registerCode:
-                return "user.registerCode.fieldName".localized()
+                key = "user.registerCode.fieldName"
             case .invitedBy:
-                return "user.invitedBy.fieldName".localized()
+                key = "user.invitedBy.fieldName"
+            case .profilePic:
+                key = "user.profilePic.fieldName"
+            case .searchPic:
+                key = "user.searchPic.fieldName"
+            case .galleryPics:
+                key = "user.galleryPics.fieldName"
             }
+
+            return key.localized()
         }
 
         func stringRule() -> ValidationRuleSet<String>? {

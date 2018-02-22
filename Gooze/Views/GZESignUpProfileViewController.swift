@@ -73,6 +73,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         viewModel.languages <~ languageTextField.reactive.continuousTextValues
         viewModel.interestedIn <~ interestsTextField.reactive.continuousTextValues
 
+        profileImageView.reactive.image <~ viewModel.profilePic
+
         birthdayTextField.reactive.text <~ birthdayPicker.reactive.dates.map { [weak self] in
             self?.viewModel.birthday.value = $0
             return GZEDateHelper.dateFormatter.string(from: $0)
@@ -123,7 +125,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         )
         //NotificationCenter.default.addObserver(self, selector: #selector(deviceRotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
 
-        profileImageView.image = viewModel.photos.first?.value?.image
+        // profileImageView.image = viewModel.photos.first?.value?.image
 
     }
 
@@ -333,6 +335,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
             segue.identifier == profileToPhotoEditSegue,
             let viewController = segue.destination as? GZESignUpPhotoViewController {
 
+            viewController.mode = .editProfilePic
             viewController.viewModel = viewModel
         }
     }

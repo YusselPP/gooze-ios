@@ -15,8 +15,6 @@ import iCarousel
 
 class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
-    // TODO: Remove this imageview
-    @IBOutlet weak var croppedImageView: UIImageView!
     var blur: GZEBlur?
     // TODO: Remove asign
     var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
@@ -57,13 +55,21 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     var cropArea: CGRect {
+        var overlay: UIView
+
+        if scene == .profilePic {
+            overlay = profileOverlay
+        } else {
+            overlay = searchOverlay
+        }
+
         let factor: CGFloat = 1 //photoImageView.image!.size.width/imageContainerView.frame.width
         let scale: CGFloat = 1/backScrollView.zoomScale
         let imageFrame = photoImageView.imageFrame()
-        let x = (backScrollView.contentOffset.x + profileOverlay.frame.origin.x - imageFrame.origin.x) * scale * factor
-        let y = (backScrollView.contentOffset.y + profileOverlay.frame.origin.y - imageFrame.origin.y) * scale * factor
-        let width = profileOverlay.frame.size.width * scale * factor
-        let height = profileOverlay.frame.size.height * scale * factor
+        let x = (backScrollView.contentOffset.x + overlay.frame.origin.x - imageFrame.origin.x) * scale * factor
+        let y = (backScrollView.contentOffset.y + overlay.frame.origin.y - imageFrame.origin.y) * scale * factor
+        let width = overlay.frame.size.width * scale * factor
+        let height = overlay.frame.size.height * scale * factor
 
         let resultArea = CGRect(x: x, y: y, width: width, height: height)
 
@@ -177,12 +183,13 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             self?.showLoading()
         }
 
-        viewModel.saveProfilePicAction.values.observeValues(onSaveProfileSuccess(user:))
-        viewModel.saveProfilePicAction.errors.observeValues(onError(err:))
-        viewModel.saveSearchPicAction.values.observeValues(onSaveSearchSuccess(user:))
-        viewModel.saveSearchPicAction.errors.observeValues(onError(err:))
-        viewModel.savePhotosAction.values.observeValues(onSaveGallerySuccess(user:))
-        viewModel.savePhotosAction.errors.observeValues(onError(err:))
+//        viewModel.saveProfilePicAction.values.observeValues(onSaveProfileSuccess(user:))
+//        viewModel.saveSearchPicAction.values.observeValues(onSaveSearchSuccess(user:))
+//        viewModel.savePhotosAction.values.observeValues(onSaveGallerySuccess(user:))
+
+        viewModel.saveProfilePicAction.events.observeValues(onEvent(event:))
+        viewModel.saveSearchPicAction.events.observeValues(onEvent(event:))
+        viewModel.savePhotosAction.events.observeValues(onEvent(event:))
 
         switch mode {
         case .editGalleryPic:
@@ -252,18 +259,13 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBAction func nextButtonTapped(_ sender: Any) {
         switch scene! {
         case .profilePic:
-            // TODO: save profile pic
-
             let croppedImage = photoImageView.crop(to: cropArea)
-
-            croppedImageView.image = croppedImage
-
-            viewModel.profilePic.value?.image = croppedImage
+            viewModel.profilePic.value = croppedImage
             saveProfileAction.execute(sender)
-
-            // 	scene = .searchPic
         case .searchPic:
-            // TODO: save search pic and go back to profile
+            let croppedImage = photoImageView.crop(to: cropArea)
+            viewModel.searchPic.value = croppedImage
+            saveSearchAction.execute(sender)
             break
         case .blur:
             viewModel.mainImage.value = blur?.resultImage
@@ -498,22 +500,45 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     // MARK: - Observer handlers
-    func onSaveProfileSuccess(user: GZEUser) {
+    func onEvent(event: Event<GZEUser, GZEError>) {
+        log.debug("Action event received: \(event)")
         hideLoading()
+
+        switch event {
+        case .value(let user):
+            switch scene! {
+            case .profilePic:
+                onSaveProfileSuccess(user: user)
+            case .searchPic:
+                onSaveSearchSuccess(user: user)
+            case .gallery:
+                onSaveGallerySuccess(user: user)
+            default:
+                break;
+            }
+        case .failed(let err):
+            onError(err: err)
+        default:
+            break
+        }
+    }
+
+    func onSaveProfileSuccess(user: GZEUser) {
+        log.debug("Profile pic saved")
+        scene = .searchPic
     }
 
     func onSaveSearchSuccess(user: GZEUser) {
-        hideLoading()
+        log.debug("Search pic saved")
+        navigationController?.popViewController(animated: true)
     }
 
     func onSaveGallerySuccess(user: GZEUser) {
-        hideLoading()
-        self.displayMessage("Gooze", "User saved")
+        log.debug("Gallery saved")
     }
 
     func onError(err: GZEError) {
-        hideLoading()
-        self.displayMessage("Error", err.localizedDescription)
+        self.displayMessage(viewModel.viewTitle, err.localizedDescription)
     }
 
     // MARK: - Scenes

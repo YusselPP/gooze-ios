@@ -50,7 +50,10 @@ class GZEActivateGoozeViewModel {
     private func createActivateGoozeAction() -> Action<Void, GZEUser, GZEError> {
         log.debug("Creating activate gooze action")
         return Action<Void, GZEUser, GZEError>{[weak self] in
-            guard let this = self else { return SignalProducer.empty }
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
 
 
             guard let userId = GZEApi.instance.accessToken?.userId else {
@@ -71,7 +74,10 @@ class GZEActivateGoozeViewModel {
     private func createSearchGoozeAction() -> Action<Void, [GZEUser], GZEError> {
         log.debug("Creating search gooze action")
         return Action<Void, [GZEUser], GZEError>{[weak self] in
-            guard let this = self else { return SignalProducer.empty }
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
 
             return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.currentLocation.value), maxDistance: this.sliderValue.value, limit: this.searchLimit.value)
         }

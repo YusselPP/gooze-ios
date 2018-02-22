@@ -230,7 +230,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             }
 
         } else {
-            return SignalProducer.empty
+            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.profilePic.fieldName)))
         }
 
     }
@@ -284,7 +284,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             }
 
         } else {
-            return SignalProducer.empty
+            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.searchPic.fieldName)))
         }
 
     }
@@ -339,7 +339,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 }
 
             } else {
-                return SignalProducer.empty
+                return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.galleryPics.fieldName)))
             }
 
     }

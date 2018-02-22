@@ -59,8 +59,8 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     let languages = MutableProperty<String?>(nil)
     let interestedIn = MutableProperty<String?>(nil)
 
-    let profilePic = MutableProperty<GZEUser.Photo?>(nil)
-    let searchPic = MutableProperty<GZEUser.Photo?>(nil)
+    let profilePic = MutableProperty<UIImage?>(nil)
+    let searchPic = MutableProperty<UIImage?>(nil)
 
     var photos = [MutableProperty<GZEUser.Photo?>]()
 
@@ -148,7 +148,10 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     private func createSaveAction() -> Action<Void, GZEUser, GZEError> {
         log.debug("Creating save action")
         return Action<Void, GZEUser, GZEError>{[weak self] in
-            guard let strongSelf = self else { return SignalProducer.empty }
+            guard let strongSelf = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
             strongSelf.fillUser()
             return strongSelf.userRepository.signUp(strongSelf.user)
         }
@@ -157,7 +160,10 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     private func createUpdateAction() -> Action<Void, GZEUser, GZEError> {
         log.debug("Creating update action")
         return Action<Void, GZEUser, GZEError>{[weak self] in
-            guard let this = self else { return SignalProducer.empty }
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
 
             guard let userId = GZEApi.instance.accessToken?.userId else {
                 return SignalProducer(error: GZEError.repository(error: .AuthRequired))
@@ -175,7 +181,10 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     private func createSavePhotosAction() -> Action<Void, GZEUser, GZEError> {
         log.debug("Creating save photos action")
         return Action<Void, GZEUser, GZEError>{[weak self] in
-            guard let this = self else { return SignalProducer.empty }
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
 
             guard let userId = GZEApi.instance.accessToken?.userId else {
                 return SignalProducer(error: GZEError.repository(error: .AuthRequired))
@@ -191,14 +200,18 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     private func createSaveProfilePicAction() -> Action<Void, GZEUser, GZEError> {
         log.debug("Creating save ProfilePic action")
         return Action<Void, GZEUser, GZEError>{[weak self] in
-            guard let this = self else { return SignalProducer.empty }
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
 
             guard let userId = GZEApi.instance.accessToken?.userId else {
                 return SignalProducer(error: GZEError.repository(error: .AuthRequired))
             }
 
-            this.fillUser()
+            // this.fillUser()
             this.user.id = userId
+            this.user.profilePic = this.profilePic.map{ GZEUser.Photo(image: $0) }.value
 
             return this.userRepository.saveProfilePic(this.user)
         }
@@ -207,14 +220,18 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
     private func createSaveSearchPicAction() -> Action<Void, GZEUser, GZEError> {
         log.debug("Creating save SearchPic action")
         return Action<Void, GZEUser, GZEError>{[weak self] in
-            guard let this = self else { return SignalProducer.empty }
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
 
             guard let userId = GZEApi.instance.accessToken?.userId else {
                 return SignalProducer(error: GZEError.repository(error: .AuthRequired))
             }
 
-            this.fillUser()
+            // this.fillUser()
             this.user.id = userId
+            this.user.searchPic = this.searchPic.map{ GZEUser.Photo(image: $0) }.value
 
             return this.userRepository.saveSearchPic(this.user)
         }
@@ -243,8 +260,8 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
             user.interestedIn = [interestedIn]
         }
         user.photos = photos.flatMap { $0.value }
-        user.profilePic = profilePic.value
-        user.searchPic = searchPic.value
+        user.profilePic = profilePic.map{ GZEUser.Photo(image: $0) }.value
+        user.searchPic = searchPic.map{ GZEUser.Photo(image: $0) }.value
 
         log.debug(user.toJSON() as Any)
     }

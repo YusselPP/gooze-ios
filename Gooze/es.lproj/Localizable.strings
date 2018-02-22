@@ -31,6 +31,9 @@
 "user.interestedIn.fieldName"="Interés";
 "user.registerCode.fieldName"="Código de registro";
 "user.invitedBy.fieldName"="Invitado por";
+"user.profilePic.fieldName"="Foto de perfil";
+"user.searchPic.fieldName"="Foto de búsqueda";
+"user.galleryPics.fieldName"="Fotos en la galería";
 
 // ViewModel/GZESignUpViewModel - GZESignUpBasicViewController
 "vm.signUp.viewTitle"="Registro";
@@ -83,4 +86,5 @@
 "Invalid password"="no puede estar vacio";
 "login failed"="Usuario o contraseña incorrectos";
 "email and password are required"="Ingresa tu correo electrónico y contraseña";
+"Authorization Required"="Tu sesión ha expirado. Inicia sesión para continuar";
 
