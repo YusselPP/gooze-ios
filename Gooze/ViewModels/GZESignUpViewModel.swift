@@ -66,6 +66,11 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
 
     let mainImage = MutableProperty<UIImage?>(nil)
 
+    let thumbnail1 = MutableProperty<UIImage?>(nil)
+    let thumbnail2 = MutableProperty<UIImage?>(nil)
+    let thumbnail3 = MutableProperty<UIImage?>(nil)
+    let thumbnail4 = MutableProperty<UIImage?>(nil)
+
     let genders: [GZEUser.Gender?]
 
     enum validationRule {
@@ -190,8 +195,15 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
                 return SignalProducer(error: GZEError.repository(error: .AuthRequired))
             }
 
-            this.fillUser()
             this.user.id = userId
+
+            // TODO: remove from server
+            this.user.photos?.removeAll(keepingCapacity: true)
+
+            this.user.photos!.append(this.thumbnail1.map{ GZEUser.Photo(image: $0) }.value)
+            this.user.photos!.append(this.thumbnail2.map{ GZEUser.Photo(image: $0) }.value)
+            this.user.photos!.append(this.thumbnail3.map{ GZEUser.Photo(image: $0) }.value)
+            this.user.photos!.append(this.thumbnail4.map{ GZEUser.Photo(image: $0) }.value)
 
             return this.userRepository.savePhotos(this.user)
         }
@@ -209,7 +221,6 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
                 return SignalProducer(error: GZEError.repository(error: .AuthRequired))
             }
 
-            // this.fillUser()
             this.user.id = userId
             this.user.profilePic = this.profilePic.map{ GZEUser.Photo(image: $0) }.value
 
@@ -229,7 +240,6 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
                 return SignalProducer(error: GZEError.repository(error: .AuthRequired))
             }
 
-            // this.fillUser()
             this.user.id = userId
             this.user.searchPic = this.searchPic.map{ GZEUser.Photo(image: $0) }.value
 
@@ -259,9 +269,6 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
         if let interestedIn = interestedIn.value {
             user.interestedIn = [interestedIn]
         }
-        user.photos = photos.flatMap { $0.value }
-        user.profilePic = profilePic.map{ GZEUser.Photo(image: $0) }.value
-        user.searchPic = searchPic.map{ GZEUser.Photo(image: $0) }.value
 
         log.debug(user.toJSON() as Any)
     }

@@ -181,7 +181,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     func onupdateSuccess(user: GZEUser) {
         hideLoading()
-        displayMessage(viewModel.viewTitle, "Perfil actualizado")
+        // displayMessage(viewModel.viewTitle, "Perfil actualizado")
+        performSegue(withIdentifier: profileToPhotoEditSegue, sender: saveButton)
     }
 
     func onupdateError(error: GZEError) {
@@ -335,7 +336,11 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
             segue.identifier == profileToPhotoEditSegue,
             let viewController = segue.destination as? GZESignUpPhotoViewController {
 
-            viewController.mode = .editProfilePic
+            if let aSender = sender as? UIButton, aSender == saveButton {
+                viewController.mode = .editGalleryPic
+            } else {
+                viewController.mode = .editProfilePic
+            }
             viewController.viewModel = viewModel
         }
     }

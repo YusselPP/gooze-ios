@@ -28,9 +28,12 @@ class GZEProfileViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
 
     @IBOutlet weak var contactButton: UIButton!
+    @IBOutlet weak var contactButtonWidthConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        log.debug("\(self) init")
 
         setLabelFormat(usernameLabel)
         setLabelFormat(phraseLabel)
@@ -48,11 +51,14 @@ class GZEProfileViewController: UIViewController {
         contactButton.layer.cornerRadius = 5
         contactButton.layer.masksToBounds = true
 
-//        if let myString = contactButton.currentTitle as NSString? {
-//            let stringSize = myString.size(attributes: [NSFontAttributeName: contactButton.titleLabel!.font!])
-//            contactButton.frame.size.width = stringSize.width
-//            log.debug("contact button width changed to: \(stringSize.width)")
-//        }
+
+        if let myString = contactButton.currentTitle as NSString? {
+            let stringSize = myString.size(attributes: [NSFontAttributeName: contactButton.titleLabel!.font!])
+            let width = stringSize.width + contactButton.titleEdgeInsets.left + contactButton.titleEdgeInsets.right
+            contactButtonWidthConstraint.constant = width
+            log.debug("contact button width changed to: \(width)")
+        }
+
 
         setUpBindings()
     }
@@ -72,6 +78,11 @@ class GZEProfileViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+
+    // MARK: - Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
+    }
 
     private func setLabelFormat(_ label: UILabel) {
         label.font = GZEConstants.Font.main

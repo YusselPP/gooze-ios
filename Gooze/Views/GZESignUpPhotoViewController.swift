@@ -24,6 +24,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     var saveGalleryAction: CocoaAction<UIButton>!
 
     var selectedImageButton: UIButton?
+    var selectedThumbnail: MutableProperty<UIImage?>?
 
     var currentPhotoNum = 0
 
@@ -82,6 +83,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         return resultArea
     }
+
+
 
     @IBOutlet weak var backScrollView: UIScrollView! {
         didSet {
@@ -164,9 +167,20 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         photoImageViews.append(photoImageView4)
         photoImageViews.append(photoImageView5)
 
+
+        editButton2.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
+        editButton3.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
+        editButton4.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
+        editButton5.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
+
         editButtonView.layer.cornerRadius = 5
 
         photoImageView.reactive.image <~ viewModel.mainImage
+
+        photoImageView2.reactive.image <~ viewModel.thumbnail1
+        photoImageView3.reactive.image <~ viewModel.thumbnail2
+        photoImageView4.reactive.image <~ viewModel.thumbnail3
+        photoImageView5.reactive.image <~ viewModel.thumbnail4
 
         saveButton.reactive.pressed = CocoaAction(viewModel.savePhotosAction)
 
@@ -183,17 +197,15 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             self?.showLoading()
         }
 
-//        viewModel.saveProfilePicAction.values.observeValues(onSaveProfileSuccess(user:))
-//        viewModel.saveSearchPicAction.values.observeValues(onSaveSearchSuccess(user:))
-//        viewModel.savePhotosAction.values.observeValues(onSaveGallerySuccess(user:))
-
         viewModel.saveProfilePicAction.events.observeValues(onEvent(event:))
         viewModel.saveSearchPicAction.events.observeValues(onEvent(event:))
         viewModel.savePhotosAction.events.observeValues(onEvent(event:))
 
+
         switch mode {
         case .editGalleryPic:
             scene = .gallery
+            editButton2.sendActions(for: .touchUpInside)
         case .editProfilePic:
             scene = .cameraOrReel
         }
@@ -266,7 +278,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             let croppedImage = photoImageView.crop(to: cropArea)
             viewModel.searchPic.value = croppedImage
             saveSearchAction.execute(sender)
-            break
         case .blur:
             viewModel.mainImage.value = blur?.resultImage
             blur = nil
@@ -275,8 +286,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
                 scene = .profilePic
             case .editGalleryPic:
                 // TODO: save and go to gallery
+                selectedThumbnail?.value = viewModel.mainImage.value
                 scene = .gallery
             }
+        case .gallery:
+            saveGalleryAction.execute(sender)
         default:
             break
         }
@@ -300,7 +314,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     @IBAction func editPhotoButtonTapped(_ sender: UIButton) {
-        editPhoto()
+        scene = .cameraOrReel
     }
 
     @IBAction func addPhoto(_ sender: UIButton) {
@@ -310,6 +324,22 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         viewModel.photos.append(MutableProperty(GZEUser.Photo(image: nil)))
         currentPhotoNum = viewModel.photos.count - 1
         editPhoto()
+    }
+
+    @IBAction func thumbnailTapped(_ sender: UIButton) {
+        switch sender {
+        case editButton2:
+            selectedThumbnail = viewModel.thumbnail1
+        case editButton3:
+            selectedThumbnail = viewModel.thumbnail2
+        case editButton4:
+            selectedThumbnail = viewModel.thumbnail3
+        case editButton5:
+            selectedThumbnail = viewModel.thumbnail4
+        default:
+            selectedThumbnail = viewModel.thumbnail1
+        }
+        viewModel.mainImage.value = selectedThumbnail?.value
     }
 
     @IBAction func blurButtonTapped(_ sender: Any) {
@@ -556,7 +586,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         case .searchPic:
             showSearchScene()
         case .gallery:
-            showGallery()
+            showGalleryScene()
         default:
             showCameraOrReelScene()
         }
@@ -578,9 +608,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     }
 
-    func showGallery() {
+    func showGalleryScene() {
         backScrollView.isHidden = false
         photoThumbnailsView.isHidden = false
+
+        editButtonView.isHidden = false
     }
 
     func showCameraOrReelScene() {

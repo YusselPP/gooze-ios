@@ -68,6 +68,7 @@
 		8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720D21F9BA5B000485566 /* Localizable.strings */; };
 		8DF720D61F9BA8F900485566 /* GZELoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */; };
 		F00355181FB61244004C778C /* GZEValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00355171FB61244004C778C /* GZEValidationError.swift */; };
+		F0339AA720408F5E00C675AA /* GZEProfilePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0339AA620408F5E00C675AA /* GZEProfilePageViewController.swift */; };
 		F0B4DF2D1FD76883002E4F18 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B4DF2C1FD76883002E4F18 /* Dictionary+Extension.swift */; };
 		F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */; };
 		F0CA6DBF1FAB6385009C1746 /* GZECarouselUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA6DBE1FAB6385009C1746 /* GZECarouselUIView.swift */; };
@@ -173,6 +174,7 @@
 		9E071D3D1E6D305DA023A78F /* Pods_GoozeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoozeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7E9018D80C9F3C0BDC68105 /* Pods_GoozeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoozeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F00355171FB61244004C778C /* GZEValidationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZEValidationError.swift; sourceTree = "<group>"; };
+		F0339AA620408F5E00C675AA /* GZEProfilePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZEProfilePageViewController.swift; sourceTree = "<group>"; };
 		F06601825C56AA9D2A670CC1 /* Pods-Gooze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gooze.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Gooze/Pods-Gooze.debug.xcconfig"; sourceTree = "<group>"; };
 		F0B4DF2C1FD76883002E4F18 /* Dictionary+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GZEUserRouter.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				8D7970281FC91ADE0022B96F /* GZEDoubleCtrlView.swift */,
 				8D01C4651FCE97CD00B53ED8 /* GZELogoutButton.swift */,
 				8DC321F71FD51FC90068630D /* GZEUserBalloon.swift */,
+				F0339AA620408F5E00C675AA /* GZEProfilePageViewController.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -757,6 +760,7 @@
 				8DF27B021FCD12BE00C85545 /* UIButton+Extension.swift in Sources */,
 				8D01C4661FCE97CD00B53ED8 /* GZELogoutButton.swift in Sources */,
 				8DB367811FCB46DB0079181F /* TextDisplayProtocol.swift in Sources */,
+				F0339AA720408F5E00C675AA /* GZEProfilePageViewController.swift in Sources */,
 				8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */,
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
 				8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */,

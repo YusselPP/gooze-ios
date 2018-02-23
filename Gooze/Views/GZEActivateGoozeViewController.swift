@@ -327,10 +327,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         if
             segue.identifier == segueToProfile,
-            let viewController = segue.destination as? GZEProfileViewController {
+            let pageViewController = segue.destination as? GZEProfilePageViewController {
 
             if let user = sender as? GZEUser {
-                viewController.viewModel = GZEProfileViewModel(user: user)
+                pageViewController.viewModel = GZEProfileViewModel(user: user)
+                // viewController.viewModel = GZEProfileViewModel(user: user)
             } else {
                 log.error("Unable to obatain the user from segue sender")
             }
