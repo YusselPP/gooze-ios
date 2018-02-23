@@ -18,6 +18,7 @@ class GZEActivateGoozeViewModel {
     let sliderValue = MutableProperty<Float>(1)
     let searchLimit = MutableProperty<Int>(5)
 
+    
     let activateButtonTitle = "vm.activate.activateButtonTitle".localized()
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()
     let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
@@ -39,6 +40,15 @@ class GZEActivateGoozeViewModel {
         return _searchGoozeAction!
     }
     private var _searchGoozeAction: Action<Void, [GZEUser], GZEError>?
+
+    var findGoozeAction: Action<String, GZEUser, GZEError> {
+        if let findGoozeAction = _findGoozeAction {
+            return findGoozeAction
+        }
+        _findGoozeAction = createFindGoozeAction()
+        return _findGoozeAction!
+    }
+    private var _findGoozeAction: Action<String, GZEUser, GZEError>?
 
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
@@ -80,6 +90,20 @@ class GZEActivateGoozeViewModel {
             }
 
             return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.currentLocation.value), maxDistance: this.sliderValue.value, limit: this.searchLimit.value)
+        }
+    }
+
+    private func createFindGoozeAction() -> Action<String, GZEUser, GZEError> {
+        log.debug("Creating find gooze action")
+        return Action<String, GZEUser, GZEError>{ [weak self] userId in
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
+
+            log.debug("finding user[id=\(userId)]")
+
+            return this.userRepository.publicProfile(byId: userId)
         }
     }
     

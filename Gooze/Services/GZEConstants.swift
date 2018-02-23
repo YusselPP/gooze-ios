@@ -27,4 +27,7 @@ class GZEConstants {
     // Fonts
     // Slider km Helvetica Neue Regular 21.44 pt
     // Buttons Helvetica Neue UltraLight 33.16 pt
+    class Font {
+        static let main = UIFont(name: "HelveticaNeue", size: 17)!
+    }
 }

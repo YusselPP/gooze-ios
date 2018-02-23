@@ -13,6 +13,8 @@ import ReactiveCocoa
 
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
+    let segueToProfile = "segueToProfile"
+
     enum Scene {
         case activate
         case search
@@ -37,6 +39,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     var sliderStep: Float = 1
 
     var userBalloons = [GZEUserBalloon]()
+    var tappedUser: GZEUser?
     var searchAnimationEnabled = false
 
     var backButton = UIBarButtonItem()
@@ -82,6 +85,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         userBalloons.append(userBalloon4)
         userBalloons.append(userBalloon5)
 
+        userBalloons.forEach { $0.onTap = userBalloonTapped }
+
         viewModel.sliderValue <~ topSlider.reactive.values
 
         sliderLabel.reactive.text <~ viewModel.sliderValue.map { [unowned self] in "\($0) \(self.sliderPostfix)" }
@@ -93,6 +98,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         allResultsAction = CocoaAction(viewModel.searchGoozeAction) { [unowned self] _ in
             self.showAllResultsScene()
         }
+
+        viewModel.findGoozeAction.events.observeValues(onFindUserEvent)
 
         viewModel.searchGoozeAction.values.observeValues { [unowned self] users in
             switch self.scene {
@@ -188,25 +195,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
             let user = users[index]
 
-            self.userBalloons[index].rating = 4.5
-
-            if let urlRequest = user.profilePic?.urlRequest {
-                self.userBalloons[index].setImage(urlRequest: urlRequest) { [weak self] in
-                    loadCompleteCount += 1
-
-                    if loadCompleteCount == resultsLimit {
-                        self?.stopSearchAnimation()
-                    }
-                }
-
-            } else {
+            self.userBalloons[index].setUser(user) { [weak self] in
                 loadCompleteCount += 1
-
                 if loadCompleteCount == resultsLimit {
-                    self.stopSearchAnimation()
+                    self?.stopSearchAnimation()
                 }
-                self.userBalloons[index].setVisible(true)
-                log.error("Failed to set image url for user id=[\(String(describing: user.id))]")
             }
         }
     }
@@ -281,6 +274,33 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         sender.value = roundedValue
     }
 
+    func userBalloonTapped(_ tapRecognizer: UITapGestureRecognizer, _ userBalloon: GZEUserBalloon) {
+        showLoading()
+
+        if let userId = userBalloon.user?.id {
+            viewModel.findGoozeAction.apply(userId).start()
+        } else {
+            hideLoading()
+        }
+    }
+
+    // MARK: - CocoaAction Observers
+    private func onFindUserEvent(event: Event<GZEUser, GZEError>) {
+        hideLoading()
+        switch event {
+        case .value(let user):
+            performSegue(withIdentifier: segueToProfile, sender: user)
+        case .failed(let err):
+            onActionError(err)
+        default:
+            break;
+        }
+    }
+
+    func onActionError(_ err: GZEError) {
+        self.displayMessage(GZEAppConfig.appTitle, err.localizedDescription)
+    }
+
     // MARK: - Map Delegate
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -297,21 +317,32 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         isInitialPositionSet = true
     }
 
-    /*
+
      // MARK: - Navigation
 
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+
+        if
+            segue.identifier == segueToProfile,
+            let viewController = segue.destination as? GZEProfileViewController {
+
+            if let user = sender as? GZEUser {
+                viewController.viewModel = GZEProfileViewModel(user: user)
+            } else {
+                log.error("Unable to obatain the user from segue sender")
+            }
+        }
      }
-     */
+
 
     func previousController() {
         navigationController?.popViewController(animated: true)
     }
 
-    // MARK: Deinitializers
+    // MARK: - Deinitializers
     deinit {
         mapView.delegate = nil
         log.debug("\(self) disposed")

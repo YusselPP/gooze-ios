@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AppTitle</key>
+	<string>Gooze</string>
 	<key>GoozeApiUrl</key>
-	<string>http://c1b7d051.ngrok.io/api</string>
+	<string>http://0409f1a4.ngrok.io/api</string>
 	<key>LogLevel</key>
 	<string>debug</string>
 	<key>LogAppID</key>

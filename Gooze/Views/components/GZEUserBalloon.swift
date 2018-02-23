@@ -12,16 +12,18 @@ import FloatRatingView
 
 class GZEUserBalloon: UIView {
 
+    var user: GZEUser?
     var rating: Float = 0 {
         didSet {
             starsView.rating = rating
         }
     }
 
-    var imageView = UIImageView()
+    var onTap: ((UITapGestureRecognizer, GZEUserBalloon) -> ())?
 
+    private var imageView = UIImageView()
+    private var starsView = FloatRatingView()
     private var ratingView = UIView()
-    var starsView = FloatRatingView()
 
     private var imageViewHeightConstraint: NSLayoutConstraint!
     private var imageViewWidthConstraint: NSLayoutConstraint!
@@ -40,12 +42,12 @@ class GZEUserBalloon: UIView {
 
 
         // Set rating View
-        ratingView.backgroundColor = .white
+        ratingView.backgroundColor = nil
         ratingView.translatesAutoresizingMaskIntoConstraints = false
 
 
-        starsView.fullImage = #imageLiteral(resourceName: "full-star")
-        starsView.emptyImage = #imageLiteral(resourceName: "empty-star")
+        starsView.fullImage = #imageLiteral(resourceName: "white-star")
+        starsView.emptyImage = #imageLiteral(resourceName: "white-star-empty")
         starsView.floatRatings = true
         starsView.editable = false
         starsView.contentMode = .scaleAspectFit
@@ -57,6 +59,8 @@ class GZEUserBalloon: UIView {
         addSubview(ratingView)
 
         setConstraints()
+
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
     }
 
     override func awakeFromNib() {
@@ -80,6 +84,22 @@ class GZEUserBalloon: UIView {
             }
         }
         layer.cornerRadius = bounds.width / 2
+    }
+
+    func setUser(_ user: GZEUser, completion: ( () -> ())? = nil) {
+
+        self.user = user
+
+        // TODO: set with user.rating
+        rating = 4.5
+
+        if let urlRequest = user.searchPic?.urlRequest {
+            setImage(urlRequest: urlRequest, completion: completion)
+        } else {
+            setVisible(true)
+            completion?()
+            log.error("Failed to set image url for user id=[\(String(describing: user.id))]")
+        }
     }
 
     func setImage(urlRequest: URLRequest, completion: ( () -> ())? = nil){
@@ -108,16 +128,22 @@ class GZEUserBalloon: UIView {
         leadingAnchor.constraint(equalTo: ratingView.leadingAnchor).isActive = true
         trailingAnchor.constraint(equalTo: ratingView.trailingAnchor).isActive = true
 
-        imageView.bottomAnchor.constraint(equalTo: ratingView.topAnchor).isActive = true
+        // imageView.bottomAnchor.constraint(equalTo: ratingView.topAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
+
+        ratingView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.25).isActive = true
 
 
-        ratingView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.2).isActive = true
-
-
-        starsView.widthAnchor.constraint(equalTo: ratingView.widthAnchor, multiplier: 0.5).isActive = true
-        starsView.heightAnchor.constraint(equalTo: ratingView.heightAnchor, multiplier: 0.5).isActive = true
+        starsView.widthAnchor.constraint(equalTo: ratingView.widthAnchor, multiplier: 0.65).isActive = true
+        starsView.heightAnchor.constraint(equalTo: ratingView.heightAnchor, multiplier: 0.65).isActive = true
 
         ratingView.centerXAnchor.constraint(equalTo: starsView.centerXAnchor).isActive = true
         ratingView.centerYAnchor.constraint(equalTo: starsView.centerYAnchor).isActive = true
+    }
+
+    func tap(_ gestureRecognizer : UITapGestureRecognizer) {
+        if gestureRecognizer.state == .ended {
+            onTap?(gestureRecognizer, self)
+        }
     }
 }

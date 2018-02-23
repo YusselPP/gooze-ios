@@ -299,7 +299,7 @@ class GZESignUpViewModel: NSObject, iCarouselDataSource, UIPickerViewDataSource 
         return genders.count
     }
 
-    // MARK: Deinitializers
+    // MARK: - Deinitializers
     deinit {
         log.debug("\(self) disposed")
     }

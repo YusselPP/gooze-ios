@@ -16,6 +16,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case destroyUser(id: String)
 
     case findByLocation(parameters: Parameters)
+    case publicProfile(id: String)
 
     case login(parameters: Parameters)
     case logout
@@ -37,6 +38,7 @@ enum GZEUserRouter: URLRequestConvertible {
             return .post
         case .readUser,
              .findByLocation,
+             .publicProfile,
              .photo:
             return .get
         case .updateUser:
@@ -57,6 +59,8 @@ enum GZEUserRouter: URLRequestConvertible {
 
         case .findByLocation:
             return "\(GZEUserRouter.route)/findByLocation"
+        case .publicProfile(let id):
+            return "\(GZEUserRouter.route)/\(id)/publicProfile"
 
         case .login:
             return "\(GZEUserRouter.route)/login"
@@ -85,6 +89,7 @@ enum GZEUserRouter: URLRequestConvertible {
         switch self {
         case .updateUser,
              .findByLocation,
+             .publicProfile,
              .photo:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         default:

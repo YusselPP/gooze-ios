@@ -110,8 +110,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 return
             }
 
-            let params = ["id": id]
-            Alamofire.request(GZEUserRouter.login(parameters: params))
+            Alamofire.request(GZEUserRouter.readUser(id: id))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
         }
     }
@@ -138,6 +137,24 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                     return [GZEUser].from(jsonArray: jsonArray)
                 }))
+        }
+    }
+
+    func publicProfile(byId id: String) -> SignalProducer<GZEUser, GZEError> {
+
+        return SignalProducer<GZEUser, GZEError> { sink, disposable in
+            disposable.add {
+                log.debug("public profile SignalProducer disposed")
+            }
+
+            guard !id.isEmpty else {
+                sink.send(error: .repository(error: .BadRequest(message: "id parameter is required")))
+                sink.sendInterrupted()
+                return
+            }
+
+            Alamofire.request(GZEUserRouter.publicProfile(id: id))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
         }
     }
 
@@ -183,7 +200,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
-        if var photo = user.profilePic {
+        if let photo = user.profilePic {
             return storageRepository.uploadFiles([photo].enumerated().flatMap { (index, photo) in
 
                 var imageData: Data?
@@ -203,12 +220,13 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                         for file in files {
                             log.debug(file.toJSON() as Any)
-                            log.debug(user.toJSON() as Any)
 
-                            photo.name = file.name
-                            photo.container = file.container
-                            photo.url = "/containers/\(file.container)/download/\(file.name)"
-                            photo.blocked = false
+                            user.profilePic!.name = file.name
+                            user.profilePic!.container = file.container
+                            user.profilePic!.url = "/containers/\(file.container)/download/\(file.name)"
+                            user.profilePic!.blocked = false
+
+                            log.debug(user.toJSON() as Any)
                         }
 
                         sink.send(value: user)
@@ -257,12 +275,13 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                         for file in files {
                             log.debug(file.toJSON() as Any)
-                            log.debug(user.toJSON() as Any)
 
-                            photo.name = file.name
-                            photo.container = file.container
-                            photo.url = "/containers/\(file.container)/download/\(file.name)"
-                            photo.blocked = false
+                            user.searchPic!.name = file.name
+                            user.searchPic!.container = file.container
+                            user.searchPic!.url = "/containers/\(file.container)/download/\(file.name)"
+                            user.searchPic!.blocked = false
+
+                            log.debug(user.toJSON() as Any)
                         }
 
                         sink.send(value: user)
@@ -278,7 +297,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                     let user = GZEUser()
                     user.id = aUser.id
-                    user.searchPic = aUser.profilePic
+                    user.searchPic = aUser.searchPic
 
                     return this.update(user)
             }

@@ -17,6 +17,7 @@ protocol GZEUserRepositoryProtocol {
     func delete(byId id: String) -> SignalProducer<Bool, GZEError>
     func find(byId id: String) -> SignalProducer<GZEUser, GZEError>
     func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int) -> SignalProducer<[GZEUser], GZEError>
+    func publicProfile(byId id: String) -> SignalProducer<GZEUser, GZEError>
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
     func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>

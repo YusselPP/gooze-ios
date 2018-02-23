@@ -68,6 +68,10 @@ class GZEAppConfig {
         return getValue("useRegisterCode", defaultValue: true)
     }
 
+    static var appTitle: String {
+        return getValue("AppTitle", defaultValue: "Gooze")
+    }
+
 
     // Mark: Load config file
     static func load() -> Void {
