@@ -305,7 +305,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
         separatorLastWidth = dblCtrlView.separatorWidth
-        dblCtrlView.separatorWidth = 0
         addKeyboardInsetAndScroll(scrollView: scrollView, activeField: dblCtrlView, notification: notification)
     }
 
@@ -313,7 +312,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         log.debug("keyboard will hide")
         (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = .white
         removeKeyboardInset(scrollView: scrollView)
-        dblCtrlView.separatorWidth = separatorLastWidth
     }
 
     // MARK: - Navigation

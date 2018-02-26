@@ -14,9 +14,13 @@ class GZEDoubleCtrlView: UIView {
 
     var topCtrlView: UIView? {
         willSet(newCtrlView) { topCtrlViewWillSet(newCtrlView) }
+        didSet {
+            separatorWidth = controlsMaxTextWidth
+        }
     }
     var bottomCtrlView: UIView? {
         willSet(newCtrlView) { bottomCtrlViewWillSet(newCtrlView) }
+        didSet { separatorWidth = controlsMaxTextWidth }
     }
 
     var separatorWidth: CGFloat = 100 {
@@ -27,6 +31,10 @@ class GZEDoubleCtrlView: UIView {
                 self?.layoutIfNeeded()
             }
         }
+    }
+
+    var controlsMaxTextWidth: CGFloat {
+        return getControlsMaxTextWidth()
     }
 
     var font = UIFont(name: "HelveticaNeue", size: 17)!
@@ -137,18 +145,10 @@ class GZEDoubleCtrlView: UIView {
             }
 
             if let topCtrlText = topCtrlView as? UITextField {
+                setUnderlineLabelText(topCtrlText.text, isSecureEntry: topCtrlText.isSecureTextEntry)
 
                 underlineLabelObserver = topCtrlText.reactive.continuousTextValues.observeValues() { [weak self] in
-                    if topCtrlText.isSecureTextEntry {
-                        // if let len = $0?.count { // swift 3 error
-                        if let len = $0?.characters.count {
-                            self?.underlineLabel.text = String(repeating: "V", count: len)
-                        } else {
-                            self?.underlineLabel.text = $0
-                        }
-                    } else  {
-                        self?.underlineLabel.text = $0
-                    }
+                    self?.setUnderlineLabelText($0, isSecureEntry: topCtrlText.isSecureTextEntry)
                 }
 
                 topView.addSubview(underlineLabel)
@@ -215,6 +215,38 @@ class GZEDoubleCtrlView: UIView {
         UIView.animate(withDuration: animationsDuration) {
             view.alpha = 1
         }
+    }
+
+    func setUnderlineLabelText(_ text: String?, isSecureEntry: Bool) {
+        if isSecureEntry {
+            // if let len = $0?.count { // swift 3 error
+            if let len = text?.characters.count {
+                self.underlineLabel.text = String(repeating: "V", count: len)
+            } else {
+                self.underlineLabel.text = text
+            }
+        } else  {
+            self.underlineLabel.text = text
+        }
+    }
+
+    private func getControlsMaxTextWidth() -> CGFloat {
+        var topTextWidth: CGFloat = 0
+        var botTextWidth: CGFloat = 0
+
+        if let topTextView = topCtrlView as? TextDisplay, (topCtrlView as? UITextField) == nil {
+            topTextWidth = topTextView.getText()?.size(font: font).width ?? 0
+            log.debug("top text: \((topTextView.getText() ?? ""))")
+        }
+        if let botTextView = bottomCtrlView as? TextDisplay {
+            log.debug("bot text: \((botTextView.getText() ?? ""))")
+            botTextWidth = botTextView.getText()?.size(font: font).width ?? 0
+        }
+
+        log.debug("top text width: \(topTextWidth)")
+        log.debug("bot text width: \(botTextWidth)")
+
+        return max(topTextWidth, botTextWidth)
     }
 
     // MARK: - Deinitializers

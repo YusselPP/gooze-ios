@@ -13,7 +13,7 @@ protocol TextDisplay {
     func setColor(_ color: UIColor)
     func setTextFont(_ font: UIFont)
     func setAlignment(_ alignment: NSTextAlignment)
-
+    func getText() -> String?
 }
 
 extension UIButton: TextDisplay {
@@ -28,6 +28,10 @@ extension UIButton: TextDisplay {
 
     func setAlignment(_ alignment: NSTextAlignment) {
         self.titleLabel?.textAlignment = alignment
+    }
+
+    func getText() -> String? {
+        return self.currentTitle
     }
 }
 
@@ -44,6 +48,10 @@ extension UILabel: TextDisplay {
     func setAlignment(_ alignment: NSTextAlignment) {
         self.textAlignment = alignment
     }
+
+    func getText() -> String? {
+        return self.text
+    }
 }
 
 extension UITextField: TextDisplay {
@@ -58,5 +66,9 @@ extension UITextField: TextDisplay {
 
     func setAlignment(_ alignment: NSTextAlignment) {
         self.textAlignment = alignment
+    }
+
+    func getText() -> String? {
+        return self.text
     }
 }

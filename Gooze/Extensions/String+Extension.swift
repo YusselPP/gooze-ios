@@ -6,7 +6,7 @@
 //  Copyright © 2018 Gooze. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension String {
     func addQuotes() -> String {
@@ -17,5 +17,10 @@ extension String {
         let first = String(characters.prefix(1)).capitalized
         let other = String(characters.dropFirst())
         return first + other
+    }
+
+    func size(font: UIFont) -> CGSize {
+        let nsString = self as NSString
+        return nsString.size(attributes: [NSFontAttributeName: font])
     }
 }

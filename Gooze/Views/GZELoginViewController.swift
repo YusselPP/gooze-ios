@@ -12,13 +12,23 @@ import ReactiveCocoa
 
 class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
+    let registerCodeSegueId = "registerCodeSegue"
+
+    enum Scene {
+        case login
+        case username
+        case password
+    }
+
+    var scene = Scene.login {
+        didSet {
+            handleSceneChanged()
+        }
+    }
+
     var viewModel: GZELoginViewModel!
 
-    var loginAction: CocoaAction<UIButton>!
-    var loginSuccesObserver: Disposable?
-    var loginErrorObserver: Disposable?
-
-    let registerCodeSegueId = "registerCodeSegue"
+    var loginAction: CocoaAction<UIBarButtonItem>!
 
     let usernameLabel = UILabel()
     let passwordLabel = UILabel()
@@ -28,7 +38,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     let signUpButton = UIButton()
     let forgotPasswordButton = UIButton()
 
-    var backButton = UIBarButtonItem()
+    var backButton = GZEBackUIBarButtonItem()
+    var nextButton = GZENextUIBarButtonItem()
 
     @IBOutlet weak var logoView: UIView!
     @IBOutlet weak var doubleCtrlView: GZEDoubleCtrlView!
@@ -36,17 +47,13 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         log.debug("\(self) init")
 
         setupInterfaceObjects()
-
         setupBindings()
 
-        showLoginScene()
-
-        emailTextField.text = "admin@gooze.com"
-        passwordTextField.text = "123admin"
+        viewModel.email.value = "admin@gooze.com"
+        viewModel.password.value = "123admin"
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +63,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
             willShowSelector: #selector(keyboardWillShow(notification:)),
             willHideSelector: #selector(keyboardWillHide(notification:))
         )
+        scene = .login
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,8 +78,10 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
     func setupInterfaceObjects() {
 
-        backButton.image = #imageLiteral(resourceName: "icons8-back-50")
-        backButton.target = self
+        navigationItem.setLeftBarButton(backButton, animated: false)
+        navigationItem.setRightBarButton(nextButton, animated: false)
+        backButton.onButtonTapped = ptr(self, GZELoginViewController.backButtonTapped)
+        nextButton.onButtonTapped = ptr(self, GZELoginViewController.nextButtonTapped)
 
         // Titles
         usernameLabel.text = viewModel.usernameLabel.uppercased()
@@ -100,6 +110,9 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
     func setupBindings() {
         // Bindings
+        emailTextField.reactive.text <~ viewModel.email
+        passwordTextField.reactive.text <~ viewModel.password
+
         viewModel.email <~ emailTextField.reactive.continuousTextValues
         viewModel.password <~ passwordTextField.reactive.continuousTextValues
 
@@ -107,26 +120,46 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         { [weak self] _ in
             self?.showLoading()
         }
-        // loginButton.reactive.pressed = loginAction
 
-
-        loginSuccesObserver = viewModel.loginAction.values.observeValues(onLogin)
-
-        loginErrorObserver = viewModel.loginAction.errors.observeValues(onLoginError)
+        let onEventRef: (Event<GZEAccesToken,GZEError>) -> () = ptr(self, GZELoginViewController.onEvent)
+        let onErrorRef = ptr(self, GZELoginViewController.onError)
+        viewModel.loginAction.events.observeValues(onEventRef)
+        viewModel.loginAction.errors.observeValues(onErrorRef)
     }
 
-    // MARK: Observer handlers
-
-    func onLogin(user: GZEAccesToken) -> Void {
-
+    // MARK: CocoaAction
+    func onEvent<T>(event: Event<T, GZEError>) {
+        log.debug("Action event received: \(event)")
         hideLoading()
-        
+
+        switch event {
+        case .value(let value):
+            switch scene {
+            case .password:
+                if let accesToken = value as? GZEAccesToken {
+                    onLogin(accesToken)
+                } else {
+                    log.error("Unexpected value type[\(type(of: value))]. Expecting GZEAccesToken")
+                }
+            default:
+                break
+            }
+        case .failed(let err):
+            onError(err)
+        default:
+            break
+        }
+    }
+
+    func onError(_ error: GZEError) {
+        displayMessage(viewModel.viewTitle, error.localizedDescription)
+    }
+
+    func onLogin(_ accesToken: GZEAccesToken) -> Void {
+
         if
             let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
             let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
-
-            loginSuccesObserver?.dispose()
-            loginErrorObserver?.dispose()
 
             viewController.viewModel = viewModel.getChooseModeViewModel()
 
@@ -137,35 +170,48 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func onLoginError(err: GZEError) {
-        hideLoading()
-        displayMessage(viewModel.viewTitle, err.localizedDescription)
-    }
 
-
-
-    // MARK: - Actions
+    // MARK: - UIAction
 
     func loginButtonTapped(_ sender: UIButton) {
-        showUsernameScene()
+        scene = .username
     }
 
     func signUpButtonTapped(_ sender: UIButton) {
-        if GZEAppConfig.useRegisterCode {
-            performSegue(withIdentifier: registerCodeSegueId, sender: self)
+        performSegue(withIdentifier: registerCodeSegueId, sender: self)
+    }
+
+    func backButtonTapped(_ sender: Any) {
+        switch scene {
+        case .username:
+            scene = .login
+        case .password:
+            scene = .username
+        default:
+            break
+        }
+    }
+
+    func nextButtonTapped(_ sender: Any) {
+        switch scene {
+        case .username:
+            scene = .password
+        case .password:
+            loginAction.execute(nextButton)
+        default:
+            break
         }
     }
 
     // MARK: UITextFieldDelegate
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        nextButtonTapped(textField)
 
-        switch textField {
-        case emailTextField:
-            showPasswordScene()
+        switch scene {
+        case .username,
+             .password:
             return false
-        case passwordTextField:
-            loginAction.execute(loginButton)
         default:
             log.debug("Text field without return action")
         }
@@ -188,13 +234,24 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    // MARK: - Scenes
+    func handleSceneChanged() {
+        log.debug("scene changed to: \(scene)")
+        switch scene {
+        case .login:
+            showLoginScene()
+        case .username:
+            showUsernameScene()
+        case .password:
+            showPasswordScene()
+        }
+    }
+
     func showLoginScene() {
-        navigationItem.setLeftBarButton(nil, animated: true)
-        backButton.action = nil
+        showNavigationBar(false, animated: true)
 
         logoView.alpha = 1
 
-        doubleCtrlView.separatorWidth = 130
         doubleCtrlView.topCtrlView = loginButton
         doubleCtrlView.bottomCtrlView = signUpButton
 
@@ -208,12 +265,10 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func showUsernameScene() {
-        navigationItem.setLeftBarButton(backButton, animated: true)
-        backButton.action = #selector(showLoginScene)
+        showNavigationBar(true, animated: true)
 
         logoView.alpha = 0
 
-        doubleCtrlView.separatorWidth = 0
         doubleCtrlView.topCtrlView = emailTextField
         doubleCtrlView.bottomCtrlView = usernameLabel
 
@@ -227,12 +282,10 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func showPasswordScene() {
-        navigationItem.setLeftBarButton(backButton, animated: true)
-        backButton.action = #selector(showUsernameScene)
+        showNavigationBar(true, animated: true)
 
         logoView.alpha = 0
-        
-        doubleCtrlView.separatorWidth = 0
+
         doubleCtrlView.topCtrlView = passwordTextField
         doubleCtrlView.bottomCtrlView = passwordLabel
 
@@ -260,8 +313,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: Deinitializers
     deinit {
-        emailTextField.delegate = nil
-        passwordTextField.delegate = nil
         log.debug("\(self) disposed")
     }
 }

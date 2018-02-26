@@ -14,7 +14,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     let profileToPhotoEditSegue = "profileToPhotoEditSegue"
 
-    var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
+    var viewModel: GZESignUpViewModel!
 
     var updateAction: CocoaAction<UIButton>!
 
