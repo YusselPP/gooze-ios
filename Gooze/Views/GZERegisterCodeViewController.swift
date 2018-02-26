@@ -49,48 +49,33 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var scrollView: UIScrollView!
 
-    var onActionExecutePtr: ((Any) -> Void)!
-    var handleTextFieldValidationPtr: ((VValidationResult) -> Void)!
-    var handleTextFieldChangedPtr: ((String?) -> Void)!
-    var backButtonTappedPtr: ((UIButton) -> Void)!
-    var nextButtonTappedPtr: ((Any) -> Void)!
-    var onBoolEventPtr: ((Event<Bool, GZEError>) -> Void)!
-    var onUserEventPtr: ((Event<GZEUser, GZEError>) -> Void)!
+    // Method weak references
+    var onActionExecute: ((Any) -> Void)!
+    var onTextFieldValidation: ((VValidationResult) -> Void)!
+    var onTextFieldChanged: ((String?) -> Void)!
+    var onBackButtonTapped: ((UIButton) -> Void)!
+    var onNextButtonTapped: ((Any) -> Void)!
+    var onBoolEvent: ((Event<Bool, GZEError>) -> Void)!
+    var onUserEvent: ((Event<GZEUser, GZEError>) -> Void)!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        backButtonTappedPtr = ptr(self, GZERegisterCodeViewController.backButtonTapped)
-        nextButtonTappedPtr = ptr(self, GZERegisterCodeViewController.nextButtonTapped)
-        onActionExecutePtr = ptr(self, GZERegisterCodeViewController.onActionExecute)
-        handleTextFieldValidationPtr = ptr(self, GZERegisterCodeViewController.handleTextFieldValidation)
-        handleTextFieldChangedPtr = ptr(self, GZERegisterCodeViewController.handleTextFieldChanged)
-        onBoolEventPtr = ptr(self, GZERegisterCodeViewController.onEvent)
-        onUserEventPtr = ptr(self, GZERegisterCodeViewController.onEvent)
+        createMethodWeakReferences()
 
         setupNavBar()
 
+        createActions()
+
         messageLabel.alpha = 0
-
-        topTextField.delegate = self
-        topTextField.validationHandler = handleTextFieldValidationPtr
-
         topButton.enableAnimationOnPressed()
         bottomButton.enableAnimationOnPressed()
 
-        topTextField.reactive
-            .continuousTextValues
-            .observeValues(handleTextFieldChangedPtr)
-
-        signupAction = CocoaAction(viewModel.signupAction, onActionExecutePtr)
-        usernameExistsAction = CocoaAction(viewModel.usernameExistsAction, onActionExecutePtr)
-        emailExistsAction = CocoaAction(viewModel.emailExistsAction, onActionExecutePtr)
-
-        viewModel.signupAction.events.observeValues(onUserEventPtr)
-        viewModel.usernameExistsAction.events.observeValues(onBoolEventPtr)
-        viewModel.emailExistsAction.events.observeValues(onBoolEventPtr)
+        topTextField.delegate = self
+        topTextField.validationHandler = onTextFieldValidation
+        topTextField.reactive.continuousTextValues.observeValues(onTextFieldChanged)
 
         showRegisterCodeScene()
     }
@@ -114,16 +99,36 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
 
+    func createMethodWeakReferences() {
+        onBackButtonTapped = ptr(self, GZERegisterCodeViewController.backButtonTapped)
+        onNextButtonTapped = ptr(self, GZERegisterCodeViewController.nextButtonTapped)
+        onActionExecute = ptr(self, GZERegisterCodeViewController.handleActionExecute)
+        onTextFieldValidation = ptr(self, GZERegisterCodeViewController.handleTextFieldValidation)
+        onTextFieldChanged = ptr(self, GZERegisterCodeViewController.handleTextFieldChanged)
+        onBoolEvent = ptr(self, GZERegisterCodeViewController.onEvent)
+        onUserEvent = ptr(self, GZERegisterCodeViewController.onEvent)
+    }
+
+    func createActions() {
+        signupAction = CocoaAction(viewModel.signupAction, onActionExecute)
+        usernameExistsAction = CocoaAction(viewModel.usernameExistsAction, onActionExecute)
+        emailExistsAction = CocoaAction(viewModel.emailExistsAction, onActionExecute)
+
+        viewModel.signupAction.events.observeValues(onUserEvent)
+        viewModel.usernameExistsAction.events.observeValues(onBoolEvent)
+        viewModel.emailExistsAction.events.observeValues(onBoolEvent)
+    }
+
     func setupNavBar() {
-        backButton.onButtonTapped = backButtonTappedPtr
-        nextBarButton.onButtonTapped = nextButtonTappedPtr
+        backButton.onButtonTapped = onBackButtonTapped
+        nextBarButton.onButtonTapped = onNextButtonTapped
 
         navigationItem.setLeftBarButton(backButton, animated: false)
         navigationItem.setRightBarButton(nextBarButton, animated: false)
     }
 
     // MARK: - CocoaAction Event Handlers
-    func onActionExecute(_ sender: Any) {
+    func handleActionExecute(_ sender: Any) {
         showLoading()
     }
 
@@ -190,6 +195,143 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     func onError(_ error: GZEError) {
         displayMessage(viewModel.viewTitle, error.localizedDescription)
+    }
+
+    // MARK: UIActions
+
+    func backButtonTapped(_ sender: UIButton) {
+        switch scene {
+        case .registerCode:
+            previousController(animated: true)
+        case .username:
+            showRegisterCodeScene()
+        case .facebookOrEmail:
+            showUsernameScene()
+        case .email:
+            showFacebookOrEmailScene()
+        case .password:
+            showEmailScene()
+        default:
+            break
+        }
+    }
+
+    func nextButtonTapped(_ sender: Any) {
+        switch scene {
+        case .registerCode:
+            showUsernameScene()
+        case .username,
+             .email,
+             .password:
+            topTextField.validate()
+        case .facebookOrEmail:
+            showEmailScene()
+        default:
+            break
+        }
+    }
+
+    // MARK: UITextFieldDelegate
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        // TODO: Hide white line until star typing
+        nextButtonTapped(textField)
+
+        switch scene {
+            // Textfields with validation
+        case .username,
+             .email,
+             .password:
+            return false
+        default:
+            break
+        }
+
+        return true
+    }
+
+    func handleTextFieldChanged(value: String?) {
+        switch scene {
+        case .username:
+            viewModel.username.value = value
+        case .email:
+            viewModel.email.value = value
+        case .password:
+            viewModel.password.value = value
+        case .registerCode:
+            viewModel.registerCode.value = value
+        default:
+            break
+        }
+    }
+
+    // Caled after textField.validate()
+    func handleTextFieldValidation(result: VValidationResult) {
+        switch result {
+        case .valid:
+            log.debug("textfield has valid input")
+            switch scene {
+            case .username:
+                usernameExistsAction.execute(nextBarButton)
+            case .email:
+                emailExistsAction.execute(nextBarButton)
+            case .password:
+                signupAction.execute(nextBarButton)
+            default:
+                break
+            }
+        case .invalid(let failureErrors):
+            log.debug(failureErrors)
+            var msg: String
+            if let description = failureErrors.first?.localizedDescription {
+                msg = description
+            } else {
+                msg = viewModel.textFieldValidationFailed
+            }
+            displayMessage(viewModel.viewTitle, msg)
+        }
+    }
+
+    // MARK: KeyboardNotifications
+
+    func keyboardWillShow(notification: Notification) {
+        log.debug("keyboard will show")
+        log.debug(notification.userInfo as Any)
+
+        (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
+        separatorLastWidth = dblCtrlView.separatorWidth
+        dblCtrlView.separatorWidth = 0
+        addKeyboardInsetAndScroll(scrollView: scrollView, activeField: dblCtrlView, notification: notification)
+    }
+
+    func keyboardWillHide(notification: Notification) {
+        log.debug("keyboard will hide")
+        (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = .white
+        removeKeyboardInset(scrollView: scrollView)
+        dblCtrlView.separatorWidth = separatorLastWidth
+    }
+
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        if
+            segue.identifier == signUpToProfileSegue,
+            let viewController = segue.destination as? GZESignUpProfileViewController
+        {
+            viewController.viewModel = viewModel
+        }
+    }
+
+    func createProfileController() {
+        performSegue(withIdentifier: signUpToProfileSegue, sender: nil)
+    }
+
+    func chooseModeController() {
+        // TODO: send to choose mode vc instead
+        previousController(animated: true)
     }
 
     // MARK: Scenes
@@ -394,142 +536,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    // MARK: UIActions
-
-    func backButtonTapped(_ sender: UIButton) {
-        switch scene {
-        case .registerCode:
-            previousController(animated: true)
-        case .username:
-            showRegisterCodeScene()
-        case .facebookOrEmail:
-            showUsernameScene()
-        case .email:
-            showFacebookOrEmailScene()
-        case .password:
-            showEmailScene()
-        default:
-            break
-        }
-    }
-
-    func nextButtonTapped(_ sender: Any) {
-        switch scene {
-        case .registerCode:
-            showUsernameScene()
-        case .username,
-             .email,
-             .password:
-            topTextField.validate()
-        case .facebookOrEmail:
-            showEmailScene()
-        default:
-            break
-        }
-    }
-
-    // MARK: UITextFieldDelegate
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
-        // TODO: Hide white line until star typing
-        nextButtonTapped(textField)
-
-        switch scene {
-            // Textfields with validation
-        case .username,
-             .email,
-             .password:
-            return false
-        default:
-            break
-        }
-
-        return true
-    }
-
-    func handleTextFieldChanged(value: String?) {
-        switch scene {
-        case .username:
-            viewModel.username.value = value
-        case .email:
-            viewModel.email.value = value
-        case .password:
-            viewModel.password.value = value
-        case .registerCode:
-            viewModel.registerCode.value = value
-        default:
-            break
-        }
-    }
-
-    // Caled after textField.validate()
-    func handleTextFieldValidation(result: VValidationResult) {
-        switch result {
-        case .valid:
-            log.debug("textfield has valid input")
-            switch scene {
-            case .username:
-                usernameExistsAction.execute(nextBarButton)
-            case .email:
-                emailExistsAction.execute(nextBarButton)
-            case .password:
-                signupAction.execute(nextBarButton)
-            default:
-                break
-            }
-        case .invalid(let failureErrors):
-            log.debug(failureErrors)
-            var msg: String
-            if let description = failureErrors.first?.localizedDescription {
-                msg = description
-            } else {
-                msg = viewModel.textFieldValidationFailed
-            }
-            displayMessage(viewModel.viewTitle, msg)
-        }
-    }
-
-    // MARK: KeyboardNotifications
-
-    func keyboardWillShow(notification: Notification) {
-        log.debug("keyboard will show")
-        log.debug(notification.userInfo as Any)
-
-        (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
-        separatorLastWidth = dblCtrlView.separatorWidth
-        dblCtrlView.separatorWidth = 0
-        addKeyboardInsetAndScroll(scrollView: scrollView, activeField: dblCtrlView, notification: notification)
-    }
-
-    func keyboardWillHide(notification: Notification) {
-        log.debug("keyboard will hide")
-        (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = .white
-        removeKeyboardInset(scrollView: scrollView)
-        dblCtrlView.separatorWidth = separatorLastWidth
-    }
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        if
-            segue.identifier == signUpToProfileSegue,
-            let viewController = segue.destination as? GZESignUpProfileViewController
-        {
-            viewController.viewModel = viewModel
-        }
-    }
-
-    func createProfileController() {
-        performSegue(withIdentifier: signUpToProfileSegue, sender: nil)
-    }
-
-    func chooseModeController() {
-        // TODO: send to choose mode vc instead
-        previousController(animated: true)
-    }
 
     // MARK: Deinitializers
     deinit {
