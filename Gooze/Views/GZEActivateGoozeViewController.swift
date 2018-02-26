@@ -143,7 +143,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         topSlider.isHidden = false
         navIcon.isHidden = false
 
-        backButton.action = #selector(previousController)
+        backButton.action = #selector(backButtonTapped)
     }
 
     func showSearchScene() {
@@ -157,7 +157,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         topSlider.isHidden = false
         navIcon.isHidden = false
 
-        backButton.action = #selector(previousController)
+        backButton.action = #selector(backButtonTapped)
 
         hideResultsOnMap()
     }
@@ -284,6 +284,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
+    func backButtonTapped(_ sender: Any) {
+        previousController(animated: true)
+    }
+
     // MARK: - CocoaAction Observers
     private func onFindUserEvent(event: Event<GZEUser, GZEError>) {
         hideLoading()
@@ -337,11 +341,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             }
         }
      }
-
-
-    func previousController() {
-        navigationController?.popViewController(animated: true)
-    }
 
     // MARK: - Deinitializers
     deinit {

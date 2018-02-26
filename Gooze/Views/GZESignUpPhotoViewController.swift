@@ -17,7 +17,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     var blur: GZEBlur?
     // TODO: Remove asign
-    var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
+    var viewModel: GZESignUpViewModel!
 
     var saveProfileAction: CocoaAction<UIButton>!
     var saveSearchAction: CocoaAction<UIButton>!

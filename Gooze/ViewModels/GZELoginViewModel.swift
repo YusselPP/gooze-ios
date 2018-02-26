@@ -51,10 +51,6 @@ class GZELoginViewModel {
         return GZESignUpViewModel(userRepository)
     }
 
-    func getRegisterCodeViewModel() -> GZERegisterCodeViewModel {
-        return GZERegisterCodeViewModel(userRepository)
-    }
-
     func getChooseModeViewModel() -> GZEChooseModeViewModel {
         return GZEChooseModeViewModel(userRepository)
     }

@@ -16,6 +16,7 @@
 "validation.invalidEmail"="Ingresa un correo electrónico válido";
 "validation.lengthMin"="El campo %@ debe tener al menos %d caracteres";
 "validation.lengthMax"="El campo %@ debe tener máximo %d caracteres";
+"validation.exists"="El %@ ya existe";
 
 // Models/GZEUser
 "user.username.fieldName"="Usuario";
@@ -41,6 +42,8 @@
 "vm.signUp.createProfileText"="Crear perfil";
 "vm.signUp.skipProfileText"="Saltar";
 "vm.signUp.success"="¡Registro exitoso!";
+
+"vm.signUp.textField.validation.failed"="La información ingresada es inválida";
 
 // ViewModel/GZESignUpViewModel - GZESignUpPhotoViewController
 "vm.signUp.profilePictureLabel"="Foto de perfil";
@@ -71,6 +74,10 @@
 "vm.activate.activateButtonTitle"="Activar gooze";
 "vm.activate.searchButtonTitle"="Buscar gooze";
 "vm.activate.allResultsButtonTitle"="Ver listado completo";
+
+// ViewModel/GZEPickerUIToolbar
+"vm.pickerToolbar.closeButton.title"="X";
+"vm.pickerToolbar.doneButton.title"="Siguiente";
 
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Aplicar";

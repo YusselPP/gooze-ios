@@ -61,11 +61,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         //UINavigationBar.appearance().barTintColor = GZEConstants.Color.mainBackground
         //UINavigationBar.appearance().tintColor = UIColor.white
-        //UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         //UINavigationBar.appearance().isTranslucent = true
 
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
+
+        UIApplication.shared.statusBarStyle = .lightContent
 
         // UITextField.appearance().backgroundColor = .black
         // UITextField.appearance().textColor = .white

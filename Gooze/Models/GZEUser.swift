@@ -31,6 +31,10 @@ class GZEUser: Glossy {
             }
             return a
         }
+
+        var displayValue: String {
+            return self.rawValue.capitalizingFirstLetter()
+        }
     }
 
     enum Status: String {

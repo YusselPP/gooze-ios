@@ -106,5 +106,9 @@ extension UIViewController {
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
     }
+
+    func previousController(animated: Bool) {
+        navigationController?.popViewController(animated: animated)
+    }
 }
 

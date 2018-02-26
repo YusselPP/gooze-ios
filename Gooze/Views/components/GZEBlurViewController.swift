@@ -38,7 +38,7 @@ class GZEBlurViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        applyButton.title = Labels.BlurView.applyButtonTitle.localizedDescription
+        // applyButton.title = Labels.BlurView.applyButtonTitle.localizedDescription
 
         blur = GZEBlur(image: image, blurEffectView: blurEffectView, resultImageView: resultImageView)
 

@@ -5,7 +5,7 @@
 	<key>AppTitle</key>
 	<string>Gooze</string>
 	<key>GoozeApiUrl</key>
-	<string>http://dcea3583.ngrok.io/api</string>
+	<string>http://0d6b457e.ngrok.io/api</string>
 	<key>LogLevel</key>
 	<string>debug</string>
 	<key>LogAppID</key>

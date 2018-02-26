@@ -79,21 +79,75 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         return SignalProducer<Bool, GZEError> { sink, disposable in
 
             disposable.add {
-                log.debug("find SignalProducer disposed")
+                log.debug("delete SignalProducer disposed")
             }
 
             guard !id.isEmpty else {
-                sink.send(error: .repository(error: .BadRequest(message: "id parameter is required")))
+                sink.send(error: .validation(error: .required(fieldName: "id")))
                 sink.sendInterrupted()
                 return
             }
 
-            let params = ["id": id]
-            Alamofire.request(GZEUserRouter.login(parameters: params))
+            Alamofire.request(GZEUserRouter.destroyUser(id: id))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
                     return true
                 }))
         }
+    }
+
+    func count(_ params: JSON) -> SignalProducer<Int, GZEError> {
+
+        return SignalProducer<Int, GZEError> { sink, disposable in
+
+            disposable.add {
+                log.debug("count SignalProducer disposed")
+            }
+
+            log.debug("counting users")
+
+            Alamofire.request(GZEUserRouter.count(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink) { (countResult: JSON) in
+
+                    guard let count = countResult["count"] as? Int else {
+                        log.error("Unable to cast 'count' property to \(Int.self)")
+                        sink.send(error: .repository(error: .UnexpectedError))
+                        sink.sendInterrupted()
+                        return 0
+                    }
+
+                    return count
+                })
+        }
+    }
+
+    func usernameExists(_ username: String) -> SignalProducer<Bool, GZEError> {
+
+        log.debug("requesting usernameExists")
+
+        guard !username.isEmpty else {
+            return SignalProducer(value: false)
+        }
+
+        let params = [
+            "where": ["username": username]
+        ] as [String : Any]
+
+        return self.count(params).map { $0 > 0 }
+    }
+
+    func emailExists(_ email: String) -> SignalProducer<Bool, GZEError> {
+
+        log.debug("requesting emailExists")
+
+        guard !email.isEmpty else {
+            return SignalProducer(value: false)
+        }
+
+        let params = [
+            "where": ["email": email]
+        ] as [String : Any]
+
+        return self.count(params).map { $0 > 0 }
     }
 
 
@@ -105,7 +159,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             }
 
             guard !id.isEmpty else {
-                sink.send(error: .repository(error: .BadRequest(message: "id parameter is required")))
+                sink.send(error: .validation(error: .required(fieldName: "id")))
                 sink.sendInterrupted()
                 return
             }
@@ -148,7 +202,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             }
 
             guard !id.isEmpty else {
-                sink.send(error: .repository(error: .BadRequest(message: "id parameter is required")))
+                sink.send(error: .validation(error: .required(fieldName: "id")))
                 sink.sendInterrupted()
                 return
             }
@@ -255,7 +309,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func saveSearchPic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
-        if var photo = user.searchPic {
+        if let photo = user.searchPic {
             return storageRepository.uploadFiles([photo].enumerated().flatMap { (index, photo) in
 
                 var imageData: Data?

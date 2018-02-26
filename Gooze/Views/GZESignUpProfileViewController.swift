@@ -14,7 +14,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     let profileToPhotoEditSegue = "profileToPhotoEditSegue"
 
-    var viewModel: GZESignUpViewModel!
+    var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
 
     var updateAction: CocoaAction<UIButton>!
 
@@ -63,9 +63,10 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         phraseTextField.isHidden = false
         interestsTextField.returnKeyType = .done
 
-
         usernameLabel.reactive.text <~ viewModel.username.map { $0?.uppercased() }
+
         // viewModel.gender <~ genderTextField.reactive.continuousTextValues
+        genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }
         viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.height <~ heightTextField.reactive.continuousTextValues
         viewModel.origin <~ originTextField.reactive.continuousTextValues
@@ -90,18 +91,12 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         genderTextField.inputView = genderPicker
 
         
-        let toolBar = UIToolbar()
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        // toolBar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
-        toolBar.sizeToFit()
+        let toolBar = GZEPickerUIToolbar()
+        toolBar.onDone = pickerDoneTapped
+        toolBar.onClose = pickerCloseTapped
 
-        let doneButton = UIBarButtonItem(title: "Next", style: UIBarButtonItemStyle.plain, target: self, action: #selector(showBirthdayScene))
-        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-
-        toolBar.setItems([spaceButton, doneButton], animated: false)
-        toolBar.isUserInteractionEnabled = true
         genderTextField.inputAccessoryView = toolBar
+        birthdayTextField.inputAccessoryView = toolBar
 
         // TODO: Validate numbers
         // TODO: validate interests
@@ -190,15 +185,23 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         displayMessage(viewModel.viewTitle, error.localizedDescription)
     }
 
+    // MARK: - UIActions
+
     @IBAction func editPhotoTapped(_ sender: Any) {
         performSegue(withIdentifier: profileToPhotoEditSegue, sender: nil)
     }
 
-    // MARK: Scenes
-    func showBirthdayScene() {
-        birthdayTextField.isHidden = false
-        birthdayTextField.becomeFirstResponder()
+    func pickerDoneTapped(_ sender: UIBarButtonItem) {
+        if let field = activeField {
+            textFieldShouldReturn(field)
+        }
     }
+
+    func pickerCloseTapped(_ sender: UIBarButtonItem) {
+        activeField?.resignFirstResponder()
+    }
+
+    // MARK: Scenes
 
     // MARK: UITextFieldDelegate
 
@@ -236,9 +239,9 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         case phraseTextField:
             genderTextField.isHidden = false
             genderTextField.becomeFirstResponder()
-            return false
         case genderTextField:
-            showBirthdayScene()
+            birthdayTextField.isHidden = false
+            birthdayTextField.becomeFirstResponder()
         case birthdayTextField:
             heightTextField.isHidden = false
             heightTextField.becomeFirstResponder()
@@ -254,11 +257,14 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         case languageTextField:
             interestsTextField.isHidden = false
             interestsTextField.becomeFirstResponder()
+        case interestsTextField:
+            updateProfile()
+            return true
         default:
             return true
         }
 
-        return true
+        return false
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -313,17 +319,13 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     // MARK: UIPickerDelegate
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return viewModel.genders[row]?.rawValue
+        return viewModel.genders[row]?.displayValue
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         log.debug("picker view, selected row: \(row), gender: \(String(describing: viewModel.genders[row]))")
         viewModel.gender.value = viewModel.genders[row]
-        genderTextField.text = viewModel.gender.value?.rawValue
     }
-
-    // MARK: - Scenes
-
     
 
     // MARK: - Navigation

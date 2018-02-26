@@ -18,7 +18,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     var loginSuccesObserver: Disposable?
     var loginErrorObserver: Disposable?
 
-    let signUpSegueId = "signUpSegue"
     let registerCodeSegueId = "registerCodeSegue"
 
     let usernameLabel = UILabel()
@@ -152,11 +151,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func signUpButtonTapped(_ sender: UIButton) {
-
         if GZEAppConfig.useRegisterCode {
             performSegue(withIdentifier: registerCodeSegueId, sender: self)
-        } else {
-            performSegue(withIdentifier: signUpSegueId, sender: self)
         }
     }
 
@@ -185,12 +181,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if
-            segue.identifier == signUpSegueId,
-            let viewController = segue.destination as? GZESignUpBasicViewController
-        {
-            viewController.viewModel = viewModel.getSignUpViewModel()
-
-        } else if
             segue.identifier == registerCodeSegueId,
             let viewController = segue.destination as? GZERegisterCodeViewController
         {

@@ -49,6 +49,8 @@ class GZEDoubleCtrlView: UIView {
 
         super.init(coder: aDecoder)
 
+        log.debug("\(self) init")
+
         topView.translatesAutoresizingMaskIntoConstraints = false
         topView.isUserInteractionEnabled = true
         topView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(GZEDoubleCtrlView.viewTapped(sender:))))
@@ -213,5 +215,10 @@ class GZEDoubleCtrlView: UIView {
         UIView.animate(withDuration: animationsDuration) {
             view.alpha = 1
         }
+    }
+
+    // MARK: - Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }
