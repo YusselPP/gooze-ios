@@ -110,5 +110,9 @@ extension UIViewController {
     func previousController(animated: Bool) {
         navigationController?.popViewController(animated: animated)
     }
+
+    func showNavigationBar(_ show: Bool, animated: Bool) {
+        navigationController?.setNavigationBarHidden(!show, animated: animated)
+    }
 }
 

@@ -87,11 +87,15 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             willShowSelector: #selector(keyboardWillShow(notification:)),
             willHideSelector: #selector(keyboardWillHide(notification:))
         )
+        if scene == .createOrSkipProfile || scene == .signupSuccess {
+            showNavigationBar(false, animated: true)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         deregisterFromKeyboardNotifications(observer: self)
+        showNavigationBar(true, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -235,7 +239,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
-        // TODO: Hide white line until star typing
+        // TODO: Hide white line until start typing
         nextButtonTapped(textField)
 
         switch scene {
@@ -340,8 +344,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         scene = .registerCode
 
-        backButton.isEnabled = true
-        nextBarButton.isEnabled = true
+        showNavigationBar(true, animated: true)
 
         topTextField.returnKeyType = .next
         topTextField.keyboardType = .default
@@ -367,8 +370,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         scene = .username
 
-        backButton.isEnabled = true
-        nextBarButton.isEnabled = true
+        showNavigationBar(true, animated: true)
 
         topTextField.returnKeyType = .next
         topTextField.keyboardType = .default
@@ -394,8 +396,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         scene = .facebookOrEmail
 
-        backButton.isEnabled = true
-        nextBarButton.isEnabled = true
+        showNavigationBar(true, animated: true)
 
         topButton.setTitle(viewModel.facebookSignUp.uppercased(), for: .normal)
         bottomButton.setTitle(viewModel.emailLabelText.uppercased(), for: .normal)
@@ -424,8 +425,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         scene = .email
 
-        backButton.isEnabled = true
-        nextBarButton.isEnabled = true
+        showNavigationBar(true, animated: true)
 
         topTextField.returnKeyType = .next
         topTextField.keyboardType = .emailAddress
@@ -450,8 +450,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         scene = .password
 
-        backButton.isEnabled = true
-        nextBarButton.isEnabled = true
+        showNavigationBar(true, animated: true)
 
         topTextField.returnKeyType = .send
         topTextField.keyboardType = .default
@@ -476,8 +475,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         scene = .signupSuccess
 
-        navigationItem.setLeftBarButton(nil, animated: true)
-        navigationItem.setRightBarButton(nil, animated: true)
+        showNavigationBar(false, animated: true)
 
         messageLabel.text = viewModel.successfulSignUp.uppercased()
 
@@ -506,8 +504,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         scene = .createOrSkipProfile
 
-        backButton.isEnabled = false
-        nextBarButton.isEnabled = false
+        showNavigationBar(false, animated: true)
 
         UIView.animate(withDuration: 0.5, animations: { [weak self] in
             self?.messageLabel.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
