@@ -38,7 +38,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="fA6-nB-KSM">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hsk-Kh-A4v">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hsk-Kh-A4v">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y7U-Mf-1Cz">
@@ -76,15 +76,15 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="fA6-nB-KSM" secondAttribute="trailing" id="1hi-ga-e03"/>
                             <constraint firstItem="Y7U-Mf-1Cz" firstAttribute="height" secondItem="dYV-3i-SEh" secondAttribute="height" id="AOD-Uz-kJM"/>
+                            <constraint firstItem="hsk-Kh-A4v" firstAttribute="bottom" secondItem="dYV-3i-SEh" secondAttribute="bottom" id="NY4-SY-Lfa"/>
+                            <constraint firstItem="hsk-Kh-A4v" firstAttribute="top" secondItem="dYV-3i-SEh" secondAttribute="top" id="Om7-Yp-dcl"/>
+                            <constraint firstItem="hsk-Kh-A4v" firstAttribute="leading" secondItem="dYV-3i-SEh" secondAttribute="leading" id="Qzh-zo-f6v"/>
                             <constraint firstItem="hsk-Kh-A4v" firstAttribute="height" secondItem="dYV-3i-SEh" secondAttribute="height" id="Sna-WV-hq3"/>
                             <constraint firstItem="fA6-nB-KSM" firstAttribute="top" secondItem="889-jd-Zop" secondAttribute="top" id="Tup-MB-1Dm"/>
-                            <constraint firstItem="hsk-Kh-A4v" firstAttribute="top" secondItem="5uT-mo-BHf" secondAttribute="bottom" id="VdP-Tb-zKZ"/>
                             <constraint firstAttribute="bottom" secondItem="fA6-nB-KSM" secondAttribute="bottom" id="Vsx-zw-gNO"/>
                             <constraint firstItem="MHZ-m2-D39" firstAttribute="top" secondItem="dYV-3i-SEh" secondAttribute="bottom" id="Wrf-wn-pqM"/>
-                            <constraint firstAttribute="bottom" secondItem="hsk-Kh-A4v" secondAttribute="bottom" id="XZB-6R-de6"/>
+                            <constraint firstItem="hsk-Kh-A4v" firstAttribute="trailing" secondItem="dYV-3i-SEh" secondAttribute="trailing" id="a2F-ut-3n9"/>
                             <constraint firstItem="dYV-3i-SEh" firstAttribute="leading" secondItem="889-jd-Zop" secondAttribute="leading" id="acZ-HZ-YcK"/>
-                            <constraint firstItem="hsk-Kh-A4v" firstAttribute="leading" secondItem="889-jd-Zop" secondAttribute="leading" id="d8n-b6-b5l"/>
-                            <constraint firstAttribute="trailing" secondItem="hsk-Kh-A4v" secondAttribute="trailing" id="eZe-US-IRQ"/>
                             <constraint firstAttribute="trailing" secondItem="dYV-3i-SEh" secondAttribute="trailing" id="hnP-0J-HWS"/>
                             <constraint firstItem="Y7U-Mf-1Cz" firstAttribute="width" secondItem="dYV-3i-SEh" secondAttribute="width" id="rUE-Pr-0hF"/>
                             <constraint firstItem="hsk-Kh-A4v" firstAttribute="width" secondItem="dYV-3i-SEh" secondAttribute="width" id="sEX-rI-9FO"/>
@@ -97,6 +97,7 @@
                         <outlet property="dblCtrlView" destination="CI3-Hb-fkl" id="hEG-Wb-mr6"/>
                         <outlet property="messageLabel" destination="VDJ-wh-g55" id="SPz-8o-ANW"/>
                         <outlet property="scrollView" destination="hsk-Kh-A4v" id="P7I-iL-P6J"/>
+                        <outlet property="viewBottomSpaceConstraint" destination="Wrf-wn-pqM" id="VJc-WV-Amz"/>
                         <segue destination="2xt-bn-0V0" kind="show" identifier="signUpToProfileSegue" id="51W-Am-yes"/>
                     </connections>
                 </viewController>
@@ -406,7 +407,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="FD9-M8-vKk">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8A7-k9-CmG">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8A7-k9-CmG">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aOZ-8b-XhZ">
@@ -457,17 +458,17 @@
                             </scrollView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="8A7-k9-CmG" firstAttribute="top" secondItem="PWB-GB-0lz" secondAttribute="bottom" id="FsK-im-PJD"/>
+                            <constraint firstItem="8A7-k9-CmG" firstAttribute="bottom" secondItem="azr-0D-h6D" secondAttribute="bottom" id="FA7-dh-FBf"/>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="width" secondItem="azr-0D-h6D" secondAttribute="width" id="GhO-8G-BCO"/>
                             <constraint firstItem="aOZ-8b-XhZ" firstAttribute="width" secondItem="azr-0D-h6D" secondAttribute="width" id="MVo-cZ-ZD9"/>
-                            <constraint firstAttribute="bottom" secondItem="8A7-k9-CmG" secondAttribute="bottom" id="NxO-cA-HQq"/>
                             <constraint firstItem="azr-0D-h6D" firstAttribute="top" secondItem="PWB-GB-0lz" secondAttribute="bottom" id="PJd-ud-65Y"/>
-                            <constraint firstAttribute="trailing" secondItem="8A7-k9-CmG" secondAttribute="trailing" id="UME-l1-YtR"/>
                             <constraint firstItem="FD9-M8-vKk" firstAttribute="leading" secondItem="Xsm-cK-fLq" secondAttribute="leading" id="V4Y-Td-1OY"/>
-                            <constraint firstItem="8A7-k9-CmG" firstAttribute="leading" secondItem="Xsm-cK-fLq" secondAttribute="leading" id="WQo-s8-ieK"/>
                             <constraint firstAttribute="trailing" secondItem="azr-0D-h6D" secondAttribute="trailing" id="YbC-z0-zCd"/>
                             <constraint firstAttribute="bottom" secondItem="azr-0D-h6D" secondAttribute="bottom" id="ez3-cO-3Qx"/>
+                            <constraint firstItem="8A7-k9-CmG" firstAttribute="leading" secondItem="azr-0D-h6D" secondAttribute="leading" id="gmo-yO-ujd"/>
+                            <constraint firstItem="8A7-k9-CmG" firstAttribute="trailing" secondItem="azr-0D-h6D" secondAttribute="trailing" id="lvE-Y8-M4h"/>
                             <constraint firstAttribute="trailing" secondItem="FD9-M8-vKk" secondAttribute="trailing" id="mG6-FB-WsE"/>
+                            <constraint firstItem="8A7-k9-CmG" firstAttribute="top" secondItem="azr-0D-h6D" secondAttribute="top" id="nIa-Hr-Cf2"/>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="height" secondItem="azr-0D-h6D" secondAttribute="height" id="p3c-sk-iId"/>
                             <constraint firstItem="aOZ-8b-XhZ" firstAttribute="height" secondItem="azr-0D-h6D" secondAttribute="height" id="qjX-jS-eGR"/>
                             <constraint firstItem="azr-0D-h6D" firstAttribute="leading" secondItem="Xsm-cK-fLq" secondAttribute="leading" id="sGd-aW-pGQ"/>
@@ -482,6 +483,7 @@
                         <outlet property="doubleCtrlView" destination="9e2-Dw-qta" id="ZAv-X2-LU8"/>
                         <outlet property="logoView" destination="aPd-bt-XyP" id="Fgb-96-UfE"/>
                         <outlet property="scrollView" destination="8A7-k9-CmG" id="F6d-Rv-x22"/>
+                        <outlet property="viewBottomSpaceConstraint" destination="ez3-cO-3Qx" id="Gpp-tM-F1l"/>
                         <segue destination="cxv-R3-Bhb" kind="show" identifier="registerCodeSegue" id="mYB-Wd-Tvt"/>
                     </connections>
                 </viewController>

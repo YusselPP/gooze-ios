@@ -112,7 +112,7 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
         log.debug("\(self) init")
 
         usernameExistsAction = Action(ptr(self, GZESignUpViewModel.onUsernameExistsAction))
-        emailExistsAction = Action(ptr(self, GZESignUpViewModel.onUsernameExistsAction))
+        emailExistsAction = Action(ptr(self, GZESignUpViewModel.onEmailExistsAction))
         signupAction = Action(ptr(self, GZESignUpViewModel.onSignupAction))
         updateAction = Action(ptr(self, GZESignUpViewModel.onUpdateAction))
         savePhotosAction = Action(ptr(self, GZESignUpViewModel.onSavePhotosAction))
@@ -142,7 +142,9 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
         user.email = email.value
         user.password = password.value
 
-        return self.userRepository.signUp(self.user)
+        log.debug("User data = \(user.toJSON() as Any)")
+
+        return self.userRepository.signUp(user)
     }
 
     private func onUpdateAction() -> SignalProducer<GZEUser, GZEError> {
@@ -150,12 +152,12 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
             return SignalProducer(error: GZEError.repository(error: .AuthRequired))
         }
 
-        self.fillUser()
-        self.user.id = userId
+        fillUser()
+        user.id = userId
 
-        log.debug("User data = \(self.user.toJSON() as Any)")
+        log.debug("User data = \(user.toJSON() as Any)")
 
-        return self.userRepository.update(self.user)
+        return self.userRepository.update(user)
     }
 
     private func onSavePhotosAction() -> SignalProducer<GZEUser, GZEError> {

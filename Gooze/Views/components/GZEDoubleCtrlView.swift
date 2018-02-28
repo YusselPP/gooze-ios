@@ -20,12 +20,24 @@ class GZEDoubleCtrlView: UIView {
     }
     var bottomCtrlView: UIView? {
         willSet(newCtrlView) { bottomCtrlViewWillSet(newCtrlView) }
-        didSet { separatorWidth = controlsMaxTextWidth }
+        didSet {
+            separatorWidth = controlsMaxTextWidth
+        }
     }
 
-    var separatorWidth: CGFloat = 100 {
+    var topCtrlText: String? {
+        didSet {
+            if let txtDisplay = topCtrlView as? TextDisplay {
+                txtDisplay.setDisplayText(topCtrlText)
+                separatorWidth = controlsMaxTextWidth
+            }
+        }
+    }
+
+    var separatorWidth: CGFloat = 0 {
         didSet {
             log.debug("Resizing separator: \(separatorWidth)")
+            layoutIfNeeded()
             separatorWidthConstraint.constant = separatorWidth
             UIView.animate(withDuration: animationsDuration) { [weak self] in
                 self?.layoutIfNeeded()
@@ -38,7 +50,7 @@ class GZEDoubleCtrlView: UIView {
     }
 
     var font = UIFont(name: "HelveticaNeue", size: 17)!
-    var animationsDuration = 0.3
+    var animationsDuration = 0.5
 
     var topViewTappedHandler: ((UITapGestureRecognizer) -> ())?
     var bottomViewTappedHandler: ((UITapGestureRecognizer) -> ())?
@@ -47,10 +59,9 @@ class GZEDoubleCtrlView: UIView {
     private let topView = UIView()
     private let bottomView = UIView()
     private let separatorView = UIView()
-    private let underlineLabel = UILabel()
-    private var underlineLabelObserver: Disposable?
     private var separatorWidthConstraint: NSLayoutConstraint
 
+    private var topCtrlTextObserver: Disposable?
 
     required init?(coder aDecoder: NSCoder) {
         separatorWidthConstraint = separatorView.widthAnchor.constraint(equalToConstant: separatorWidth)
@@ -70,19 +81,17 @@ class GZEDoubleCtrlView: UIView {
         separatorView.backgroundColor = .white
         separatorView.translatesAutoresizingMaskIntoConstraints = false
 
-        underlineLabel.font = font
-        underlineLabel.textColor = UIColor.clear
-        underlineLabel.textAlignment = .center
-        underlineLabel.layer.borderColor = UIColor.white.cgColor
-        underlineLabel.layer.borderWidth = 1
-        underlineLabel.translatesAutoresizingMaskIntoConstraints = false
-        underlineLabel.heightAnchor.constraint(equalToConstant: 1).isActive = true
-
         addSubview(topView)
         addSubview(bottomView)
         addSubview(separatorView)
 
         setConstraints()
+
+        registerForKeyboarNotifications(
+            observer: self,
+            willShowSelector: #selector(keyboardWillShow(notification:)),
+            willHideSelector: #selector(keyboardWillHide(notification:))
+        )
     }
 
     func setConstraints() {
@@ -121,13 +130,25 @@ class GZEDoubleCtrlView: UIView {
             removeAnimated(oldCtrlView, superView: topView)
 
             if oldCtrlView is UITextField {
-                underlineLabel.removeFromSuperview()
-                underlineLabelObserver?.dispose()
+                topCtrlTextObserver?.dispose()
             }
 
         }
 
         if let topCtrlView = newCtrlView {
+            if let textDisplay = topCtrlView as? TextDisplay {
+                textDisplay.setAlignment(.center)
+                textDisplay.setColor(.white)
+                textDisplay.setTextFont(font)
+            }
+
+            if let topCtrlText = topCtrlView as? UITextField {
+
+                topCtrlTextObserver = topCtrlText.reactive.continuousTextValues.observeValues() { [weak self] _ in
+                    guard let this = self else {return}
+                    this.separatorWidth = this.controlsMaxTextWidth
+                }
+            }
 
             topCtrlView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -137,25 +158,6 @@ class GZEDoubleCtrlView: UIView {
             topView.trailingAnchor.constraint(equalTo: topCtrlView.trailingAnchor).isActive = true
             topView.bottomAnchor.constraint(equalTo: topCtrlView.bottomAnchor, constant: 9).isActive = true
             topCtrlView.heightAnchor.constraint(equalToConstant: 21).isActive = true
-
-            if let textDisplay = topCtrlView as? TextDisplay {
-                textDisplay.setAlignment(.center)
-                textDisplay.setColor(.white)
-                textDisplay.setTextFont(font)
-            }
-
-            if let topCtrlText = topCtrlView as? UITextField {
-                setUnderlineLabelText(topCtrlText.text, isSecureEntry: topCtrlText.isSecureTextEntry)
-
-                underlineLabelObserver = topCtrlText.reactive.continuousTextValues.observeValues() { [weak self] in
-                    self?.setUnderlineLabelText($0, isSecureEntry: topCtrlText.isSecureTextEntry)
-                }
-
-                topView.addSubview(underlineLabel)
-
-                topView.bottomAnchor.constraint(equalTo: underlineLabel.bottomAnchor).isActive = true
-                topView.centerXAnchor.constraint(equalTo: underlineLabel.centerXAnchor).isActive = true
-            }
         }
     }
 
@@ -169,6 +171,12 @@ class GZEDoubleCtrlView: UIView {
 
         if let bottomCtrlView = newCtrlView {
 
+            if let textDisplay = bottomCtrlView as? TextDisplay {
+                textDisplay.setAlignment(.center)
+                textDisplay.setColor(.white)
+                textDisplay.setTextFont(font)
+            }
+
             bottomCtrlView.translatesAutoresizingMaskIntoConstraints = false
 
             addAnimated(bottomCtrlView, superView: bottomView)
@@ -177,12 +185,6 @@ class GZEDoubleCtrlView: UIView {
             bottomView.trailingAnchor.constraint(equalTo: bottomCtrlView.trailingAnchor).isActive = true
             bottomView.topAnchor.constraint(equalTo: bottomCtrlView.topAnchor, constant: -8).isActive = true
             bottomCtrlView.heightAnchor.constraint(equalToConstant: 21).isActive = true
-
-            if let textDisplay = bottomCtrlView as? TextDisplay {
-                textDisplay.setAlignment(.center)
-                textDisplay.setColor(.white)
-                textDisplay.setTextFont(font)
-            }
         }
     }
 
@@ -217,26 +219,20 @@ class GZEDoubleCtrlView: UIView {
         }
     }
 
-    func setUnderlineLabelText(_ text: String?, isSecureEntry: Bool) {
-        if isSecureEntry {
-            // if let len = $0?.count { // swift 3 error
-            if let len = text?.characters.count {
-                self.underlineLabel.text = String(repeating: "V", count: len)
-            } else {
-                self.underlineLabel.text = text
-            }
-        } else  {
-            self.underlineLabel.text = text
-        }
-    }
-
     private func getControlsMaxTextWidth() -> CGFloat {
         var topTextWidth: CGFloat = 0
         var botTextWidth: CGFloat = 0
 
-        if let topTextView = topCtrlView as? TextDisplay, (topCtrlView as? UITextField) == nil {
-            topTextWidth = topTextView.getText()?.size(font: font).width ?? 0
-            log.debug("top text: \((topTextView.getText() ?? ""))")
+        if let topTextView = topCtrlView as? TextDisplay {
+            var topText = topTextView.getText()
+            log.debug("top text: \((topText ?? ""))")
+
+            if topText != nil {
+                if topTextView.hasSecureEntry() {
+                    topText = String(repeating: "V", count: topText!.characters.count)
+                }
+                topTextWidth = topText!.size(font: font).width
+            }
         }
         if let botTextView = bottomCtrlView as? TextDisplay {
             log.debug("bot text: \((botTextView.getText() ?? ""))")
@@ -249,8 +245,20 @@ class GZEDoubleCtrlView: UIView {
         return max(topTextWidth, botTextWidth)
     }
 
+    // MARK: KeyboardNotifications
+    func keyboardWillShow(notification: Notification) {
+        log.debug("keyboard will show")
+        (bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
+    }
+
+    func keyboardWillHide(notification: Notification) {
+        log.debug("keyboard will hide")
+        (bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.mainTextColor
+    }
+
     // MARK: - Deinitializers
     deinit {
+        deregisterFromKeyboardNotifications(observer: self)
         log.debug("\(self) disposed")
     }
 }

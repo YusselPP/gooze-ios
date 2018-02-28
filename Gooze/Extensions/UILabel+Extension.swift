@@ -12,11 +12,21 @@ extension UILabel {
 
     func setText(_ text: String?, animated: Bool) {
         if animated {
-            UIView.transition(with: self, duration: 0.5, options: .transitionCrossDissolve, animations: { [weak self] in
+            UIView.transition(with: self, duration: 0.5, options: [.transitionCrossDissolve, .allowAnimatedContent], animations: { [weak self] in
                 self?.text = text
             })
         } else {
             self.text = text
+        }
+    }
+
+    func setColor(_ color: UIColor?, animated: Bool) {
+        if animated {
+            UIView.transition(with: self, duration: 1, options: [.transitionCrossDissolve, .allowAnimatedContent], animations: { [weak self] in
+                self?.textColor = color
+            })
+        } else {
+            self.textColor = color
         }
     }
 }

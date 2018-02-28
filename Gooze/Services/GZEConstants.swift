@@ -22,6 +22,8 @@ class GZEConstants {
         static let distanceSliderBackground = UIColor(white: 1.0, alpha: 0.51)
 
         static let textInputPlacehoderOnEdit = UIColor(white: 102/255, alpha: 1.0) // text input placehoder when editing text
+
+        static let mainTextColor = UIColor.white
     }
 
     // Fonts

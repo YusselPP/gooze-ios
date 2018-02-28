@@ -21,7 +21,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     let signUpToProfileSegue = "signUpToProfileSegue"
 
-    var separatorLastWidth: CGFloat = 0
     var scene: Scene = .registerCode
 
     enum Scene {
@@ -49,6 +48,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var scrollView: UIScrollView!
 
+    @IBOutlet weak var viewBottomSpaceConstraint: NSLayoutConstraint!
+
     // Method weak references
     var onActionExecute: ((Any) -> Void)!
     var onTextFieldValidation: ((VValidationResult) -> Void)!
@@ -72,6 +73,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         messageLabel.alpha = 0
         topButton.enableAnimationOnPressed()
         bottomButton.enableAnimationOnPressed()
+        topButton.setTitleColor(GZEConstants.Color.textInputPlacehoderOnEdit, for: .disabled)
+        bottomButton.setTitleColor(GZEConstants.Color.textInputPlacehoderOnEdit, for: .disabled)
 
         topTextField.delegate = self
         topTextField.validationHandler = onTextFieldValidation
@@ -178,7 +181,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
             displayMessage(viewModel.viewTitle, error.localizedDescription)
         } else {
-            showEmailScene()
+            showFacebookOrEmailScene()
         }
     }
 
@@ -239,7 +242,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
-        // TODO: Hide white line until start typing
         nextButtonTapped(textField)
 
         switch scene {
@@ -297,21 +299,16 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    // MARK: KeyboardNotifications
+    // MARK: - KeyboardNotifications
 
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
-        log.debug(notification.userInfo as Any)
-
-        (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
-        separatorLastWidth = dblCtrlView.separatorWidth
-        addKeyboardInsetAndScroll(scrollView: scrollView, activeField: dblCtrlView, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification)
     }
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = .white
-        removeKeyboardInset(scrollView: scrollView)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification)
     }
 
     // MARK: - Navigation
@@ -337,9 +334,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     }
 
     // MARK: Scenes
-
     func showRegisterCodeScene() {
-
         scene = .registerCode
 
         showNavigationBar(true, animated: true)
@@ -353,8 +348,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         bottomLabel.setText(viewModel.registerCodeLabelText.uppercased(), animated: true)
 
-        dblCtrlView.separatorWidth = 180
-        separatorLastWidth = dblCtrlView.separatorWidth
         dblCtrlView.topCtrlView = topTextField
         dblCtrlView.bottomCtrlView = bottomLabel
 
@@ -362,10 +355,11 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             self.topTextField.becomeFirstResponder()
         }
         dblCtrlView.bottomViewTappedHandler = dblCtrlView.topViewTappedHandler
+        // Mess with scrolling when view is being loaded
+        topTextField.becomeFirstResponder()
     }
 
     func showUsernameScene() {
-
         scene = .username
 
         showNavigationBar(true, animated: true)
@@ -378,9 +372,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         bottomLabel.setText(viewModel.usernameLabelText.uppercased(), animated: true)
 
-        dblCtrlView.separatorWidth = 100
-        separatorLastWidth = dblCtrlView.separatorWidth
-
         dblCtrlView.topCtrlView = topTextField
         dblCtrlView.bottomCtrlView = bottomLabel
 
@@ -388,10 +379,10 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             self.topTextField.becomeFirstResponder()
         }
         dblCtrlView.bottomViewTappedHandler = dblCtrlView.topViewTappedHandler
+        topTextField.becomeFirstResponder()
     }
 
     func showFacebookOrEmailScene() {
-
         scene = .facebookOrEmail
 
         showNavigationBar(true, animated: true)
@@ -402,12 +393,13 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         topButton.removeAllTargets()
         bottomButton.removeAllTargets()
 
+        // TODO: Implement facebook login
         // topButton.addTarget(self, action: #selector(), for: .touchUpInside)
         bottomButton.addTarget(self, action: #selector(showEmailScene), for: .touchUpInside)
 
+        topButton.isEnabled = true
+        bottomButton.isEnabled = true
 
-        dblCtrlView.separatorWidth = 240
-        separatorLastWidth = dblCtrlView.separatorWidth
         dblCtrlView.topCtrlView = topButton
         dblCtrlView.bottomCtrlView = bottomButton
 
@@ -417,10 +409,10 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         dblCtrlView.bottomViewTappedHandler = { [unowned self] _ in
             self.bottomButton.sendActions(for: .touchUpInside)
         }
+        topTextField.resignFirstResponder()
     }
 
     func showEmailScene() {
-
         scene = .email
 
         showNavigationBar(true, animated: true)
@@ -433,8 +425,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         bottomLabel.setText(viewModel.emailLabelText.uppercased(), animated: true)
 
-        dblCtrlView.separatorWidth = 200
-        separatorLastWidth = dblCtrlView.separatorWidth
         dblCtrlView.topCtrlView = topTextField
         dblCtrlView.bottomCtrlView = bottomLabel
 
@@ -442,10 +432,10 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             self.topTextField.becomeFirstResponder()
         }
         dblCtrlView.bottomViewTappedHandler = dblCtrlView.topViewTappedHandler
+        topTextField.becomeFirstResponder()
     }
 
     func showPasswordScene() {
-
         scene = .password
 
         showNavigationBar(true, animated: true)
@@ -458,8 +448,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         bottomLabel.setText(viewModel.passwordLabelText.uppercased(), animated: true)
 
-        dblCtrlView.separatorWidth = 120
-        separatorLastWidth = dblCtrlView.separatorWidth
         dblCtrlView.topCtrlView = topTextField
         dblCtrlView.bottomCtrlView = bottomLabel
 
@@ -467,70 +455,54 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             self.topTextField.becomeFirstResponder()
         }
         dblCtrlView.bottomViewTappedHandler = dblCtrlView.topViewTappedHandler
+        topTextField.becomeFirstResponder()
     }
 
     func showSignupSuccessScene() {
-
         scene = .signupSuccess
 
         showNavigationBar(false, animated: true)
 
         messageLabel.text = viewModel.successfulSignUp.uppercased()
 
-        topLabel.setText(viewModel.createProfileText.uppercased(), animated: true)
-        bottomLabel.setText(viewModel.skipProfileText.uppercased(), animated: true)
+        topLabel.text = viewModel.createProfileText.uppercased()
+        bottomLabel.text = viewModel.skipProfileText.uppercased()
 
-        dblCtrlView.separatorWidth = 120
-        separatorLastWidth = dblCtrlView.separatorWidth
         dblCtrlView.topCtrlView = topLabel
         dblCtrlView.bottomCtrlView = bottomLabel
 
-        (dblCtrlView.topCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
-        (dblCtrlView.bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
+        topLabel.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
+        bottomLabel.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
 
         dblCtrlView.topViewTappedHandler = nil
         dblCtrlView.bottomViewTappedHandler = nil
 
-        UIView.animate(withDuration: 3, animations: { [weak self] in
+        UIView.animate(withDuration: 1, animations: { [weak self] in
             self?.messageLabel.alpha = 1
         }) { [weak self] _ in
             self?.showCreateOrSkipProfile()
         }
+        topTextField.resignFirstResponder()
     }
 
     func showCreateOrSkipProfile() {
-
         scene = .createOrSkipProfile
 
         showNavigationBar(false, animated: true)
 
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
-            self?.messageLabel.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
-        })
+        messageLabel.setColor(GZEConstants.Color.textInputPlacehoderOnEdit, animated: true)
 
-        topButton.setTitle(viewModel.createProfileText.uppercased(), for: .normal)
-        bottomButton.setTitle(viewModel.skipProfileText.uppercased(), for: .normal)
-
-        topButton.removeAllTargets()
-        bottomButton.removeAllTargets()
-
-        topButton.addTarget(self, action: #selector(createProfileController), for: .touchUpInside)
-        bottomButton.addTarget(self, action: #selector(chooseModeController), for: .touchUpInside)
-
-
-        dblCtrlView.separatorWidth = 120
-        separatorLastWidth = dblCtrlView.separatorWidth
-        dblCtrlView.topCtrlView = topButton
-        dblCtrlView.bottomCtrlView = bottomButton
+        topLabel.setColor(GZEConstants.Color.mainTextColor, animated: true)
+        bottomLabel.setColor(GZEConstants.Color.mainTextColor, animated: true)
 
         dblCtrlView.topViewTappedHandler = { [unowned self] _ in
-            self.topButton.sendActions(for: .touchUpInside)
+            self.createProfileController()
         }
         dblCtrlView.bottomViewTappedHandler = { [unowned self] _ in
-            self.bottomButton.sendActions(for: .touchUpInside)
+            self.chooseModeController()
         }
+        topTextField.resignFirstResponder()
     }
-
 
     // MARK: Deinitializers
     deinit {

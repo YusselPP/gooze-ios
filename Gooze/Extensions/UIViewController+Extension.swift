@@ -52,25 +52,7 @@ extension UIViewController {
         }
     }
 
-    func registerForKeyboarNotifications(observer: Any, willShowSelector: Selector, willHideSelector: Selector) {
-
-        let notifications = NotificationCenter.default
-        // notifications.addObserver(observer, selector: didShowSelector, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        notifications.addObserver(observer, selector: willHideSelector, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        notifications.addObserver(observer, selector: willShowSelector, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-    }
-
-    func deregisterFromKeyboardNotifications(observer: Any) {
-
-        let notifications = NotificationCenter.default
-        // notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-    }
-
     func addKeyboardInsetAndScroll(scrollView: UIScrollView, activeField: UIView?, notification: Notification) {
-
-
         if
             let info = notification.userInfo,
             let kbSize = info[UIKeyboardFrameEndUserInfoKey] as? CGRect
@@ -84,18 +66,38 @@ extension UIViewController {
             log.debug(curve as Any)
             log.debug(options)
 
+            log.debug("scroll bottom contentInset: \(scrollView.contentInset.bottom)")
+
             var contentInset = scrollView.contentInset
             contentInset.bottom = kbSize.height
             scrollView.contentInset = contentInset
             scrollView.scrollIndicatorInsets = contentInset
 
+            log.debug("scroll bottom contentInset: \(scrollView.contentInset.bottom)")
+
+            log.debug("Keyboard height \(kbSize.height)")
+
+            log.debug("View frame \(self.view.frame)")
+
             var aRect : CGRect = self.view.frame
             aRect.size.height -= kbSize.height
+
+            log.debug("View frame \(self.view.frame)")
+            log.debug("rect minus kb height \(aRect)")
+
             if let activeField = activeField {
+
+                log.debug("activeField frame \(activeField.frame)")
+                log.debug("View contains active field? \(aRect.contains(activeField.frame))")
+                log.debug("scroll contentOffset: \(scrollView.contentOffset)")
+
                 if (!aRect.contains(activeField.frame)) {
-                    UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
+                    //UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
+                        //scrollView.contentOffset.y = kbSize.height
                         scrollView.scrollRectToVisible(activeField.frame, animated: false)
-                    }, completion: nil)
+                    //}, completion: { _ in
+                        log.debug("scroll result contentOffset: \(scrollView.contentOffset)")
+                   // })
                 }
             }
         }
@@ -105,6 +107,28 @@ extension UIViewController {
         let contentInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
+    }
+
+    func resizeViewWithKeyboard(keyboardShow: Bool, constraint: NSLayoutConstraint, notification: Notification) {
+        if
+            keyboardShow,
+            let info = notification.userInfo,
+            let kbSize = info[UIKeyboardFrameEndUserInfoKey] as? CGRect
+        {
+            let duration = info[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.35
+            let curve = UIViewAnimationCurve(
+                rawValue: info[UIKeyboardAnimationCurveUserInfoKey] as? Int ?? UIViewAnimationCurve.linear.rawValue
+            )
+            let options = curve?.toOptions() ?? UIViewAnimationOptions.curveLinear
+
+            constraint.constant = kbSize.height
+
+            UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
+                self?.view.layoutIfNeeded()
+            }, completion: nil)
+        } else {
+            constraint.constant = 0
+        }
     }
 
     func previousController(animated: Bool) {

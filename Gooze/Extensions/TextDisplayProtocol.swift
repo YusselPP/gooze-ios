@@ -14,6 +14,8 @@ protocol TextDisplay {
     func setTextFont(_ font: UIFont)
     func setAlignment(_ alignment: NSTextAlignment)
     func getText() -> String?
+    func setDisplayText(_ text: String?)
+    func hasSecureEntry() -> Bool
 }
 
 extension UIButton: TextDisplay {
@@ -32,6 +34,14 @@ extension UIButton: TextDisplay {
 
     func getText() -> String? {
         return self.currentTitle
+    }
+
+    func setDisplayText(_ text: String?)  {
+        self.setTitle(text, for: .normal)
+    }
+
+    func hasSecureEntry() -> Bool{
+        return false
     }
 }
 
@@ -52,6 +62,14 @@ extension UILabel: TextDisplay {
     func getText() -> String? {
         return self.text
     }
+
+    func setDisplayText(_ text: String?)  {
+        self.text = text
+    }
+
+    func hasSecureEntry() -> Bool{
+        return false
+    }
 }
 
 extension UITextField: TextDisplay {
@@ -70,5 +88,13 @@ extension UITextField: TextDisplay {
 
     func getText() -> String? {
         return self.text
+    }
+
+    func setDisplayText(_ text: String?)  {
+        self.text = text
+    }
+
+    func hasSecureEntry() -> Bool{
+        return self.isSecureTextEntry
     }
 }

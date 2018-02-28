@@ -44,7 +44,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var logoView: UIView!
     @IBOutlet weak var doubleCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var scrollView: UIScrollView!
-    
+    @IBOutlet weak var viewBottomSpaceConstraint: NSLayoutConstraint!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
@@ -219,7 +220,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
 
-
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -261,7 +261,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         doubleCtrlView.bottomViewTappedHandler = { [unowned self] _ in
             self.signUpButton.sendActions(for: .touchUpInside)
         }
-        emailTextField.resignFirstResponder()
     }
 
     func showUsernameScene() {
@@ -277,7 +276,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         }
         doubleCtrlView.bottomViewTappedHandler = doubleCtrlView.topViewTappedHandler
 
-        passwordTextField.resignFirstResponder()
         emailTextField.becomeFirstResponder()
     }
 
@@ -293,25 +291,22 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
             self.passwordTextField.becomeFirstResponder()
         }
         doubleCtrlView.bottomViewTappedHandler = doubleCtrlView.topViewTappedHandler
-        emailTextField.resignFirstResponder()
+
         passwordTextField.becomeFirstResponder()
     }
 
-    // MARK: KeyboardNotifications
-
+    // MARK: - KeyboardNotifications
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
-        (doubleCtrlView.bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
-        addKeyboardInsetAndScroll(scrollView: scrollView, activeField: doubleCtrlView, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification)
     }
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        (doubleCtrlView.bottomCtrlView as? UILabel)?.textColor = .white
-        removeKeyboardInset(scrollView: scrollView)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification)
     }
 
-    // MARK: Deinitializers
+    // MARK: - Deinitializers
     deinit {
         log.debug("\(self) disposed")
     }

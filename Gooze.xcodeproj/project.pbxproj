@@ -15,6 +15,7 @@
 		8D06CC502043A9400034A90C /* GZEMethodPointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D06CC4F2043A9400034A90C /* GZEMethodPointer.swift */; };
 		8D14B3621FB2B919005CE9A9 /* GZEStorageApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */; };
 		8D14B3641FB2BB41005CE9A9 /* GZEFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D14B3631FB2BB41005CE9A9 /* GZEFile.swift */; };
+		8D1B9ABF2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1B9ABE2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift */; };
 		8D2171922018A20400337F6B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2171912018A20400337F6B /* String+Extension.swift */; };
 		8D22DD9E2039AF3C0088D5F5 /* GZEBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */; };
 		8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */; };
@@ -111,6 +112,7 @@
 		8D06CC4F2043A9400034A90C /* GZEMethodPointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMethodPointer.swift; sourceTree = "<group>"; };
 		8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEStorageApiRepository.swift; sourceTree = "<group>"; };
 		8D14B3631FB2BB41005CE9A9 /* GZEFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEFile.swift; sourceTree = "<group>"; };
+		8D1B9ABE2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEKeyboardNotifications.swift; sourceTree = "<group>"; };
 		8D2171912018A20400337F6B /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBlur.swift; sourceTree = "<group>"; };
 		8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserApiRepository.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				8DCDBDFF1FF2BFAF00F7B5C2 /* UIView+Extensions.swift */,
 				8D2171912018A20400337F6B /* String+Extension.swift */,
 				8DE23E9820260912000B7422 /* UIScrollView+Extension.swift */,
+				8D1B9ABE2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -792,6 +795,7 @@
 				F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */,
 				F0CA6DBF1FAB6385009C1746 /* GZECarouselUIView.swift in Sources */,
 				F0EE89131FA7A48B001D194C /* GZEApiError.swift in Sources */,
+				8D1B9ABF2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift in Sources */,
 				8D9FF9F32042292B003BE951 /* GZENextUIBarButtonItem.swift in Sources */,
 				F0B4DF2D1FD76883002E4F18 /* Dictionary+Extension.swift in Sources */,
 				8D9711B31FC307D200E98F95 /* GZEConstants.swift in Sources */,

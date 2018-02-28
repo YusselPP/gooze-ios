@@ -111,7 +111,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // FILTERS
             //destination.minLevel = .error
             //let filter1 = Filters.Path.contains("View", minLevel: .debug)
-            //destination.addFilter(filter1)
+            let filter1 = Filters.Path.excludes("GZEDoubleCtrlView")
+            destination.addFilter(filter1)
         }
 
         log.debug("Log level: " + GZEAppConfig.logLevel)
