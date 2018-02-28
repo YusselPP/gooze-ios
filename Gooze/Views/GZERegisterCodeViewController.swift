@@ -329,8 +329,17 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     }
 
     func chooseModeController() {
-        // TODO: send to choose mode vc instead
-        previousController(animated: true)
+        if
+            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
+            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
+
+            viewController.viewModel = viewModel.getChooseModeViewModel()
+
+            setRootController(controller: navController)
+        } else {
+            log.error("Unable to instantiate SearchGoozeNavController")
+            displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)
+        }
     }
 
     // MARK: Scenes
@@ -367,6 +376,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         topTextField.returnKeyType = .next
         topTextField.keyboardType = .default
         topTextField.isSecureTextEntry = false
+        topTextField.autocapitalizationType = .none
         topTextField.text = viewModel.username.value
         topTextField.validationRules = GZESignUpViewModel.validationRule.username.stringRules
 
@@ -420,6 +430,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         topTextField.returnKeyType = .next
         topTextField.keyboardType = .emailAddress
         topTextField.isSecureTextEntry = false
+        topTextField.autocapitalizationType = .none
         topTextField.text = viewModel.email.value
         topTextField.validationRules = GZESignUpViewModel.validationRule.email.stringRules
 
@@ -442,6 +453,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
         topTextField.returnKeyType = .send
         topTextField.keyboardType = .default
+        topTextField.autocapitalizationType = .none
         topTextField.isSecureTextEntry = true
         topTextField.text = viewModel.password.value
         topTextField.validationRules = GZESignUpViewModel.validationRule.password.stringRules

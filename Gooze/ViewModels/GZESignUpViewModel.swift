@@ -120,6 +120,10 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
         saveSearchPicAction = Action(ptr(self, GZESignUpViewModel.onSaveSearchPicAction))
     }
 
+    func getChooseModeViewModel() -> GZEChooseModeViewModel {
+        return GZEChooseModeViewModel(userRepository)
+    }
+
 
     private func onUsernameExistsAction() -> SignalProducer<Bool, GZEError> {
         guard let username = username.value else {

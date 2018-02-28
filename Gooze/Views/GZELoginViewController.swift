@@ -95,6 +95,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         emailTextField.keyboardType = .emailAddress
         emailTextField.returnKeyType = .next
         emailTextField.delegate = self
+        emailTextField.autocapitalizationType = .none
 
         passwordTextField.returnKeyType = .send
         passwordTextField.isSecureTextEntry = true
