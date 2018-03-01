@@ -14,6 +14,7 @@
 // Protocols/GZEValidationError
 "validation.required"="Enter your %@";
 "validation.invalidEmail"="Enter a valid email";
+"validation.invalidNumber"="The field %@ must be a number";
 "validation.lengthMin"="The field %@ must be a minimum of %d characters";
 "validation.lengthMax"="The field %@ must be a maximum of %d characters";
 "validation.exists"="%@ already exists";
@@ -50,6 +51,7 @@
 "vm.signUp.searchPictureLabel"="Search picture";
 "vm.signUp.blurButtonTitle"="Blur";
 "vm.signUp.nextButtonTitle"="Next";
+"vm.signUp.saveButtonTitle"="Save";
 
 // ViewModel/GZELoginViewController
 "vm.login.loginViewTitle"="Login";

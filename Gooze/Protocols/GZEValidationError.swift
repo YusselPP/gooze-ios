@@ -11,7 +11,10 @@ import Localize_Swift
 
 enum GZEValidationError: Error {
     case required(fieldName: String)
+
     case invalidEmail
+    case invalidNumber(fieldName: String)
+
     case lengthMin(fieldName: String, min: Int)
     case lengthMax(fieldName: String, max: Int)
     case exists(fieldName: String)
@@ -29,6 +32,9 @@ extension GZEValidationError: LocalizedError {
 
         case .invalidEmail:
             message = "validation.invalidEmail".localized()
+        case .invalidNumber(let fieldName):
+            message = "validation.invalidNumber".localized()
+            message = String(format: message, fieldName)
 
         case .lengthMin(let fieldName, let min):
             message = "validation.lengthMin".localized()

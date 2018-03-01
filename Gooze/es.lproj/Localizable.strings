@@ -14,6 +14,7 @@
 // Protocols/GZEValidationError
 "validation.required"="Ingresa tu %@";
 "validation.invalidEmail"="Ingresa un correo electrónico válido";
+"validation.invalidNumber"="El campo %@ debe ser un número";
 "validation.lengthMin"="El campo %@ debe tener al menos %d caracteres";
 "validation.lengthMax"="El campo %@ debe tener máximo %d caracteres";
 "validation.exists"="El %@ ya existe";
@@ -50,6 +51,7 @@
 "vm.signUp.searchPictureLabel"="Foto buscador";
 "vm.signUp.blurButtonTitle"="Censurar";
 "vm.signUp.nextButtonTitle"="Siguiente";
+"vm.signUp.saveButtonTitle"="Guardar";
 
 // ViewModel/GZELoginViewController
 "vm.login.loginViewTitle"="Inicio de sesión";

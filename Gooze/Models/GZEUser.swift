@@ -324,8 +324,10 @@ class GZEUser: Glossy {
 
 //            case .birthday:
 //            case .gender:
-//            case .weight:
-//            case .height:
+            case .weight,
+                 .height:
+                // ruleSet.add(rule: ValidationRuleComparison<Float>(min: 0, max: , error: GZEValidationError.lengthMin(fieldName: fieldName, min: 0)))
+                ruleSet.add(rule: ValidationRulePattern(pattern: ContainsNumberValidationPattern(), error: GZEValidationError.invalidEmail))
 //            case .origin:
 //            case .phrase:
 //

@@ -40,6 +40,7 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
     let searchPictureLabel = "vm.signUp.searchPictureLabel".localized()
     let blurButtonTitle = "vm.signUp.blurButtonTitle".localized()
     let nextButtonTitle = "vm.signUp.nextButtonTitle".localized()
+    let saveButtonTitle = "vm.signUp.saveButtonTitle".localized()
 
     let textFieldValidationFailed = "vm.signUp.textField.validation.failed".localized()
 

@@ -122,27 +122,19 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         { [weak self] _ in
             self?.showLoading()
         }
-
-        let onEventRef: (Event<GZEAccesToken,GZEError>) -> () = ptr(self, GZELoginViewController.onEvent)
-        let onErrorRef = ptr(self, GZELoginViewController.onError)
-        viewModel.loginAction.events.observeValues(onEventRef)
-        viewModel.loginAction.errors.observeValues(onErrorRef)
+        viewModel.loginAction.events.observeValues(ptr(self, GZELoginViewController.onEvent))
     }
 
     // MARK: CocoaAction
-    func onEvent<T>(event: Event<T, GZEError>) {
+    func onEvent(event: Event<GZEAccesToken, GZEError>) {
         log.debug("Action event received: \(event)")
         hideLoading()
 
         switch event {
-        case .value(let value):
+        case .value(let token):
             switch scene {
             case .password:
-                if let accesToken = value as? GZEAccesToken {
-                    onLogin(accesToken)
-                } else {
-                    log.error("Unexpected value type[\(type(of: value))]. Expecting GZEAccesToken")
-                }
+                onLogin(token)
             default:
                 break
             }

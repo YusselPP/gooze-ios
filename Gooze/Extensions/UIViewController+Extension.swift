@@ -92,12 +92,12 @@ extension UIViewController {
                 log.debug("scroll contentOffset: \(scrollView.contentOffset)")
 
                 if (!aRect.contains(activeField.frame)) {
-                    //UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
+                    UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
                         //scrollView.contentOffset.y = kbSize.height
                         scrollView.scrollRectToVisible(activeField.frame, animated: false)
-                    //}, completion: { _ in
+                    }, completion: { _ in
                         log.debug("scroll result contentOffset: \(scrollView.contentOffset)")
-                   // })
+                    })
                 }
             }
         }

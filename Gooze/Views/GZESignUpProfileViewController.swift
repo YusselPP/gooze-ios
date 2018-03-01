@@ -20,9 +20,25 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     var activeField: UITextField?
 
-    var lastOrientation: UIDeviceOrientation!
+    enum Scene {
+        case phrase
+        case gender
+        case birthday
+        case height
+        case weight
+        case origin
+        case language
+        case interests
+    }
+    var _scene: Scene = .phrase
+    var scene: Scene {
+        get { return _scene }
+        set(newScene){ setScene(newScene) }
+    }
 
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var scrollContentView: UIView!
+    @IBOutlet weak var bottomReferenceView: UIView!
 
     @IBOutlet weak var usernameLabel: UILabel!
 
@@ -38,18 +54,69 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     @IBOutlet weak var profileImageView: UIImageView!
 
     @IBOutlet weak var editPhotoButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
 
     let birthdayPicker = UIDatePicker()
     let genderPicker = UIPickerView()
+
+    let backButton = GZEBackUIBarButtonItem()
+    let nextButton = GZENextUIBarButtonItem()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        lastOrientation = UIDevice.current.orientation
+        setupInterfaceObjects()
+        setupBindings()
+        setupActions()
 
+        showPhraseScene()
+
+        // TODO: Validate numbers: weight, height
+        // TODO: How to know what gender search for
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        registerForKeyboarNotifications(
+            observer: self,
+            willShowSelector: #selector(keyboardWillShow(notification:)),
+            willHideSelector: #selector(keyboardWillHide(notification:))
+        )
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        deregisterFromKeyboardNotifications(observer: self)
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        log.debug("View Will Transition to size: \(size)")
+
+        coordinator.animate(alongsideTransition: nil) { [unowned self] _ in
+            log.debug("View did Transition to size: \(size)")
+            log.debug("Status bar landscape? \(UIApplication.shared.statusBarOrientation.isLandscape)")
+            log.debug("Status bar portrait? \(UIApplication.shared.statusBarOrientation.isPortrait)")
+
+            log.debug("Scroll content view: \(self.scrollContentView.frame)")
+            log.debug("Bottom reference view: \(self.bottomReferenceView.frame)")
+        }
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    func setupInterfaceObjects() {
+        navigationItem.hidesBackButton = true
+        navigationItem.setRightBarButton(nextButton, animated: false)
+
+        skipButton.setTitle(viewModel.skipProfileText.uppercased(), for: .normal)
+        saveButton.setTitle(viewModel.saveButtonTitle.uppercased(), for: .normal)
 
         setTextFieldFormat(phraseTextField, placeholder:  viewModel.phraseLabelText.addQuotes() )
         setTextFieldFormat(genderTextField, placeholder: viewModel.genderLabelText)
@@ -60,12 +127,28 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         setTextFieldFormat(languageTextField, placeholder: viewModel.languageLabelText)
         setTextFieldFormat(interestsTextField, placeholder: viewModel.interestsLabelText)
 
-        phraseTextField.isHidden = false
         interestsTextField.returnKeyType = .done
 
-        usernameLabel.reactive.text <~ viewModel.username.map { $0?.uppercased() }
+        heightTextField.validationRules = GZEUser.Validation.height.stringRule()
+        weightTextField.validationRules = GZEUser.Validation.weight.stringRule()
 
-        // viewModel.gender <~ genderTextField.reactive.continuousTextValues
+        let toolBar = GZEPickerUIToolbar()
+        toolBar.onDone = ptr(self, GZESignUpProfileViewController.pickerDoneTapped)
+        toolBar.onClose = ptr(self, GZESignUpProfileViewController.pickerCloseTapped)
+
+        birthdayPicker.datePickerMode = .date
+        birthdayPicker.maximumDate = Date()
+        birthdayTextField.inputView = birthdayPicker
+        birthdayTextField.inputAccessoryView = toolBar
+
+        genderPicker.dataSource = viewModel
+        genderPicker.delegate = self
+        genderTextField.inputView = genderPicker
+        genderTextField.inputAccessoryView = toolBar
+    }
+
+    func setupBindings() {
+        usernameLabel.reactive.text <~ viewModel.username.map { $0?.uppercased() }
         genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }
         viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.height <~ heightTextField.reactive.continuousTextValues
@@ -73,88 +156,23 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         viewModel.phrase <~ phraseTextField.reactive.continuousTextValues
         viewModel.languages <~ languageTextField.reactive.continuousTextValues
         viewModel.interestedIn <~ interestsTextField.reactive.continuousTextValues
-
         profileImageView.reactive.image <~ viewModel.profilePic
-
         birthdayTextField.reactive.text <~ birthdayPicker.reactive.dates.map { [weak self] in
             self?.viewModel.birthday.value = $0
             return GZEDateHelper.dateFormatter.string(from: $0)
         }
+    }
 
-        birthdayPicker.datePickerMode = .date
-        birthdayPicker.maximumDate = Date()
-        birthdayTextField.inputView = birthdayPicker
-
-
-        genderPicker.dataSource = viewModel
-        genderPicker.delegate = self
-        genderTextField.inputView = genderPicker
-
+    func setupActions() {
+        backButton.onButtonTapped = ptr(self, GZESignUpProfileViewController.backButtonTapped)
+        nextButton.onButtonTapped = ptr(self, GZESignUpProfileViewController.nextButtonTapped)
+        saveButton.addTarget(self, action: #selector(updateProfile), for: .touchUpInside)
         
-        let toolBar = GZEPickerUIToolbar()
-        toolBar.onDone = pickerDoneTapped
-        toolBar.onClose = pickerCloseTapped
-
-        genderTextField.inputAccessoryView = toolBar
-        birthdayTextField.inputAccessoryView = toolBar
-
-        // TODO: Validate numbers
-        // TODO: validate interests
-
         updateAction = CocoaAction(viewModel.updateAction)
         { [weak self] _ in
             self?.showLoading()
         }
-
-        viewModel.updateAction.values.observeValues(onupdateSuccess)
-        viewModel.updateAction.errors.observeValues(onupdateError)
-        saveButton.addTarget(self, action: #selector(updateProfile), for: .touchUpInside)
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        registerForKeyboarNotifications(
-            observer: self,
-            willShowSelector: #selector(keyboardWillShow(notification:)),
-            willHideSelector: #selector(keyboardWillHide(notification:))
-        )
-        //NotificationCenter.default.addObserver(self, selector: #selector(deviceRotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-
-        // profileImageView.image = viewModel.photos.first?.value?.image
-
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        deregisterFromKeyboardNotifications(observer: self)
-        //NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        log.debug("View Will Transition to size: \(size)")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    override func viewDidLayoutSubviews() {
-        log.debug("didLayoutSubviews")
-        deviceRotated()
-    }
-
-    func deviceRotated(){
-        var contentRect = CGRect.zero
-
-        for view in scrollView.subviews {
-            contentRect = contentRect.union(view.frame)
-        }
-        log.debug(scrollView.contentSize)
-        scrollView.contentSize = contentRect.size
-        log.debug(scrollView.contentSize)
+        viewModel.updateAction.events.observeValues(ptr(self, GZESignUpProfileViewController.onEvent))
     }
 
     func setTextFieldFormat(_ textField: UITextField, placeholder: String) {
@@ -170,30 +188,41 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 17)!])
     }
 
-    func updateProfile() {
-        updateAction.execute(saveButton)
+    // MARK: - CocoaAction
+    func onEvent(event: Event<GZEUser, GZEError>) {
+        log.debug("Action event received: \(event)")
+        hideLoading()
+
+        switch event {
+        case .value(let user):
+            onUpdateSuccess(user)
+        case .failed(let err):
+            onError(err)
+        default:
+            break
+        }
     }
 
-    func onupdateSuccess(user: GZEUser) {
-        hideLoading()
-        // displayMessage(viewModel.viewTitle, "Perfil actualizado")
+    func onUpdateSuccess(_ user: GZEUser) {
         performSegue(withIdentifier: profileToPhotoEditSegue, sender: saveButton)
     }
 
-    func onupdateError(error: GZEError) {
-        hideLoading()
+    func onError(_ error: GZEError) {
         displayMessage(viewModel.viewTitle, error.localizedDescription)
     }
 
     // MARK: - UIActions
-
     @IBAction func editPhotoTapped(_ sender: Any) {
         performSegue(withIdentifier: profileToPhotoEditSegue, sender: nil)
     }
 
+    @IBAction func skipButtonTapped(_ sender: Any) {
+        showChooseModeController()
+    }
+
     func pickerDoneTapped(_ sender: UIBarButtonItem) {
         if let field = activeField {
-            textFieldShouldReturn(field)
+            if textFieldShouldReturn(field) {}
         }
     }
 
@@ -201,13 +230,60 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         activeField?.resignFirstResponder()
     }
 
-    // MARK: Scenes
+    func updateProfile() {
+        updateAction.execute(saveButton)
+    }
 
-    // MARK: UITextFieldDelegate
+    func backButtonTapped(_ sender: Any) {
+        switch scene {
+        case .phrase: break
+        case .gender: scene = .phrase
+        case .birthday: scene = .gender
+        case .height: scene = .birthday
+        case .weight: scene = .height
+        case .origin: scene = .weight
+        case .language: scene = .origin
+        case .interests: scene = .language
+        }
+    }
+
+    func nextButtonTapped(_ sender: Any) -> Bool {
+        switch scene {
+        case .phrase: scene = .gender
+        case .gender: scene = .birthday
+        case .birthday: scene = .height
+        case .height: scene = .weight
+        case .weight: scene = .origin
+        case .origin: scene = .language
+        case .language: scene = .interests
+        case .interests: updateProfile()
+        }
+
+//        switch textField.validate() {
+//        case .valid:
+//        case .invalid(let err):
+ //       }
+
+        return true
+    }
+
+    // MARK: - UITextFieldDelegate
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         log.debug("Text editing")
         activeField = textField
+
+        switch textField {
+        case phraseTextField: scene = .phrase
+        case genderTextField: scene = .gender
+        case birthdayTextField: scene = .birthday
+        case heightTextField: scene = .height
+        case weightTextField: scene = .weight
+        case originTextField: scene = .origin
+        case languageTextField: scene = .language
+        case interestsTextField: scene = .interests
+        default: break
+        }
 
         if textField == phraseTextField {
 
@@ -221,8 +297,6 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
                 textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
             }
         }
-
-
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -234,37 +308,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
-        switch textField {
-        case phraseTextField:
-            genderTextField.isHidden = false
-            genderTextField.becomeFirstResponder()
-        case genderTextField:
-            birthdayTextField.isHidden = false
-            birthdayTextField.becomeFirstResponder()
-        case birthdayTextField:
-            heightTextField.isHidden = false
-            heightTextField.becomeFirstResponder()
-        case heightTextField:
-            weightTextField.isHidden = false
-            weightTextField.becomeFirstResponder()
-        case weightTextField:
-            originTextField.isHidden = false
-            originTextField.becomeFirstResponder()
-        case originTextField:
-            languageTextField.isHidden = false
-            languageTextField.becomeFirstResponder()
-        case languageTextField:
-            interestsTextField.isHidden = false
-            interestsTextField.becomeFirstResponder()
-        case interestsTextField:
-            updateProfile()
-            return true
-        default:
-            return true
-        }
-
-        return false
+        return nextButtonTapped(textField)
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -327,6 +371,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         viewModel.gender.value = viewModel.genders[row]
     }
     
+    
 
     // MARK: - Navigation
 
@@ -347,7 +392,96 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         }
     }
 
-    // MARK: Deinitializers
+    func showChooseModeController() {
+        if
+            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
+            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
+
+            viewController.viewModel = viewModel.getChooseModeViewModel()
+
+            setRootController(controller: navController)
+        } else {
+            log.error("Unable to instantiate SearchGoozeNavController")
+            displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
+
+    // MARK: - Scenes
+    func setScene(_ newScene: Scene) {
+        guard newScene != scene else { return }
+
+        _scene = newScene
+
+        switch scene {
+        case .phrase: showPhraseScene()
+        case .gender: showGenderScene()
+        case .birthday: showBirthdayScene()
+        case .height: showHeightScene()
+        case .weight: showWeightScene()
+        case .origin: showOriginScene()
+        case .language: showLanguageScene()
+        case .interests: showInterestsScene()
+        }
+        log.debug("scene changed to: \(scene)")
+    }
+
+    func showPhraseScene() {
+        phraseTextField.isHidden = false
+        phraseTextField.becomeFirstResponder()
+
+        navigationItem.setLeftBarButton(nil, animated: true)
+    }
+
+    func showGenderScene() {
+        genderTextField.isHidden = false
+        genderTextField.becomeFirstResponder()
+
+        navigationItem.setLeftBarButton(backButton, animated: true)
+    }
+
+    func showBirthdayScene() {
+        birthdayTextField.isHidden = false
+        birthdayTextField.becomeFirstResponder()
+
+        navigationItem.setLeftBarButton(backButton, animated: true)
+    }
+
+    func showHeightScene() {
+        heightTextField.isHidden = false
+        heightTextField.becomeFirstResponder()
+    }
+
+    func showWeightScene() {
+        weightTextField.isHidden = false
+        weightTextField.becomeFirstResponder()
+
+        navigationItem.setLeftBarButton(backButton, animated: true)
+    }
+
+    func showOriginScene() {
+        originTextField.isHidden = false
+        originTextField.becomeFirstResponder()
+
+        navigationItem.setLeftBarButton(backButton, animated: true)
+    }
+
+    func showLanguageScene() {
+        languageTextField.isHidden = false
+        languageTextField.becomeFirstResponder()
+
+        navigationItem.setLeftBarButton(backButton, animated: true)
+    }
+
+    func showInterestsScene() {
+        interestsTextField.isHidden = false
+        interestsTextField.becomeFirstResponder()
+
+        navigationItem.setLeftBarButton(backButton, animated: true)
+    }
+
+
+
+    // MARK: - Deinitializers
     deinit {
         log.debug("\(self) disposed")
     }
