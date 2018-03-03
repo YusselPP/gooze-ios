@@ -33,7 +33,7 @@ class GZEUser: Glossy {
         }
 
         var displayValue: String {
-            return self.rawValue.capitalizingFirstLetter()
+            return self.rawValue.localized().capitalizingFirstLetter()
         }
     }
 
@@ -94,8 +94,12 @@ class GZEUser: Glossy {
         var blocked: Bool?
         var image: UIImage?
 
-        init(image: UIImage?) {
-            self.image = image
+        init?(image: UIImage?) {
+            if let image = image {
+                self.image = image
+            } else {
+                return nil
+            }
         }
 
         init?(json: JSON) {
@@ -327,7 +331,7 @@ class GZEUser: Glossy {
             case .weight,
                  .height:
                 // ruleSet.add(rule: ValidationRuleComparison<Float>(min: 0, max: , error: GZEValidationError.lengthMin(fieldName: fieldName, min: 0)))
-                ruleSet.add(rule: ValidationRulePattern(pattern: ContainsNumberValidationPattern(), error: GZEValidationError.invalidEmail))
+                ruleSet.add(rule: ValidationRulePattern(pattern: GZEValidationPattern.atMost2decimalsOptional, error: GZEValidationError.invalidNumber(fieldName: fieldName)))
 //            case .origin:
 //            case .phrase:
 //

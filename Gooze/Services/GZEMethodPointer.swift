@@ -19,3 +19,10 @@ func ptr<T: AnyObject, U>(_ obj: T, _ method: @escaping (T) -> (U) -> Void) -> (
         method(obj!)(arg)
     }
 }
+
+func ptr<T: AnyObject, U, V>(_ obj: T, _ method: @escaping (T) -> (U) -> V) -> ((U) -> V) {
+    return { [weak obj] arg in
+        return method(obj!)(arg)
+    }
+}
+

@@ -699,6 +699,9 @@
                                                             <constraint firstAttribute="width" constant="32" id="jd8-7U-tsh"/>
                                                         </constraints>
                                                         <state key="normal" backgroundImage="camera-153-icon"/>
+                                                        <connections>
+                                                            <action selector="thumbnailTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="sRa-rc-o4z"/>
+                                                        </connections>
                                                     </button>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cLL-wI-EnK">
                                                         <rect key="frame" x="5" y="5" width="70" height="54.5"/>
@@ -731,6 +734,9 @@
                                                             <constraint firstAttribute="width" constant="32" id="vsL-nK-oP3"/>
                                                         </constraints>
                                                         <state key="normal" backgroundImage="camera-153-icon"/>
+                                                        <connections>
+                                                            <action selector="thumbnailTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="eNc-zi-Jd2"/>
+                                                        </connections>
                                                     </button>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FIG-bV-RA2">
                                                         <rect key="frame" x="2" y="5" width="73" height="54.5"/>
@@ -763,6 +769,9 @@
                                                             <constraint firstAttribute="height" constant="22" id="kLH-Xa-D32"/>
                                                         </constraints>
                                                         <state key="normal" backgroundImage="camera-153-icon"/>
+                                                        <connections>
+                                                            <action selector="thumbnailTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="rSi-gy-ZlG"/>
+                                                        </connections>
                                                     </button>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FYw-1F-W7J">
                                                         <rect key="frame" x="3" y="5" width="72" height="54.5"/>
@@ -795,6 +804,9 @@
                                                             <constraint firstAttribute="height" constant="22" id="lok-rd-3bW"/>
                                                         </constraints>
                                                         <state key="normal" backgroundImage="camera-153-icon"/>
+                                                        <connections>
+                                                            <action selector="thumbnailTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="2AK-ro-0QH"/>
+                                                        </connections>
                                                     </button>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TZt-Hl-BzA">
                                                         <rect key="frame" x="2" y="5" width="70" height="54.5"/>
@@ -863,15 +875,23 @@
                                                 </connections>
                                             </button>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15" minValue="1" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="pU0-Sj-avk">
-                                                <rect key="frame" x="85" y="0.0" width="207" height="31"/>
+                                                <rect key="frame" x="85" y="0.0" width="150" height="31"/>
                                             </slider>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r0n-5a-yIm">
+                                                <rect key="frame" x="248" y="0.0" width="52" height="30"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                <state key="normal" title="Button"/>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="q1R-A3-Nh8" firstAttribute="leading" secondItem="6aJ-Ma-qho" secondAttribute="leading" id="9p9-0N-Qm9"/>
                                             <constraint firstAttribute="bottom" secondItem="pU0-Sj-avk" secondAttribute="bottom" id="Ana-jW-0yR"/>
+                                            <constraint firstAttribute="bottom" secondItem="r0n-5a-yIm" secondAttribute="bottom" id="BhZ-tR-nJM"/>
                                             <constraint firstItem="pU0-Sj-avk" firstAttribute="leading" secondItem="q1R-A3-Nh8" secondAttribute="trailing" constant="15" id="Ckl-Ja-Ez4"/>
+                                            <constraint firstItem="r0n-5a-yIm" firstAttribute="top" secondItem="6aJ-Ma-qho" secondAttribute="top" id="THi-QU-f7A"/>
                                             <constraint firstItem="pU0-Sj-avk" firstAttribute="top" secondItem="6aJ-Ma-qho" secondAttribute="top" id="VtZ-y6-tYg"/>
-                                            <constraint firstAttribute="trailing" secondItem="pU0-Sj-avk" secondAttribute="trailing" constant="10" id="XMO-62-fYV"/>
+                                            <constraint firstItem="r0n-5a-yIm" firstAttribute="leading" secondItem="pU0-Sj-avk" secondAttribute="trailing" constant="15" id="XMO-62-fYV"/>
+                                            <constraint firstAttribute="trailing" secondItem="r0n-5a-yIm" secondAttribute="trailing" id="Z8U-M1-Vy5"/>
                                             <constraint firstAttribute="height" constant="30" id="cBH-hc-aom"/>
                                             <constraint firstAttribute="bottom" secondItem="q1R-A3-Nh8" secondAttribute="bottom" id="uNI-p8-Xuk"/>
                                             <constraint firstItem="q1R-A3-Nh8" firstAttribute="top" secondItem="6aJ-Ma-qho" secondAttribute="top" id="ysG-IJ-PI1"/>
@@ -941,12 +961,10 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="tf7-yV-4Ap">
-                        <barButtonItem key="rightBarButtonItem" title="Guardar" id="ueT-4a-Aly"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="tf7-yV-4Ap"/>
                     <connections>
+                        <outlet property="applyBlurButton" destination="r0n-5a-yIm" id="75k-dX-MiC"/>
                         <outlet property="backScrollView" destination="B1l-1m-VOV" id="rws-QF-WQm"/>
-                        <outlet property="blurButton" destination="q1R-A3-Nh8" id="MQe-hV-RgP"/>
                         <outlet property="blurControlsView" destination="6aJ-Ma-qho" id="XNi-vw-f0Z"/>
                         <outlet property="blurEffectView" destination="tsu-W6-Fua" id="x7B-Rp-Xcq"/>
                         <outlet property="blurSlider" destination="pU0-Sj-avk" id="s9i-jv-ZWm"/>
@@ -955,28 +973,28 @@
                         <outlet property="bottomViewHeightConstraint" destination="iyn-R8-Jf3" id="3dV-vo-fkH"/>
                         <outlet property="bottomViewWidthConstraint" destination="BVj-yz-Tia" id="Ilv-Eb-cbK"/>
                         <outlet property="cameraOrReelView" destination="vA2-6o-xIQ" id="x3x-A0-iKp"/>
-                        <outlet property="editButton2" destination="ggh-qe-KAT" id="y4m-kE-Oli"/>
-                        <outlet property="editButton3" destination="VXL-uD-Iho" id="N1I-Yl-h7C"/>
-                        <outlet property="editButton4" destination="vRx-dp-usR" id="QF9-GM-26p"/>
-                        <outlet property="editButton5" destination="2hX-g4-mof" id="OGc-Y7-z3f"/>
+                        <outlet property="editButton1" destination="ggh-qe-KAT" id="0gh-sA-hS4"/>
+                        <outlet property="editButton2" destination="VXL-uD-Iho" id="rmP-z4-oq2"/>
+                        <outlet property="editButton3" destination="vRx-dp-usR" id="Vii-uj-8ii"/>
+                        <outlet property="editButton4" destination="2hX-g4-mof" id="Rlp-Sa-uu1"/>
                         <outlet property="editButtonView" destination="MLo-Oz-9ew" id="olx-Na-5Jl"/>
                         <outlet property="imageContainerTrailingViewLeadingConstraint" destination="Nnd-ZM-pKM" id="Dz1-iP-rVO"/>
                         <outlet property="imageContainerView" destination="dO2-in-Qrd" id="UU9-Aj-It7"/>
+                        <outlet property="mainImageView" destination="4hT-lE-ril" id="XBH-aU-waS"/>
                         <outlet property="overlayView" destination="n3U-KK-ELb" id="ObK-jB-2nY"/>
-                        <outlet property="photoImageView" destination="4hT-lE-ril" id="PLG-Pv-gw9"/>
-                        <outlet property="photoImageView2" destination="cLL-wI-EnK" id="d8h-ex-B4A"/>
-                        <outlet property="photoImageView3" destination="FIG-bV-RA2" id="gtt-VH-Say"/>
-                        <outlet property="photoImageView4" destination="FYw-1F-W7J" id="64h-bx-CnJ"/>
-                        <outlet property="photoImageView5" destination="TZt-Hl-BzA" id="xG7-wK-ynt"/>
+                        <outlet property="photoImageView1" destination="cLL-wI-EnK" id="swu-yX-xFP"/>
+                        <outlet property="photoImageView2" destination="FIG-bV-RA2" id="bGv-7N-c6j"/>
+                        <outlet property="photoImageView3" destination="FYw-1F-W7J" id="Jqr-Ez-OM7"/>
+                        <outlet property="photoImageView4" destination="TZt-Hl-BzA" id="Tbv-nT-LoK"/>
                         <outlet property="photoLabel" destination="3Bh-nd-CJb" id="sN8-wO-V6t"/>
                         <outlet property="photoThumbnailsView" destination="XV1-l3-ykz" id="Obw-C6-XS5"/>
                         <outlet property="profileOverlay" destination="GeZ-wd-uBD" id="Gyy-ub-UbB"/>
-                        <outlet property="saveButton" destination="ueT-4a-Aly" id="IeQ-nh-8CZ"/>
                         <outlet property="searchOverlay" destination="wOa-CL-T0W" id="eVW-qQ-BOV"/>
                         <outlet property="searchOverlayBottomConstraint" destination="NGI-bX-6il" id="Rih-x1-J2L"/>
                         <outlet property="searchOverlayLeadingConstraint" destination="9Py-iC-aJy" id="sXT-zM-3aL"/>
                         <outlet property="searchOverlayTopConstraint" destination="lhI-T6-HHS" id="xHD-12-T2N"/>
                         <outlet property="searchOverlayTrailingConstraint" destination="Koy-c9-6sl" id="c5S-9a-4L0"/>
+                        <outlet property="showBlurButton" destination="q1R-A3-Nh8" id="aa6-Q1-AEP"/>
                         <outlet property="superViewBottomImageContainerBottomConstraint" destination="MnL-sN-r6K" id="8f1-mv-TS8"/>
                         <outlet property="superviewTopViewTopConstraint" destination="ajB-Ca-xW6" id="KMj-x0-uVq"/>
                         <outlet property="superviewTrailingImageContainerTrailingConstraint" destination="IwA-IU-85O" id="kOu-Zu-psy"/>
@@ -987,7 +1005,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Jp-4V-1S0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4766" y="-782"/>
+            <point key="canvasLocation" x="4764.375" y="-782.74647887323943"/>
         </scene>
         <!--Profile Page View Controller-->
         <scene sceneID="UqT-s6-CFk">

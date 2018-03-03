@@ -255,23 +255,21 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
         if let photo = user.profilePic {
-            return storageRepository.uploadFiles([photo].enumerated().flatMap { (index, photo) in
+            return (
+                storageRepository.uploadFiles([photo].enumerated().flatMap { (index, photo) in
 
-                var imageData: Data?
+                    var imageData: Data?
 
-                if let image = photo.image {
+                    if let image = photo.image {
 
-                    imageData = UIImageJPEGRepresentation(image, 1)
+                        imageData = UIImageJPEGRepresentation(image, 1)
 
-                    return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
-                } else {
-                    return nil
-                }
-            }, container: GZEUser.Photo.container)
-                .flatMap(FlattenStrategy.latest, transform: { files -> SignalProducer<GZEUser, GZEError> in
-
-                    return SignalProducer<GZEUser, GZEError> { sink, disposable in
-
+                        return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
+                    } else {
+                        return nil
+                    }
+                }, container: GZEUser.Photo.container)
+                    .map { files -> GZEUser in
                         for file in files {
                             log.debug(file.toJSON() as Any)
 
@@ -283,24 +281,22 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                             log.debug(user.toJSON() as Any)
                         }
 
-                        sink.send(value: user)
-                        sink.sendCompleted()
+                        return user
                     }
-                })
-                .flatMap(FlattenStrategy.latest) { [weak self] (aUser) -> SignalProducer<GZEUser, GZEError> in
+                    .flatMap(FlattenStrategy.latest) { [weak self] (aUser) -> SignalProducer<GZEUser, GZEError> in
 
-                    guard let this = self else {
-                        log.error("Unable to complete the task. Self has been disposed.")
-                        return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                        guard let this = self else {
+                            log.error("Unable to complete the task. Self has been disposed.")
+                            return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                        }
+
+                        let user = GZEUser()
+                        user.id = aUser.id
+                        user.profilePic = aUser.profilePic
+
+                        return this.update(user)
                     }
-
-                    let user = GZEUser()
-                    user.id = aUser.id
-                    user.profilePic = aUser.profilePic
-
-                    return this.update(user)
-            }
-
+            )
         } else {
             return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.profilePic.fieldName)))
         }

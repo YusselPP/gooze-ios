@@ -14,7 +14,7 @@
 // Protocols/GZEValidationError
 "validation.required"="Ingresa tu %@";
 "validation.invalidEmail"="Ingresa un correo electrónico válido";
-"validation.invalidNumber"="El campo %@ debe ser un número";
+"validation.invalidNumber"="El campo %@ debe ser un número válido. Ej: 1.70";
 "validation.lengthMin"="El campo %@ debe tener al menos %d caracteres";
 "validation.lengthMax"="El campo %@ debe tener máximo %d caracteres";
 "validation.exists"="El %@ ya existe";
@@ -36,6 +36,11 @@
 "user.profilePic.fieldName"="Foto de perfil";
 "user.searchPic.fieldName"="Foto de búsqueda";
 "user.galleryPics.fieldName"="Fotos en la galería";
+
+// Models/GZEUser/Gender
+"male"="hombre";
+"female"="mujer";
+"other"="otro";
 
 // ViewModel/GZESignUpViewModel - GZESignUpBasicViewController
 "vm.signUp.viewTitle"="Registro";

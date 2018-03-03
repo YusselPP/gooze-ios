@@ -14,7 +14,7 @@
 // Protocols/GZEValidationError
 "validation.required"="Enter your %@";
 "validation.invalidEmail"="Enter a valid email";
-"validation.invalidNumber"="The field %@ must be a number";
+"validation.invalidNumber"="The field %@ must be a valid number. Ex: 1.70";
 "validation.lengthMin"="The field %@ must be a minimum of %d characters";
 "validation.lengthMax"="The field %@ must be a maximum of %d characters";
 "validation.exists"="%@ already exists";
@@ -36,6 +36,11 @@
 "user.profilePic.fieldName"="Profile picture";
 "user.searchPic.fieldName"="Search picture";
 "user.galleryPics.fieldName"="Gallery pictures";
+
+// Models/GZEUser/Gender
+"male"="male";
+"female"="female";
+"other"="other";
 
 // ViewModel/GZESignUpViewModel - GZESignUpBasicViewController
 "vm.signUp.viewTitle"="Sign up";

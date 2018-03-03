@@ -136,6 +136,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         toolBar.onDone = ptr(self, GZESignUpProfileViewController.pickerDoneTapped)
         toolBar.onClose = ptr(self, GZESignUpProfileViewController.pickerCloseTapped)
 
+
         birthdayPicker.datePickerMode = .date
         birthdayPicker.maximumDate = Date()
         birthdayTextField.inputView = birthdayPicker
@@ -148,19 +149,30 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     }
 
     func setupBindings() {
+        // Out bindings
         usernameLabel.reactive.text <~ viewModel.username.map { $0?.uppercased() }
+        profileImageView.reactive.image <~ viewModel.profilePic
+        phraseTextField.reactive.text <~ viewModel.phrase
         genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }
-        viewModel.weight <~ weightTextField.reactive.continuousTextValues
-        viewModel.height <~ heightTextField.reactive.continuousTextValues
-        viewModel.origin <~ originTextField.reactive.continuousTextValues
+        birthdayTextField.reactive.text <~ viewModel.birthday.map {
+            $0.flatMap { GZEDateHelper.displayDateFormatter.string(from: $0) }
+        }
+        heightTextField.reactive.text <~ viewModel.height
+        weightTextField.reactive.text <~ viewModel.weight
+        originTextField.reactive.text <~ viewModel.origin
+        languageTextField.reactive.text <~ viewModel.languages
+        interestsTextField.reactive.text <~ viewModel.interestedIn
+
+        // In bindings
         viewModel.phrase <~ phraseTextField.reactive.continuousTextValues
+        // viewModel.gender is set through picker delegate,
+        // because it doesn't have reactive interface
+        viewModel.birthday <~ birthdayPicker.reactive.dates
+        viewModel.height <~ heightTextField.reactive.continuousTextValues
+        viewModel.weight <~ weightTextField.reactive.continuousTextValues
+        viewModel.origin <~ originTextField.reactive.continuousTextValues
         viewModel.languages <~ languageTextField.reactive.continuousTextValues
         viewModel.interestedIn <~ interestsTextField.reactive.continuousTextValues
-        profileImageView.reactive.image <~ viewModel.profilePic
-        birthdayTextField.reactive.text <~ birthdayPicker.reactive.dates.map { [weak self] in
-            self?.viewModel.birthday.value = $0
-            return GZEDateHelper.dateFormatter.string(from: $0)
-        }
     }
 
     func setupActions() {
@@ -231,7 +243,15 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     }
 
     func updateProfile() {
-        updateAction.execute(saveButton)
+        let validationResult = heightTextField.validate()
+            .merge(with: weightTextField.validate())
+
+        switch validationResult {
+        case .valid:
+            updateAction.execute(saveButton)
+        case .invalid(let errors):
+            hanldeValidationError(errors)
+        }
     }
 
     func backButtonTapped(_ sender: Any) {
@@ -247,24 +267,18 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         }
     }
 
-    func nextButtonTapped(_ sender: Any) -> Bool {
-        switch scene {
-        case .phrase: scene = .gender
-        case .gender: scene = .birthday
-        case .birthday: scene = .height
-        case .height: scene = .weight
-        case .weight: scene = .origin
-        case .origin: scene = .language
-        case .language: scene = .interests
-        case .interests: updateProfile()
+    func nextButtonTapped(_ sender: Any) {
+        if let activeField = activeField {
+            switch activeField {
+            case heightTextField, weightTextField:
+                if !validate(activeField) {
+                    return
+                }
+            default:
+                break
+            }
         }
-
-//        switch textField.validate() {
-//        case .valid:
-//        case .invalid(let err):
- //       }
-
-        return true
+        showNextScene()
     }
 
     // MARK: - UITextFieldDelegate
@@ -308,7 +322,18 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return nextButtonTapped(textField)
+
+        switch textField {
+        case heightTextField,
+             weightTextField:
+            if !validate(textField) {
+                return false
+            }
+        default:
+            break
+        }
+        showNextScene()
+        return false
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -348,7 +373,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         return true
     }
 
-    // MARK: KeyboardNotifications
+    // MARK: - KeyboardNotifications
 
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
@@ -360,7 +385,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         removeKeyboardInset(scrollView: scrollView)
     }
 
-    // MARK: UIPickerDelegate
+    // MARK: - UIPickerDelegate
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return viewModel.genders[row]?.displayValue
@@ -371,7 +396,27 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         viewModel.gender.value = viewModel.genders[row]
     }
     
-    
+    // MARK: - Validation
+    func validate(_ field: UITextField) -> Bool {
+        switch field.validate() {
+        case .valid: return true
+        case .invalid(let failureErrors):
+            hanldeValidationError(failureErrors)
+            return false
+        }
+    }
+
+    func hanldeValidationError(_ errors: [Error]) {
+        log.debug(errors)
+        var msg = ""
+        for error in errors {
+            if !msg.isEmpty {
+                msg += ". \n"
+            }
+            msg += error.localizedDescription
+        }
+        displayMessage(viewModel.viewTitle, msg)
+    }
 
     // MARK: - Navigation
 
@@ -423,6 +468,19 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         case .interests: showInterestsScene()
         }
         log.debug("scene changed to: \(scene)")
+    }
+
+    func showNextScene() {
+        switch scene {
+        case .phrase: scene = .gender
+        case .gender: scene = .birthday
+        case .birthday: scene = .height
+        case .height: scene = .weight
+        case .weight: scene = .origin
+        case .origin: scene = .language
+        case .language: scene = .interests
+        case .interests: updateProfile()
+        }
     }
 
     func showPhraseScene() {
@@ -478,7 +536,6 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
-
 
 
     // MARK: - Deinitializers
