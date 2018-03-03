@@ -63,14 +63,9 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
     let profilePic = MutableProperty<UIImage?>(nil)
     let searchPic = MutableProperty<UIImage?>(nil)
 
-    var photos = [MutableProperty<GZEUser.Photo?>]()
-
     let mainImage = MutableProperty<UIImage?>(nil)
 
-    let thumbnail1 = MutableProperty<UIImage?>(nil)
-    let thumbnail2 = MutableProperty<UIImage?>(nil)
-    let thumbnail3 = MutableProperty<UIImage?>(nil)
-    let thumbnail4 = MutableProperty<UIImage?>(nil)
+    var thumbnails = [MutableProperty<UIImage?>](repeating: MutableProperty<UIImage?>(nil), count: 4)
 
     let genders: [GZEUser.Gender?]
 
@@ -172,13 +167,11 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
 
         self.user.id = userId
 
-        // TODO: remove from server
-        self.user.photos?.removeAll(keepingCapacity: true)
-
-        self.user.photos!.append(self.thumbnail1.map{ GZEUser.Photo(image: $0) }.value)
-        self.user.photos!.append(self.thumbnail2.map{ GZEUser.Photo(image: $0) }.value)
-        self.user.photos!.append(self.thumbnail3.map{ GZEUser.Photo(image: $0) }.value)
-        self.user.photos!.append(self.thumbnail4.map{ GZEUser.Photo(image: $0) }.value)
+        // TODO: remove old photos from server
+        self.user.photos = (
+            self.thumbnails
+                .flatMap{ GZEUser.Photo(image:$0.value) }
+        )
 
         return self.userRepository.savePhotos(self.user)
     }
