@@ -18,14 +18,11 @@ extension UIScrollView {
     }
 
     //fit imageview in the scrollview
-    func setZoomScale(imageView: UIImageView, animated: Bool) {
-        let imageViewSize = imageView.bounds.size
-        let size = self.bounds.size
-        let widthScale = size.width / imageViewSize.width
-        let heightScale = size.height / imageViewSize.height
-        let minZoomScale = max(widthScale, heightScale)
+    func setZoomScale(aRect: CGRect, fitIn rect: CGRect, animated: Bool) {
+        let widthScale = rect.width / aRect.width
+        let heightScale = rect.height / aRect.height
 
-        self.minimumZoomScale = minZoomScale
-        self.setZoomScale(minZoomScale, animated: animated)
+        self.minimumZoomScale = min(widthScale, heightScale)
+        self.setZoomScale(max(widthScale, heightScale), animated: animated)
     }
 }

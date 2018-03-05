@@ -55,6 +55,7 @@
 "vm.signUp.profilePictureLabel"="Profile picture";
 "vm.signUp.searchPictureLabel"="Search picture";
 "vm.signUp.blurButtonTitle"="Blur";
+"vm.signUp.applyBlurButtonTitle"="Apply";
 "vm.signUp.nextButtonTitle"="Next";
 "vm.signUp.saveButtonTitle"="Save";
 

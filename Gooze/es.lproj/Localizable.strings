@@ -55,6 +55,7 @@
 "vm.signUp.profilePictureLabel"="Foto de perfil";
 "vm.signUp.searchPictureLabel"="Foto buscador";
 "vm.signUp.blurButtonTitle"="Censurar";
+"vm.signUp.applyBlurButtonTitle"="Aplicar";
 "vm.signUp.nextButtonTitle"="Siguiente";
 "vm.signUp.saveButtonTitle"="Guardar";
 

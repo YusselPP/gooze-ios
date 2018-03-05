@@ -14,7 +14,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     let profileToPhotoEditSegue = "profileToPhotoEditSegue"
 
-    var viewModel: GZESignUpViewModel!
+    var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
 
     var updateAction: CocoaAction<UIButton>!
 
@@ -68,13 +68,22 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
         log.debug("\(self) init")
 
+        loadLoggedUser().start { [weak self] in
+            switch $0 {
+            case .value(let user):
+                self?.viewModel.user = user
+            case .failed(let err):
+                self?.onError(err)
+            default: break
+            }
+        }
+
         setupInterfaceObjects()
         setupBindings()
         setupActions()
 
         showPhraseScene()
 
-        // TODO: Validate numbers: weight, height
         // TODO: How to know what gender search for
     }
 

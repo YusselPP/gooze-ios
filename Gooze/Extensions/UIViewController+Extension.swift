@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftOverlays
+import ReactiveSwift
 
 extension UIViewController {
 
@@ -137,6 +138,15 @@ extension UIViewController {
 
     func showNavigationBar(_ show: Bool, animated: Bool) {
         navigationController?.setNavigationBarHidden(!show, animated: animated)
+    }
+
+    func loadLoggedUser() -> SignalProducer<GZEUser, GZEError> {
+        if let token = GZEApi.instance.accessToken {
+            return GZEUserApiRepository().find(byId: token.userId)
+        } else {
+            log.error("No logged in user found")
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
     }
 }
 

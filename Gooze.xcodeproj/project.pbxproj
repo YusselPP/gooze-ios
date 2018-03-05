@@ -21,6 +21,7 @@
 		8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */; };
 		8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2447301F9E9700004330AF /* GZERepositoryError.swift */; };
 		8D27D03E1FBEB14E00263B6C /* GZEDateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */; };
+		8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A4696204C626400581838 /* UIImage+Extension.swift */; };
 		8D357BAF1FD18C8000D6FB87 /* GZEApiStorageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */; };
 		8D358AC41FBBF75F00F261DC /* ValidatorAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D358AC31FBBF75F00F261DC /* ValidatorAliases.swift */; };
 		8D358AC61FBBFA4200F261DC /* GZEError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D358AC51FBBFA4200F261DC /* GZEError.swift */; };
@@ -118,6 +119,7 @@
 		8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserApiRepository.swift; sourceTree = "<group>"; };
 		8D2447301F9E9700004330AF /* GZERepositoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERepositoryError.swift; sourceTree = "<group>"; };
 		8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateHelper.swift; sourceTree = "<group>"; };
+		8D2A4696204C626400581838 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApiStorageResponse.swift; sourceTree = "<group>"; };
 		8D358AC01FBBDD9300F261DC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D358AC31FBBF75F00F261DC /* ValidatorAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorAliases.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				8D2171912018A20400337F6B /* String+Extension.swift */,
 				8DE23E9820260912000B7422 /* UIScrollView+Extension.swift */,
 				8D1B9ABE2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift */,
+				8D2A4696204C626400581838 /* UIImage+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -806,6 +809,7 @@
 				8DD035331FB55105008EBEAD /* UIImageView+Extension.swift in Sources */,
 				8D357BAF1FD18C8000D6FB87 /* GZEApiStorageResponse.swift in Sources */,
 				F0DDECE41FA1295600450B2D /* GZESearchGoozeViewModel.swift in Sources */,
+				8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,
 				8DAC9A1A203FE17E00E87814 /* GZEProfileViewModel.swift in Sources */,
 				8DE23E9920260912000B7422 /* UIScrollView+Extension.swift in Sources */,

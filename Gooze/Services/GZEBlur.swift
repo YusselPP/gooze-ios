@@ -17,6 +17,7 @@ class GZEBlur {
     var blurEffectView: UIView
     var scrollView: UIScrollView?
 
+    var isEnabled: Bool { return _isEnabled }
     var isDirty = false
 
     var image: UIImage? {
@@ -40,6 +41,7 @@ class GZEBlur {
     // Private vars
     private let ciContext = CIContext(options: nil)
     private let filter = CIFilter(name: "CIMaskedVariableBlur")!
+    private var _isEnabled = false
 
 
     init(image: UIImage, blurEffectView: UIView, resultImageView: UIImageView, scrollView: UIScrollView? = nil) {
@@ -55,17 +57,37 @@ class GZEBlur {
         radiusDidSet()
     }
 
+    func enable(){
+        _isEnabled = true
+        draw()
+    }
+
+    func disable() {
+        //revert()
+        resultImageView.image = resultImage
+        _isEnabled = false
+    }
+
     func apply() {
+        if !isEnabled {
+            return
+        }
         resultImage = resultImageView.image
         isDirty = true
     }
 
     func revert() {
+        if !isEnabled {
+            return
+        }
         resultImage = image
         isDirty = false
     }
 
     func draw() {
+        if !isEnabled {
+            return
+        }
 
         guard let image = resultImage else {
             log.debug("No image to draw")

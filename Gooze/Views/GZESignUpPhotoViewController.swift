@@ -22,7 +22,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     var saveSearchAction: CocoaAction<UIButton>!
     var saveGalleryAction: CocoaAction<UIButton>!
 
-    var selectedImageButton: UIButton?
     var selectedThumbnail: MutableProperty<UIImage?>?
 
     var photoImageViews: [UIImageView] = []
@@ -61,18 +60,17 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             overlay = searchOverlay
         }
 
-        let factor: CGFloat = 1 //mainImageView.image!.size.width/imageContainerView.frame.width
-        let scale: CGFloat = 1/backScrollView.zoomScale
         let imageFrame = mainImageView.imageFrame()
-        let x = (backScrollView.contentOffset.x + overlay.frame.origin.x - imageFrame.origin.x) * scale * factor
-        let y = (backScrollView.contentOffset.y + overlay.frame.origin.y - imageFrame.origin.y) * scale * factor
-        let width = overlay.frame.size.width * scale * factor
-        let height = overlay.frame.size.height * scale * factor
+        let imageScale = 1/mainImageView.imageScale()
+        let x = (backScrollView.contentOffset.x + overlay.frame.origin.x - imageFrame.origin.x) * imageScale
+        let y = (backScrollView.contentOffset.y + overlay.frame.origin.y - imageFrame.origin.y) * imageScale
+        let width = overlay.frame.size.width * imageScale
+        let height = overlay.frame.size.height * imageScale
 
         let resultArea = CGRect(x: x, y: y, width: width, height: height)
 
-        log.debug("factor: \(factor)")
-        log.debug("scale: \(scale)")
+        log.debug("original image size: \(String(describing: mainImageView.image?.size))")
+        log.debug("image scale: \(imageScale)")
         log.debug("backScrollView.contentOffset: \(backScrollView.contentOffset)")
         log.debug("profileOverlay.frame: \(profileOverlay.frame)")
         log.debug("imageFrame: \(imageFrame)")
@@ -82,11 +80,15 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
 
+    var nextButton = GZENextUIBarButtonItem()
+    var backButton = GZEBackUIBarButtonItem()
+
     @IBOutlet weak var backScrollView: UIScrollView! {
         didSet {
             backScrollView.delegate = self
         }
     }
+    @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
 
     @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var overlayView: UIView!
@@ -104,11 +106,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var photoImageView3: UIImageView!
     @IBOutlet weak var photoImageView4: UIImageView!
 
-    var nextButton: GZENextUIBarButtonItem!
-    var backButton: GZEBackUIBarButtonItem!
-
     @IBOutlet weak var bottomRightButton: UIButton!
-    @IBOutlet weak var bottomBackButton: UIButton!
     @IBOutlet weak var editButton1: UIButton!
     @IBOutlet weak var editButton2: UIButton!
     @IBOutlet weak var editButton3: UIButton!
@@ -139,25 +137,26 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var searchOverlayTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var searchOverlayBottomConstraint: NSLayoutConstraint!
 
+    // Method weak references
+    var onEventPtr: ((Event<GZEUser,GZEError>) -> Void)!
+    var onActionTriggered: ((UIButton) -> Void)!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        // TODO: SetLayout here or in viewDidAppear to work in landscape mode?????
-        setLayout()
+        createWeakMethods()
         setupInterfaceObjects()
         setupBindings()
-
 
         switch mode {
         case .editGalleryPic:
             scene = .gallery
-            editButton2.sendActions(for: .touchUpInside)
+            editButton1.sendActions(for: .touchUpInside)
         case .editProfilePic:
             scene = .cameraOrReel
         }
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -168,11 +167,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // setLayout()
-        setOverlay()
-
-        backScrollView.setZoomScale(imageView: mainImageView, animated: false)
-        backScrollView.centerContent(animated: false)
+        setLayout()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -180,34 +175,42 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     override func viewDidLayoutSubviews() {
-        log.debug("Search bounds: \(searchOverlay.bounds)")
         super.viewDidLayoutSubviews()
-
-        setOverlayConstraints()
-
-        blur?.draw()
-
-        log.debug("Image container bounds: \(imageContainerView.bounds)")
-        log.debug("Search bounds: \(searchOverlay.bounds)")
+        log.debug("viewDidLayoutSubviews")
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         log.debug("View Will Transition to size: \(size)")
 
-        setLayout(size)
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.overlayView.alpha = 0
+        }
 
-        log.debug("Search bounds: \(searchOverlay.bounds)")
+        if size.width > size.height {
+            setLayout(.landscapeLeft)
+        } else {
+            setLayout(.portrait)
+        }
 
-        coordinator.animate(alongsideTransition: nil, completion: {
-            [weak self]_ in
+        coordinator.animate(alongsideTransition: nil) { [unowned self] _ in
+            log.debug("View did Transition to size: \(size)")
+            log.debug("Status bar landscape? \(UIApplication.shared.statusBarOrientation.isLandscape)")
+            log.debug("Status bar portrait? \(UIApplication.shared.statusBarOrientation.isPortrait)")
 
-            guard let this = self else {
-                return
+
+            self.setZoomScale()
+            self.setScrollInsets()
+            self.backScrollView.centerContent(animated: true)
+
+            self.setOverlay()
+            self.blur?.draw()
+
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.overlayView.alpha = 0.5
             }
-            log.debug("Search bounds: \(this.searchOverlay.bounds)")
-            this.setOverlay()
-        })
+        }
+        super.viewWillTransition(to: size, with: coordinator)
     }
 
     override func didReceiveMemoryWarning() {
@@ -216,56 +219,71 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     // MARK: - Setup
+    func createWeakMethods() {
+        onActionTriggered = ptr(self, GZESignUpPhotoViewController.actionTriggerHandler)
+        onEventPtr = ptr(self, GZESignUpPhotoViewController.onEvent)
+    }
+
     func setupInterfaceObjects() {
         setupBlur()
+        setupDblCtrlView()
+
+        backButton.onButtonTapped = ptr(self, GZESignUpPhotoViewController.backButtonTapped)
+        nextButton.onButtonTapped = ptr(self, GZESignUpPhotoViewController.nextButtonTapped)
+        navigationItem.hidesBackButton = true
 
         photoImageViews.append(photoImageView1)
         photoImageViews.append(photoImageView2)
         photoImageViews.append(photoImageView3)
         photoImageViews.append(photoImageView4)
 
-
         editButton1.tag = 0
-        editButton2.tag = 0
-        editButton3.tag = 0
-        editButton4.tag = 0
+        editButton2.tag = 1
+        editButton3.tag = 2
+        editButton4.tag = 3
 
         editButton1.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
         editButton2.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
         editButton3.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
         editButton4.addTarget(self, action: #selector(thumbnailTapped(_:)), for: .touchUpInside)
+
+        editButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(editButtonViewTapped(_:))))
     }
 
     func setupBindings() {
-        mainImageView.reactive.image <~ viewModel.mainImage
+        // mainImageView.reactive.image <~ viewModel.mainImage
+        viewModel.mainImage.signal.observeValues { [weak self] in
+            guard let this = self else {return}
+            this.mainImageView.image = $0
+            //this.setScrollInsets()
+            //this.setZoomScale()
+            //this.backScrollView.centerContent(animated: true)
+        }
 
         for (index, imageView) in photoImageViews.enumerated() {
             if index < viewModel.thumbnails.count {
                 imageView.tag = index
                 imageView.reactive.image <~ viewModel.thumbnails[index]
+                imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(thumbnailImageTapped(_:))))
             }
         }
 
-        saveProfileAction = CocoaAction(viewModel.saveProfilePicAction)
-        { [weak self] _ in
-            self?.showLoading()
-        }
-        saveSearchAction = CocoaAction(viewModel.saveSearchPicAction)
-        { [weak self] _ in
-            self?.showLoading()
-        }
-        saveGalleryAction = CocoaAction(viewModel.savePhotosAction)
-        { [weak self] _ in
-            self?.showLoading()
-        }
 
-        viewModel.saveProfilePicAction.events.observeValues(onEvent(event:))
-        viewModel.saveSearchPicAction.events.observeValues(onEvent(event:))
-        viewModel.savePhotosAction.events.observeValues(onEvent(event:))
+        saveProfileAction = CocoaAction(viewModel.saveProfilePicAction, onActionTriggered)
+        saveSearchAction = CocoaAction(viewModel.saveSearchPicAction, onActionTriggered)
+        saveGalleryAction = CocoaAction(viewModel.savePhotosAction, onActionTriggered)
+
+
+        viewModel.saveProfilePicAction.events.observeValues(onEventPtr)
+        viewModel.saveSearchPicAction.events.observeValues(onEventPtr)
+        viewModel.savePhotosAction.events.observeValues(onEventPtr)
     }
+
+
 
     func setupBlur() {
         showBlurButton.setTitle(viewModel.blurButtonTitle, for: .normal)
+        applyBlurButton.setTitle(viewModel.applyBlurButtonTitle, for: .normal)
         blurSlider.reactive.values.debounce(0.3, on: QueueScheduler.main).observeValues { [weak self] in
             self?.blur?.radius = $0
         }
@@ -278,27 +296,60 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         blurEffectView.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(blurPinched(_:))))
     }
 
+    func setupDblCtrlView() {
+        let cameraButton = UIButton()
+        cameraButton.setImage(#imageLiteral(resourceName: "camera-white-icon"), for: .normal)
+        cameraButton.translatesAutoresizingMaskIntoConstraints = false
+        cameraButton.addTarget(self, action: #selector(showCamera), for: .touchUpInside)
+        let topView = UIView()
+        topView.translatesAutoresizingMaskIntoConstraints = false
+        topView.addSubview(cameraButton)
+        topView.topAnchor.constraint(equalTo: cameraButton.topAnchor).isActive = true
+        topView.bottomAnchor.constraint(equalTo: cameraButton.bottomAnchor).isActive = true
+        topView.centerXAnchor.constraint(equalTo: cameraButton.centerXAnchor).isActive = true
+        cameraButton.widthAnchor.constraint(equalToConstant: 32.0).isActive = true
 
+        let reelButton = UIButton()
+        reelButton.setImage(#imageLiteral(resourceName: "movie-icon"), for: .normal)
+        reelButton.translatesAutoresizingMaskIntoConstraints = false
+        reelButton.addTarget(self, action: #selector(showCamera), for: .touchUpInside)
+        let botView = UIView()
+        botView.translatesAutoresizingMaskIntoConstraints = false
+        botView.addSubview(reelButton)
+        botView.topAnchor.constraint(equalTo: reelButton.topAnchor).isActive = true
+        botView.bottomAnchor.constraint(equalTo: reelButton.bottomAnchor).isActive = true
+        botView.centerXAnchor.constraint(equalTo: reelButton.centerXAnchor).isActive = true
+        reelButton.widthAnchor.constraint(equalToConstant: 32.0).isActive = true
+
+        dblCtrlView.topCtrlView = topView
+        dblCtrlView.bottomCtrlView = botView
+        dblCtrlView.separatorWidth = 35
+
+        dblCtrlView.topViewTappedHandler = { _ in
+            cameraButton.sendActions(for: .touchUpInside)
+        }
+        dblCtrlView.bottomViewTappedHandler = dblCtrlView.topViewTappedHandler
+    }
 
     // MARK: - Actions
     @IBAction func nextButtonTapped(_ sender: Any) {
         switch scene! {
         case .profilePic:
-            let croppedImage = mainImageView.crop(to: cropArea)
+            let croppedImage = viewModel.mainImage.value?.crop(to: cropArea)
             viewModel.profilePic.value = croppedImage
             saveProfileAction.execute(sender)
         case .searchPic:
-            let croppedImage = mainImageView.crop(to: cropArea)
+            let croppedImage = viewModel.mainImage.value?.crop(to: cropArea)
             viewModel.searchPic.value = croppedImage
             saveSearchAction.execute(sender)
         case .blur:
+            blur?.disable()
             viewModel.mainImage.value = blur?.resultImage
             blur = nil
             switch mode {
             case .editProfilePic:
                 scene = .profilePic
             case .editGalleryPic:
-                // TODO: save and go to gallery
                 selectedThumbnail?.value = viewModel.mainImage.value
                 scene = .gallery
             }
@@ -309,68 +360,138 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         }
     }
 
-    @IBAction func backButtonTapped(_ sender: Any) {
+    func backButtonTapped(_ sender: Any) {
         switch scene! {
+        case .cameraOrReel:
+            switch mode {
+            case .editProfilePic: previousController(animated: true)
+            case .editGalleryPic:
+                scene = .gallery
+            }
         case .profilePic:
             scene = .cameraOrReel
         case .searchPic:
             scene = .profilePic
         case .blur:
-            if let blur = blur, blur.isDirty {
-                blur.revert()
-            } else {
+            //if let blur = blur, blur.isDirty {
+            //    blur.revert()
+            //} else {
+                blur?.disable()
+                viewModel.mainImage.value = nil
                 scene = .cameraOrReel
-            }
+            //}
+        case .gallery:
+            previousController(animated: true)
         default:
             break
         }
     }
 
-    @IBAction func editPhotoButtonTapped(_ sender: UIButton) {
+    func editButtonViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        if let view = gestureRecognizer.view {
+            editPhotoButtonTapped(view)
+        }
+    }
+
+    @IBAction func editPhotoButtonTapped(_ sender: Any) {
         scene = .cameraOrReel
     }
 
     @IBAction func addPhoto(_ sender: UIButton) {
-        editPhoto()
+        showCamera()
     }
 
-    @IBAction func thumbnailTapped(_ sender: UIButton) {
-        switch sender {
-        case editButton1:
-            selectedThumbnail = viewModel.thumbnails[0]
-        case editButton2:
-            selectedThumbnail = viewModel.thumbnails[1]
-        case editButton3:
-            selectedThumbnail = viewModel.thumbnails[2]
-        case editButton4:
-            selectedThumbnail = viewModel.thumbnails[3]
-        default:
-            selectedThumbnail = viewModel.thumbnails[0]
+    func thumbnailImageTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        if let view = gestureRecognizer.view {
+            thumbnailTapped(view)
         }
+    }
 
-        
+    @IBAction func thumbnailTapped(_ sender: UIView) {
+        selectedThumbnail = viewModel.thumbnails[sender.tag]
         viewModel.mainImage.value = selectedThumbnail?.value
     }
 
-    @IBAction func blurButtonTapped(_ sender: Any) {
+    @IBAction func showBlurButtonTapped(_ sender: Any) {
+        if blur != nil {
+            if blur!.isEnabled {
+                blur!.disable()
+                blurEffectView.isHidden = true
+
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    self?.blurSlider.alpha = 0
+                    self?.applyBlurButton.alpha = 0
+                }
+            } else {
+                blurEffectView.transform = .identity
+                blurEffectView.isHidden = false
+                blur!.enable()
+
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    self?.blurSlider.alpha = 1
+                    self?.applyBlurButton.alpha = 1
+                }
+            }
+        }
+    }
+
+    @IBAction func applyButtonTapped(_ sender: Any) {
         blur?.apply()
     }
 
     func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
 
-        let scale = gestureRecognizer.scale
+        guard gestureRecognizer.state == .began || gestureRecognizer.state == .changed else { return }
+
+        guard gestureRecognizer.numberOfTouches > 1 else { return }
+        
 
         guard let view = gestureRecognizer.view else {
             log.debug("Gesture doesn't have a view")
             return
         }
 
-        log.debug(view.transform)
-        log.debug(scale)
+        let location1 = gestureRecognizer
+            .location(ofTouch: 0, in: view)
+        let location2 = gestureRecognizer
+            .location(ofTouch: 1, in: view)
 
-        let transform = view.transform.scaledBy(x: scale, y: scale)
+        //log.debug("touch 1 location: \(location1)")
+        //log.debug("touch 2 location: \(location2)")
 
-        guard transform.a >= 1 else {
+
+        let scale = gestureRecognizer.scale
+        var xScale: CGFloat = 1
+        var yScale: CGFloat = 1
+
+        let x1 = location1.x
+        let x2 = location2.x
+        let y1 = location1.y
+        let y2 = location2.y
+
+        if x1 == x2 {
+            // Catch perfect vertical line to avoid div by Zero
+            yScale = scale
+        } else {
+            // Calc line slope
+            let slope = abs((y1 - y2) / (x1 - x2))
+
+            if slope < 0.5 {
+                // Horizontal scaling range
+                xScale = scale
+            } else if slope < 1.5 {
+                // Diagonal scaling range
+                xScale = scale
+                yScale = scale
+            } else {
+                // Vertical scaling range
+                yScale = scale
+            }
+        }
+
+        let transform = view.transform.scaledBy(x: xScale, y: yScale)
+
+        guard transform.a >= 1 && transform.d >= 1 else {
             log.debug("Reached min size")
             return
         }
@@ -383,17 +504,31 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
 
-        if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-            let translation = gestureRecognizer.translation(in: self.view)
+        guard gestureRecognizer.state == .began || gestureRecognizer.state == .changed else { return }
 
-            gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
-            gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+        guard let view = gestureRecognizer.view else {
+            log.debug("Gesture doesn't have a view")
+            return
         }
+
+        let containerView: UIView = imageContainerView
+        let translation = gestureRecognizer.translation(in: containerView)
+
+        var transform = view.transform.translatedBy(x: translation.x, y: translation.y)
+
+        // limits
+        let viewCenter = view.center
+        transform.tx = min(max(transform.tx, -viewCenter.x), viewCenter.x)
+        transform.ty = min(max(transform.ty, -viewCenter.y), viewCenter.y)
+
+        // log.debug("new view transform: \(transform)")
+        view.transform = transform
+        gestureRecognizer.setTranslation(CGPoint.zero, in: containerView)
 
         blur?.draw()
     }
 
-    func editPhoto() {
+    func showCamera() {
         let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: false)) { [weak self] image, asset in
 
             log.debug("camera controller handler")
@@ -415,11 +550,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
                 return
             }
 
-                guard this.currentPhotoNum >= 0 else {
-                    log.warning("Invalid photo number")
-                    return
-                }
-
             this.viewModel.mainImage.value = compressedImage
 
             this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.mainImageView, scrollView: this.backScrollView)
@@ -431,30 +561,41 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         present(cameraViewController, animated: true, completion: nil)
     }
 
-    func setLayout(_ size: CGSize? = nil) {
-        var viewSize: CGSize
-        if size == nil {
-            viewSize = view.bounds.size
+    func setLayout(_ aOrientation: UIInterfaceOrientation? = nil) {
+        log.debug("Setting layout..")
+        log.debug("controller view frame: \(view.frame)")
+        log.debug("Image container frame: \(imageContainerView.frame)")
+        log.debug("Search frame: \(searchOverlay.frame)")
+        var orientation: UIInterfaceOrientation
+
+        if aOrientation != nil {
+            orientation = aOrientation!
         } else {
-            viewSize = size!
+            orientation = UIApplication.shared.statusBarOrientation
         }
 
-        log.debug("viewSize: \(viewSize)")
-        log.debug("Image container bounds: \(imageContainerView.bounds)")
-
-        if viewSize.width > viewSize.height {
+        if orientation.isLandscape {
             setLandscapeLayout()
         } else {
             setPortraitLayout()
         }
 
+        UIView.animate(withDuration: 0.3, animations: { [weak self] _ in
+            self?.view.layoutIfNeeded()
+        })
 
-        log.debug("Image container bounds: \(imageContainerView.bounds)")
-        log.debug("Search bounds: \(searchOverlay.bounds)")
+        self.setSearchOverlayConstraints()
+
+        UIView.animate(withDuration: 0.3, animations: { [weak self] _ in
+            self?.view.layoutIfNeeded()
+        })
+
+        log.debug("Layout set")
+        log.debug("Image container frame: \(imageContainerView.frame)")
+        log.debug("Search frame: \(searchOverlay.frame)")
     }
 
     func setPortraitLayout() {
-        log.debug("Portrait layout set")
         imageContainerTrailingViewLeadingConstraint.isActive = false
         superViewBottomImageContainerBottomConstraint.isActive = false
         superviewTopViewTopConstraint.isActive = false
@@ -464,10 +605,10 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         viewTopImageContainerBottomConstraint.isActive = true
         viewLeadingSuperviewLeadingConstrint.isActive = true
         bottomViewHeightConstraint.isActive = true
+        log.debug("Portrait layout set")
     }
 
     func setLandscapeLayout() {
-        log.debug("Landscape layout set")
         superviewTrailingImageContainerTrailingConstraint.isActive = false
         viewTopImageContainerBottomConstraint.isActive = false
         viewLeadingSuperviewLeadingConstrint.isActive = false
@@ -477,9 +618,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         superViewBottomImageContainerBottomConstraint.isActive = true
         superviewTopViewTopConstraint.isActive = true
         bottomViewWidthConstraint.isActive = true
+        log.debug("Landscape layout set")
     }
 
-    func setOverlayConstraints() {
+    func setSearchOverlayConstraints() {
+        log.debug("Image container frame: \(imageContainerView.frame)")
         if imageContainerView.bounds.width < imageContainerView.bounds.height {
             searchOverlayTopConstraint.isActive = false
             searchOverlayBottomConstraint.isActive = false
@@ -496,11 +639,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func setOverlay() {
-
-        log.debug("Image container bounds: \(imageContainerView.bounds)")
-        log.debug("Search bounds: \(searchOverlay.bounds)")
-        log.debug("Search bounds: \(searchOverlay.frame)")
-
+        log.debug("searchOverlay frame: \(searchOverlay.frame)")
         let path = CGMutablePath()
 
         if scene == .profilePic {
@@ -521,11 +660,10 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         maskLayer.path = path;
         maskLayer.fillRule = kCAFillRuleEvenOdd
 
-        // Release the path since it's not covered by ARC.
         overlayView.layer.mask = maskLayer
     }
 
-    // MARK: - Observer handlers
+    // MARK: - CocoaAction
     func onEvent(event: Event<GZEUser, GZEError>) {
         log.debug("Action event received: \(event)")
         hideLoading()
@@ -559,11 +697,17 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     func onSaveSearchSuccess(user: GZEUser) {
         log.debug("Search pic saved")
-        navigationController?.popViewController(animated: true)
+        previousController(animated: true)
     }
 
     func onSaveGallerySuccess(user: GZEUser) {
         log.debug("Gallery saved")
+        // TODO: Send to fill payment data
+        showChooseModeController()
+    }
+
+    func actionTriggerHandler(_ sender: UIButton) {
+        showLoading()
     }
 
     func onError(err: GZEError) {
@@ -599,32 +743,42 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         photoThumbnailsView.isHidden = true
         photoLabel.isHidden = true
         blurEffectView.isHidden = true
+        dblCtrlView.isHidden = true
 
         bottomRightButton.isHidden = true
-
-        // TODO: remove buttons
         editButtonView.isHidden = true
-
     }
 
     func showGalleryScene() {
         backScrollView.isHidden = false
         photoThumbnailsView.isHidden = false
+        bottomRightButton.isHidden = false
+        showBackButton(true)
+        showNextButton(false)
 
         editButtonView.isHidden = false
+        bottomRightButton.setTitle(viewModel.saveButtonTitle.uppercased(), for: .normal)
     }
 
     func showCameraOrReelScene() {
-        cameraOrReelView.isHidden = false
+        // cameraOrReelView.isHidden = false
+        dblCtrlView.isHidden = false
+        showBackButton(true)
+        showNextButton(false)
     }
 
     func showBlurScene() {
+
+        blurSlider.alpha = 0
+        applyBlurButton.alpha = 0
+
         backScrollView.isHidden = false
         blurControlsView.isHidden = false
         bottomRightButton.isHidden = false
-        blurEffectView.isHidden = false
 
-        bottomRightButton.setTitle(viewModel.nextButtonTitle, for: .normal)
+        setScrollInsets()
+        setZoomScale()
+        bottomRightButton.setTitle(viewModel.nextButtonTitle.uppercased(), for: .normal)
     }
 
     func showProfileScene() {
@@ -633,12 +787,12 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         photoLabel.isHidden = false
         bottomRightButton.isHidden = false
 
+        setZoomScale()
+        setScrollInsets()
         setOverlay()
-        backScrollView.setZoomScale(imageView: mainImageView, animated: false)
-        backScrollView.centerContent(animated: false)
 
         photoLabel.text = viewModel.profilePictureLabel
-        bottomRightButton.setTitle(viewModel.nextButtonTitle, for: .normal)
+        bottomRightButton.setTitle(viewModel.nextButtonTitle.uppercased(), for: .normal)
     }
 
     func showSearchScene() {
@@ -647,29 +801,101 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         photoLabel.isHidden = false
         bottomRightButton.isHidden = false
 
+        setZoomScale()
+        setScrollInsets()
         setOverlay()
-        backScrollView.setZoomScale(imageView: mainImageView, animated: false)
-        backScrollView.centerContent(animated: false)
 
         photoLabel.text = viewModel.searchPictureLabel
-        bottomRightButton.setTitle(viewModel.nextButtonTitle, for: .normal)
+        bottomRightButton.setTitle(viewModel.nextButtonTitle.uppercased(), for: .normal)
+    }
+
+    func showNextButton(_ show: Bool){
+        if show {
+            navigationItem.setRightBarButton(nextButton, animated: true)
+        } else {
+            navigationItem.setRightBarButton(nil, animated: true)
+        }
+    }
+    func showBackButton(_ show: Bool){
+        if show {
+            navigationItem.setLeftBarButton(backButton, animated: true)
+        } else {
+            navigationItem.setLeftBarButton(nil, animated: true)
+        }
     }
 
     // MARK: - UIScrollViewDelegate
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         switch scrollView {
         default:
-            return scrollView.subviews.first
+            return mainImageView
         }
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         blur?.draw()
+        setScrollInsets()
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        log.debug(backScrollView.contentOffset)
         blur?.draw()
+    }
+
+    func setZoomScale() {
+        if scene == .profilePic {
+            self.backScrollView.setZoomScale(aRect: mainImageView.imageBounds(), fitIn: profileOverlay.bounds, animated: false)
+        } else if scene == .searchPic {
+            self.backScrollView.setZoomScale(aRect: mainImageView.imageBounds(), fitIn: searchOverlay.bounds, animated: false)
+        } else {
+            self.backScrollView.setZoomScale(aRect: mainImageView.imageBounds(), fitIn: imageContainerView.bounds, animated: false)
+        }
+    }
+
+    func setScrollInsets() {
+        // image offset
+        let imageFrame = mainImageView.imageFrame()
+        let imageXOffset = imageFrame.minX
+        let imageYOffset = imageFrame.minY
+        //log.debug("image frame: \(imageFrame)")
+
+
+        // Overlay inset
+        var overlayHInset: CGFloat = 0
+        var overlayVInset: CGFloat = 0
+        if scene == .profilePic {
+            overlayHInset = min(max(
+                imageFrame.width - profileOverlay.frame.minX - profileOverlay.frame.width,
+                0
+            ), profileOverlay.frame.minX)
+            overlayVInset = min(max(
+                imageFrame.height - profileOverlay.frame.minY - profileOverlay.frame.height,
+                0
+            ), profileOverlay.frame.minY)
+        } else if scene == .searchPic {
+            overlayHInset = min(max(
+                imageFrame.width - searchOverlay.frame.minX - searchOverlay.frame.width,
+                0
+            ), searchOverlay.frame.minX)
+            overlayVInset = min(max(
+                imageFrame.height - searchOverlay.frame.minY - searchOverlay.frame.height,
+                0
+            ), searchOverlay.frame.minY)
+        }
+
+        //log.debug("overlayHInset: \(overlayHInset)")
+        //log.debug("overlayVInset: \(overlayVInset)")
+
+        let zoomScale = 1 / backScrollView.zoomScale - 1
+
+        let hInset = max(mainImageView.frame.width * zoomScale + imageXOffset, -imageXOffset) + overlayHInset
+        //log.debug("hInset: \(hInset)")
+        backScrollView.contentInset.left = hInset
+        backScrollView.contentInset.right = hInset
+
+        let vInset = max(mainImageView.frame.height * zoomScale + imageYOffset, -imageYOffset) + overlayVInset
+        //log.debug("vInset: \(vInset)")
+        backScrollView.contentInset.top = vInset
+        backScrollView.contentInset.bottom = vInset
     }
 
     /*
@@ -681,6 +907,19 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+    func showChooseModeController() {
+        if
+            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
+            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
+
+            viewController.viewModel = viewModel.getChooseModeViewModel()
+
+            setRootController(controller: navController)
+        } else {
+            log.error("Unable to instantiate SearchGoozeNavController")
+            displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
 
     // MARK: - Deinitializers
     deinit {

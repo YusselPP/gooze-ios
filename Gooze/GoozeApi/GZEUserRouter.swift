@@ -91,7 +91,8 @@ enum GZEUserRouter: URLRequestConvertible {
 
         // Auth
         switch self {
-        case .updateUser,
+        case .readUser,
+             .updateUser,
              .findByLocation,
              .publicProfile,
              .photo:

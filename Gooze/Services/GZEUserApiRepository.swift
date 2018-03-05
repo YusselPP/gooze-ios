@@ -269,19 +269,23 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                         return nil
                     }
                 }, container: GZEUser.Photo.container)
-                    .map { files -> GZEUser in
-                        for file in files {
-                            log.debug(file.toJSON() as Any)
+                    .flatMap(FlattenStrategy.latest) { files -> SignalProducer<GZEUser, GZEError> in
 
-                            user.profilePic!.name = file.name
-                            user.profilePic!.container = file.container
-                            user.profilePic!.url = "/containers/\(file.container)/download/\(file.name)"
-                            user.profilePic!.blocked = false
+                        return SignalProducer<GZEUser, GZEError> { sink, disposable in
+                            for file in files {
+                                log.debug(file.toJSON() as Any)
 
-                            log.debug(user.toJSON() as Any)
+                                user.profilePic!.name = file.name
+                                user.profilePic!.container = file.container
+                                user.profilePic!.url = "/containers/\(file.container)/download/\(file.name)"
+                                user.profilePic!.blocked = false
+
+                                log.debug(user.toJSON() as Any)
+                            }
+
+                            sink.send(value: user)
+                            sink.sendCompleted()
                         }
-
-                        return user
                     }
                     .flatMap(FlattenStrategy.latest) { [weak self] (aUser) -> SignalProducer<GZEUser, GZEError> in
 

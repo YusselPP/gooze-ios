@@ -14,7 +14,29 @@ import Validator
 class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
 
     let userRepository: GZEUserRepositoryProtocol
-    let user: GZEUser
+    var user: GZEUser {
+        set(newUser) {
+            username.value = newUser.username
+            email.value = newUser.email
+            password.value = newUser.password
+            registerCode.value = newUser.registerCode
+
+            phrase.value = newUser.phrase
+            gender.value = newUser.gender
+            birthday.value = newUser.birthday
+            if let newHeight = newUser.height {
+                height.value = "\(newHeight)"
+            }
+            if let newWeight = newUser.weight {
+                weight.value = "\(newWeight)"
+            }
+            origin.value = newUser.origin
+            languages.value = newUser.languages?.first
+            interestedIn.value = newUser.interestedIn?.first
+        }
+        get { return _user! }
+    }
+    var _user: GZEUser?
 
     let usernameLabelText = GZEUser.Validation.username.fieldName
     let emailLabelText = GZEUser.Validation.email.fieldName
@@ -39,6 +61,7 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
     let profilePictureLabel = "vm.signUp.profilePictureLabel".localized()
     let searchPictureLabel = "vm.signUp.searchPictureLabel".localized()
     let blurButtonTitle = "vm.signUp.blurButtonTitle".localized()
+    let applyBlurButtonTitle = "vm.signUp.applyBlurButtonTitle".localized()
     let nextButtonTitle = "vm.signUp.nextButtonTitle".localized()
     let saveButtonTitle = "vm.signUp.saveButtonTitle".localized()
 
@@ -65,7 +88,12 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
 
     let mainImage = MutableProperty<UIImage?>(nil)
 
-    var thumbnails = [MutableProperty<UIImage?>](repeating: MutableProperty<UIImage?>(nil), count: 4)
+    var thumbnails = [MutableProperty<UIImage?>](arrayLiteral:
+        MutableProperty<UIImage?>(nil),
+        MutableProperty<UIImage?>(nil),
+        MutableProperty<UIImage?>(nil),
+        MutableProperty<UIImage?>(nil)
+    )
 
     let genders: [GZEUser.Gender?]
 
@@ -97,7 +125,7 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
-        self.user = GZEUser()
+        self._user = GZEUser()
 
         var genders: [GZEUser.Gender?] = GZEUser.Gender.array
         genders.insert(nil, at: 0)
