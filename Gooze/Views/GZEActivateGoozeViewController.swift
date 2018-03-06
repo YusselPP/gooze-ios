@@ -220,7 +220,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         searchingRadiusView.alpha = 1
 
-        UIView.animate(withDuration: 1, animations: { [weak self] in
+        UIView.animate(withDuration: 3, animations: { [weak self] in
 
             guard let this = self else {
                 return
