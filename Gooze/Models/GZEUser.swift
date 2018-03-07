@@ -179,6 +179,10 @@ class GZEUser: Glossy {
             self.goozeRating
         ).flatMap{ $0 }
 
+        guard rates.count > 0 else {
+            return nil
+        }
+
         let avg = rates.reduce(0, +) / Float(rates.count)
 
         return  avg
