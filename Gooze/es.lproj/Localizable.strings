@@ -36,6 +36,11 @@
 "user.profilePic.fieldName"="Foto de perfil";
 "user.searchPic.fieldName"="Foto de búsqueda";
 "user.galleryPics.fieldName"="Fotos en la galería";
+"user.imagesRating.fieldName"="Veracidad de imágenes";
+"user.complianceRating.fieldName"="Cumplimiento de acuerdos";
+"user.dateQualityRating.fieldName"="Calidad de la cita";
+"user.dateRating.fieldName"="Calificación de la cita";
+"user.goozeRating.fieldName"="Calificación Gooze";
 
 // Models/GZEUser/Gender
 "male"="hombre";
@@ -89,6 +94,12 @@
 
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Aplicar";
+
+// Views/GZEProfileViewController
+"vm.profile.contactTitle"="Contactar";
+
+// Views/components/GZERatingView
+"vm.ratingView.unrated"="Sin calificación";
 
 // GoozeApi/GZEApiError
 "username"="usuario";

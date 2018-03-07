@@ -145,7 +145,6 @@ class GZEUser: Glossy {
 
     var languages: [String]?
     var interestedIn: [String]?
-    var photos: [Photo]?
 
     var currentLocation: GeoPoint?
     var activeUntil: Date?
@@ -160,8 +159,30 @@ class GZEUser: Glossy {
     var updatedAt: Date?
 
     var profilePic: Photo?
-
     var searchPic: Photo?
+    var photos: [Photo]?
+
+    // Ratings
+    var imagesRating: Float?
+    var complianceRating: Float?
+    var dateQualityRating: Float?
+    var dateRating: Float?
+    var goozeRating: Float?
+
+
+    var overallRating: Float? {
+        let rates = [Float?](arrayLiteral:
+            self.imagesRating,
+            self.complianceRating,
+            self.dateQualityRating,
+            self.dateRating,
+            self.goozeRating
+        ).flatMap{ $0 }
+
+        let avg = rates.reduce(0, +) / Float(rates.count)
+
+        return  avg
+    }
 
     init() {
         log.debug("\(self) init")
@@ -177,6 +198,7 @@ class GZEUser: Glossy {
         self.email = "email" <~~ json
         self.password = "password" <~~ json
 
+        self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
         self.gender = "gender" <~~ json
         self.weight = "weight" <~~ json
         self.height = "height" <~~ json
@@ -185,9 +207,6 @@ class GZEUser: Glossy {
 
         self.languages = "languages" <~~ json
         self.interestedIn = "interestedIn" <~~ json
-        self.photos = "photos" <~~ json
-        self.profilePic = "profilePic" <~~ json
-        self.searchPic = "searchPic" <~~ json
 
         self.currentLocation = "currentLocation" <~~ json
         self.activeUntil = Decoder.decode(dateForKey: "activeUntil", dateFormatter: GZEApi.dateFormatter)(json)
@@ -198,10 +217,18 @@ class GZEUser: Glossy {
         self.mode = "mode" <~~ json
         self.status = "status" <~~ json
         self.loggedIn = "loggedIn" <~~ json
-
-        self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
         self.createdAt = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json)
         self.updatedAt = Decoder.decode(dateForKey: "updatedAt", dateFormatter: GZEApi.dateFormatter)(json)
+
+        self.photos = "photos" <~~ json
+        self.profilePic = "profilePic" <~~ json
+        self.searchPic = "searchPic" <~~ json
+
+        self.imagesRating = "imagesRating" <~~ json
+        self.complianceRating = "complianceRating" <~~ json
+        self.dateQualityRating = "dateQualityRating" <~~ json
+        self.dateRating = "dateRating" <~~ json
+        self.goozeRating = "goozeRating" <~~ json
 
         log.debug("\(self) init")
     }
@@ -241,6 +268,12 @@ class GZEUser: Glossy {
             Encoder.encode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(self.birthday),
             Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(self.createdAt),
             Encoder.encode(dateForKey: "updatedAt", dateFormatter: GZEApi.dateFormatter)(self.updatedAt),
+
+            "imagesRating" ~~> self.imagesRating,
+            "complianceRating" ~~> self.complianceRating,
+            "dateQualityRating" ~~> self.dateQualityRating,
+            "dateRating" ~~> self.dateRating,
+            "goozeRating" ~~> self.goozeRating,
         ])
     }
 
@@ -268,6 +301,12 @@ class GZEUser: Glossy {
         case profilePic
         case searchPic
         case galleryPics
+
+        case imagesRating
+        case complianceRating
+        case dateQualityRating
+        case dateRating
+        case goozeRating
 
         var fieldName: String {
             var key: String
@@ -307,6 +346,17 @@ class GZEUser: Glossy {
                 key = "user.searchPic.fieldName"
             case .galleryPics:
                 key = "user.galleryPics.fieldName"
+
+            case .imagesRating:
+                key = "user.imagesRating.fieldName"
+            case .complianceRating:
+                key = "user.complianceRating.fieldName"
+            case .dateQualityRating:
+                key = "user.dateQualityRating.fieldName"
+            case .dateRating:
+                key = "user.dateRating.fieldName"
+            case .goozeRating:
+                key = "user.goozeRating.fieldName"
             }
 
             return key.localized()

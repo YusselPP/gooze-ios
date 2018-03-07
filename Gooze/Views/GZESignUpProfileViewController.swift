@@ -14,7 +14,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     let profileToPhotoEditSegue = "profileToPhotoEditSegue"
 
-    var viewModel: GZESignUpViewModel! = GZESignUpViewModel(GZEUserApiRepository())
+    var viewModel: GZESignUpViewModel!
 
     var updateAction: CocoaAction<UIButton>!
 
@@ -68,7 +68,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
         log.debug("\(self) init")
 
-        loadLoggedUser().start { [weak self] in
+        /*loadLoggedUser().start { [weak self] in
             switch $0 {
             case .value(let user):
                 self?.viewModel.user = user
@@ -76,7 +76,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
                 self?.onError(err)
             default: break
             }
-        }
+        }*/
 
         setupInterfaceObjects()
         setupBindings()

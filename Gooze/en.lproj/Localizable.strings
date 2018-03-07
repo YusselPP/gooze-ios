@@ -36,6 +36,11 @@
 "user.profilePic.fieldName"="Profile picture";
 "user.searchPic.fieldName"="Search picture";
 "user.galleryPics.fieldName"="Gallery pictures";
+"user.imagesRating.fieldName"="Images veracity";
+"user.complianceRating.fieldName"="Compliance with agreements";
+"user.dateQualityRating.fieldName"="Date quality";
+"user.dateRating.fieldName"="Date rating";
+"user.goozeRating.fieldName"="Gooze rating";
 
 // Models/GZEUser/Gender
 "male"="male";
@@ -89,6 +94,12 @@
 
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Apply";
+
+// Views/GZEProfileViewController
+"vm.profile.contactTitle"="Contact";
+
+// Views/components/GZERatingView
+"vm.ratingView.unrated"="Unrated";
 
 "login failed"="Invalid username or password";
 

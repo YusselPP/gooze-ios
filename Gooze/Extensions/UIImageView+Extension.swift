@@ -7,33 +7,9 @@
 //
 
 import UIKit
+import ReactiveSwift
 
 extension UIImageView {
-
-//    func imageFrame() -> CGRect {
-//        let imageView = self
-//        let imageViewSize = imageView.frame.size
-//        let imgSize = imageView.image?.size
-//
-//        guard let imageSize = imgSize else {
-//            return CGRect.zero
-//        }
-//
-//        let scaleWidth = imageViewSize.width / imageSize.width
-//        let scaleHeight = imageViewSize.height / imageSize.height
-//        let aspect = fmin(scaleWidth, scaleHeight)
-//
-//        var imageRect = CGRect(x: 0, y: 0, width: imageSize.width * aspect, height: imageSize.height * aspect)
-//        // Center image
-//        imageRect.origin.x = (imageViewSize.width - imageRect.size.width) / 2
-//        imageRect.origin.y = (imageViewSize.height - imageRect.size.height) / 2
-//
-//        // Add imageView offset
-//        imageRect.origin.x += imageView.frame.origin.x
-//        imageRect.origin.y += imageView.frame.origin.y
-//
-//        return imageRect
-//    }
 
     func imageBounds() -> CGRect{
         let imageViewSize = self.bounds.size
@@ -85,5 +61,15 @@ extension UIImageView {
         let aspect = fmin(scaleWidth, scaleHeight)
 
         return aspect
+    }
+}
+
+extension Reactive where Base: UIImageView {
+    public var imageUrlRequest: BindingTarget<URLRequest?> {
+        return makeBindingTarget {
+            if let urlRequest = $1 {
+                $0.af_setImage(withURLRequest: urlRequest)
+            }
+        }
     }
 }

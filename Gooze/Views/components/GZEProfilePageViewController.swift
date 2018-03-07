@@ -10,7 +10,9 @@ import UIKit
 
 class GZEProfilePageViewController: UIPageViewController {
 
-    var viewModel: GZEProfileViewModel!
+    var profileVm: GZEProfileViewModel!
+    var galleryVm: GZEGalleryViewModel!
+    var ratingsVm: GZERatingsViewModel!
 
 
     private(set) lazy var orderedViewControllers: [UIViewController] = {
@@ -26,12 +28,6 @@ class GZEProfilePageViewController: UIPageViewController {
         dataSource = self
 
         if let firstViewController = orderedViewControllers.first {
-
-            if let profileVc = firstViewController as? GZEProfileViewController {
-                log.debug("setting profile view controller view model")
-                profileVc.viewModel = viewModel
-            }
-
             setViewControllers([firstViewController],
                                direction: .forward,
                                animated: true,
@@ -45,7 +41,24 @@ class GZEProfilePageViewController: UIPageViewController {
     }
 
     private func newViewController(_ identifier: String) -> UIViewController {
-        return storyboard!.instantiateViewController(withIdentifier: identifier)
+        let vc = storyboard!.instantiateViewController(withIdentifier: identifier)
+
+        if let profileVc = vc as? GZEProfileViewController {
+            log.debug("setting profile view controller view model")
+            profileVc.viewModel = profileVm
+            return profileVc
+        }
+        else if let galleryVc = vc as? GZEGalleryViewController {
+            log.debug("setting gallery view controller view model")
+            galleryVc.viewModel = galleryVm
+            return galleryVc
+        } else if let ratingsVc = vc as? GZERatingsViewController {
+            log.debug("setting ratings view controller view model")
+            ratingsVc.viewModel = ratingsVm
+            return ratingsVc
+        }
+
+        return vc
     }
     
 
@@ -75,12 +88,12 @@ extension GZEProfilePageViewController: UIPageViewControllerDataSource {
             return nil
         }
 
-        let previousIndex = viewControllerIndex - 1
+        var previousIndex = viewControllerIndex - 1
 
         // User is on the first view controller and swiped left to loop to
         // the last view controller.
-        guard previousIndex >= 0 else {
-            return orderedViewControllers.last
+        if previousIndex < 0 {
+            previousIndex = orderedViewControllers.count - 1
         }
 
         guard orderedViewControllers.count > previousIndex else {

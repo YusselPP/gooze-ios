@@ -14,52 +14,28 @@ class GZEProfileViewController: UIViewController {
 
     var viewModel: GZEProfileViewModel!
 
-    @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var phraseLabel: UILabel!
-    @IBOutlet weak var genderLabel: UILabel!
-    @IBOutlet weak var ageLabel: UILabel!
-    @IBOutlet weak var heightLabel: UILabel!
-    @IBOutlet weak var weightLabel: UILabel!
-    @IBOutlet weak var originLabel: UILabel!
-    @IBOutlet weak var languagesLabel: UILabel!
-    @IBOutlet weak var ocupationLabel: UILabel!
-    @IBOutlet weak var interestsLabel: UILabel!
+    var contactButtonTitle = "vm.profile.contactTitle".localized().uppercased()
+
+    @IBOutlet weak var usernameLabel: GZELabel!
+    @IBOutlet weak var phraseLabel: GZELabel!
+    @IBOutlet weak var genderLabel: GZELabel!
+    @IBOutlet weak var ageLabel: GZELabel!
+    @IBOutlet weak var heightLabel: GZELabel!
+    @IBOutlet weak var weightLabel: GZELabel!
+    @IBOutlet weak var originLabel: GZELabel!
+    @IBOutlet weak var languagesLabel: GZELabel!
+    @IBOutlet weak var interestsLabel: GZELabel!
 
     @IBOutlet weak var profileImageView: UIImageView!
 
-    @IBOutlet weak var contactButton: UIButton!
-    @IBOutlet weak var contactButtonWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var contactButton: GZEButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        setLabelFormat(usernameLabel)
-        setLabelFormat(phraseLabel)
-        setLabelFormat(genderLabel)
-        setLabelFormat(ageLabel)
-        setLabelFormat(heightLabel)
-        setLabelFormat(weightLabel)
-        setLabelFormat(originLabel)
-        setLabelFormat(languagesLabel)
-        setLabelFormat(ocupationLabel)
-        setLabelFormat(interestsLabel)
-
-        contactButton.layer.borderWidth = 1
-        contactButton.layer.borderColor = GZEConstants.Color.mainGreen.cgColor
-        contactButton.layer.cornerRadius = 5
-        contactButton.layer.masksToBounds = true
-
-
-        if let myString = contactButton.currentTitle as NSString? {
-            let stringSize = myString.size(attributes: [NSFontAttributeName: contactButton.titleLabel!.font!])
-            let width = stringSize.width + contactButton.titleEdgeInsets.left + contactButton.titleEdgeInsets.right
-            contactButtonWidthConstraint.constant = width
-            log.debug("contact button width changed to: \(width)")
-        }
-
-
+        setupInterfaceObjects()
         setUpBindings()
     }
 
@@ -84,10 +60,20 @@ class GZEProfileViewController: UIViewController {
         log.debug("\(self) disposed")
     }
 
-    private func setLabelFormat(_ label: UILabel) {
-        label.font = GZEConstants.Font.main
-        label.textColor = UIColor.white
-        label.textAlignment = .center
+    private func setupInterfaceObjects() {
+        usernameLabel.setWhiteFontFormat()
+        phraseLabel.setWhiteFontFormat()
+        genderLabel.setWhiteFontFormat()
+        ageLabel.setWhiteFontFormat()
+        heightLabel.setWhiteFontFormat()
+        weightLabel.setWhiteFontFormat()
+        originLabel.setWhiteFontFormat()
+        languagesLabel.setWhiteFontFormat()
+        //ocupationLabel.setWhiteFontFormat()
+        interestsLabel.setWhiteFontFormat()
+
+        contactButton.setGrayFormat()
+        contactButton.setTitle(contactButtonTitle, for: .normal)
     }
 
     private func setUpBindings() {
@@ -99,11 +85,9 @@ class GZEProfileViewController: UIViewController {
         weightLabel.reactive.text <~ viewModel.weight
         originLabel.reactive.text <~ viewModel.origin
         languagesLabel.reactive.text <~ viewModel.languages
-        ocupationLabel.reactive.text <~ viewModel.ocupation
+        //ocupationLabel.reactive.text <~ viewModel.ocupation
         interestsLabel.reactive.text <~ viewModel.interestedIn
 
-        if let urlReq = viewModel.profilePic.value {
-            profileImageView.af_setImage(withURLRequest: urlReq)
-        }
+        profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
     }
 }

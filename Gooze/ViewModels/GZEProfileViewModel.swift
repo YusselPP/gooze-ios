@@ -9,65 +9,24 @@
 import Foundation
 import ReactiveSwift
 
-class GZEProfileViewModel: NSObject {
+protocol GZEProfileViewModel {
 
     // basic data
-    let username = MutableProperty<String?>(nil)
+    var username: MutableProperty<String?> { get }
 
     // additional data
-    let age = MutableProperty<String?>(nil)
-    let gender = MutableProperty<String?>(nil)
-    let weight = MutableProperty<String?>(nil)
-    let height = MutableProperty<String?>(nil)
-    let origin = MutableProperty<String?>(nil)
-    let phrase = MutableProperty<String?>(nil)
-    let languages = MutableProperty<String?>(nil)
-    let interestedIn = MutableProperty<String?>(nil)
-
+    var phrase: MutableProperty<String?> { get }
+    var gender: MutableProperty<String?> { get }
+    var age: MutableProperty<String?> { get }
+    var height: MutableProperty<String?> { get }
+    var weight: MutableProperty<String?> { get }
+    var origin: MutableProperty<String?> { get }
+    var languages: MutableProperty<String?> { get }
+    var interestedIn: MutableProperty<String?> { get }
     // TODO: Implement ocupation in user model
-    let ocupation = MutableProperty<String?>(nil)
+    var ocupation: MutableProperty<String?> { get }
 
-    let profilePic = MutableProperty<URLRequest?>(nil)
+    var profilePic: MutableProperty<URLRequest?> { get }
 
-    var photos = [MutableProperty<URLRequest?>]()
-
-    let mainImage = MutableProperty<UIImage?>(nil)
-
-
-    init(user: GZEUser) {
-        super.init()
-        log.debug("\(self) init")
-
-        populate(user)
-    }
-
-    private func populate(_ user: GZEUser) {
-        username.value = user.username
-
-        age.value = user.birthday.map{ "\(GZEDateHelper.years(from: $0, to: Date()))" }
-        if let uGender = user.gender {
-            gender.value = uGender.rawValue
-        }
-        if let uWeight = user.weight {
-            weight.value = "\(uWeight)"
-        }
-        if let uHeight = user.height {
-            height.value = "\(uHeight)"
-        }
-        origin.value = user.origin
-        phrase.value = user.phrase
-        languages.value = user.languages?.first
-        interestedIn.value = user.interestedIn?.first
-
-        profilePic.value = user.profilePic?.urlRequest
-
-        if let uPhotos = user.photos {
-            photos = uPhotos.map { MutableProperty($0.urlRequest) }
-        }
-    }
-
-    // MARK: - Deinitializers
-    deinit {
-        log.debug("\(self) disposed")
-    }
+    func contact();
 }

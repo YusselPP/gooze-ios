@@ -8,21 +8,20 @@
 
 import UIKit
 import AlamofireImage
-import FloatRatingView
 
 class GZEUserBalloon: UIView {
 
     var user: GZEUser?
     var rating: Float = 0 {
         didSet {
-            starsView.rating = rating
+            starsView.setRating(rating)
         }
     }
 
     var onTap: ((UITapGestureRecognizer, GZEUserBalloon) -> ())?
 
     private var imageView = UIImageView()
-    private var starsView = FloatRatingView()
+    private var starsView = GZERatingView()
     private var ratingView = UIView()
 
     private var imageViewHeightConstraint: NSLayoutConstraint!
@@ -44,14 +43,6 @@ class GZEUserBalloon: UIView {
         // Set rating View
         ratingView.backgroundColor = nil
         ratingView.translatesAutoresizingMaskIntoConstraints = false
-
-
-        starsView.fullImage = #imageLiteral(resourceName: "white-star")
-        starsView.emptyImage = #imageLiteral(resourceName: "white-star-empty")
-        starsView.floatRatings = true
-        starsView.editable = false
-        starsView.contentMode = .scaleAspectFit
-        starsView.translatesAutoresizingMaskIntoConstraints = false
 
 
         ratingView.addSubview(starsView)
