@@ -220,16 +220,20 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     // MARK: - Setup
     func createWeakMethods() {
-        onActionTriggered = ptr(self, GZESignUpPhotoViewController.actionTriggerHandler)
-        onEventPtr = ptr(self, GZESignUpPhotoViewController.onEvent)
+        onActionTriggered =  { [weak self] btn in
+            self?.actionTriggerHandler(btn)
+        }
+        onEventPtr =  { [weak self] evt in
+            self?.onEvent(event: evt)
+        }
     }
 
     func setupInterfaceObjects() {
         setupBlur()
         setupDblCtrlView()
 
-        backButton.onButtonTapped = ptr(self, GZESignUpPhotoViewController.backButtonTapped)
-        nextButton.onButtonTapped = ptr(self, GZESignUpPhotoViewController.nextButtonTapped)
+        backButton.onButtonTapped =  { [weak self] btn in  self?.backButtonTapped(btn) }
+        nextButton.onButtonTapped =  { [weak self] btn in  self?.nextButtonTapped(btn) }
         navigationItem.hidesBackButton = true
 
         photoImageViews.append(photoImageView1)

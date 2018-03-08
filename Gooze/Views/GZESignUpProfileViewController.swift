@@ -193,7 +193,9 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         { [weak self] _ in
             self?.showLoading()
         }
-        viewModel.updateAction.events.observeValues(ptr(self, GZESignUpProfileViewController.onEvent))
+        viewModel.updateAction.events.observeValues { [weak self] evt in
+            self?.onEvent(event: evt)
+        }
     }
 
     func setTextFieldFormat(_ textField: UITextField, placeholder: String) {

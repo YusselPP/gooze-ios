@@ -135,13 +135,27 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
 
         log.debug("\(self) init")
 
-        usernameExistsAction = Action(ptr(self, GZESignUpViewModel.onUsernameExistsAction))
-        emailExistsAction = Action(ptr(self, GZESignUpViewModel.onEmailExistsAction))
-        signupAction = Action(ptr(self, GZESignUpViewModel.onSignupAction))
-        updateAction = Action(ptr(self, GZESignUpViewModel.onUpdateAction))
-        savePhotosAction = Action(ptr(self, GZESignUpViewModel.onSavePhotosAction))
-        saveProfilePicAction = Action(ptr(self, GZESignUpViewModel.onSaveProfilePicAction))
-        saveSearchPicAction = Action(ptr(self, GZESignUpViewModel.onSaveSearchPicAction))
+        usernameExistsAction = Action { [unowned self] in
+            return self.onUsernameExistsAction()
+        }
+        emailExistsAction = Action { [unowned self] in
+            return self.onEmailExistsAction()
+        }
+        signupAction = Action { [unowned self] in
+            return self.onSignupAction()
+        }
+        updateAction = Action { [unowned self] in
+            return self.onUpdateAction()
+        }
+        savePhotosAction = Action { [unowned self] in
+            return self.onSavePhotosAction()
+        }
+        saveProfilePicAction = Action { [unowned self] in
+            return self.onSaveProfilePicAction()
+        }
+        saveSearchPicAction = Action { [unowned self] in
+            return self.onSaveSearchPicAction()
+        }
     }
 
     func getChooseModeViewModel() -> GZEChooseModeViewModel {
