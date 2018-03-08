@@ -24,18 +24,48 @@ class GZEUserBalloon: UIView {
     private var starsView = GZERatingView()
     private var ratingView = UIView()
 
-    private var imageViewHeightConstraint: NSLayoutConstraint!
-    private var imageViewWidthConstraint: NSLayoutConstraint!
+    private var imageViewHeightConstraint: NSLayoutConstraint?
+    private var imageViewWidthConstraint: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        initProperties()
+    }
 
+    init() {
+        super.init(frame: CGRect.zero)
+        initProperties()
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        log.debug("awakeFromNib")
+        imageViewHeightConstraint = heightAnchor.constraint(equalTo: superview!.heightAnchor, multiplier: 0.25)
+        imageViewWidthConstraint = widthAnchor.constraint(equalTo: superview!.widthAnchor, multiplier: 0.25)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if let bounds = superview?.bounds {
+            if bounds.width < bounds.height {
+                imageViewHeightConstraint?.isActive = false
+                imageViewWidthConstraint?.isActive = true
+            } else {
+                imageViewWidthConstraint?.isActive = false
+                imageViewHeightConstraint?.isActive = true
+            }
+        }
+        layer.cornerRadius = bounds.width / 2
+    }
+
+    func initProperties() {
         alpha = 0
         layer.masksToBounds = true
-        
+
         // Set image view
         imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .white
+        imageView.backgroundColor = GZEConstants.Color.buttonBackground
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -52,29 +82,6 @@ class GZEUserBalloon: UIView {
         setConstraints()
 
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-
-        imageViewHeightConstraint = heightAnchor.constraint(equalTo: superview!.heightAnchor, multiplier: 0.25)
-        imageViewWidthConstraint = widthAnchor.constraint(equalTo: superview!.widthAnchor, multiplier: 0.25)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        if let bounds = superview?.bounds {
-
-            if bounds.width < bounds.height {
-                imageViewHeightConstraint.isActive = false
-                imageViewWidthConstraint.isActive = true
-            } else {
-                imageViewWidthConstraint.isActive = false
-                imageViewHeightConstraint.isActive = true
-            }
-        }
-        layer.cornerRadius = bounds.width / 2
     }
 
     func setUser(_ user: GZEUser, completion: ( () -> ())? = nil) {

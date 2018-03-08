@@ -57,7 +57,6 @@ class GZERatingView: UIView {
 
         // infoLabel
         self.infoLabel.setWhiteFontFormat()
-        self.infoLabel.textAlignment = .natural
         self.infoLabel.text = infoLabelText
 
         // GZERatingView

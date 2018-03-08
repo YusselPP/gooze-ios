@@ -50,7 +50,7 @@ class GZERatingsViewModelReadOnly: NSObject, GZERatingsViewModel {
         profilePic.value = user.profilePic?.urlRequest
 
         // TODO: Where does this come from?
-        phrase.value = "Usuario altamente recomendado por Gooze"
+        phrase.value = "\"Usuario altamente recomendado por Gooze\""
 
         imagesRatingDesc.value = GZEUser.Validation.imagesRating.fieldName
         complianceRatingDesc.value = GZEUser.Validation.complianceRating.fieldName
