@@ -62,6 +62,7 @@ class GZEDoubleCtrlView: UIView {
     private var separatorWidthConstraint: NSLayoutConstraint
 
     private var topCtrlTextObserver: Disposable?
+    private var isKeyboardShown = false
 
     required init?(coder aDecoder: NSCoder) {
         separatorWidthConstraint = separatorView.widthAnchor.constraint(equalToConstant: separatorWidth)
@@ -233,6 +234,10 @@ class GZEDoubleCtrlView: UIView {
                 }
                 topTextWidth = topText!.size(font: font).width
             }
+
+            if isKeyboardShown && (topCtrlView as? UITextField) != nil {
+                return max(topTextWidth, 10)
+            }
         }
         if let botTextView = bottomCtrlView as? TextDisplay {
             log.debug("bot text: \((botTextView.getText() ?? ""))")
@@ -248,11 +253,17 @@ class GZEDoubleCtrlView: UIView {
     // MARK: KeyboardNotifications
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
+        isKeyboardShown = true
+        // sets separator width to textfield.text width
+        separatorWidth = controlsMaxTextWidth
         (bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
     }
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
+        isKeyboardShown = false
+        // No need to set separator width because textField
+        // sends an editing event that triggers separator calculation
         (bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.mainTextColor
     }
 
