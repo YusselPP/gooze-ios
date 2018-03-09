@@ -11,7 +11,7 @@ import ReactiveSwift
 import iCarousel
 import Validator
 
-class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
+class GZESignUpViewModel: NSObject {
 
     let userRepository: GZEUserRepositoryProtocol
     var user: GZEUser {
@@ -95,7 +95,8 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
         MutableProperty<UIImage?>(nil)
     )
 
-    let genders: [GZEUser.Gender?]
+    let genderPickerDatasource: GZEPickerDatasource<GZEUser.Gender?>
+    let genderPickerDelegate: GZEPickerDelegate<GZEUser.Gender?>
 
     enum validationRule {
         case username
@@ -129,11 +130,16 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
 
         var genders: [GZEUser.Gender?] = GZEUser.Gender.array
         genders.insert(nil, at: 0)
-        self.genders = genders
+        let gendersTitles = genders.map { $0?.displayValue }
+
+        self.genderPickerDelegate = GZEPickerDelegate(titles: [gendersTitles], elements: [genders])
+        self.genderPickerDatasource = GZEPickerDatasource(elements: [genders])
 
         super.init()
 
         log.debug("\(self) init")
+
+        self.gender <~ self.genderPickerDelegate.selectedElement.map { $0?.flatMap{ $0 } }
 
         usernameExistsAction = Action { [unowned self] in
             return self.onUsernameExistsAction()
@@ -259,16 +265,6 @@ class GZESignUpViewModel: NSObject, UIPickerViewDataSource {
         }
 
         log.debug(user.toJSON() as Any)
-    }
-
-    // MARK: genderPicker data source protocol
-
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return genders.count
     }
 
     // MARK: - Deinitializers

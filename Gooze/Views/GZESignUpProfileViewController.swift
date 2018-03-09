@@ -10,7 +10,7 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate {
+class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     let profileToPhotoEditSegue = "profileToPhotoEditSegue"
 
@@ -21,6 +21,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
     var activeField: UITextField?
 
     enum Scene {
+        case profilePic
+        case profilePicSet
         case phrase
         case gender
         case birthday
@@ -30,7 +32,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         case language
         case interests
     }
-    var _scene: Scene = .phrase
+    var _scene: Scene = .profilePic
     var scene: Scene {
         get { return _scene }
         set(newScene){ setScene(newScene) }
@@ -82,7 +84,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         setupBindings()
         setupActions()
 
-        showPhraseScene()
+        showProfilePicScene()
 
         // TODO: How to know what gender search for
     }
@@ -94,6 +96,9 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
             willShowSelector: #selector(keyboardWillShow(notification:)),
             willHideSelector: #selector(keyboardWillHide(notification:))
         )
+        if scene == .profilePic && profileImageView.image != nil {
+            scene = .profilePicSet
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -151,10 +156,12 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         birthdayTextField.inputView = birthdayPicker
         birthdayTextField.inputAccessoryView = toolBar
 
-        genderPicker.dataSource = viewModel
-        genderPicker.delegate = self
+        genderPicker.dataSource = viewModel.genderPickerDatasource
+        genderPicker.delegate = viewModel.genderPickerDelegate
         genderTextField.inputView = genderPicker
         genderTextField.inputAccessoryView = toolBar
+
+        // TODO: Add picker for height and weight fields
     }
 
     func setupBindings() {
@@ -174,8 +181,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
         // In bindings
         viewModel.phrase <~ phraseTextField.reactive.continuousTextValues
-        // viewModel.gender is set through picker delegate,
-        // because it doesn't have reactive interface
+        // viewModel.gender binding set in viewModel
         viewModel.birthday <~ birthdayPicker.reactive.dates
         viewModel.height <~ heightTextField.reactive.continuousTextValues
         viewModel.weight <~ weightTextField.reactive.continuousTextValues
@@ -267,7 +273,9 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     func backButtonTapped(_ sender: Any) {
         switch scene {
-        case .phrase: break
+        case .profilePic: break
+        case .profilePicSet: break
+        case .phrase: scene = .profilePicSet
         case .gender: scene = .phrase
         case .birthday: scene = .gender
         case .height: scene = .birthday
@@ -395,17 +403,6 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         log.debug("keyboard will hide")
         removeKeyboardInset(scrollView: scrollView)
     }
-
-    // MARK: - UIPickerDelegate
-
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return viewModel.genders[row]?.displayValue
-    }
-
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        log.debug("picker view, selected row: \(row), gender: \(String(describing: viewModel.genders[row]))")
-        viewModel.gender.value = viewModel.genders[row]
-    }
     
     // MARK: - Validation
     func validate(_ field: UITextField) -> Bool {
@@ -469,6 +466,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         _scene = newScene
 
         switch scene {
+        case .profilePic: showProfilePicScene()
+        case .profilePicSet: showProfilePicSetScene()
         case .phrase: showPhraseScene()
         case .gender: showGenderScene()
         case .birthday: showBirthdayScene()
@@ -483,6 +482,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
 
     func showNextScene() {
         switch scene {
+        case .profilePic: scene = .profilePicSet
+        case .profilePicSet: scene = .phrase
         case .phrase: scene = .gender
         case .gender: scene = .birthday
         case .birthday: scene = .height
@@ -494,11 +495,21 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, UIP
         }
     }
 
+    func showProfilePicScene() {
+        navigationItem.setLeftBarButton(nil, animated: true)
+    }
+
+    func showProfilePicSetScene() {
+        phraseTextField.isHidden = false
+        phraseTextField.resignFirstResponder()
+        navigationItem.setLeftBarButton(nil, animated: true)
+    }
+
     func showPhraseScene() {
         phraseTextField.isHidden = false
         phraseTextField.becomeFirstResponder()
 
-        navigationItem.setLeftBarButton(nil, animated: true)
+        navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showGenderScene() {

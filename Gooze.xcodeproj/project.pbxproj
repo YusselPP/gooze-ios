@@ -71,6 +71,8 @@
 		8DEC4E201FA57A1000B5EA8E /* GZEUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEC4E1F1FA57A1000B5EA8E /* GZEUserTests.swift */; };
 		8DF1BE461FA824B800FFE02F /* GZEAccesToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF1BE451FA824B800FFE02F /* GZEAccesToken.swift */; };
 		8DF27B021FCD12BE00C85545 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF27B011FCD12BE00C85545 /* UIButton+Extension.swift */; };
+		8DF32FE22052A99500FC8D14 /* GZEPickerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF32FE12052A99500FC8D14 /* GZEPickerDelegate.swift */; };
+		8DF32FE42052A9AE00FC8D14 /* GZEPickerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF32FE32052A9AE00FC8D14 /* GZEPickerDatasource.swift */; };
 		8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720911F9B9B6700485566 /* AppDelegate.swift */; };
 		8DF720971F9B9B6700485566 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DF720951F9B9B6700485566 /* Main.storyboard */; };
 		8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DF720981F9B9B6700485566 /* Gooze.xcdatamodeld */; };
@@ -181,6 +183,8 @@
 		8DEC4E1F1FA57A1000B5EA8E /* GZEUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserTests.swift; sourceTree = "<group>"; };
 		8DF1BE451FA824B800FFE02F /* GZEAccesToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAccesToken.swift; sourceTree = "<group>"; };
 		8DF27B011FCD12BE00C85545 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		8DF32FE12052A99500FC8D14 /* GZEPickerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPickerDelegate.swift; sourceTree = "<group>"; };
+		8DF32FE32052A9AE00FC8D14 /* GZEPickerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPickerDatasource.swift; sourceTree = "<group>"; };
 		8DF7208E1F9B9B6700485566 /* Gooze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gooze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DF720911F9B9B6700485566 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DF720961F9B9B6700485566 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -317,6 +321,22 @@
 			path = TestData;
 			sourceTree = "<group>";
 		};
+		8DF32FDF2052A95300FC8D14 /* delegates */ = {
+			isa = PBXGroup;
+			children = (
+				8DF32FE12052A99500FC8D14 /* GZEPickerDelegate.swift */,
+			);
+			name = delegates;
+			sourceTree = "<group>";
+		};
+		8DF32FE02052A97600FC8D14 /* datasources */ = {
+			isa = PBXGroup;
+			children = (
+				8DF32FE32052A9AE00FC8D14 /* GZEPickerDatasource.swift */,
+			);
+			name = datasources;
+			sourceTree = "<group>";
+		};
 		8DF720851F9B9B6600485566 = {
 			isa = PBXGroup;
 			children = (
@@ -386,6 +406,8 @@
 		8DF720C41F9BA42400485566 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8DF32FE02052A97600FC8D14 /* datasources */,
+				8DF32FDF2052A95300FC8D14 /* delegates */,
 				8DA575AB1FC3D5DF0001CE2A /* components */,
 				8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */,
 				8D0551F71FC0164900BC3915 /* GZERegisterCodeViewController.swift */,
@@ -829,11 +851,13 @@
 				8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */,
 				8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */,
 				8D27D03E1FBEB14E00263B6C /* GZEDateHelper.swift in Sources */,
+				8DF32FE42052A9AE00FC8D14 /* GZEPickerDatasource.swift in Sources */,
 				8DC81BF0204E55960099B417 /* GZELabel.swift in Sources */,
 				8DAE96501FC684E100E56740 /* GZEActivateGoozeViewModel.swift in Sources */,
 				8D192386204EB8FA005F6F5F /* GZEGalleryViewModel.swift in Sources */,
 				8D358AC41FBBF75F00F261DC /* ValidatorAliases.swift in Sources */,
 				8DC321F81FD51FC90068630D /* GZEUserBalloon.swift in Sources */,
+				8DF32FE22052A99500FC8D14 /* GZEPickerDelegate.swift in Sources */,
 				F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */,
 				F0EE89131FA7A48B001D194C /* GZEApiError.swift in Sources */,
 				8D1B9ABF2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift in Sources */,
