@@ -617,10 +617,10 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsu-W6-Fua">
-                                        <rect key="frame" x="85" y="77" width="150" height="150"/>
+                                        <rect key="frame" x="120" y="112" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tsu-W6-Fua" secondAttribute="height" multiplier="1:1" id="8Bb-kh-ION"/>
-                                            <constraint firstAttribute="height" constant="150" id="CgV-eh-oPJ"/>
+                                            <constraint firstAttribute="height" constant="80" id="CgV-eh-oPJ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdP-PT-gBJ" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
