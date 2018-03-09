@@ -61,6 +61,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     let birthdayPicker = UIDatePicker()
     let genderPicker = UIPickerView()
+    let heightPicker = UIPickerView()
+    let weightPicker = UIPickerView()
 
     let backButton = GZEBackUIBarButtonItem()
     let nextButton = GZENextUIBarButtonItem()
@@ -162,6 +164,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         genderTextField.inputAccessoryView = toolBar
 
         // TODO: Add picker for height and weight fields
+        heightTextField.inputView = heightPicker
     }
 
     func setupBindings() {

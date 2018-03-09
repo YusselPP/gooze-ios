@@ -97,6 +97,10 @@ class GZESignUpViewModel: NSObject {
 
     let genderPickerDatasource: GZEPickerDatasource<GZEUser.Gender?>
     let genderPickerDelegate: GZEPickerDelegate<GZEUser.Gender?>
+    let heightPickerDatasource: GZEPickerDatasource<String>
+    let heightPickerDelegate: GZEPickerDelegate<String>
+    let weightPickerDatasource: GZEPickerDatasource<String>
+    let weightPickerDelegate: GZEPickerDelegate<String>
 
     enum validationRule {
         case username
@@ -135,11 +139,26 @@ class GZESignUpViewModel: NSObject {
         self.genderPickerDelegate = GZEPickerDelegate(titles: [gendersTitles], elements: [genders])
         self.genderPickerDatasource = GZEPickerDatasource(elements: [genders])
 
+        let heightInteger = ["0", "1", "2"]
+        let heightDecimals = (0...9).map{ "\($0)" }
+        let heightComponents = [heightInteger, ["."], heightDecimals, heightDecimals, ["m"]]
+        self.heightPickerDelegate = GZEPickerDelegate(titles: heightComponents, elements: heightComponents)
+        self.heightPickerDatasource = GZEPickerDatasource(elements: heightComponents)
+
+        let weightFirstDigit = ["0", "1"]
+        let weightNumbers = (0...9).map{ "\($0)" }
+        let weightComponents = [weightFirstDigit, weightNumbers, weightNumbers, ["kg"]]
+        self.weightPickerDelegate = GZEPickerDelegate(titles: weightComponents, elements: weightComponents)
+        self.weightPickerDatasource = GZEPickerDatasource(elements: weightComponents)
+
         super.init()
 
         log.debug("\(self) init")
 
-        self.gender <~ self.genderPickerDelegate.selectedElement.map { $0?.flatMap{ $0 } }
+        // TODO: test this and add height and weight picker bindings
+        self.gender <~ self.genderPickerDelegate.selectedElements.map { gA -> (GZEUser.Gender?) in
+            return (gA.first.flatMap{$0.flatMap{$0}})
+        }
 
         usernameExistsAction = Action { [unowned self] in
             return self.onUsernameExistsAction()

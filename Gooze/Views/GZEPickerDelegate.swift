@@ -14,7 +14,7 @@ class GZEPickerDelegate<T>: NSObject, UIPickerViewDelegate {
     var titles: [[String?]]
     var elements: [[T]]
 
-    let selectedElement = MutableProperty<T?>(nil)
+    let selectedElements = MutableProperty<[T?]>([T?]())
 
 
     init(titles: [[String?]], elements: [[T]]) {
@@ -22,6 +22,8 @@ class GZEPickerDelegate<T>: NSObject, UIPickerViewDelegate {
         self.elements = elements
         super.init()
         log.debug("\(self) init")
+
+        self.selectedElements.value = [T?].init(repeating: nil, count: self.elements.count)
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -35,10 +37,11 @@ class GZEPickerDelegate<T>: NSObject, UIPickerViewDelegate {
 
         guard component < elements.count && row < elements[component].count else { return }
 
-        selectedElement.value = elements[component][row]
+        selectedElements.value[component] = elements[component][row]
 
-        log.debug("selected value: \(String(describing: selectedElement.value))")
+        log.debug("selected value: \(String(describing: selectedElements.value))")
     }
+
 
     // MARK: - Deinitializers
     deinit {
