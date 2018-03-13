@@ -79,9 +79,11 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         return resultArea
     }
 
+    var originalImage: UIImage?
 
     var nextButton = GZENextUIBarButtonItem()
     var backButton = GZEBackUIBarButtonItem()
+    var undoButton = GZENavButton()
 
     @IBOutlet weak var backScrollView: UIScrollView! {
         didSet {
@@ -232,8 +234,12 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         setupBlur()
         setupDblCtrlView()
 
+        undoButton.button.frame = CGRect(x: 0.0, y: 0.0, width: 45, height: 45)
+        undoButton.button.setImage(#imageLiteral(resourceName: "undo-icon"), for: .normal)
+
         backButton.onButtonTapped =  { [weak self] btn in  self?.backButtonTapped(btn) }
         nextButton.onButtonTapped =  { [weak self] btn in  self?.nextButtonTapped(btn) }
+        undoButton.onButtonTapped = { [weak self] in self?.undoButtonTapped($0) }
         navigationItem.hidesBackButton = true
 
         photoImageViews.append(photoImageView1)
@@ -377,15 +383,20 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         case .searchPic:
             scene = .profilePic
         case .blur:
-            //if let blur = blur, blur.isDirty {
-            //    blur.revert()
-            //} else {
-                blur?.disable()
-                viewModel.mainImage.value = nil
-                scene = .cameraOrReel
-            //}
+            blur?.disable()
+            viewModel.mainImage.value = nil
+            scene = .cameraOrReel
         case .gallery:
             previousController(animated: true)
+        default:
+            break
+        }
+    }
+
+    func undoButtonTapped(_ sender: Any) {
+        switch scene! {
+        case .blur:
+            blur?.revert()
         default:
             break
         }
@@ -419,28 +430,38 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBAction func showBlurButtonTapped(_ sender: Any) {
         if blur != nil {
             if blur!.isEnabled {
-                blur!.disable()
-                blurEffectView.isHidden = true
-
-                UIView.animate(withDuration: 0.3) { [weak self] in
-                    self?.blurSlider.alpha = 0
-                    self?.applyBlurButton.alpha = 0
-                }
+                showBlur(false)
             } else {
-                blurEffectView.transform = .identity
-                blurEffectView.isHidden = false
-                blur!.enable()
+                showBlur(true)
+            }
+        }
+    }
 
-                UIView.animate(withDuration: 0.3) { [weak self] in
-                    self?.blurSlider.alpha = 1
-                    self?.applyBlurButton.alpha = 1
-                }
+    func showBlur(_ show: Bool) {
+        guard let blur = blur else { return }
+        if show {
+            blurEffectView.transform = .identity
+            blurEffectView.isHidden = false
+            blur.enable()
+
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.blurSlider.alpha = 1
+                self?.applyBlurButton.alpha = 1
+            }
+        } else {
+            blur.disable()
+            blurEffectView.isHidden = true
+
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.blurSlider.alpha = 0
+                self?.applyBlurButton.alpha = 0
             }
         }
     }
 
     @IBAction func applyButtonTapped(_ sender: Any) {
         blur?.apply()
+        showBlur(false)
     }
 
     func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
@@ -555,6 +576,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             }
 
             this.viewModel.mainImage.value = compressedImage
+            this.originalImage = compressedImage
 
             this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.mainImageView, scrollView: this.backScrollView)
 
@@ -783,6 +805,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         setScrollInsets()
         setZoomScale()
         bottomRightButton.setTitle(viewModel.nextButtonTitle.uppercased(), for: .normal)
+
+        showUndoButton(true)
     }
 
     func showProfileScene() {
@@ -797,6 +821,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         photoLabel.text = viewModel.profilePictureLabel
         bottomRightButton.setTitle(viewModel.nextButtonTitle.uppercased(), for: .normal)
+        showUndoButton(false)
     }
 
     func showSearchScene() {
@@ -825,6 +850,14 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             navigationItem.setLeftBarButton(backButton, animated: true)
         } else {
             navigationItem.setLeftBarButton(nil, animated: true)
+        }
+    }
+
+    func showUndoButton(_ show: Bool){
+        if show {
+            navigationItem.setRightBarButton(undoButton, animated: true)
+        } else {
+            navigationItem.setRightBarButton(nil, animated: true)
         }
     }
 

@@ -77,10 +77,9 @@ class GZEBlur {
     }
 
     func revert() {
-        if !isEnabled {
-            return
-        }
+        resultImageView.image = image
         resultImage = image
+
         isDirty = false
     }
 
