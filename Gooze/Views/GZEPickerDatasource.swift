@@ -10,10 +10,10 @@ import UIKit
 
 class GZEPickerDatasource<T>: NSObject, UIPickerViewDataSource {
 
-    var elements: [[T]]
+    var elements: [[T?]]
 
     // MARK - init
-    init(elements: [[T]]) {
+    init(elements: [[T?]]) {
         self.elements = elements
         super.init()
         log.debug("\(self) init")

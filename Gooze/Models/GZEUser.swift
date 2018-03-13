@@ -129,6 +129,11 @@ class GZEUser: Glossy {
         }
     }
 
+    static let heightUnit = "m"
+    static let weightUnit = "kg"
+    static let ageLabel = "vm.user.ageLabel".localized()
+    static let ageUnit = "vm.user.ageUnit".localized()
+
     // Mark: Instance members
     var id: String?
 
@@ -380,7 +385,9 @@ class GZEUser: Glossy {
             case .password:
                 ruleSet.add(rule: ValidationRuleLength(min: 8, error: GZEValidationError.lengthMin(fieldName: fieldName, min: 8)))
 
-//            case .birthday:
+            case .birthday:
+                // ruleSet.add(rule: ValidationRuleCondition(error: GZEValidationError., condition: ))
+                break
 //            case .gender:
             case .weight,
                  .height:

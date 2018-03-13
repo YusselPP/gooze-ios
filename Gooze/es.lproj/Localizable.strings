@@ -18,6 +18,7 @@
 "validation.lengthMin"="El campo %@ debe tener al menos %d caracteres";
 "validation.lengthMax"="El campo %@ debe tener máximo %d caracteres";
 "validation.exists"="El %@ ya existe";
+"validation.underAge"="Debes ser mayor de edad";
 
 // Models/GZEUser
 "user.username.fieldName"="Usuario";
@@ -41,6 +42,9 @@
 "user.dateQualityRating.fieldName"="Calidad de la cita";
 "user.dateRating.fieldName"="Calificación de la cita";
 "user.goozeRating.fieldName"="Calificación Gooze";
+
+"vm.user.ageLabel"="Edad";
+"vm.user.ageUnit"="Años";
 
 // Models/GZEUser/Gender
 "male"="hombre";

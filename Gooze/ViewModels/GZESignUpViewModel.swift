@@ -141,24 +141,32 @@ class GZESignUpViewModel: NSObject {
 
         let heightInteger = ["0", "1", "2"]
         let heightDecimals = (0...9).map{ "\($0)" }
-        let heightComponents = [heightInteger, ["."], heightDecimals, heightDecimals, ["m"]]
-        self.heightPickerDelegate = GZEPickerDelegate(titles: heightComponents, elements: heightComponents)
-        self.heightPickerDatasource = GZEPickerDatasource(elements: heightComponents)
+        let heightTitles = [heightInteger, ["."], heightDecimals, heightDecimals, [GZEUser.heightUnit]]
+        let heightValues = [heightInteger, ["."], heightDecimals, heightDecimals, [""]]
+        self.heightPickerDelegate = GZEPickerDelegate(titles: heightTitles, elements: heightValues)
+        self.heightPickerDatasource = GZEPickerDatasource(elements: heightValues)
+        self.heightPickerDelegate.width = 50
 
         let weightFirstDigit = ["0", "1"]
         let weightNumbers = (0...9).map{ "\($0)" }
-        let weightComponents = [weightFirstDigit, weightNumbers, weightNumbers, ["kg"]]
-        self.weightPickerDelegate = GZEPickerDelegate(titles: weightComponents, elements: weightComponents)
-        self.weightPickerDatasource = GZEPickerDatasource(elements: weightComponents)
+        let weightTitles = [weightFirstDigit, weightNumbers, weightNumbers, [GZEUser.weightUnit]]
+        let weightValues = [weightFirstDigit, weightNumbers, weightNumbers, [""]]
+        self.weightPickerDelegate = GZEPickerDelegate(titles: weightTitles, elements: weightValues)
+        self.weightPickerDatasource = GZEPickerDatasource(elements: weightValues)
+        self.weightPickerDelegate.width = 50
 
         super.init()
 
         log.debug("\(self) init")
 
-        // TODO: test this and add height and weight picker bindings
         self.gender <~ self.genderPickerDelegate.selectedElements.map { gA -> (GZEUser.Gender?) in
-            return (gA.first.flatMap{$0.flatMap{$0}})
+            let gender = (gA.first.flatMap{$0.flatMap{$0}})
+            log.debug("saved gender: \(String(describing: gender))")
+            return gender
         }
+
+        self.height <~ self.heightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + ($1 ?? "") }) }
+        self.weight <~ self.weightPickerDelegate.selectedElements.map{ "\(($0.reduce("", { $0 + ($1 ?? "") }) as NSString).intValue)" }
 
         usernameExistsAction = Action { [unowned self] in
             return self.onUsernameExistsAction()

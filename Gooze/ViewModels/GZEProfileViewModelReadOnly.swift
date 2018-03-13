@@ -44,20 +44,46 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     private func populate(_ user: GZEUser) {
         username.value = user.username?.uppercased()
 
-        age.value = user.birthday.map{ "\(GZEDateHelper.years(from: $0, to: Date())) años" }
+        if let birthday = user.birthday {
+            self.age.value = "\(GZEDateHelper.years(from: birthday, to: Date())) \(GZEUser.ageUnit)"
+        } else {
+            self.age.value = GZEUser.ageLabel
+        }
         if let uGender = user.gender {
             gender.value = uGender.displayValue
+        } else {
+            gender.value = GZEUser.Validation.gender.fieldName
         }
-        if let uWeight = user.weight {
-            weight.value = "\(uWeight) kg"
+        if let uWeight = user.weight, uWeight != 0 {
+            weight.value = "\(uWeight) \(GZEUser.weightUnit)"
+        } else {
+            weight.value = GZEUser.Validation.weight.fieldName
         }
-        if let uHeight = user.height {
-            height.value = "\(uHeight) m"
+        if let uHeight = user.height, uHeight != 0 {
+            height.value = "\(uHeight) \(GZEUser.heightUnit)"
+        } else {
+            height.value = GZEUser.Validation.height.fieldName
         }
-        origin.value = user.origin
-        phrase.value = user.phrase
-        languages.value = user.languages?.first
-        interestedIn.value = user.interestedIn?.first
+        if let origin = user.origin {
+            self.origin.value = origin
+        } else {
+            self.origin.value = GZEUser.Validation.origin.fieldName
+        }
+        if let phrase = user.phrase {
+            self.phrase.value = phrase
+        } else {
+            self.phrase.value = GZEUser.Validation.phrase.fieldName
+        }
+        if let languages = user.languages?.first {
+            self.languages.value = languages
+        } else {
+            self.languages.value = GZEUser.Validation.language.fieldName
+        }
+        if let interestedIn = user.interestedIn?.first {
+            self.interestedIn.value = interestedIn
+        } else {
+            self.interestedIn.value = GZEUser.Validation.interestedIn.fieldName
+        }
 
         profilePic.value = user.profilePic?.urlRequest
     }

@@ -60,8 +60,8 @@ class GZERatingsViewController: UIViewController {
     */
 
     private func setupInterfaceObjects() {
-        contactButton.setTitle(contactButtonTitle, for: .normal)
         contactButton.setGrayFormat()
+        contactButton.setTitle(contactButtonTitle, for: .normal)
     }
 
     private func setUpBindings() {

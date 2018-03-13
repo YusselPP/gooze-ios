@@ -11,19 +11,22 @@ import ReactiveSwift
 
 class GZEPickerDelegate<T>: NSObject, UIPickerViewDelegate {
 
+    var width: CGFloat = 200
     var titles: [[String?]]
-    var elements: [[T]]
+    var elements: [[T?]]
 
     let selectedElements = MutableProperty<[T?]>([T?]())
 
 
-    init(titles: [[String?]], elements: [[T]]) {
+    init(titles: [[String?]], elements: [[T?]]) {
         self.titles = titles
         self.elements = elements
         super.init()
         log.debug("\(self) init")
 
-        self.selectedElements.value = [T?].init(repeating: nil, count: self.elements.count)
+        //self.selectedElements.value = [T?].init(repeating: nil, count: self.elements.count)
+        // Autoselect first element of each component
+        self.selectedElements.value = self.elements.map{ $0.first.flatMap{$0} }
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -40,6 +43,10 @@ class GZEPickerDelegate<T>: NSObject, UIPickerViewDelegate {
         selectedElements.value[component] = elements[component][row]
 
         log.debug("selected value: \(String(describing: selectedElements.value))")
+    }
+
+    func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        return width
     }
 
 

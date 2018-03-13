@@ -163,8 +163,15 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         genderTextField.inputView = genderPicker
         genderTextField.inputAccessoryView = toolBar
 
-        // TODO: Add picker for height and weight fields
+        heightPicker.dataSource = viewModel.heightPickerDatasource
+        heightPicker.delegate = viewModel.heightPickerDelegate
         heightTextField.inputView = heightPicker
+        heightTextField.inputAccessoryView = toolBar
+
+        weightPicker.dataSource = viewModel.weightPickerDatasource
+        weightPicker.delegate = viewModel.weightPickerDelegate
+        weightTextField.inputView = weightPicker
+        weightTextField.inputAccessoryView = toolBar
     }
 
     func setupBindings() {
@@ -176,8 +183,20 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         birthdayTextField.reactive.text <~ viewModel.birthday.map {
             $0.flatMap { GZEDateHelper.displayDateFormatter.string(from: $0) }
         }
-        heightTextField.reactive.text <~ viewModel.height
-        weightTextField.reactive.text <~ viewModel.weight
+        heightTextField.reactive.text <~ viewModel.height.map{ height in
+            if height == nil || height!.isEmpty || height == "0.00" {
+                return ""
+            } else {
+                return "\(height ?? "") \(GZEUser.heightUnit)"
+            }
+        }
+        weightTextField.reactive.text <~ viewModel.weight.map{ weight in
+            if weight == nil || weight!.isEmpty || weight == "0" {
+                return ""
+            } else {
+                return "\(weight ?? "") \(GZEUser.weightUnit)"
+            }
+        }
         originTextField.reactive.text <~ viewModel.origin
         languageTextField.reactive.text <~ viewModel.languages
         interestsTextField.reactive.text <~ viewModel.interestedIn
@@ -186,8 +205,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         viewModel.phrase <~ phraseTextField.reactive.continuousTextValues
         // viewModel.gender binding set in viewModel
         viewModel.birthday <~ birthdayPicker.reactive.dates
-        viewModel.height <~ heightTextField.reactive.continuousTextValues
-        viewModel.weight <~ weightTextField.reactive.continuousTextValues
+        // viewModel.height <~ heightTextField.reactive.continuousTextValues
+        // viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.origin <~ originTextField.reactive.continuousTextValues
         viewModel.languages <~ languageTextField.reactive.continuousTextValues
         viewModel.interestedIn <~ interestsTextField.reactive.continuousTextValues
@@ -263,15 +282,15 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func updateProfile() {
-        let validationResult = heightTextField.validate()
-            .merge(with: weightTextField.validate())
+        //let validationResult = heightTextField.validate()
+        //    .merge(with: weightTextField.validate())
 
-        switch validationResult {
-        case .valid:
+        //switch validationResult {
+        //case .valid:
             updateAction.execute(saveButton)
-        case .invalid(let errors):
-            hanldeValidationError(errors)
-        }
+        //case .invalid(let errors):
+        //    hanldeValidationError(errors)
+        //}
     }
 
     func backButtonTapped(_ sender: Any) {
@@ -290,16 +309,16 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func nextButtonTapped(_ sender: Any) {
-        if let activeField = activeField {
-            switch activeField {
-            case heightTextField, weightTextField:
-                if !validate(activeField) {
-                    return
-                }
-            default:
-                break
-            }
-        }
+//        if let activeField = activeField {
+//            switch activeField {
+//            case heightTextField, weightTextField:
+//                if !validate(activeField) {
+//                    return
+//                }
+//            default:
+//                break
+//            }
+//        }
         showNextScene()
     }
 
@@ -345,15 +364,15 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
-        switch textField {
-        case heightTextField,
-             weightTextField:
-            if !validate(textField) {
-                return false
-            }
-        default:
-            break
-        }
+        //switch textField {
+        //case heightTextField,
+        //     weightTextField:
+        //    if !validate(textField) {
+         //       return false
+         //   }
+       // default:
+        //    break
+       // }
         showNextScene()
         return false
     }

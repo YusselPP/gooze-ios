@@ -18,6 +18,8 @@ enum GZEValidationError: Error {
     case lengthMin(fieldName: String, min: Int)
     case lengthMax(fieldName: String, max: Int)
     case exists(fieldName: String)
+
+    case underAge
 }
 
 extension GZEValidationError: LocalizedError {
@@ -47,6 +49,9 @@ extension GZEValidationError: LocalizedError {
         case .exists(let fieldName):
             message = "validation.exists".localized()
             message = String(format: message, fieldName)
+
+        case .underAge:
+            message = "validation.underAge".localized()
         }
         return message
     }

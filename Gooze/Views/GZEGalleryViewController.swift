@@ -78,8 +78,8 @@ class GZEGalleryViewController: UIViewController {
             )
         }
 
-        contactButton.setTitle(contactButtonTitle, for: .normal)
         contactButton.setGrayFormat()
+        contactButton.setTitle(contactButtonTitle, for: .normal)
     }
 
     private func setupBindings() {
