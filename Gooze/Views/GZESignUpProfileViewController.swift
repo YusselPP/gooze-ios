@@ -235,8 +235,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         textField.borderStyle = .none
         textField.textColor = UIColor.white
         textField.textAlignment = .center
-        textField.font = UIFont(name: "HelveticaNeue", size: 17)!
-        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 17)!])
+        textField.font = GZEConstants.Font.main
+        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: GZEConstants.Font.main])
     }
 
     // MARK: - CocoaAction

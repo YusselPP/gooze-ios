@@ -50,6 +50,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         log.debug("\(self) init")
 
+        GZEConstants.horizontalSize = traitCollection.horizontalSizeClass
+
         setupInterfaceObjects()
         setupBindings()
 

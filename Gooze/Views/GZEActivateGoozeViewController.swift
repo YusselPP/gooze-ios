@@ -17,11 +17,19 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     enum Scene {
         case activate
+        case activated
+
         case search
+        case searching
         case searchResults
-        case allResults
+        case resultsList
+        case otherResultsList
     }
-    var scene = Scene.search
+    var scene = Scene.search {
+        didSet {
+            handleSceneChanged()
+        }
+    }
 
     let MAX_RESULTS_ON_MAP = 5
 
@@ -30,9 +38,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     var viewModel: GZEActivateGoozeViewModel!
 
-    var activateGoozeAction: CocoaAction<UIButton>!
-    var searchGoozeAction: CocoaAction<UIButton>!
-    var allResultsAction: CocoaAction<UIButton>!
+    var activateGoozeAction: CocoaAction<GZEButton>!
+    var searchGoozeAction: CocoaAction<GZEButton>!
+    var allResultsAction: CocoaAction<GZEButton>!
 
     var isInitialPositionSet = false
 
@@ -50,10 +58,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             mapView.delegate = self
         }
     }
-    @IBOutlet weak var sliderLabel: UILabel!
-    @IBOutlet weak var topSlider: UISlider!
 
-    @IBOutlet weak var activateGoozeButton: UIButton!
+    @IBOutlet weak var activateGoozeButton: GZEButton!
 
     @IBOutlet weak var userBalloon1: GZEUserBalloon!
     @IBOutlet weak var userBalloon2: GZEUserBalloon!
@@ -61,35 +67,32 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var userBalloon4: GZEUserBalloon!
     @IBOutlet weak var userBalloon5: GZEUserBalloon!
 
-    @IBOutlet weak var distanceView: UIView!
+    // Top controls
     @IBOutlet weak var navIcon: UIImageView!
+    @IBOutlet weak var sliderLabel: UILabel!
+    @IBOutlet weak var topSlider: UISlider!
+    @IBOutlet weak var topControls: UIView!
+    @IBOutlet weak var topControlsBackground: UIView!
 
     @IBOutlet weak var searchingRadiusView: UIImageView!
 
     @IBOutlet weak var usersListCollectionView: GZEUsersListCollectionView!
     @IBOutlet weak var usersListBackground: UIView!
 
-    var onFindUserEvent: ((Event<GZEUser, GZEError>) -> Void)!
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         log.debug("\(self) init")
 
-        createWeakMethods()
         setupInterfaceObjects()
         setupBindings()
 
-        showScene()
+        handleSceneChanged()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    func createWeakMethods() {
-        onFindUserEvent = ptr(self, GZEActivateGoozeViewController.findUserEventHandler)
     }
 
     func setupInterfaceObjects() {
@@ -98,6 +101,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         backButton.onButtonTapped = ptr(self, GZEActivateGoozeViewController.backButtonTapped)
         navigationItem.setLeftBarButton(backButton, animated: false)
+
+        activateGoozeButton.setGrayFormat()
 
         searchingRadiusView.alpha = 0
 
@@ -123,11 +128,15 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         sliderLabel.reactive.text <~ viewModel.sliderValue.map { [unowned self] in "\($0) \(self.sliderPostfix)" }
 
-        activateGoozeAction = CocoaAction(viewModel.activateGoozeAction)
+        activateGoozeAction = CocoaAction(viewModel.activateGoozeAction) { [weak self] _ in
+                self?.searchAnimationEnabled = true
+                self?.startSearchAnimation()
+                self?.activateGoozeButton.setGrayFormatToggled()
+            }
         searchGoozeAction = CocoaAction(viewModel.searchGoozeAction)
         allResultsAction = CocoaAction(viewModel.searchGoozeAction)
 
-        viewModel.findGoozeAction.events.observeValues(onFindUserEvent)
+        viewModel.findGoozeAction.events.observeValues(onUserEvent)
 
         viewModel.searchGoozeAction.values.observeValues { [unowned self] users in
             switch self.scene {
@@ -146,6 +155,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         viewModel.searchGoozeAction.errors.observeValues { [weak self] in
             self?.displayMessage("Gooze", $0.localizedDescription)
         }
+
+        viewModel.activateGoozeAction.events.observeValues(onUserEvent)
 
     }
 
@@ -263,18 +274,23 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             previousController(animated: true)
         case .searchResults:
             showSearchScene()
-        case .allResults:
+        case .resultsList:
             showSearchScene()
         }
 
     }
 
     // MARK: - CocoaAction Observers
-    private func findUserEventHandler(event: Event<GZEUser, GZEError>) {
+    private func onUserEvent(_ event: Event<GZEUser, GZEError>) {
         hideLoading()
         switch event {
         case .value(let user):
-            performSegue(withIdentifier: segueToProfile, sender: user)
+            switch scene {
+            case .searchResults,
+                    .resultsList:
+                performSegue(withIdentifier: segueToProfile, sender: user)
+            default: break
+            }
         case .failed(let err):
             onActionError(err)
         default:
@@ -284,6 +300,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func onActionError(_ err: GZEError) {
         self.displayMessage(GZEAppConfig.appTitle, err.localizedDescription)
+        if scene == .activate {
+            self.activateGoozeButton.setGrayFormat()
+            self.stopSearchAnimation()
+        }
     }
 
     // MARK: - Map Delegate
@@ -325,65 +345,71 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
      }
 
     // MARK: - Scenes
-    func showScene() {
+    func handleSceneChanged() {
+        hideAll()
         switch scene {
         case .activate: showActivateScene()
+        case .activated: showActivatedScene()
+
         case .search: showSearchScene()
+        case .searching: showSearchingScene()
         case .searchResults: showSearchResultsScene()
-        case .allResults : showAllResultsScene()
+        case .resultsList : showAllResultsScene()
+        case .otherResultsList: showOtherResultsListScene()
         }
     }
 
-    func showActivateScene() {
-        scene = .activate
-        activateGoozeButton.setTitle(viewModel.activateButtonTitle, for: .normal)
-        activateGoozeButton.reactive.pressed = activateGoozeAction
-
-        distanceView.isHidden = false
-        sliderLabel.isHidden = false
-        topSlider.isHidden = false
-        navIcon.isHidden = false
+    func hideAll() {
+        topControls.isHidden = true
+        topControlsBackground.isHidden = true
         usersListCollectionView.isHidden = true
         usersListBackground.isHidden = true
+    }
+
+    func showActivateScene() {
+        topControls.isHidden = false
+        topControlsBackground.isHidden = false
+
+        activateGoozeButton.setTitle(viewModel.activateButtonTitle.uppercased(), for: .normal)
+        activateGoozeButton.reactive.pressed = activateGoozeAction
+    }
+
+    func showActivatedScene() {
+
     }
 
     func showSearchScene() {
-        scene = .search
+        topControls.isHidden = false
+        topControlsBackground.isHidden = false
+
         viewModel.searchLimit.value = MAX_RESULTS_ON_MAP
 
-        activateGoozeButton.setTitle(viewModel.searchButtonTitle, for: .normal)
+        activateGoozeButton.setTitle(viewModel.searchButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = searchGoozeAction
 
-        distanceView.isHidden = false
-        sliderLabel.isHidden = false
-        topSlider.isHidden = false
-        navIcon.isHidden = false
-        usersListCollectionView.isHidden = true
-        usersListBackground.isHidden = true
-
         hideResultsOnMap()
+    }
+
+    func showSearchingScene() {
+
     }
 
     func showSearchResultsScene() {
-        scene = .searchResults
         viewModel.searchLimit.value = 50
 
-        activateGoozeButton.setTitle(viewModel.allResultsButtonTitle, for: .normal)
+        activateGoozeButton.setTitle(viewModel.allResultsButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = searchGoozeAction
-
-        distanceView.isHidden = true
-        sliderLabel.isHidden = true
-        topSlider.isHidden = true
-        navIcon.isHidden = true
-        usersListCollectionView.isHidden = true
-        usersListBackground.isHidden = true
     }
 
     func showAllResultsScene() {
-        scene = .allResults
         usersListCollectionView.isHidden = false
         usersListBackground.isHidden = false
         hideResultsOnMap()
+    }
+
+    func showOtherResultsListScene() {
+        usersListCollectionView.isHidden = false
+        usersListBackground.isHidden = false
     }
 
     // MARK: - Deinitializers

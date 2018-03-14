@@ -8,17 +8,20 @@
 
 import UIKit
 
-class GZELogoutButton: UIBarButtonItem {
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-
-        image = #imageLiteral(resourceName: "exit-icon")
-    }
+class GZELogoutButton: GZENavButton {
 
     override init() {
         super.init()
-        
-        image = #imageLiteral(resourceName: "exit-icon")
+        initialize()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initialize()
+    }
+
+    private func initialize() {
+        button.frame = CGRect(x: 0.0, y: 0.0, width: 10, height: 10)
+        button.setImage(#imageLiteral(resourceName: "exit-icon"), for: .normal)
     }
 }

@@ -49,7 +49,7 @@ class GZEDoubleCtrlView: UIView {
         return getControlsMaxTextWidth()
     }
 
-    var font = UIFont(name: "HelveticaNeue", size: 17)!
+    var font: UIFont { return GZEConstants.Font.main }
     var animationsDuration = 0.5
 
     var topViewTappedHandler: ((UITapGestureRecognizer) -> ())?
