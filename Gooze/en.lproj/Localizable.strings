@@ -88,7 +88,11 @@
 "vm.chooseMode.searchButtonTitle"="Search";
 
 // ViewModel/GZEActivateGoozeViewModel
+"vm.search.viewTitle"="Search";
+"vm.search.zeroResultsMessage"="No matches found";
+
 "vm.activate.activateButtonTitle"="Activate gooze";
+"vm.activate.deactivateButtonTitle"="Deactivate gooze";
 "vm.activate.searchButtonTitle"="Search gooze";
 "vm.activate.allResultsButtonTitle"="View all results";
 

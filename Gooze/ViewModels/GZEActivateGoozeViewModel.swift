@@ -18,8 +18,12 @@ class GZEActivateGoozeViewModel {
     let sliderValue = MutableProperty<Float>(1)
     let searchLimit = MutableProperty<Int>(5)
 
-    
+    var userResults = MutableProperty<[GZEUser]>([])
+
+    let searchViewTitle = "vm.search.viewTitle".localized()
+    let zeroResultsMessage = "vm.search.zeroResultsMessage".localized()
     let activateButtonTitle = "vm.activate.activateButtonTitle".localized()
+    let deactivateButtonTitle = "vm.activate.deactivateButtonTitle".localized()
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()
     let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
 
@@ -50,11 +54,21 @@ class GZEActivateGoozeViewModel {
     }
     private var _findGoozeAction: Action<String, GZEUser, GZEError>?
 
+    var deactivateGoozeAction: Action<Void, GZEUser, GZEError>!
+
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
 
         log.debug("\(self) init")
+
+        deactivateGoozeAction = Action { [weak self] in
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+            }
+            return this.deactivateGoozeHandler()
+        }
     }
 
     private func createActivateGoozeAction() -> Action<Void, GZEUser, GZEError> {
@@ -105,6 +119,20 @@ class GZEActivateGoozeViewModel {
 
             return this.userRepository.publicProfile(byId: userId)
         }
+    }
+
+    private func deactivateGoozeHandler() -> SignalProducer<GZEUser, GZEError> {
+        guard let userId = GZEApi.instance.accessToken?.userId else {
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
+
+        let user = GZEUser()
+        user.id = userId
+        user.activeUntil = Date().addingTimeInterval(-1000)
+
+        log.debug(user.toJSON() as Any)
+
+        return userRepository.update(user)
     }
     
     // MARK: Deinitializers

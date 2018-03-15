@@ -21,7 +21,7 @@ class GZELogoutButton: GZENavButton {
     }
 
     private func initialize() {
-        button.frame = CGRect(x: 0.0, y: 0.0, width: 10, height: 10)
+        button.frame = CGRect(x: 0.0, y: 0.0, width: 40, height: 40)
         button.setImage(#imageLiteral(resourceName: "exit-icon"), for: .normal)
     }
 }
