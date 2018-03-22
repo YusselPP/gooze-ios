@@ -90,6 +90,7 @@
 // ViewModel/GZEActivateGoozeViewModel
 "vm.search.viewTitle"="Search";
 "vm.search.zeroResultsMessage"="No matches found";
+"vm.search.searchingButtonTitle"="Searching...";
 
 "vm.activate.activateButtonTitle"="Activate gooze";
 "vm.activate.deactivateButtonTitle"="Deactivate gooze";

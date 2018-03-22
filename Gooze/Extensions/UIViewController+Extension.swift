@@ -34,10 +34,56 @@ extension UIViewController {
         SwiftOverlays.removeAllBlockingOverlays()
     }
 
-    func logoutButtonTapped(_ sender: Any) {
-
+    func showLoginView(userRepository: GZEUserRepositoryProtocol?) {
+        var userRepo: GZEUserRepositoryProtocol
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
+        if
+            let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
+            let loginController = navController.viewControllers.first as? GZELoginViewController {
+
+            if userRepository == nil {
+                userRepo = GZEUserApiRepository()
+            } else {
+                userRepo = userRepository!
+            }
+
+            // Set up initial view model
+            loginController.viewModel = GZELoginViewModel(userRepo)
+            // setRootController(controller: navController)
+            present(navController, animated: true)
+        } else {
+            log.error("Unable to instantiate LoginNavController")
+            displayMessage("Unexpected error", "Please contact support")
+        }
+    }
+
+    func login(userRepository: GZEUserRepositoryProtocol?) {
+        var userRepo: GZEUserRepositoryProtocol
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+
+        if
+            let navController = mainStoryboard.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
+            let chooseModeController = navController.viewControllers.first as? GZEChooseModeViewController {
+
+            if userRepository == nil {
+                userRepo = GZEUserApiRepository()
+            } else {
+                userRepo = userRepository!
+            }
+
+            // Set up initial view model
+            chooseModeController.viewModel = GZEChooseModeViewModel(userRepo)
+            setRootController(controller: navController)
+        } else {
+            log.error("Unable to instantiate LoginNavController")
+            displayMessage("Unexpected error", "Please contact support")
+        }
+
+    }
+
+    func logout(loginVM: GZELoginViewModel) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
         if
             let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
@@ -45,7 +91,7 @@ extension UIViewController {
         // if let loginController = mainStoryboard.instantiateViewController(withIdentifier: "GZELoginViewController") as? GZELoginViewController {
 
             // Set up initial view model
-            loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
+            loginController.viewModel = loginVM
             setRootController(controller: navController)
         } else {
             log.error("Unable to instantiate LoginNavController")
@@ -138,15 +184,6 @@ extension UIViewController {
 
     func showNavigationBar(_ show: Bool, animated: Bool) {
         navigationController?.setNavigationBarHidden(!show, animated: animated)
-    }
-
-    func loadLoggedUser() -> SignalProducer<GZEUser, GZEError> {
-        if let token = GZEApi.instance.accessToken {
-            return GZEUserApiRepository().find(byId: token.userId)
-        } else {
-            log.error("No logged in user found")
-            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
-        }
     }
 }
 

@@ -246,7 +246,7 @@ class GZEUser: Glossy {
 
     func toJSON() -> JSON? {
         return jsonify([
-            // "id" ~~> self.id,
+            "id" ~~> self.id,
 
             "username" ~~> self.username,
             "email" ~~> self.email,
@@ -386,7 +386,8 @@ class GZEUser: Glossy {
                 ruleSet.add(rule: ValidationRuleLength(min: 8, error: GZEValidationError.lengthMin(fieldName: fieldName, min: 8)))
 
             case .birthday:
-                // ruleSet.add(rule: ValidationRuleCondition(error: GZEValidationError., condition: ))
+                //var date
+                //ruleSet.add(rule: ValidationRuleComparison<Date>(min: Date(), max:Date(), error: GZEValidationError.underAge))
                 break
 //            case .gender:
             case .weight,

@@ -56,22 +56,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GZEAppConfig.load()
         setUpLogs()
         setUpInitialController()
+        
 
-        // TODO: Move to a service
-        // Override point for customization after application launch.
-        //UINavigationBar.appearance().barTintColor = GZEConstants.Color.mainBackground
-        //UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-        //UINavigationBar.appearance().isTranslucent = true
-
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
 
         UIApplication.shared.statusBarStyle = .lightContent
-
-        // UITextField.appearance().backgroundColor = .black
-        // UITextField.appearance().textColor = .white
-        // UITextField.appearance().tintColor = UIColor(red: 44/255, green: 198/255, blue: 159/255, alpha: 1)
     }
     
     func setUpLogs() {
@@ -111,8 +102,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // FILTERS
             //destination.minLevel = .error
             //let filter1 = Filters.Path.contains("View", minLevel: .debug)
-            let filter1 = Filters.Path.excludes("GZEDoubleCtrlView")
+            let filter1 = Filters.Path.excludes("GZEDoubleCtrlView", required: true)
+            let filter2 = Filters.Path.excludes("GZEConstants", required: true)
             destination.addFilter(filter1)
+            destination.addFilter(filter2)
         }
 
         log.debug("Log level: " + GZEAppConfig.logLevel)
@@ -120,12 +113,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setUpInitialController() {
         if
-            let navController = window?.rootViewController as? UINavigationController,
-            let loginController = navController.viewControllers.first as? GZELoginViewController
+            // let navController = window?.rootViewController as? UINavigationController,
+            // let initialController = navController.viewControllers.first as? GZELoadingViewController
+            let initialController = window?.rootViewController as? GZELoadingViewController
         {
-
             // Set up initial view model
-            loginController.viewModel = GZELoginViewModel(GZEUserApiRepository())
+            initialController.viewModel = GZELoadingViewModel(GZEUserApiRepository())
+        } else {
+            log.error("Unable to instantiate GZELoadingViewcontroller")
         }
     }
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Gooze. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import ReactiveSwift
 
 protocol GZEProfileViewModel {
@@ -28,5 +28,5 @@ protocol GZEProfileViewModel {
 
     var profilePic: MutableProperty<URLRequest?> { get }
 
-    func contact();
+    func contact(controller: UIViewController);
 }

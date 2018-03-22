@@ -16,11 +16,19 @@ struct GZEAccesToken: Glossy {
     let userId: String
     let created: Date
 
+    let expires: Date
+
+    var isExpired: Bool {
+        log.debug("token.ttl: \(self.ttl), token.created: \(self.created), token.expires: \(self.expires)")
+        return self.expires.compare(Date()) == .orderedAscending
+    }
+
     init(id: String, ttl: Int, userId: String, created: Date) {
         self.id = id
         self.ttl = ttl
         self.userId = userId
         self.created = created
+        self.expires = created.addingTimeInterval(Double(ttl))
     }
 
     init?(json: JSON) {
@@ -31,10 +39,7 @@ struct GZEAccesToken: Glossy {
             let created = Decoder.decode(dateForKey: "created", dateFormatter: GZEApi.dateFormatter)(json)
         else { return nil }
 
-        self.id = id
-        self.ttl = ttl
-        self.userId = userId
-        self.created = created
+        self.init(id: id, ttl: ttl, userId: userId, created: created)
     }
 
     func toJSON() -> JSON? {

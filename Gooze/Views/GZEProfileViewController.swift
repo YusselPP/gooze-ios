@@ -74,6 +74,7 @@ class GZEProfileViewController: UIViewController {
 
         contactButton.setGrayFormat()
         contactButton.setTitle(contactButtonTitle, for: .normal)
+        contactButton.addTarget(self, action: #selector(contact), for: .touchUpInside)
     }
 
     private func setUpBindings() {
@@ -89,5 +90,9 @@ class GZEProfileViewController: UIViewController {
         interestsLabel.reactive.text <~ viewModel.interestedIn
 
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
+    }
+
+    func contact() {
+        viewModel.contact(controller: self)
     }
 }

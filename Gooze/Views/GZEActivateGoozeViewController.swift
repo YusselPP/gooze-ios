@@ -81,7 +81,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var userBalloon5: GZEUserBalloon!
 
     // Top controls
-    @IBOutlet weak var navIcon: UIImageView!
+    @IBOutlet weak var navIcon: UIView!
     @IBOutlet weak var sliderLabel: UILabel!
     @IBOutlet weak var topSlider: UISlider!
     @IBOutlet weak var topControls: UIView!
@@ -443,8 +443,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     func showSearchingScene() {
         mapView.isUserInteractionEnabled = false
         isSearchingAnimationEnabled = true
-        //TODO: stop searching button
-        activateGoozeButton.setTitle("Buscando...".uppercased(), for: .normal)
+        activateGoozeButton.setTitle(viewModel.searchingButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.isEnabled = false
     }
 

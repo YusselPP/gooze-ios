@@ -38,7 +38,10 @@ class GZEChooseModeViewController: UIViewController {
 
         //logoutButton.target = self
         //logoutButton.action = #selector(logoutButtonTapped(_:))
-        logoutButton.onButtonTapped = { [weak self] in self?.logoutButtonTapped($0) }
+        logoutButton.onButtonTapped = { [weak self] _ in
+            guard let this = self else {return}
+            this.logout(loginVM: this.viewModel.getLoginViewModel())
+        }
 
         closeHelpButton.title = "X"
         closeHelpButton.target = self

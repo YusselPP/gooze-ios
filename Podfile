@@ -18,6 +18,8 @@ target 'Gooze' do
   pod 'Validator'
   # pod 'Cosmos', '~> 11.0'
   pod 'FloatRatingView', '~> 2.0.0'
+  pod 'Socket.IO-Client-Swift', '11.1.3'
+
 
   target 'GoozeTests' do
     inherit! :search_paths
@@ -30,3 +32,4 @@ target 'Gooze' do
   end
 
 end
+

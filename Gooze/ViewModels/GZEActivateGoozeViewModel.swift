@@ -22,6 +22,8 @@ class GZEActivateGoozeViewModel {
 
     let searchViewTitle = "vm.search.viewTitle".localized()
     let zeroResultsMessage = "vm.search.zeroResultsMessage".localized()
+    let searchingButtonTitle = "vm.search.searchingButtonTitle".localized()
+
     let activateButtonTitle = "vm.activate.activateButtonTitle".localized()
     let deactivateButtonTitle = "vm.activate.deactivateButtonTitle".localized()
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()

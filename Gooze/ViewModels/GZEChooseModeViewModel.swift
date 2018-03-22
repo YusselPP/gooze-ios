@@ -32,6 +32,10 @@ class GZEChooseModeViewModel {
         return GZEActivateGoozeViewModel(userRepository)
     }
 
+    func getLoginViewModel() -> GZELoginViewModel {
+        return GZELoginViewModel(userRepository)
+    }
+
     // MARK: Deinitializers
     deinit {
         log.debug("\(self) disposed")

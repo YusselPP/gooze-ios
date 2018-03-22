@@ -29,12 +29,26 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     let profilePic = MutableProperty<URLRequest?>(nil)
 
-    func contact() {
+    func contact(controller: UIViewController) {
+        guard let dateSocket = GZESocketManager.shared[DatesSocket.namespace] else {
+            log.error("Date socket not found")
+            return
+        }
+
+        guard let userJson = user.toJSON() else {
+            log.error("user invalid json")
+            return
+        }
+
+        dateSocket.emit(.dateRequestSent, userJson)
     }
+
+    let user: GZEUser
 
 
     // MARK - init
     init(user: GZEUser) {
+        self.user = user
         super.init()
         log.debug("\(self) init")
 

@@ -68,7 +68,7 @@ class GZELoginViewModel {
         }
     }
 
-    // MARK: Deinitializers
+    // MARK: - Deinitializers
     deinit {
         log.debug("\(self) disposed")
     }
