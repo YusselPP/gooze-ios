@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import Validator
 
 class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
@@ -145,8 +146,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
         interestsTextField.returnKeyType = .done
 
-        heightTextField.validationRules = GZEUser.Validation.height.stringRule()
-        weightTextField.validationRules = GZEUser.Validation.weight.stringRule()
+        // heightTextField.validationRules = GZEUser.Validation.height.stringRule()
+        // weightTextField.validationRules = GZEUser.Validation.weight.stringRule()
 
         let toolBar = GZEPickerUIToolbar()
         toolBar.onDone = ptr(self, GZESignUpProfileViewController.pickerDoneTapped)
@@ -204,7 +205,28 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         // In bindings
         viewModel.phrase <~ phraseTextField.reactive.continuousTextValues
         // viewModel.gender binding set in viewModel
-        viewModel.birthday <~ birthdayPicker.reactive.dates
+        viewModel.birthday <~ birthdayPicker.reactive.dates.map{[weak self] date -> (Date?) in
+
+            let rule = ValidationRuleCondition<Date>(
+                error: GZEValidationError.underAge,
+                condition: {
+                    if let date = $0 {
+                        return GZEDateHelper.years(from: date, to: Date()) >= 18
+                    } else {
+                        return true
+                    }
+                }
+            )
+            var validationRuleSet = ValidationRuleSet<Date>()
+            validationRuleSet.add(rule: rule)
+
+            switch date.validate(rules: validationRuleSet) {
+            case .valid: return date
+            case .invalid(let errors):
+                self?.hanldeValidationError(errors)
+                return nil
+            }
+        }
         // viewModel.height <~ heightTextField.reactive.continuousTextValues
         // viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.origin <~ originTextField.reactive.continuousTextValues
