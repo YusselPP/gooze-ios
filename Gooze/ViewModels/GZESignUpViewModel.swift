@@ -239,7 +239,6 @@ class GZESignUpViewModel: NSObject {
 
     private func onUpdateAction() -> SignalProducer<GZEUser, GZEError> {
         fillUser()
-        //user.id = userId
 
         log.debug("User data = \(user.toJSON() as Any)")
 
@@ -247,11 +246,6 @@ class GZESignUpViewModel: NSObject {
     }
 
     private func onSavePhotosAction() -> SignalProducer<GZEUser, GZEError> {
-//        guard let userId = GZEAuthService.shared.authUser?.id else {
-//            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
-//        }
-
-        // self.user.id = userId
 
         // TODO: remove old photos from server
         self.user.photos = (
@@ -263,22 +257,12 @@ class GZESignUpViewModel: NSObject {
     }
 
     private func onSaveProfilePicAction() -> SignalProducer<GZEUser, GZEError> {
-//        guard let userId = GZEAuthService.shared.authUser?.id else {
-//            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
-//        }
-//
-//        self.user.id = userId
         self.user.profilePic = self.profilePic.map{ GZEUser.Photo(image: $0) }.value
 
         return self.userRepository.saveProfilePic(self.user)
     }
 
     private func onSaveSearchPicAction() -> SignalProducer<GZEUser, GZEError> {
-//        guard let userId = GZEApi.instance.accessToken?.userId else {
-//            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
-//        }
-//
-//        self.user.id = userId
         self.user.searchPic = self.searchPic.map{ GZEUser.Photo(image: $0) }.value
 
         return self.userRepository.saveSearchPic(self.user)
