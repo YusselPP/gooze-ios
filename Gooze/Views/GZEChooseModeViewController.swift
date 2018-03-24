@@ -40,6 +40,7 @@ class GZEChooseModeViewController: UIViewController {
         //logoutButton.action = #selector(logoutButtonTapped(_:))
         logoutButton.onButtonTapped = { [weak self] _ in
             guard let this = self else {return}
+            GZEAuthService.shared.logout()
             this.logout(loginVM: this.viewModel.getLoginViewModel())
         }
 

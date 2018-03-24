@@ -110,6 +110,9 @@
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Unrated";
 
+// AuthService
+"vm.authService.sessionExpired"="Your session has expired. Please log in";
+
 "login failed"="Invalid username or password";
 
 

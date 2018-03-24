@@ -47,6 +47,10 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func update(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
+
         return SignalProducer<GZEUser, GZEError> { sink, disposable in
 
             disposable.add {
@@ -75,6 +79,10 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
     }
 
     func delete(byId id: String) -> SignalProducer<Bool, GZEError> {
+
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
 
         return SignalProducer<Bool, GZEError> { sink, disposable in
 
@@ -153,6 +161,10 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func find(byId id: String) -> SignalProducer<GZEUser, GZEError> {
 
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
+
         return SignalProducer<GZEUser, GZEError> { sink, disposable in
             disposable.add {
                 log.debug("find SignalProducer disposed")
@@ -170,6 +182,10 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
     }
 
     func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int = 5) -> SignalProducer<[GZEUser], GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
+
         return SignalProducer<[GZEUser], GZEError> { sink, disposable in
 
             disposable.add {
@@ -195,6 +211,9 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
     }
 
     func publicProfile(byId id: String) -> SignalProducer<GZEUser, GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
 
         return SignalProducer<GZEUser, GZEError> { sink, disposable in
             disposable.add {
@@ -232,11 +251,11 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             switch this.validateLogin(email, password) {
             case .valid:
                 let params = ["email": email!, "password": password!]
-                Alamofire.request(GZEUserRouter.login(parameters: params))
+                Alamofire.request(GZEUserRouter.login(parameters: params, queryParams: ["include": "user"]))
                     .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
                         let accessToken = GZEAccesToken(json: json)
                         if accessToken != nil {
-                            GZEApi.instance.setToken(accessToken!)
+                            GZEAuthService.shared.login(token: accessToken!, user: accessToken!.user)
                         }
                         return accessToken
                     }))
@@ -247,6 +266,20 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                     log.error("Unable to cast validation error to class: GZEValidationError")
                     sink.send(error: .repository(error: .UnexpectedError))
                 }
+                sink.sendCompleted()
+            }
+        }
+    }
+
+    @discardableResult
+    func logout() -> SignalProducer<Void, GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+        }
+
+        return SignalProducer<Void, GZEError> {sink, disposable in
+
+            return Alamofire.request(GZEUserRouter.logout).response{data in
                 sink.sendCompleted()
             }
         }
@@ -418,21 +451,18 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
     }
 
     func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
-        var responseUser: GZEUser!
-
         return (
-            create(user)
-            .flatMap(FlattenStrategy.latest, transform: { aUser -> SignalProducer<GZEUser, GZEError> in
-                responseUser = aUser
-
-                return SignalProducer<GZEUser, GZEError> { sink, disposable in
-
-                    sink.send(value: responseUser)
-                    sink.sendCompleted()
+            self.create(user)
+            .flatMap(FlattenStrategy.latest, transform: {[weak self] _ -> SignalProducer<GZEUser, GZEError> in
+                guard let this = self else {
+                    log.error("Unable to complete the task. Self has been disposed.")
+                    return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                }
+                return this.login(user.email, user.password).map { token in
+                    return token.user
                 }
             })
-            .then(login(user.email, user.password))
-            .then({ () -> (SignalProducer<[GZEFile], GZEError>) in
+            /*.then({ () -> (SignalProducer<[GZEFile], GZEError>) in
 
                 if let photos = user.photos, photos.count > 0 {
                     return storageRepository.uploadFiles(photos.enumerated().flatMap { (index, photo) in
@@ -482,7 +512,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 user.photos = aUser.photos
 
                 return this.update(user)
-            }
+            }*/
         )
     }
 

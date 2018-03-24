@@ -158,7 +158,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
             let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
 
             viewController.viewModel = viewModel.getChooseModeViewModel()
-
+            viewModel.dismiss?()
             setRootController(controller: navController)
         } else {
             log.error("Unable to instantiate SearchGoozeNavController")

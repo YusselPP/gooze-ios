@@ -19,7 +19,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case findByLocation(parameters: Parameters)
     case publicProfile(id: String)
 
-    case login(parameters: Parameters)
+    case login(parameters: Parameters, queryParams: Parameters)
     case logout
     case reset(parameters: Parameters)
     case resetPassword(parameters: Parameters)
@@ -93,6 +93,7 @@ enum GZEUserRouter: URLRequestConvertible {
         switch self {
         case .readUser,
              .updateUser,
+             .logout,
              .findByLocation,
              .publicProfile,
              .photo:
@@ -105,7 +106,6 @@ enum GZEUserRouter: URLRequestConvertible {
         switch self {
         case .createUser(let parameters),
              .updateUser(_, let parameters),
-             .login(let parameters),
              .reset(let parameters),
              .resetPassword(let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
@@ -113,6 +113,10 @@ enum GZEUserRouter: URLRequestConvertible {
         case .count(let parameters),
              .findByLocation(let parameters):
             urlRequest = try URLEncoding.queryString.encode(urlRequest, with: parameters)
+
+        case .login(let parameters, let queryParams):
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+            urlRequest = try URLEncoding.queryString.encode(urlRequest, with: queryParams)
 
 
         default:

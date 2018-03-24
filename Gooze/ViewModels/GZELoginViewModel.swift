@@ -8,6 +8,7 @@
 
 import Foundation
 import ReactiveSwift
+import Result
 
 class GZELoginViewModel {
 
@@ -25,6 +26,8 @@ class GZELoginViewModel {
 
     let email = MutableProperty<String?>("")
     let password = MutableProperty<String?>("")
+
+    var dismiss: (() -> ())?
 
     var loginAction: Action<Void, GZEAccesToken, GZEError> {
         if let loginAction = _loginAction {

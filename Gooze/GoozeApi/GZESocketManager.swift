@@ -12,9 +12,17 @@ import SocketIO
 class GZESocketManager: NSObject {
     static let shared = SocketClientManager.sharedManager
 
+    static func createSockets() {
+        createDateSocket()
+    }
+
+    static func destroyAllSockets() {
+        destroyDateSocket()
+    }
+
     static func createDateSocket() {
         if let dateSocket = shared[DatesSocket.namespace] {
-            log.debug("date socket already exists, verifying connection")
+            log.debug("Dates socket already exists, verifying connection")
 
             if dateSocket.status == .connected || dateSocket.status == .connecting {
                 log.debug("Socket already connected or connecting. No action will be taken.")
@@ -23,7 +31,7 @@ class GZESocketManager: NSObject {
             }
         }
 
-        log.debug("Creating date socket..")
+        log.debug("Creating dates socket..")
         let socket = DatesSocket(socketURL: URL(string: GZEAppConfig.goozeApiUrl)!, config: [.compress, .log(false)])
 
         socket.joinNamespace(DatesSocket.namespace)
@@ -36,7 +44,7 @@ class GZESocketManager: NSObject {
         destroySocket(withLabel: DatesSocket.namespace)
     }
 
-    static func createChatSocket() {
+    static func destroyChatSocket() {
         destroySocket(withLabel: ChatSocket.namespace)
     }
 
@@ -44,7 +52,7 @@ class GZESocketManager: NSObject {
         if let socket = GZESocketManager.shared.removeSocket(withLabel: label) {
             socket.removeAllHandlers()
             socket.disconnect()
-            log.debug("Socket with label [\(label)] dstroyed")
+            log.debug("Socket with label [\(label)] destroyed")
         } else {
             log.debug("Socket with label [\(label)] not found")
         }

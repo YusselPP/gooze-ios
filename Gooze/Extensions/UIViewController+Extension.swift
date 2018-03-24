@@ -12,16 +12,18 @@ import ReactiveSwift
 
 extension UIViewController {
 
-    func displayMessage(_ title: String?, _ message: String) -> Void {
+    func displayMessage(_ title: String?, _ message: String, onDismiss: (() -> ())? = nil) -> Void {
         let alert = UIAlertController(title: title ?? "Gooze", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { _ in onDismiss?() }))
         present(alert, animated: true)
     }
 
     func setRootController(controller: UIViewController) -> Void {
         if let window = UIApplication.shared.keyWindow {
             UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                let oldRootVC = window.rootViewController
                 window.rootViewController = controller
+                oldRootVC?.dismiss(animated: false)
             }, completion: nil)
         }
     }
@@ -56,30 +58,6 @@ extension UIViewController {
             log.error("Unable to instantiate LoginNavController")
             displayMessage("Unexpected error", "Please contact support")
         }
-    }
-
-    func login(userRepository: GZEUserRepositoryProtocol?) {
-        var userRepo: GZEUserRepositoryProtocol
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-
-        if
-            let navController = mainStoryboard.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
-            let chooseModeController = navController.viewControllers.first as? GZEChooseModeViewController {
-
-            if userRepository == nil {
-                userRepo = GZEUserApiRepository()
-            } else {
-                userRepo = userRepository!
-            }
-
-            // Set up initial view model
-            chooseModeController.viewModel = GZEChooseModeViewModel(userRepo)
-            setRootController(controller: navController)
-        } else {
-            log.error("Unable to instantiate LoginNavController")
-            displayMessage("Unexpected error", "Please contact support")
-        }
-
     }
 
     func logout(loginVM: GZELoginViewModel) {

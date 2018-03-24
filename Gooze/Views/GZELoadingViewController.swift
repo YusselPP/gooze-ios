@@ -20,22 +20,37 @@ class GZELoadingViewController: UIViewController {
         super.viewDidLoad()
         log.debug("\(self) init")
 
-        viewModel.checkAuth(self)
-        viewModel.loadUserAction.events.observeValues { [weak self] in
-            switch $0 {
-            case .value: self?.login()
-            case .completed: break
-            default: self?.showLogin()
+        // Wait until next tick for view to be loaded, if not it will try to present
+        // login view controller over app loading screen and it will fail
+        Timer.scheduledTimer(timeInterval: 0, target: self, selector: #selector(checkAuth), userInfo: nil, repeats: false)
+    }
+
+    func checkAuth() {
+        viewModel.loginStoredUser {[weak self] _ in
+            guard let this = self else {
+                log.error("GZELoadingViewController disposed before being used")
+                return
+            }
+            this.viewModel.checkAuth(presenter: this) { _ in
+                this.showInitialController()
             }
         }
     }
 
-    func login() {
-        super.login(userRepository: viewModel.userRepository)
-    }
+    func showInitialController() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
-    func showLogin() {
-        super.showLoginView(userRepository: viewModel.userRepository)
+        if
+            let navController = mainStoryboard.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
+            let chooseModeController = navController.viewControllers.first as? GZEChooseModeViewController {
+
+            // Set up initial view model
+            chooseModeController.viewModel = GZEChooseModeViewModel(self.viewModel.userRepository)
+            setRootController(controller: navController)
+        } else {
+            log.error("Unable to instantiate SearchGoozeNavController")
+            displayMessage("Unexpected error", "Please contact support")
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,7 +68,7 @@ class GZELoadingViewController: UIViewController {
     }
     */
 
-    // MARK: Deinitializers
+    // MARK: - Deinitializers
     deinit {
         log.debug("\(self) disposed")
     }

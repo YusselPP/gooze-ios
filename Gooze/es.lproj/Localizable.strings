@@ -110,6 +110,9 @@
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Sin calificación";
 
+// AuthService
+"vm.authService.sessionExpired"="Tu sesión ha expirado. Inicia sesión nuevamente";
+
 // GoozeApi/GZEApiError
 "username"="usuario";
 "email"="correo electrónico";

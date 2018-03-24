@@ -12,49 +12,25 @@ import ReactiveSwift
 class GZELoadingViewModel: NSObject {
 
     let userRepository: GZEUserRepositoryProtocol
-    var loadUserAction: Action<Void, GZEUser, GZEError>!
 
     // MARK - constructor
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
         super.init()
-
-        loadUserAction = Action { [unowned self] in
-            return self.loadAuthUser()
-        }
-
-        loadUserAction.events.observeValues {
-            switch $0 {
-            case .value(let user): GZEAuthService.shared.login(user: user)
-            case .completed: break
-            default: break
-            }
-        }
+        GZEAuthService.shared.userRepository = userRepository
     }
 
-    func checkAuth(_ vc: UIViewController) {
-        if GZEAuthService.shared.isAuthenticated {
-            loadUserAction.apply().start()
-        } else {
-            showLogin(vc)
-        }
+    func loginStoredUser(completion: ((Bool) -> Void)? = nil) {
+        GZEAuthService.shared.loginStoredUser(completion: completion)
     }
 
-    func loadAuthUser() -> SignalProducer<GZEUser, GZEError> {
-        if let token = GZEAuthService.shared.token {
-            return userRepository.find(byId: token.userId)
-        } else {
-            log.debug("No auth user found")
-            return SignalProducer.init(error: .repository(error: .AuthRequired))
-        }
+    func checkAuth(presenter: UIViewController, completion: ((Bool)-> Void)? = nil) {
+        GZEAuthService.shared.checkAuth(presenter: presenter, completion: completion)
     }
 
-    func login(_ vc: UIViewController) {
-
-    }
-
-    func showLogin(_ vc: UIViewController) {
-        
+    // MARK: - Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }
