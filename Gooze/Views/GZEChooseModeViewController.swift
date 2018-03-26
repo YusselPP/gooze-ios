@@ -40,8 +40,7 @@ class GZEChooseModeViewController: UIViewController {
         //logoutButton.action = #selector(logoutButtonTapped(_:))
         logoutButton.onButtonTapped = { [weak self] _ in
             guard let this = self else {return}
-            GZEAuthService.shared.logout()
-            this.logout(loginVM: this.viewModel.getLoginViewModel())
+            GZEAuthService.shared.logout(presenter: this)
         }
 
         closeHelpButton.title = "X"
@@ -136,7 +135,7 @@ class GZEChooseModeViewController: UIViewController {
                 viewController.scene = goozeScene
             } else {
                 log.error("Unable to instantiate GZEActivateGoozeViewController")
-                displayMessage(nil, GZERepositoryError.UnexpectedError.localizedDescription)
+                GZEAlertService.shared.showBottomAlert(superview: self.view, text: GZEError.repository(error: .UnexpectedError).localizedDescription)
             }
         }
     }

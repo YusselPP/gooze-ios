@@ -16,6 +16,7 @@ class GZEProfileViewController: UIViewController {
 
     var contactButtonTitle = "vm.profile.contactTitle".localized().uppercased()
 
+    @IBOutlet weak var scrollContentView: UIView!
     @IBOutlet weak var usernameLabel: GZELabel!
     @IBOutlet weak var phraseLabel: GZELabel!
     @IBOutlet weak var genderLabel: GZELabel!

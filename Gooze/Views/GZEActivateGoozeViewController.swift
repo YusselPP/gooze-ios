@@ -176,8 +176,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func updateBalloons(_ users: [GZEUser]) {
         if users.count == 0 {
-            displayMessage(viewModel.searchViewTitle, viewModel.zeroResultsMessage)
             scene = .search
+            GZEAlertService.shared.showBottomAlert(superview: self.view, text: viewModel.zeroResultsMessage)
         }
 
         var loadCompleteCount = 0
@@ -217,7 +217,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         let scale: CGFloat = max(view.bounds.width, view.bounds.height) / 8
 
         let scaledTransform = searchingRadiusView.transform.scaledBy(x: scale, y: scale)
-        let originalTransform = searchingRadiusView.transform
+        //let originalTransform = searchingRadiusView.transform
 
         searchingRadiusView.alpha = 1
 
@@ -235,7 +235,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 return
             }
             
-            this.searchingRadiusView.transform = originalTransform
+            this.searchingRadiusView.transform = .identity
             this.searchingRadiusView.alpha = 1
 
             if this.isSearchingAnimationEnabled {
@@ -333,7 +333,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func onActionError(_ err: GZEError) {
-        self.displayMessage(GZEAppConfig.appTitle, err.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(superview: self.view, text: err.localizedDescription)
         if scene == .activate {
             self.activateGoozeButton.setGrayFormat()
             self.stopSearchAnimation()
@@ -385,6 +385,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     // MARK: - Scenes
     func handleSceneChanged() {
         hideAll()
+        GZEAlertService.shared.dismissBottomAlert()
         switch scene {
         case .activate: showActivateScene()
         case .activated: showActivatedScene()

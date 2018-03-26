@@ -39,8 +39,9 @@ extension GZERepositoryError: LocalizedError {
 
         case .GZEApiError(let apiError):
             return apiError.getMessage()
-        case .NetworkError(let error):
-            return error.localizedDescription
+        case .NetworkError:
+            // return error.localizedDescription
+            return "error.repository.comunication".localized()
         }
     }
 }

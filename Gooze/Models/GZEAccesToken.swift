@@ -17,14 +17,14 @@ struct GZEAccesToken: Glossy {
     let created: Date
     let expires: Date
 
-    let user: GZEUser
+    let user: GZEUser?
 
     var isExpired: Bool {
         log.debug("token.ttl: \(self.ttl), token.created: \(self.created), token.expires: \(self.expires)")
         return self.expires.compare(Date()) == .orderedAscending
     }
 
-    init(id: String, ttl: Int, userId: String, created: Date, expires: Date, user: GZEUser) {
+    init(id: String, ttl: Int, userId: String, created: Date, expires: Date, user: GZEUser?) {
         self.id = id
         self.ttl = ttl
         self.userId = userId
@@ -38,10 +38,11 @@ struct GZEAccesToken: Glossy {
             let id: String = "id" <~~ json,
             let ttl: Int = "ttl" <~~ json,
             let userId: String = "userId" <~~ json,
-            let user: GZEUser = "user" <~~ json,
             let created = Decoder.decode(dateForKey: "created", dateFormatter: GZEApi.dateFormatter)(json),
             let expires = Decoder.decode(dateForKey: "expires", dateFormatter: GZEApi.dateFormatter)(json)
         else { return nil }
+
+        let user: GZEUser? = "user" <~~ json
 
         self.init(id: id, ttl: ttl, userId: userId, created: created, expires: expires, user: user)
     }

@@ -28,6 +28,8 @@ class GZEConstants {
         static let textInputPlacehoderOnEdit = UIColor(white: 115/255, alpha: 1.0) // text input placehoder when editing text
 
         static let mainTextColor = UIColor.white
+
+        static let validationErrorViewBg = UIColor(white: 0.6, alpha: 0.9)
     }
 
     // Fonts

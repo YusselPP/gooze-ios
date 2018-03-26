@@ -7,8 +7,9 @@
 */
 
 // Protocols/GZEUserApiRepositoryError
+"Unexpected Error"="Unexpected Error. Please contact support";
 "error.repository.authRequired"="Login to continue";
-
+"error.repository.comunication"="Unable to establish communication with server";
 
 
 // Protocols/GZEValidationError

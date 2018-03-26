@@ -27,29 +27,33 @@ class GZELoadingViewController: UIViewController {
 
     func checkAuth() {
         viewModel.loginStoredUser {[weak self] _ in
+            log.debug("login stored user completed")
             guard let this = self else {
                 log.error("GZELoadingViewController disposed before being used")
                 return
             }
             this.viewModel.checkAuth(presenter: this) { _ in
+                log.debug("check auth completed")
                 this.showInitialController()
             }
         }
     }
 
     func showInitialController() {
+        log.debug("Trying to show initiall controller...")
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
         if
             let navController = mainStoryboard.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
             let chooseModeController = navController.viewControllers.first as? GZEChooseModeViewController {
 
+            log.debug("Initial controller instantiated. Setting up its view model")
             // Set up initial view model
             chooseModeController.viewModel = GZEChooseModeViewModel(self.viewModel.userRepository)
             setRootController(controller: navController)
         } else {
             log.error("Unable to instantiate SearchGoozeNavController")
-            displayMessage("Unexpected error", "Please contact support")
+            GZEAlertService.shared.showBottomAlert(superview: self.view, text: GZERepositoryError.UnexpectedError.localizedDescription)
         }
     }
 

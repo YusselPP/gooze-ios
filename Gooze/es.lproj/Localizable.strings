@@ -8,8 +8,9 @@
 
 // Protocols/GZEUserApiRepositoryError
 "Unknown error"="Error desconcido";
-"Unexpected Error"="Error inesperado";
+"Unexpected Error"="Error inesperado. Porfavor contacta a soporte";
 "error.repository.authRequired"="Inicia sesión para continuar";
+"error.repository.comunication"="No se pudo establecer la comunicación con el servidor";
 
 // Protocols/GZEValidationError
 "validation.required"="Ingresa tu %@";
@@ -36,7 +37,7 @@
 "user.invitedBy.fieldName"="Invitado por";
 "user.profilePic.fieldName"="Foto de perfil";
 "user.searchPic.fieldName"="Foto de búsqueda";
-"user.galleryPics.fieldName"="Fotos en la galería";
+"user.galleryPics.fieldName"="Foto en la galería";
 "user.imagesRating.fieldName"="Veracidad de imágenes";
 "user.complianceRating.fieldName"="Cumplimiento de acuerdos";
 "user.dateQualityRating.fieldName"="Calidad de la cita";

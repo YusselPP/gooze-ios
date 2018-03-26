@@ -21,7 +21,11 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     let signUpToProfileSegue = "signUpToProfileSegue"
 
-    var scene: Scene = .registerCode
+    var scene: Scene = .registerCode {
+        didSet {
+            GZEAlertService.shared.dismissBottomAlert()
+        }
+    }
 
     enum Scene {
         case username
@@ -44,6 +48,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     var backButton = GZEBackUIBarButtonItem()
     var nextBarButton = GZENextUIBarButtonItem()
 
+    @IBOutlet weak var rootView: UIView!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -176,10 +181,9 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     func onUsernameExistsSuccess(_ exists: Bool) {
         if exists {
-            let error = GZEValidationError
-                .exists(fieldName: GZEUser.Validation.username.fieldName)
-
-            displayMessage(viewModel.viewTitle, error.localizedDescription)
+            let error = GZEError.validation(error:
+                .exists(fieldName: GZEUser.Validation.username.fieldName))
+            onError(error)
         } else {
             showFacebookOrEmailScene()
         }
@@ -187,10 +191,10 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     func onEmailExistsSuccess(_ exists: Bool) {
         if exists {
-            let error = GZEValidationError
-                .exists(fieldName: GZEUser.Validation.email.fieldName)
+            let error = GZEError.validation(error:
+                .exists(fieldName: GZEUser.Validation.email.fieldName))
 
-            displayMessage(viewModel.viewTitle, error.localizedDescription)
+            onError(error)
         } else {
             showPasswordScene()
         }
@@ -201,7 +205,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     }
 
     func onError(_ error: GZEError) {
-        displayMessage(viewModel.viewTitle, error.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: error.localizedDescription)
     }
 
     // MARK: UIActions
@@ -272,7 +276,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    // Caled after textField.validate()
+    // Called after textField.validate()
     func handleTextFieldValidation(result: VValidationResult) {
         switch result {
         case .valid:
@@ -295,7 +299,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             } else {
                 msg = viewModel.textFieldValidationFailed
             }
-            displayMessage(viewModel.viewTitle, msg)
+            GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: msg)
         }
     }
 
@@ -329,17 +333,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     }
 
     func chooseModeController() {
-        if
-            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
-            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
-
-            viewController.viewModel = viewModel.getChooseModeViewModel()
-
-            setRootController(controller: navController)
-        } else {
-            log.error("Unable to instantiate SearchGoozeNavController")
-            displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)
-        }
+        self.viewModel.dismiss?()
     }
 
     // MARK: Scenes

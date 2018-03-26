@@ -36,47 +36,6 @@ extension UIViewController {
         SwiftOverlays.removeAllBlockingOverlays()
     }
 
-    func showLoginView(userRepository: GZEUserRepositoryProtocol?) {
-        var userRepo: GZEUserRepositoryProtocol
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-
-        if
-            let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
-            let loginController = navController.viewControllers.first as? GZELoginViewController {
-
-            if userRepository == nil {
-                userRepo = GZEUserApiRepository()
-            } else {
-                userRepo = userRepository!
-            }
-
-            // Set up initial view model
-            loginController.viewModel = GZELoginViewModel(userRepo)
-            // setRootController(controller: navController)
-            present(navController, animated: true)
-        } else {
-            log.error("Unable to instantiate LoginNavController")
-            displayMessage("Unexpected error", "Please contact support")
-        }
-    }
-
-    func logout(loginVM: GZELoginViewModel) {
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-
-        if
-            let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
-            let loginController = navController.viewControllers.first as? GZELoginViewController {
-        // if let loginController = mainStoryboard.instantiateViewController(withIdentifier: "GZELoginViewController") as? GZELoginViewController {
-
-            // Set up initial view model
-            loginController.viewModel = loginVM
-            setRootController(controller: navController)
-        } else {
-            log.error("Unable to instantiate LoginNavController")
-            displayMessage("Unexpected error", "Please contact support")
-        }
-    }
-
     func addKeyboardInsetAndScroll(scrollView: UIScrollView, activeField: UIView?, notification: Notification) {
         if
             let info = notification.userInfo,

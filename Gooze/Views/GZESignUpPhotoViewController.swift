@@ -737,13 +737,15 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func onError(err: GZEError) {
-        self.displayMessage(viewModel.viewTitle, err.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(superview: self.view, text: err.localizedDescription)
     }
 
     // MARK: - Scenes
     func showCurrentScene() {
 
         hideAll()
+
+        GZEAlertService.shared.dismissBottomAlert()
 
         switch scene! {
         case .cameraOrReel:
@@ -945,17 +947,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
     */
     func showChooseModeController() {
-        if
-            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
-            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
-
-            viewController.viewModel = viewModel.getChooseModeViewModel()
-
-            setRootController(controller: navController)
-        } else {
-            log.error("Unable to instantiate SearchGoozeNavController")
-            displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)
-        }
+        self.viewModel.dismiss?()
     }
 
     // MARK: - Deinitializers

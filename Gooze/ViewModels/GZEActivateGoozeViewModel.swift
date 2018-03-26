@@ -67,7 +67,7 @@ class GZEActivateGoozeViewModel {
         deactivateGoozeAction = Action { [weak self] in
             guard let this = self else {
                 log.error("self disposed")
-                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                return SignalProducer(error: .repository(error: .UnexpectedError))
             }
             return this.deactivateGoozeHandler()
         }
@@ -78,12 +78,12 @@ class GZEActivateGoozeViewModel {
         return Action<Void, GZEUser, GZEError>{[weak self] in
             guard let this = self else {
                 log.error("self disposed")
-                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
 
             guard let userId = GZEApi.instance.accessToken?.userId else {
-                return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+                return SignalProducer(error: .repository(error: .AuthRequired))
             }
 
             let user = GZEUser()
@@ -102,7 +102,7 @@ class GZEActivateGoozeViewModel {
         return Action<Void, [GZEUser], GZEError>{[weak self] in
             guard let this = self else {
                 log.error("self disposed")
-                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
             return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.currentLocation.value), maxDistance: this.sliderValue.value, limit: this.searchLimit.value)
@@ -114,7 +114,7 @@ class GZEActivateGoozeViewModel {
         return Action<String, GZEUser, GZEError>{ [weak self] userId in
             guard let this = self else {
                 log.error("self disposed")
-                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
             log.debug("finding user[id=\(userId)]")
@@ -125,7 +125,7 @@ class GZEActivateGoozeViewModel {
 
     private func deactivateGoozeHandler() -> SignalProducer<GZEUser, GZEError> {
         guard let userId = GZEApi.instance.accessToken?.userId else {
-            return SignalProducer(error: GZEError.repository(error: .AuthRequired))
+            return SignalProducer(error: .repository(error: .AuthRequired))
         }
 
         let user = GZEUser()

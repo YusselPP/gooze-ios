@@ -39,6 +39,8 @@ class GZESignUpViewModel: NSObject {
     }
     var _user: GZEUser?
 
+    var dismiss: (() -> ())?
+
     let usernameLabelText = GZEUser.Validation.username.fieldName
     let emailLabelText = GZEUser.Validation.email.fieldName
     let passwordLabelText = GZEUser.Validation.password.fieldName

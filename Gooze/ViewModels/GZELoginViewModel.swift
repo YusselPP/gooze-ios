@@ -65,7 +65,7 @@ class GZELoginViewModel {
             // return SignalProducer<GZEAccesToken, GZEError>(value: GZEAccesToken(id: "", ttl: 0, userId: "", created: Date()))
             guard let strongSelf = self else {
                 log.error("self disposed")
-                return SignalProducer(error: GZEError.repository(error: .UnexpectedError))
+                return SignalProducer(error: .repository(error: .UnexpectedError))
             }
             return strongSelf.userRepository.login(strongSelf.email.value, strongSelf.password.value)
         }

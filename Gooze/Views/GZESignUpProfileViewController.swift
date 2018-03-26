@@ -39,6 +39,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         set(newScene){ setScene(newScene) }
     }
 
+    @IBOutlet weak var rootView: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollContentView: UIView!
     @IBOutlet weak var bottomReferenceView: UIView!
@@ -60,6 +61,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
 
+    @IBOutlet weak var viewBottomSpaceConstraint: NSLayoutConstraint!
+
     let birthdayPicker = UIDatePicker()
     let genderPicker = UIPickerView()
     let heightPicker = UIPickerView()
@@ -72,16 +75,6 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
 
         log.debug("\(self) init")
-
-        /*loadLoggedUser().start { [weak self] in
-            switch $0 {
-            case .value(let user):
-                self?.viewModel.user = user
-            case .failed(let err):
-                self?.onError(err)
-            default: break
-            }
-        }*/
 
         setupInterfaceObjects()
         setupBindings()
@@ -281,7 +274,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func onError(_ error: GZEError) {
-        displayMessage(viewModel.viewTitle, error.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: error.localizedDescription)
     }
 
     // MARK: - UIActions
@@ -440,12 +433,12 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
-        addKeyboardInsetAndScroll(scrollView: scrollView, activeField: activeField, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification)
     }
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        removeKeyboardInset(scrollView: scrollView)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification)
     }
     
     // MARK: - Validation
@@ -467,7 +460,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
             }
             msg += error.localizedDescription
         }
-        displayMessage(viewModel.viewTitle, msg)
+        GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: msg)
     }
 
     // MARK: - Navigation
@@ -490,17 +483,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func showChooseModeController() {
-        if
-            let navController = storyboard?.instantiateViewController(withIdentifier: "SearchGoozeNavController") as? UINavigationController,
-            let viewController = navController.viewControllers.first as? GZEChooseModeViewController {
-
-            viewController.viewModel = viewModel.getChooseModeViewModel()
-
-            setRootController(controller: navController)
-        } else {
-            log.error("Unable to instantiate SearchGoozeNavController")
-            displayMessage(viewModel.viewTitle, GZERepositoryError.UnexpectedError.localizedDescription)
-        }
+        self.viewModel.dismiss?()
     }
 
     // MARK: - Scenes
@@ -508,6 +491,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         guard newScene != scene else { return }
 
         _scene = newScene
+
+        GZEAlertService.shared.dismissBottomAlert()
 
         switch scene {
         case .profilePic: showProfilePicScene()

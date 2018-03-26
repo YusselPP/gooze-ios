@@ -104,29 +104,34 @@ class GZEAuthService: NSObject {
                 self.showLogin(presenter: presenter, completion: completion)
             } else {
                 log.debug("Stored token expired")
-                presenter.displayMessage(GZEAppConfig.appTitle, "vm.authService.sessionExpired".localized()) {[weak self] in
-                    self?.showLogin(presenter: presenter, completion: completion)
-                }
+                self.showLogin(presenter: presenter, showExpiredAlert: true, completion: completion)
             }
         }
     }
 
-    func showLogin(presenter: UIViewController, completion: ((Bool) -> ())? = nil) {
+    func showLogin(presenter: UIViewController, showExpiredAlert: Bool = false, completion: ((Bool) -> ())? = nil) {
+        log.debug("Trying to show login modal")
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
         if
             let navController = mainStoryboard.instantiateViewController(withIdentifier: "LoginNavController") as? UINavigationController,
             let loginController = navController.viewControllers.first as? GZELoginViewController {
 
+            log.debug("Login controller instanciated. Setting up login view model")
             loginController.viewModel = GZELoginViewModel(self.userRepository)
             loginController.viewModel.dismiss = {
+                log.debug("Login modal dismissed")
                 presenter.dismiss(animated: true)
                 completion?(true)
             }
-            presenter.present(navController, animated: true)
+            presenter.present(navController, animated: true) {
+                if showExpiredAlert {
+                    GZEAlertService.shared.showBottomAlert(superview: loginController.view, text: "vm.authService.sessionExpired".localized())
+                }
+            }
         } else {
             log.error("Unable to instantiate LoginNavController")
-            presenter.displayMessage("Unexpected error", "Please contact support")
+            GZEAlertService.shared.showBottomAlert(superview: presenter.view, text: GZEError.repository(error: .UnexpectedError).localizedDescription)
         }
     }
 
@@ -137,12 +142,13 @@ class GZEAuthService: NSObject {
         GZESocketManager.createSockets()
     }
 
-    func logout() {
+    func logout(presenter: UIViewController, completion: ((Bool) -> ())? = nil) {
         log.debug("logout user from GZEAuthService")
         GZESocketManager.destroyAllSockets()
         self.userRepository.logout().start()
         self.token = nil
         self.authUser = nil
+        self.checkAuth(presenter: presenter, completion: completion)
     }
 
     // MARK: - private methods

@@ -25,7 +25,7 @@ class GZEStorageApiRepository {
             }
 
             guard let token = GZEApi.instance.accessToken?.id else {
-                sink.send(error: GZEError.repository(error: .AuthRequired))
+                sink.send(error: .repository(error: .AuthRequired))
                 sink.sendInterrupted()
                 return
             }

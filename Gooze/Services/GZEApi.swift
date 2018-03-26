@@ -50,23 +50,22 @@ class GZEApi {
     }
 
     func saveToken(_ accessToken: GZEAccesToken?) {
-        var tokenString: String?
         if let token = accessToken {
             if
                 let jsonToken = token.toJSON(),
                 let jsonTokenData = try? JSONSerialization.data(withJSONObject: jsonToken),
                 let jsonTokenString = String(data: jsonTokenData, encoding: .utf8)
             {
-                tokenString = jsonTokenString
+                UserDefaults.standard.set(jsonTokenString, forKey: GZEApi.tokenKey)
+                log.debug("Token stored: \(jsonTokenString)")
+                return
             } else {
                 log.error("Error parsing access token. nil will be stored")
-                tokenString = nil
             }
         } else {
-            tokenString = nil
+            log.debug("Token set to nil. Storing nil token")
         }
-        UserDefaults.standard.set(tokenString, forKey: GZEApi.tokenKey)
-        log.debug("Token stored: \(String(describing: tokenString))")
+        UserDefaults.standard.set(nil, forKey: GZEApi.tokenKey)
     }
 
     // MARK: Response handler
