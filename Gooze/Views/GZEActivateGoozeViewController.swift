@@ -63,6 +63,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
+    var isSearchAnimationInProgress = false
 
     var backButton = GZEBackUIBarButtonItem()
 
@@ -214,12 +215,19 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func startSearchAnimation() {
-        let scale: CGFloat = max(view.bounds.width, view.bounds.height) / 8
 
-        let scaledTransform = searchingRadiusView.transform.scaledBy(x: scale, y: scale)
-        //let originalTransform = searchingRadiusView.transform
+        if self.isSearchAnimationInProgress {
+            return
+        }
 
+        self.isSearchAnimationInProgress = true
+
+        searchingRadiusView.transform = .identity
         searchingRadiusView.alpha = 1
+
+        let scale: CGFloat = max(view.bounds.width, view.bounds.height) / 8
+        let scaledTransform = searchingRadiusView.transform.scaledBy(x: scale, y: scale)
+
 
         UIView.animate(withDuration: 3, animations: { [weak self] in
 
@@ -234,9 +242,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             guard let this = self else {
                 return
             }
-            
-            this.searchingRadiusView.transform = .identity
-            this.searchingRadiusView.alpha = 1
+
+            this.isSearchAnimationInProgress = false
 
             if this.isSearchingAnimationEnabled {
                 this.startSearchAnimation()
