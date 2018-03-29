@@ -475,6 +475,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         topControls.isHidden = false
         topControlsBackground.isHidden = false
         activateGoozeButton.isHidden = false
+        
+        hideBalloons()
 
         mapView.isUserInteractionEnabled = true
         isSearchingAnimationEnabled = false
@@ -495,6 +497,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 log.debug("event received: \(event)")
                 switch event {
                 case .value(let dateRequests):
+                    log.debug("dateRequest: \(dateRequests.toJSONArray())")
                     self?.viewModel.userResults.value = dateRequests.map{$0.sender}
                     self?.updateBalloons()
                     self?.scene = .requestResults
@@ -520,8 +523,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func showRequestResultsListScene() {
-        disposeRequestsObserver?.dispose()
-        disposeRequestsObserver = nil
+        //disposeRequestsObserver?.dispose()
+        //disposeRequestsObserver = nil
         hideBalloons()
 
         usersList.onDismiss = { [weak self] in
@@ -611,12 +614,15 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 {[weak self] receivedRequests in
                     guard let this = self else {return}
                     //if let dateRequest = dateRequest {
-                        if this.scene != .requestResults {
-                            this.scene = .requestResults
-                        }
+                        //if this.scene != .requestResults {
+                        //    this.scene = .requestResults
+                        //}
 
                     this.viewModel.userResults.value = receivedRequests.map{$0.sender}
+                    this.usersList.users = this.viewModel.userResults.value
                     this.updateBalloons()
+
+                    
 //                        let count = this.viewModel.userResults.value.count
 //                        this.viewModel.userResults.value.append(dateRequest.sender)
 //                        if count < this.userBalloons.count {

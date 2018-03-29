@@ -104,13 +104,13 @@ class GZEUserBalloon: UIView {
     func setImage(urlRequest: URLRequest?, completion: ( () -> ())? = nil){
         if let urlRequest = urlRequest {
             imageView.af_setImage(withURLRequest: urlRequest, completion: { [weak self] _ in
-                self?.setVisible(true)
+                //self?.setVisible(true)
                 completion?()
             })
         } else {
             log.error("Failed to set image url for user id=[\(String(describing: user?.id))]")
             imageView.image = nil
-            setVisible(true)
+            //setVisible(true)
             completion?()
         }
     }

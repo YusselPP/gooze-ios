@@ -68,6 +68,7 @@ class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, 
 
         userCell.user = users[indexPath.row]
         userCell.onTap = onUserTap
+        userCell.userBalloon.setVisible(true)
 
         return userCell
     }

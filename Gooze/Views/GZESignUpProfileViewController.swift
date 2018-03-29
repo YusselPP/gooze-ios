@@ -61,6 +61,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
 
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var viewBottomSpaceConstraint: NSLayoutConstraint!
 
     let birthdayPicker = UIDatePicker()
