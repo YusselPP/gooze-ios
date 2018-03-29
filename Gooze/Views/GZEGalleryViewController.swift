@@ -44,6 +44,8 @@ class GZEGalleryViewController: UIViewController {
         setupInterfaceObjects()
 
         setupBindings()
+
+        setMode(mode: viewModel.mode.value)
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,12 +80,23 @@ class GZEGalleryViewController: UIViewController {
             )
         }
 
+        contactButton.enableAnimationOnPressed()
         contactButton.setGrayFormat()
-        contactButton.setTitle(contactButtonTitle, for: .normal)
         view.layoutIfNeeded()
     }
 
     private func setupBindings() {
+        viewModel.mode.signal.observeValues {[weak self] mode in
+            guard let this = self else {return}
+            this.setMode(mode: mode)
+        }
+        
+        viewModel.error.signal.observeValues { error in
+            error.flatMap {
+                GZEAlertService.shared.showBottomAlert(superview: self.view, text: $0)
+            }
+        }
+        
         // Model bindings
         usernameLabel.reactive.text <~ viewModel.username
 
@@ -102,6 +115,29 @@ class GZEGalleryViewController: UIViewController {
         if pos < thumbnailImages.count {
             selectedThumbnail.value = thumbnailImages[pos].image
         }
+    }
+
+    func setMode(mode: GZEProfileMode) {
+        var btnTitle: String
+        var selector: Selector
+        if mode == .request {
+            btnTitle = self.viewModel.acceptRequestButtonTitle
+            selector = #selector(self.acceptRequest)
+        } else {
+            btnTitle = self.viewModel.contactButtonTitle
+            selector = #selector(self.contact)
+        }
+        self.contactButton.setTitle(btnTitle, for: .normal)
+        self.contactButton.removeAllTargets()
+        self.contactButton.addTarget(self, action: selector, for: .touchUpInside)
+    }
+
+    func contact() {
+        viewModel.contact()
+    }
+
+    func acceptRequest() {
+        viewModel.acceptRequest()
     }
 
     // MARK: - Deinitializers

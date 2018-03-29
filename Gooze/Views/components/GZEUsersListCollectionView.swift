@@ -15,9 +15,22 @@ class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, 
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        initialize()
+    }
+
+    init() {
+        super.init(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+        initialize()
+    }
+
+    func initialize() {
+        log.debug("\(self) init")
         self.dataSource = self
         self.delegate = self
         self.backgroundColor = nil
+        self.translatesAutoresizingMaskIntoConstraints = false
+
+        self.register(GZEUserCollectionViewCell.self, forCellWithReuseIdentifier: "GZEUserCollectionViewCell")
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -27,6 +40,14 @@ class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, 
         let size = max(minSize/3 - 2 * 15, 100)
 
         return CGSize(width: size, height: size);
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 15
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(15, 15, 15, 15)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -62,11 +83,25 @@ class GZEUserCollectionViewCell: UICollectionViewCell {
     }
     var onTap: ((UITapGestureRecognizer, GZEUserBalloon) -> ())? {
         didSet {
-            self.userBalloon?.onTap = self.onTap
+            self.userBalloon.onTap = self.onTap
         }
     }
 
-    let userBalloon: GZEUserBalloon?
+    let userBalloon: GZEUserBalloon
+
+    required init?(coder aDecoder: NSCoder) {
+        userBalloon = GZEUserBalloon()
+        super.init(coder: aDecoder)
+        log.debug("\(self) init")
+        initProperties()
+    }
+
+    override init(frame: CGRect) {
+        userBalloon = GZEUserBalloon()
+        super.init(frame: frame)
+        log.debug("\(self) init")
+        initProperties()
+    }
 
     init() {
         userBalloon = GZEUserBalloon()
@@ -75,15 +110,9 @@ class GZEUserCollectionViewCell: UICollectionViewCell {
         initProperties()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        userBalloon = GZEUserBalloon(coder: aDecoder)
-        super.init(coder: aDecoder)
-        log.debug("\(self) init")
-        initProperties()
-    }
 
     private func initProperties() {
-        guard let userBalloon = self.userBalloon else { return }
+        self.contentMode = .center
 
         userBalloon.translatesAutoresizingMaskIntoConstraints = false
 
@@ -96,9 +125,11 @@ class GZEUserCollectionViewCell: UICollectionViewCell {
     }
 
     private func setUser(_ user: GZEUser?) {
-        guard let user = user else { return }
-        guard let userBalloon = self.userBalloon else { return }
-
         userBalloon.setUser(user)
+    }
+
+    // MARK: - Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

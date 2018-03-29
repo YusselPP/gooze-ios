@@ -14,6 +14,7 @@ class GZEProfilePageViewController: UIPageViewController {
     var galleryVm: GZEGalleryViewModel!
     var ratingsVm: GZERatingsViewModel!
 
+    var backButton = GZEBackUIBarButtonItem()
 
     private(set) lazy var orderedViewControllers: [UIViewController] = {
         return [self.newViewController("profileControllerId"),
@@ -24,6 +25,11 @@ class GZEProfilePageViewController: UIPageViewController {
     override func viewDidLoad() {
         log.debug("\(self) init")
         super.viewDidLoad()
+
+        backButton.onButtonTapped = {[weak self] _ in
+            self?.previousController(animated: true)
+        }
+        navigationItem.setLeftBarButton(backButton, animated: false)
 
         dataSource = self
 

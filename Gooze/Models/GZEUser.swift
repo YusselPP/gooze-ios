@@ -193,6 +193,14 @@ class GZEUser: Glossy {
         return  avg
     }
 
+    var isActivated: Bool {
+        if let activeUntil = self.activeUntil {
+            return activeUntil.compare(Date()) != .orderedDescending
+        } else {
+            return false
+        }
+    }
+
     init() {
         log.debug("\(self) init")
     }

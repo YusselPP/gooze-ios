@@ -18,6 +18,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     enum Scene {
         case activate
         case activated
+        case requestResults
+        case requestResultsList
+        case requestOtherResultsList
 
         case search
         case searching
@@ -45,7 +48,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     var deactivateGoozeAction: CocoaAction<GZEButton>!
     var searchGoozeAction: CocoaAction<GZEButton>!
     var showResultsListAction: CocoaAction<GZEButton>!
+    var showOtherResultsListAction: CocoaAction<GZEButton>!
+    var showRequestResultsListAction: CocoaAction<GZEButton>!
+    var showRequestOtherResultsListAction: CocoaAction<GZEButton>!
 
+    var disposeRequestsObserver: Disposable?
     var isInitialPositionSet = false
 
     var sliderPostfix = "km"
@@ -65,6 +72,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
     var isSearchAnimationInProgress = false
 
+    let usersList = GZEUsersList()
+
     var backButton = GZEBackUIBarButtonItem()
 
     @IBOutlet weak var mapView: MKMapView! {
@@ -73,6 +82,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activateGoozeButton: GZEButton!
 
     @IBOutlet weak var userBalloon1: GZEUserBalloon!
@@ -89,9 +99,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var topControlsBackground: UIView!
 
     @IBOutlet weak var searchingRadiusView: UIImageView!
-
-    @IBOutlet weak var usersListCollectionView: GZEUsersListCollectionView!
-    @IBOutlet weak var usersListBackground: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,11 +140,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             $0.onTap = ptr(self, GZEActivateGoozeViewController.userBalloonTapped)
         }
 
-        usersListCollectionView.onUserTap = ptr(self, GZEActivateGoozeViewController.userBalloonTapped)
-        usersListBackground.layer.cornerRadius = 15
-        usersListBackground.layer.masksToBounds = true
+        usersList.onUserTap = {[weak self] tapRecognizer, userBalloon in
+            self?.userBalloonTapped(tapRecognizer, userBalloon)
+        }
 
         setupSlider()
+
+        self.containerView.addSubview(self.usersList)
+        self.view.leadingAnchor.constraint(equalTo: self.usersList.leadingAnchor, constant: -20).isActive = true
+        self.view.trailingAnchor.constraint(equalTo: self.usersList.trailingAnchor, constant: 20).isActive = true
+        self.topLayoutGuide.bottomAnchor.constraint(equalTo: self.usersList.topAnchor, constant: -20).isActive = true
+        self.bottomLayoutGuide.topAnchor.constraint(equalTo: self.usersList.bottomAnchor, constant: 20).isActive = true
     }
 
     func setupBindings() {
@@ -158,6 +171,15 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         showResultsListAction = CocoaAction(Action<Void,Void,GZEError>{SignalProducer.empty}) { [weak self] _ in
             self?.scene = .resultsList
         }
+        showOtherResultsListAction = CocoaAction(Action<Void,Void,GZEError>{SignalProducer.empty}) { [weak self] _ in
+            self?.scene = .otherResultsList
+        }
+        showRequestResultsListAction = CocoaAction(Action<Void,Void,GZEError>{SignalProducer.empty}) { [weak self] _ in
+            self?.scene = .requestResultsList
+        }
+        showRequestOtherResultsListAction = CocoaAction(Action<Void,Void,GZEError>{SignalProducer.empty}) { [weak self] _ in
+            self?.scene = .requestOtherResultsList
+        }
 
         viewModel.findGoozeAction.events.observeValues {[weak self] in
             self?.onUserEvent($0)
@@ -175,10 +197,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
 
 
-    func updateBalloons(_ users: [GZEUser]) {
+    func updateBalloons() {
+        let users = viewModel.userResults.value
         if users.count == 0 {
-            scene = .search
-            GZEAlertService.shared.showBottomAlert(superview: self.view, text: viewModel.zeroResultsMessage)
+            if scene == .searching {
+                scene = .search
+                GZEAlertService.shared.showBottomAlert(superview: self.containerView, text: viewModel.zeroResultsMessage)
+            }
         }
 
         var loadCompleteCount = 0
@@ -192,7 +217,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             self.userBalloons[index].setUser(user) { [weak self] in
                 loadCompleteCount += 1
                 if loadCompleteCount == resultsLimit {
-                    self?.scene = .searchResults
+                    if self?.scene == .searching {
+                        self?.scene = .searchResults
+                    }
                 }
             }
         }
@@ -209,10 +236,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         self.userBalloons.forEach { $0.setVisible(false) }
     }
 
-    func updateResultsOnList(_ users: [GZEUser]) {
-        usersListCollectionView.users = users
-        usersListCollectionView.reloadData()
-    }
+    //func updateResultsOnList(_ users: [GZEUser]) {
+    //    self.usersResults = users
+    //}
 
     func startSearchAnimation() {
 
@@ -279,6 +305,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     @IBAction func topSliderChanged(_ sender: UISlider) {
         let roundedValue = round(sender.value / sliderStep) * sliderStep
         sender.value = roundedValue
+        log.debug("map region \(mapView.centerCoordinate)")
     }
 
     func userBalloonTapped(_ tapRecognizer: UITapGestureRecognizer, _ userBalloon: GZEUserBalloon) {
@@ -303,6 +330,12 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             scene = .searchResults
         case .otherResultsList:
             scene = .searchResults
+        case .requestResults:
+            scene = .activate
+        case .requestResultsList:
+            scene = .requestResults
+        case .requestOtherResultsList:
+            scene = .requestResultsList
         default:
             break
         }
@@ -325,10 +358,14 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 if let users = user as? [GZEUser] {
                     viewModel.userResults.value = users
                 }
-                updateBalloons(viewModel.userResults.value)
-                updateResultsOnList(viewModel.userResults.value)
+                updateBalloons()
+                //updateResultsOnList()
             case .searchResults,
-                    .resultsList:
+                 .resultsList,
+                 .otherResultsList,
+                 .requestResults,
+                 .requestResultsList,
+                 .requestOtherResultsList:
                 performSegue(withIdentifier: segueToProfile, sender: user)
             default: break
             }
@@ -340,7 +377,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func onActionError(_ err: GZEError) {
-        GZEAlertService.shared.showBottomAlert(superview: self.view, text: err.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(superview: self.containerView, text: err.localizedDescription)
         if scene == .activate {
             self.activateGoozeButton.setGrayFormat()
             self.stopSearchAnimation()
@@ -383,6 +420,16 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 pageViewController.profileVm = GZEProfileViewModelReadOnly(user: user)
                 pageViewController.galleryVm = GZEGalleryViewModelReadOnly(user: user)
                 pageViewController.ratingsVm = GZERatingsViewModelReadOnly(user: user)
+
+                if
+                    scene == .requestResults ||
+                    scene == .requestResultsList ||
+                    scene == .requestOtherResultsList
+                {
+                    pageViewController.profileVm.mode.value = .request
+                    pageViewController.galleryVm.mode.value = .request
+                    pageViewController.ratingsVm.mode.value = .request
+                }
             } else {
                 log.error("Unable to obatain the user from segue sender")
             }
@@ -393,9 +440,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     func handleSceneChanged() {
         hideAll()
         GZEAlertService.shared.dismissBottomAlert()
+        GZEAlertService.shared.dismissTopAlert()
         switch scene {
         case .activate: showActivateScene()
         case .activated: showActivatedScene()
+        case .requestResults: showRequestResultsScene()
+        case .requestResultsList: showRequestResultsListScene()
+        case .requestOtherResultsList: showRequestOtherResultsListScene()
 
         case .search: showSearchScene()
         case .searching: showSearchingScene()
@@ -409,32 +460,95 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     func hideAll() {
         topControls.isHidden = true
         topControlsBackground.isHidden = true
-        usersListCollectionView.isHidden = true
-        usersListBackground.isHidden = true
+        activateGoozeButton.isHidden = true
+        switch scene {
+        case .resultsList,
+             .otherResultsList,
+             .requestResultsList,
+             .requestOtherResultsList:
+            break
+        default: usersList.dismiss()
+        }
     }
 
     func showActivateScene() {
         topControls.isHidden = false
         topControlsBackground.isHidden = false
+        activateGoozeButton.isHidden = false
 
         mapView.isUserInteractionEnabled = true
         isSearchingAnimationEnabled = false
 
         activateGoozeButton.setTitle(viewModel.activateButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = activateGoozeAction
+        disposeRequestsObserver?.dispose()
+        disposeRequestsObserver = nil
     }
 
     func showActivatedScene() {
         mapView.isUserInteractionEnabled = false
+        activateGoozeButton.isHidden = false
         isSearchingAnimationEnabled = true
+
+        GZEDateRequestApiRepository().findUnresponded().startWithSignal{[weak self] sink, disposable in
+            sink.observe { event in
+                log.debug("event received: \(event)")
+                switch event {
+                case .value(let dateRequests):
+                    self?.viewModel.userResults.value = dateRequests.map{$0.sender}
+                    self?.updateBalloons()
+                    self?.scene = .requestResults
+                default: break
+                }
+            }
+        }
 
         activateGoozeButton.setTitle(viewModel.deactivateButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = deactivateGoozeAction
+
+        observeRequests()
+    }
+
+    func showRequestResultsScene() {
+        activateGoozeButton.isHidden = false
+        activateGoozeButton.isEnabled = true
+        activateGoozeButton.setTitle(viewModel.allResultsButtonTitle.uppercased(), for: .normal)
+        activateGoozeButton.reactive.pressed = showRequestResultsListAction
+
+        showBalloons()
+        observeRequests()
+    }
+
+    func showRequestResultsListScene() {
+        disposeRequestsObserver?.dispose()
+        disposeRequestsObserver = nil
+        hideBalloons()
+
+        usersList.onDismiss = { [weak self] in
+            self?.usersList.onDismiss = nil
+            self?.scene = .requestResults
+        }
+
+        usersList.users = viewModel.userResults.value
+        usersList.show()
+
+        usersList.actionButton.setTitle(
+            viewModel.otherResultsButtonTitle.uppercased(), for: .normal
+        )
+        usersList.actionButton.reactive.pressed = showRequestOtherResultsListAction
+    }
+
+    func showRequestOtherResultsListScene() {
+        usersList.users = viewModel.userOtherResults.value
+        usersList.actionButton.setTitle(viewModel.backButtonTitle.uppercased(), for: .normal)
+        usersList.actionButton.reactive.pressed = showRequestResultsListAction
+        GZEAlertService.shared.showTopAlert(superview: self.containerView, text: viewModel.othersResultsWarning)
     }
 
     func showSearchScene() {
         topControls.isHidden = false
         topControlsBackground.isHidden = false
+        activateGoozeButton.isHidden = false
 
         mapView.isUserInteractionEnabled = true
         isSearchingAnimationEnabled = false
@@ -450,6 +564,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func showSearchingScene() {
         mapView.isUserInteractionEnabled = false
+        activateGoozeButton.isHidden = false
+
         isSearchingAnimationEnabled = true
         activateGoozeButton.setTitle(viewModel.searchingButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.isEnabled = false
@@ -457,6 +573,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func showSearchResultsScene() {
         isSearchingAnimationEnabled = false
+        activateGoozeButton.isHidden = false
 
         activateGoozeButton.isEnabled = true
         activateGoozeButton.setTitle(viewModel.allResultsButtonTitle.uppercased(), for: .normal)
@@ -466,19 +583,54 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func showAllResultsScene() {
-        usersListCollectionView.isHidden = false
-        usersListBackground.isHidden = false
-
         hideBalloons()
+
+        usersList.onDismiss = { [weak self] in
+            self?.usersList.onDismiss = nil
+            self?.scene = .searchResults
+        }
+
+        usersList.users = viewModel.userResults.value
+        usersList.show() 
+
+        usersList.actionButton.setTitle(viewModel.otherResultsButtonTitle.uppercased(), for: .normal)
+        usersList.actionButton.reactive.pressed = showOtherResultsListAction
     }
 
     func showOtherResultsListScene() {
-        usersListCollectionView.isHidden = false
-        usersListBackground.isHidden = false
+        usersList.users = viewModel.userOtherResults.value
+        usersList.actionButton.setTitle(viewModel.backButtonTitle.uppercased(), for: .normal)
+        usersList.actionButton.reactive.pressed = showResultsListAction
+        GZEAlertService.shared.showTopAlert(superview: self.containerView, text: viewModel.othersResultsWarning)
+    }
+
+    func observeRequests() {
+        if (disposeRequestsObserver == nil) {
+            disposeRequestsObserver = GZEDatesService.shared
+                .receivedRequests.signal.observeValues
+                {[weak self] receivedRequests in
+                    guard let this = self else {return}
+                    //if let dateRequest = dateRequest {
+                        if this.scene != .requestResults {
+                            this.scene = .requestResults
+                        }
+
+                    this.viewModel.userResults.value = receivedRequests.map{$0.sender}
+                    this.updateBalloons()
+//                        let count = this.viewModel.userResults.value.count
+//                        this.viewModel.userResults.value.append(dateRequest.sender)
+//                        if count < this.userBalloons.count {
+//                            this.userBalloons[count].setUser(dateRequest.sender)
+//                        }
+                   // }
+            }
+        }
     }
 
     // MARK: - Deinitializers
     deinit {
+        disposeRequestsObserver?.dispose()
+        disposeRequestsObserver = nil
         mapView.delegate = nil
         log.debug("\(self) disposed")
     }

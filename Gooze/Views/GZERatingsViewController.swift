@@ -41,6 +41,7 @@ class GZERatingsViewController: UIViewController {
 
         setupInterfaceObjects()
         setUpBindings()
+        setMode(mode: viewModel.mode.value)
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,11 +61,22 @@ class GZERatingsViewController: UIViewController {
     */
 
     private func setupInterfaceObjects() {
+        contactButton.enableAnimationOnPressed()
         contactButton.setGrayFormat()
-        contactButton.setTitle(contactButtonTitle, for: .normal)
     }
 
     private func setUpBindings() {
+        viewModel.mode.signal.observeValues {[weak self] mode in
+            guard let this = self else {return}
+            this.setMode(mode: mode)
+        }
+        
+        viewModel.error.signal.observeValues { error in
+            error.flatMap {
+                GZEAlertService.shared.showBottomAlert(superview: self.view, text: $0)
+            }
+        }
+        
         usernameLabel.reactive.text <~ viewModel.username
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
         phraseLabel.reactive.text <~ viewModel.phrase
@@ -82,5 +94,28 @@ class GZERatingsViewController: UIViewController {
         goozeRatingView.reactive.rating <~ viewModel.goozeRating
 
         overallRatingView.reactive.rating <~ viewModel.overallRating
+    }
+
+    func setMode(mode: GZEProfileMode) {
+        var btnTitle: String
+        var selector: Selector
+        if mode == .request {
+            btnTitle = self.viewModel.acceptRequestButtonTitle
+            selector = #selector(self.acceptRequest)
+        } else {
+            btnTitle = self.viewModel.contactButtonTitle
+            selector = #selector(self.contact)
+        }
+        self.contactButton.setTitle(btnTitle, for: .normal)
+        self.contactButton.removeAllTargets()
+        self.contactButton.addTarget(self, action: selector, for: .touchUpInside)
+    }
+
+    func acceptRequest() {
+        viewModel.acceptRequest()
+    }
+
+    func contact() {
+        viewModel.contact()
     }
 }

@@ -12,7 +12,7 @@ import AlamofireImage
 class GZEUserBalloon: UIView {
 
     var user: GZEUser?
-    var rating: Float = 0 {
+    var rating: Float? {
         didSet {
             starsView.setRating(rating)
         }
@@ -84,27 +84,35 @@ class GZEUserBalloon: UIView {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
     }
 
-    func setUser(_ user: GZEUser, completion: ( () -> ())? = nil) {
+    func setUser(_ user: GZEUser?, completion: ( () -> ())? = nil) {
 
         self.user = user
 
-        // TODO: set with user.rating
-        rating = 4.5
-
-        if let urlRequest = user.searchPic?.urlRequest {
-            setImage(urlRequest: urlRequest, completion: completion)
+        if let user = user {
+            // TODO: set with user.rating
+            self.rating = 4.5
+            self.setImage(urlRequest: user.searchPic?.urlRequest, completion: completion)
         } else {
-            setVisible(true)
+            log.error("Empty user set. Hidding balloon")
+            self.rating = nil
+            self.imageView.image = nil
+            self.setVisible(false)
             completion?()
-            log.error("Failed to set image url for user id=[\(String(describing: user.id))]")
         }
     }
 
-    func setImage(urlRequest: URLRequest, completion: ( () -> ())? = nil){
-        imageView.af_setImage(withURLRequest: urlRequest, completion: { [weak self] _ in
-            self?.setVisible(true)
+    func setImage(urlRequest: URLRequest?, completion: ( () -> ())? = nil){
+        if let urlRequest = urlRequest {
+            imageView.af_setImage(withURLRequest: urlRequest, completion: { [weak self] _ in
+                self?.setVisible(true)
+                completion?()
+            })
+        } else {
+            log.error("Failed to set image url for user id=[\(String(describing: user?.id))]")
+            imageView.image = nil
+            setVisible(true)
             completion?()
-        })
+        }
     }
 
     func setVisible(_ visible: Bool) {

@@ -14,8 +14,6 @@ class GZEProfileViewController: UIViewController {
 
     var viewModel: GZEProfileViewModel!
 
-    var contactButtonTitle = "vm.profile.contactTitle".localized().uppercased()
-
     @IBOutlet weak var scrollContentView: UIView!
     @IBOutlet weak var usernameLabel: GZELabel!
     @IBOutlet weak var phraseLabel: GZELabel!
@@ -38,6 +36,8 @@ class GZEProfileViewController: UIViewController {
 
         setupInterfaceObjects()
         setUpBindings()
+        setMode(mode: viewModel.mode.value)
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,12 +73,24 @@ class GZEProfileViewController: UIViewController {
         //ocupationLabel.setWhiteFontFormat()
         interestsLabel.setWhiteFontFormat()
 
+        contactButton.enableAnimationOnPressed()
         contactButton.setGrayFormat()
-        contactButton.setTitle(contactButtonTitle, for: .normal)
-        contactButton.addTarget(self, action: #selector(contact), for: .touchUpInside)
+
     }
 
     private func setUpBindings() {
+
+        viewModel.mode.signal.observeValues {[weak self] mode in
+            guard let this = self else {return}
+            this.setMode(mode: mode)
+        }
+
+        viewModel.error.signal.observeValues { error in
+            error.flatMap {
+                GZEAlertService.shared.showBottomAlert(superview: self.view, text: $0)
+            }
+        }
+
         usernameLabel.reactive.text <~ viewModel.username
         phraseLabel.reactive.text <~ viewModel.phrase
         genderLabel.reactive.text <~ viewModel.gender
@@ -93,7 +105,26 @@ class GZEProfileViewController: UIViewController {
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
     }
 
+    func setMode(mode: GZEProfileMode) {
+        var btnTitle: String
+        var selector: Selector
+        if mode == .request {
+            btnTitle = self.viewModel.acceptRequestButtonTitle
+            selector = #selector(self.acceptRequest)
+        } else {
+            btnTitle = self.viewModel.contactButtonTitle
+            selector = #selector(self.contact)
+        }
+        self.contactButton.setTitle(btnTitle, for: .normal)
+        self.contactButton.removeAllTargets()
+        self.contactButton.addTarget(self, action: selector, for: .touchUpInside)
+    }
+
     func contact() {
-        viewModel.contact(controller: self)
+        viewModel.contact()
+    }
+
+    func acceptRequest() {
+        viewModel.acceptRequest()
     }
 }

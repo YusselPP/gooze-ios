@@ -19,9 +19,10 @@ class GZEValidationErrorView: UIView {
         }
     }
 
-    private let discardButton = UIView()
+    private let discardButton = DismissView()
+
     private let textView = UIView()
-    private let textLabel = UILabel()
+    let textLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,26 +42,18 @@ class GZEValidationErrorView: UIView {
 
     private func initialize() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.discardButton.translatesAutoresizingMaskIntoConstraints = false
         self.textView.translatesAutoresizingMaskIntoConstraints = false
+        self.textLabel.translatesAutoresizingMaskIntoConstraints = false
 
 
         self.alpha = 0
         self.backgroundColor = GZEConstants.Color.validationErrorViewBg
         self.discardButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismiss)))
 
-        let label = UILabel()
-        label.text = "X"
-        label.textColor = .darkGray
-        label.font = GZEConstants.Font.main
-        label.translatesAutoresizingMaskIntoConstraints = false
-        self.discardButton.addSubview(label)
-
 
         self.textLabel.font = GZEConstants.Font.main
         self.textLabel.textAlignment = .center
-        self.textLabel.numberOfLines = 2
-        self.textLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.textLabel.numberOfLines = 3
         self.textView.addSubview(textLabel)
 
 
@@ -69,8 +62,6 @@ class GZEValidationErrorView: UIView {
 
 
         // Constraints
-        self.discardButton.centerXAnchor.constraint(equalTo: label.centerXAnchor).isActive = true
-        self.discardButton.centerYAnchor.constraint(equalTo: label.centerYAnchor).isActive = true
         self.discardButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
 
         // self.textView.centerXAnchor.constraint(equalTo: textLabel.centerXAnchor).isActive = true

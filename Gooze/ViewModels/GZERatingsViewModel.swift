@@ -11,6 +11,12 @@ import ReactiveSwift
 
 protocol GZERatingsViewModel {
 
+    var mode: MutableProperty<GZEProfileMode> { get }
+    var error: MutableProperty<String?> { get }
+
+    var contactButtonTitle: String { get }
+    var acceptRequestButtonTitle: String { get }
+    
     var username: MutableProperty<String?> { get }
 
     var profilePic: MutableProperty<URLRequest?> { get }
@@ -32,4 +38,6 @@ protocol GZERatingsViewModel {
     var overallRating: MutableProperty<Float?> { get }
 
     func contact();
+
+    func acceptRequest();
 }

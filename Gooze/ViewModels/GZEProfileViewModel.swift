@@ -11,6 +11,12 @@ import ReactiveSwift
 
 protocol GZEProfileViewModel {
 
+    var mode: MutableProperty<GZEProfileMode> { get }
+    var error: MutableProperty<String?> { get }
+
+    var contactButtonTitle: String { get }
+    var acceptRequestButtonTitle: String { get }
+
     // basic data
     var username: MutableProperty<String?> { get }
 
@@ -28,5 +34,12 @@ protocol GZEProfileViewModel {
 
     var profilePic: MutableProperty<URLRequest?> { get }
 
-    func contact(controller: UIViewController);
+    func contact();
+
+    func acceptRequest();
+}
+
+enum GZEProfileMode {
+    case request
+    case contact
 }

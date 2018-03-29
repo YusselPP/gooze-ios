@@ -28,17 +28,22 @@ class DatesSocket: GZESocket {
     }
 
     private func addEventHandlers() {
-        self.on(.dateRequestReceived) {[weak self] data, ack in
-            log.debug("data: \(data[0])")
+        // TODO: make dateRequests polling
+        self.on(.dateRequestReceived) {data, ack in
+            guard let dateRequestJson = data[0] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
+                log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")
+                return
+            }
+            log.debug("Date request received : \(String(describing: dateRequest.toJSON()))")
 
-            guard let userJson = data[0] as? JSON, let user = GZEUser(json: userJson) else { return }
+            var newSet = Set(GZEDatesService.shared.receivedRequests.value)
+            let (inserted, _) = newSet.insert(dateRequest)
 
-            let message = "Date request from: \(String(describing: user.toJSON()))"
-
-            log.debug(message)
-
-            self?.dateRequestReceivedUser.value = user
-            self?.topViewController?.displayMessage(GZEAppConfig.appTitle, "\(String(describing: user.username)) quiere contactarte")
+            if (inserted) {
+                GZEDatesService.shared.receivedRequests.value = newSet
+                GZEDatesService.shared.lastReceivedRequest.value = dateRequest
+            }
+            ack.with()
         }
     }
 
@@ -53,6 +58,11 @@ extension SocketIOClient {
     func emit(_ clientEvent: DatesSocket.DateEvent, _ items: SocketData...) {
 
         emit(clientEvent.rawValue, items)
+    }
+
+    func emitWithAck(_ clientEvent: DatesSocket.DateEvent, _ items: SocketData...) -> OnAckCallback {
+
+        return emitWithAck(clientEvent.rawValue, items)
     }
 
     @discardableResult

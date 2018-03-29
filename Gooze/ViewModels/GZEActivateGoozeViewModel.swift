@@ -18,16 +18,21 @@ class GZEActivateGoozeViewModel {
     let sliderValue = MutableProperty<Float>(1)
     let searchLimit = MutableProperty<Int>(5)
 
-    var userResults = MutableProperty<[GZEUser]>([])
+    let userResults = MutableProperty<[GZEUser]>([])
+    let userOtherResults = MutableProperty<[GZEUser]>([])
 
     let searchViewTitle = "vm.search.viewTitle".localized()
     let zeroResultsMessage = "vm.search.zeroResultsMessage".localized()
     let searchingButtonTitle = "vm.search.searchingButtonTitle".localized()
+    let otherResultsButtonTitle = "vm.search.otherResultsButtonTitle".localized()
+    let othersResultsWarning = "vm.search.othersResultsWarning".localized()
+    let backButtonTitle = "vm.search.backButtonTitle".localized()
 
     let activateButtonTitle = "vm.activate.activateButtonTitle".localized()
     let deactivateButtonTitle = "vm.activate.deactivateButtonTitle".localized()
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()
     let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
+
 
     var activateGoozeAction: Action<Void, GZEUser, GZEError> {
         if let activateGoozeAction = _activateGoozeAction {
@@ -71,6 +76,15 @@ class GZEActivateGoozeViewModel {
             }
             return this.deactivateGoozeHandler()
         }
+
+        // update auth user
+        Signal.merge(
+            activateGoozeAction.values,
+            deactivateGoozeAction.values
+        )
+            .observeValues {user in
+                GZEAuthService.shared.authUser = user
+        }
     }
 
     private func createActivateGoozeAction() -> Action<Void, GZEUser, GZEError> {
@@ -82,7 +96,7 @@ class GZEActivateGoozeViewModel {
             }
 
 
-            guard let userId = GZEApi.instance.accessToken?.userId else {
+            guard let userId = GZEAuthService.shared.authUser?.id else {
                 return SignalProducer(error: .repository(error: .AuthRequired))
             }
 

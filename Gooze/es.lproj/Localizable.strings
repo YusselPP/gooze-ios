@@ -92,6 +92,9 @@
 "vm.search.viewTitle"="Búsqueda";
 "vm.search.zeroResultsMessage"="No se encontraron resultados";
 "vm.search.searchingButtonTitle"="Buscando...";
+"vm.search.otherResultsButtonTitle"="Ver otros";
+"vm.search.othersResultsWarning"="Advertencia: Los siguientes usuarios no cuentan con el minimo de valoraciones, o bien han sido calificados negativamente";
+"vm.search.backButtonTitle"="Regresar";
 
 "vm.activate.activateButtonTitle"="Activar gooze";
 "vm.activate.deactivateButtonTitle"="Desactivar gooze";
@@ -107,6 +110,7 @@
 
 // Views/GZEProfileViewController
 "vm.profile.contactTitle"="Contactar";
+"vm.profile.acceptRequestTitle"="Aceptar contacto";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Sin calificación";

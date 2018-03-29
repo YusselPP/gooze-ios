@@ -12,6 +12,12 @@ import ReactiveSwift
 class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     // MARK - GZEProfileViewModel protocol
+    let mode = MutableProperty<GZEProfileMode>(.contact)
+    let error = MutableProperty<String?>(nil)
+
+    let contactButtonTitle = "vm.profile.contactTitle".localized().uppercased()
+    let acceptRequestButtonTitle = "vm.profile.acceptRequestTitle".localized().uppercased()
+
     // basic data
     let username = MutableProperty<String?>(nil)
 
@@ -29,18 +35,17 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     let profilePic = MutableProperty<URLRequest?>(nil)
 
-    func contact(controller: UIViewController) {
-        guard let dateSocket = GZESocketManager.shared[DatesSocket.namespace] else {
-            log.error("Date socket not found")
+    func contact() {
+        guard let userId = user.id else {
+            log.error("User in profile doesn't have an id")
+            error.value = GZERepositoryError.UnexpectedError.localizedDescription
             return
         }
+        GZEDatesService.shared.requestDate(to: userId)
+    }
 
-        guard let userJson = user.toJSON() else {
-            log.error("user invalid json")
-            return
-        }
-
-        dateSocket.emit(.dateRequestSent, userJson)
+    func acceptRequest() {
+        // Open chat
     }
 
     let user: GZEUser

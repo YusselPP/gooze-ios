@@ -23,9 +23,6 @@ class GZESocket: SocketIOClient {
         return UIApplication.topViewController()
     }
 
-    let dateRequestReceivedUser = MutableProperty<GZEUser?>(nil)
-
-
     // MARK - init
     override init(socketURL: URL, config: SocketIOClientConfiguration) {
         super.init(socketURL: socketURL, config: config)
