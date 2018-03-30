@@ -449,13 +449,19 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                         <subviews>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aPd-bt-XyP">
-                                                <rect key="frame" x="120.5" y="49.5" width="80" height="138"/>
+                                                <rect key="frame" x="120.5" y="50" width="80" height="137"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="b7L-a7-Ca8">
-                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="103"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="102.5"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="b7L-a7-Ca8" secondAttribute="height" multiplier="60:77" id="knw-13-CIk"/>
+                                                        </constraints>
                                                     </imageView>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="5Rn-eU-9kk">
-                                                        <rect key="frame" x="0.0" y="113" width="80" height="25"/>
+                                                        <rect key="frame" x="0.0" y="112.5" width="80" height="24.5"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="5Rn-eU-9kk" secondAttribute="height" multiplier="120:37" id="3gF-l2-BUu"/>
+                                                        </constraints>
                                                     </imageView>
                                                 </subviews>
                                                 <constraints>
@@ -493,6 +499,7 @@
                         <constraints>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="bottom" secondItem="azr-0D-h6D" secondAttribute="bottom" id="FA7-dh-FBf"/>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="width" secondItem="azr-0D-h6D" secondAttribute="width" id="GhO-8G-BCO"/>
+                            <constraint firstItem="b7L-a7-Ca8" firstAttribute="width" secondItem="Xsm-cK-fLq" secondAttribute="width" multiplier="0.25" id="I0R-Gk-hfi"/>
                             <constraint firstItem="aOZ-8b-XhZ" firstAttribute="width" secondItem="azr-0D-h6D" secondAttribute="width" id="MVo-cZ-ZD9"/>
                             <constraint firstItem="azr-0D-h6D" firstAttribute="top" secondItem="PWB-GB-0lz" secondAttribute="bottom" id="PJd-ud-65Y"/>
                             <constraint firstItem="FD9-M8-vKk" firstAttribute="leading" secondItem="Xsm-cK-fLq" secondAttribute="leading" id="V4Y-Td-1OY"/>
@@ -1307,57 +1314,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nl3-QF-WLB">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="oIX-yH-eTt">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D36-Fy-qwN">
+                                <rect key="frame" x="120" y="215" width="80" height="138"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="oIX-yH-eTt">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                    </imageView>
-                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D36-Fy-qwN">
-                                        <rect key="frame" x="120" y="215" width="80" height="138"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="ega-VV-YsP">
-                                                <rect key="frame" x="0.0" y="0.0" width="80" height="103"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="ega-VV-YsP" secondAttribute="height" multiplier="80:103" id="AC8-qY-DP7"/>
-                                                </constraints>
-                                            </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="Gbf-8b-ktq">
-                                                <rect key="frame" x="0.0" y="113" width="80" height="25"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="Gbf-8b-ktq" secondAttribute="height" multiplier="16:5" id="RB4-tx-erR"/>
-                                                </constraints>
-                                            </imageView>
-                                        </subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="ega-VV-YsP">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="103"/>
                                         <constraints>
-                                            <constraint firstItem="Gbf-8b-ktq" firstAttribute="top" secondItem="ega-VV-YsP" secondAttribute="bottom" multiplier="1.1" id="A0u-vu-LRd"/>
-                                            <constraint firstItem="Gbf-8b-ktq" firstAttribute="leading" secondItem="D36-Fy-qwN" secondAttribute="leading" id="RZX-To-nva"/>
-                                            <constraint firstAttribute="trailing" secondItem="Gbf-8b-ktq" secondAttribute="trailing" id="W5q-vr-Arw"/>
-                                            <constraint firstItem="ega-VV-YsP" firstAttribute="leading" secondItem="D36-Fy-qwN" secondAttribute="leading" id="Xb2-ZO-b3g"/>
-                                            <constraint firstAttribute="bottom" secondItem="Gbf-8b-ktq" secondAttribute="bottom" id="cFn-ad-HAP"/>
-                                            <constraint firstItem="ega-VV-YsP" firstAttribute="top" secondItem="D36-Fy-qwN" secondAttribute="top" id="vZO-YG-cXr"/>
-                                            <constraint firstAttribute="trailing" secondItem="ega-VV-YsP" secondAttribute="trailing" id="y9j-7Y-mt4"/>
+                                            <constraint firstAttribute="width" secondItem="ega-VV-YsP" secondAttribute="height" multiplier="80:103" id="AC8-qY-DP7"/>
                                         </constraints>
-                                    </view>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="Gbf-8b-ktq">
+                                        <rect key="frame" x="0.0" y="113" width="80" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Gbf-8b-ktq" secondAttribute="height" multiplier="16:5" id="RB4-tx-erR"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.094117647060000004" green="0.098039215690000001" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="oIX-yH-eTt" firstAttribute="leading" secondItem="nl3-QF-WLB" secondAttribute="leading" id="1tr-78-X6O"/>
-                                    <constraint firstItem="D36-Fy-qwN" firstAttribute="centerX" secondItem="nl3-QF-WLB" secondAttribute="centerX" id="3aR-qz-QtN"/>
-                                    <constraint firstAttribute="bottom" secondItem="oIX-yH-eTt" secondAttribute="bottom" id="MFn-tp-i3f"/>
-                                    <constraint firstItem="oIX-yH-eTt" firstAttribute="trailing" secondItem="nl3-QF-WLB" secondAttribute="trailing" id="dIc-ge-dVJ"/>
-                                    <constraint firstItem="oIX-yH-eTt" firstAttribute="top" secondItem="nl3-QF-WLB" secondAttribute="top" id="osh-Y1-p3U"/>
-                                    <constraint firstItem="D36-Fy-qwN" firstAttribute="centerY" secondItem="nl3-QF-WLB" secondAttribute="centerY" id="rsU-h2-m0i"/>
+                                    <constraint firstItem="Gbf-8b-ktq" firstAttribute="top" secondItem="ega-VV-YsP" secondAttribute="bottom" multiplier="1.1" id="A0u-vu-LRd"/>
+                                    <constraint firstItem="Gbf-8b-ktq" firstAttribute="leading" secondItem="D36-Fy-qwN" secondAttribute="leading" id="RZX-To-nva"/>
+                                    <constraint firstAttribute="trailing" secondItem="Gbf-8b-ktq" secondAttribute="trailing" id="W5q-vr-Arw"/>
+                                    <constraint firstItem="ega-VV-YsP" firstAttribute="leading" secondItem="D36-Fy-qwN" secondAttribute="leading" id="Xb2-ZO-b3g"/>
+                                    <constraint firstAttribute="bottom" secondItem="Gbf-8b-ktq" secondAttribute="bottom" id="cFn-ad-HAP"/>
+                                    <constraint firstItem="ega-VV-YsP" firstAttribute="top" secondItem="D36-Fy-qwN" secondAttribute="top" id="vZO-YG-cXr"/>
+                                    <constraint firstAttribute="trailing" secondItem="ega-VV-YsP" secondAttribute="trailing" id="y9j-7Y-mt4"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="nl3-QF-WLB" secondAttribute="trailing" id="QD3-TS-QzT"/>
-                            <constraint firstItem="nl3-QF-WLB" firstAttribute="leading" secondItem="jor-V3-7TK" secondAttribute="leading" id="dIU-ND-vzB"/>
-                            <constraint firstAttribute="bottom" secondItem="nl3-QF-WLB" secondAttribute="bottom" id="eTX-xn-WNv"/>
-                            <constraint firstItem="nl3-QF-WLB" firstAttribute="top" secondItem="jor-V3-7TK" secondAttribute="top" id="huh-da-KFl"/>
-                            <constraint firstItem="ega-VV-YsP" firstAttribute="width" secondItem="jor-V3-7TK" secondAttribute="width" multiplier="0.25" id="wmL-NL-mcS"/>
+                            <constraint firstAttribute="bottom" secondItem="oIX-yH-eTt" secondAttribute="bottom" id="OiL-dk-GbP"/>
+                            <constraint firstItem="D36-Fy-qwN" firstAttribute="centerX" secondItem="jor-V3-7TK" secondAttribute="centerX" id="Vkl-s6-rYe"/>
+                            <constraint firstItem="D36-Fy-qwN" firstAttribute="centerY" secondItem="jor-V3-7TK" secondAttribute="centerY" id="Xbd-91-b5c"/>
+                            <constraint firstItem="oIX-yH-eTt" firstAttribute="leading" secondItem="jor-V3-7TK" secondAttribute="leading" id="XhJ-nR-PgL"/>
+                            <constraint firstAttribute="trailing" secondItem="oIX-yH-eTt" secondAttribute="trailing" id="cIG-eL-1EG"/>
+                            <constraint firstItem="ega-VV-YsP" firstAttribute="width" secondItem="jor-V3-7TK" secondAttribute="width" multiplier="0.25" id="yiZ-PO-C72"/>
+                            <constraint firstItem="oIX-yH-eTt" firstAttribute="top" secondItem="jor-V3-7TK" secondAttribute="top" id="zq4-PP-wQN"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -2338,8 +2333,8 @@
         <image name="5841762-image" width="500" height="250"/>
         <image name="camera-153-icon" width="52" height="40"/>
         <image name="camera-white-icon" width="52" height="40"/>
-        <image name="gooze-logo-1" width="79" height="103"/>
-        <image name="gooze-text" width="80" height="25"/>
+        <image name="gooze-logo-1" width="119" height="154"/>
+        <image name="gooze-text" width="120" height="37"/>
         <image name="main-background" width="750" height="1334"/>
         <image name="movie-icon" width="61" height="45"/>
         <image name="navigation-icon" width="40" height="39"/>

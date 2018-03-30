@@ -55,9 +55,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.094117647058823528" green="0.098039215686274508" blue="0.10980392156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="uuL-NN-R5N" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.25" id="41f-pJ-e7U"/>
                             <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ACh-YE-488"/>
                             <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Fkq-o2-595"/>
-                            <constraint firstItem="uuL-NN-R5N" firstAttribute="width" secondItem="hMo-lp-76O" secondAttribute="width" multiplier="0.25" id="GVe-hc-6Y7"/>
                             <constraint firstAttribute="bottom" secondItem="hMo-lp-76O" secondAttribute="bottom" id="S7s-Y6-cMs"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="Z9J-1y-3rM"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="ZVf-31-QVr"/>
@@ -71,8 +71,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="gooze-logo-1" width="79" height="103"/>
-        <image name="gooze-text" width="80" height="25"/>
+        <image name="gooze-logo-1" width="119" height="154"/>
+        <image name="gooze-text" width="120" height="37"/>
         <image name="main-background" width="750" height="1334"/>
     </resources>
 </document>
