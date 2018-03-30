@@ -451,10 +451,10 @@
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aPd-bt-XyP">
                                                 <rect key="frame" x="120.5" y="49.5" width="80" height="138"/>
                                                 <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="b7L-a7-Ca8">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="b7L-a7-Ca8">
                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="103"/>
                                                     </imageView>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="5Rn-eU-9kk">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="5Rn-eU-9kk">
                                                         <rect key="frame" x="0.0" y="113" width="80" height="25"/>
                                                     </imageView>
                                                 </subviews>
@@ -1318,9 +1318,15 @@
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="ega-VV-YsP">
                                                 <rect key="frame" x="0.0" y="0.0" width="80" height="103"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="ega-VV-YsP" secondAttribute="height" multiplier="80:103" id="AC8-qY-DP7"/>
+                                                </constraints>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="Gbf-8b-ktq">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="Gbf-8b-ktq">
                                                 <rect key="frame" x="0.0" y="113" width="80" height="25"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Gbf-8b-ktq" secondAttribute="height" multiplier="16:5" id="RB4-tx-erR"/>
+                                                </constraints>
                                             </imageView>
                                         </subviews>
                                         <constraints>
@@ -1351,6 +1357,7 @@
                             <constraint firstItem="nl3-QF-WLB" firstAttribute="leading" secondItem="jor-V3-7TK" secondAttribute="leading" id="dIU-ND-vzB"/>
                             <constraint firstAttribute="bottom" secondItem="nl3-QF-WLB" secondAttribute="bottom" id="eTX-xn-WNv"/>
                             <constraint firstItem="nl3-QF-WLB" firstAttribute="top" secondItem="jor-V3-7TK" secondAttribute="top" id="huh-da-KFl"/>
+                            <constraint firstItem="ega-VV-YsP" firstAttribute="width" secondItem="jor-V3-7TK" secondAttribute="width" multiplier="0.25" id="wmL-NL-mcS"/>
                         </constraints>
                     </view>
                 </viewController>
