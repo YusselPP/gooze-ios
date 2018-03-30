@@ -26,35 +26,33 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kSd-Mh-mRi">
-                                <rect key="frame" x="127.5" y="200" width="120" height="200"/>
+                                <rect key="frame" x="147.5" y="264.5" width="80" height="138"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="uuL-NN-R5N">
-                                        <rect key="frame" x="0.0" y="0.0" width="120" height="132"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="uuL-NN-R5N">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="103"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="k90-VM-uBb">
-                                        <rect key="frame" x="0.0" y="132" width="120" height="50"/>
+                                        <rect key="frame" x="0.0" y="113" width="80" height="25"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="uuL-NN-R5N" firstAttribute="leading" secondItem="kSd-Mh-mRi" secondAttribute="leading" id="0Wv-Yb-wIY"/>
                                     <constraint firstAttribute="trailing" secondItem="uuL-NN-R5N" secondAttribute="trailing" id="14N-M0-zQQ"/>
                                     <constraint firstAttribute="trailing" secondItem="k90-VM-uBb" secondAttribute="trailing" id="8Zj-hw-xKl"/>
-                                    <constraint firstItem="k90-VM-uBb" firstAttribute="top" secondItem="uuL-NN-R5N" secondAttribute="bottom" id="VhX-JJ-ajx"/>
+                                    <constraint firstItem="k90-VM-uBb" firstAttribute="top" secondItem="uuL-NN-R5N" secondAttribute="bottom" multiplier="1.1" id="VhX-JJ-ajx"/>
                                     <constraint firstItem="k90-VM-uBb" firstAttribute="leading" secondItem="kSd-Mh-mRi" secondAttribute="leading" id="c4K-OD-Yxv"/>
                                     <constraint firstItem="uuL-NN-R5N" firstAttribute="top" secondItem="kSd-Mh-mRi" secondAttribute="top" id="uOX-mb-ja4"/>
-                                    <constraint firstAttribute="bottom" secondItem="k90-VM-uBb" secondAttribute="bottom" multiplier="1.1" id="wAL-OK-AVE"/>
+                                    <constraint firstAttribute="bottom" secondItem="k90-VM-uBb" secondAttribute="bottom" id="wAL-OK-AVE"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.094117647058823528" green="0.098039215686274508" blue="0.10980392156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ACh-YE-488"/>
-                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="width" secondItem="hMo-lp-76O" secondAttribute="width" multiplier="0.32" id="EYz-uo-xfw"/>
-                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="0.9" id="Fkq-o2-595"/>
+                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Fkq-o2-595"/>
                             <constraint firstAttribute="bottom" secondItem="hMo-lp-76O" secondAttribute="bottom" id="S7s-Y6-cMs"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="Z9J-1y-3rM"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="ZVf-31-QVr"/>
-                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="height" secondItem="hMo-lp-76O" secondAttribute="height" multiplier="0.3" id="eH7-4W-xfy"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="n4X-MI-j98"/>
                         </constraints>
                     </view>
@@ -65,8 +63,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="gooze-logo-1" width="252" height="307"/>
-        <image name="gooze-text" width="160" height="50"/>
+        <image name="gooze-logo-1" width="79" height="103"/>
+        <image name="gooze-text" width="80" height="25"/>
         <image name="main-background" width="750" height="1334"/>
     </resources>
 </document>

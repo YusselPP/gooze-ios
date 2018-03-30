@@ -497,7 +497,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 log.debug("event received: \(event)")
                 switch event {
                 case .value(let dateRequests):
-                    log.debug("dateRequest: \(dateRequests.toJSONArray())")
+                    log.debug("dateRequest: \(String(describing: dateRequests.toJSONArray()))")
                     self?.viewModel.userResults.value = dateRequests.map{$0.sender}
                     self?.updateBalloons()
                     self?.scene = .requestResults
@@ -613,22 +613,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 .receivedRequests.signal.observeValues
                 {[weak self] receivedRequests in
                     guard let this = self else {return}
-                    //if let dateRequest = dateRequest {
-                        //if this.scene != .requestResults {
-                        //    this.scene = .requestResults
-                        //}
 
+                    log.debug("receivedRequests updated: \(receivedRequests)")
                     this.viewModel.userResults.value = receivedRequests.map{$0.sender}
                     this.usersList.users = this.viewModel.userResults.value
                     this.updateBalloons()
 
-                    
-//                        let count = this.viewModel.userResults.value.count
-//                        this.viewModel.userResults.value.append(dateRequest.sender)
-//                        if count < this.userBalloons.count {
-//                            this.userBalloons[count].setUser(dateRequest.sender)
-//                        }
-                   // }
+                    if this.scene == .activated {
+                        this.scene = .requestResults
+                    } else if this.scene == .requestResults {
+                        this.showBalloons()
+                    }
             }
         }
     }
