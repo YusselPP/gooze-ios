@@ -28,7 +28,6 @@ class DatesSocket: GZESocket {
     }
 
     private func addEventHandlers() {
-        // TODO: make dateRequests polling
         self.on(.dateRequestReceived) {data, ack in
             guard let dateRequestJson = data[0] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
                 log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")

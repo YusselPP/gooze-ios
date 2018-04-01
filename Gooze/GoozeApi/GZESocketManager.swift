@@ -44,6 +44,26 @@ class GZESocketManager: NSObject {
         destroySocket(withLabel: DatesSocket.namespace)
     }
 
+    static func createChatSocket() {
+        if let chatSocket = shared[ChatSocket.namespace] {
+            log.debug("Cht socket already exists, verifying connection")
+
+            if chatSocket.status == .connected || chatSocket.status == .connecting {
+                log.debug("Socket already connected or connecting. No action will be taken.")
+            } else {
+                chatSocket.connect()
+            }
+        }
+
+        log.debug("Creating chat socket..")
+        let socket = ChatSocket(socketURL: URL(string: GZEAppConfig.goozeApiUrl)!, config: [.compress, .log(false)])
+
+        socket.joinNamespace(ChatSocket.namespace)
+        socket.connect()
+
+        shared.addSocket(socket, labeledAs: ChatSocket.namespace)
+    }
+
     static func destroyChatSocket() {
         destroySocket(withLabel: ChatSocket.namespace)
     }

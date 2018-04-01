@@ -8,10 +8,12 @@
 
 import Foundation
 import SocketIO
+import Gloss
 
 class ChatSocket: GZESocket {
     enum ChatEvent: String {
-        case event
+        case sendMessage
+        case messageReceived
     }
 
     static let namespace = "/chat"
@@ -24,7 +26,21 @@ class ChatSocket: GZESocket {
     }
 
     private func addEventHandlers() {
+        self.on(.messageReceived) {data, ack in
+            guard let messageJson = data[0] as? JSON, let message = GZEChatMessage(json: messageJson) else {
+                log.error("Unable to parse data[0], expected data[0] to be a messageJson, found: \(data[0])")
+                return
+            }
+            log.debug("Message received : \(String(describing: message.toJSON()))")
 
+            var newMessages = Array(GZEChatService.shared.receivedMessages.value)
+            newMessages.append(message)
+
+            GZEChatService.shared.receivedMessages.value = newMessages
+            GZEChatService.shared.lastReceivedMessage.value = message
+
+            ack.with()
+        }
     }
 
     // MARK: - Deinitializers
@@ -38,6 +54,11 @@ extension SocketIOClient {
     func emit(_ clientEvent: ChatSocket.ChatEvent, _ items: SocketData...) {
 
         emit(clientEvent.rawValue, items)
+    }
+
+    func emitWithAck(_ clientEvent: ChatSocket.ChatEvent, _ items: SocketData...) -> OnAckCallback {
+
+        return emitWithAck(clientEvent.rawValue, items)
     }
 
     @discardableResult
