@@ -29,6 +29,16 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         super.init(frame: CGRect.zero, style: .plain)
         initialize()
     }
+    
+    func scrollToBottom(){
+        if self.messages.value.count > 0 {
+            DispatchQueue.main.async { [weak self] in
+                guard let this = self else {return}
+                let indexPath = IndexPath(row: this.messages.value.count-1, section: 0)
+                this.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
+        }
+    }
 
 
     // MARK: - private methods
@@ -43,6 +53,7 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
             // TODO: reload only changes
             log.debug("messages changed, reloading table data")
             self?.reloadData()
+            self?.scrollToBottom()
         }
     }
 

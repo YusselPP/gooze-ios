@@ -22,7 +22,7 @@ class GZESocket: SocketIOClient {
     var topViewController: UIViewController? {
         return UIApplication.topViewController()
     }
-
+    
     // MARK - init
     override init(socketURL: URL, config: SocketIOClientConfiguration) {
         super.init(socketURL: socketURL, config: config)
@@ -31,7 +31,8 @@ class GZESocket: SocketIOClient {
     }
 
     private func addEventHandlers() {
-        self.on(clientEvent: .connect) {data, ack in
+        log.debug("Adding socket handlers")
+        self.on(clientEvent: .connect) {[weak self] data, ack in
 
             log.debug("socket connected")
 
@@ -42,12 +43,12 @@ class GZESocket: SocketIOClient {
             }
 
             log.debug("Socket authentication started")
-            self.emit(.authentication, ["id": accessToken.id, "userId": accessToken.userId])
+            self?.emit(.authentication, ["id": accessToken.id, "userId": accessToken.userId])
         }
 
         self.on(clientEvent: .disconnect) {data, ack in
-            log.error("Socket disconnected. Removing all event handlers")
-            self.removeAllHandlers()
+            log.error("Socket disconnected")
+            // TODO: send messag and give the user ability to reconect
         }
 
         self.on(clientEvent: .reconnect) {data, ack in

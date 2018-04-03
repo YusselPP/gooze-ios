@@ -12,7 +12,7 @@ import ReactiveCocoa
 
 class GZEProfileViewController: UIViewController {
 
-    var viewModel: GZEProfileViewModel!
+    var viewModel: GZEProfileUserInfoViewModel!
 
     @IBOutlet weak var scrollContentView: UIView!
     @IBOutlet weak var usernameLabel: GZELabel!
@@ -40,6 +40,16 @@ class GZEProfileViewController: UIViewController {
 
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.observeMessages()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.viewModel.stopObservingMessages()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -125,6 +135,23 @@ class GZEProfileViewController: UIViewController {
     }
 
     func acceptRequest() {
+        // Open chat
+        log.debug("Trying to show chat controller...")
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController {
+            
+            log.debug("chat controller instantiated. Setting up its view model")
+            // Set up initial view model
+            chatController.viewModel = self.viewModel.chatViewModel
+            chatController.onDismissTapped = {[weak self] in
+                self?.dismiss(animated: true)
+            }
+            self.present(chatController, animated: true)
+        } else {
+            log.error("Unable to instantiate GZEChatViewController")
+            GZEAlertService.shared.showBottomAlert(superview: self.view, text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
         viewModel.acceptRequest()
     }
 }

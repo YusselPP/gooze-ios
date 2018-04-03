@@ -16,8 +16,8 @@ class GZEChatService: NSObject {
     let lastReceivedMessage = MutableProperty<GZEChatMessage?>(nil)
     let receivedMessages = MutableProperty<[GZEChatMessage]>([])
 
-    var chatSocket: SocketIOClient? {
-        return GZESocketManager.shared[ChatSocket.namespace]
+    var chatSocket: ChatSocket? {
+        return GZESocketManager.shared[ChatSocket.namespace] as? ChatSocket
     }
 
     override init() {
@@ -36,8 +36,15 @@ class GZEChatService: NSObject {
             return
         }
 
+        self.addReceivedMessage(message: message)
         chatSocket.emitWithAck(.sendMessage, messageJson).timingOut(after: 5) { data in
             log.debug("Message sent. Ack data: \(data)")
         }
+    }
+    
+    func addReceivedMessage(message: GZEChatMessage) {
+        var newMessages = Array(self.receivedMessages.value)
+        newMessages.append(message)
+        self.receivedMessages.value = newMessages
     }
 }

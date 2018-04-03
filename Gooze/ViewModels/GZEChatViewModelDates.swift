@@ -39,7 +39,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.topButtonAction = CocoaAction(self.createTopButtonAction())
         self.sendButtonAction = CocoaAction(self.createSendAction())
 
-        //messages.bindingTarget <~
+        messages.bindingTarget <~ GZEChatService.shared.receivedMessages
     }
 
     // MARK: - Actions
@@ -64,6 +64,13 @@ class GZEChatViewModelDates: GZEChatViewModel {
             guard let messageText = this.inputMessage.value else {
                 return SignalProducer(error: .validation(error: .required(fieldName: "messageText")))
             }
+            
+            let messageTextTrim = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            guard !messageTextTrim.isEmpty else {
+                return SignalProducer(error: .validation(error: .required(fieldName: "messageText")))
+            }
+            
             guard let senderId = GZEAuthService.shared.authUser?.id else {
                 log.error("senderId is nil")
                 return SignalProducer(error: .repository(error: .UnexpectedError))
@@ -74,12 +81,14 @@ class GZEChatViewModelDates: GZEChatViewModel {
             }
 
             let message = GZEChatMessage(
-                text: messageText,
+                text: messageTextTrim,
                 senderId: senderId,
                 recipientId: recipientId
             )
 
             GZEChatService.shared.send(message: message)
+            
+            this.inputMessage.value = ""
 
             return SignalProducer(value: true)
         }

@@ -14,6 +14,12 @@ class GZEAlertService {
     private let bottomAlert = GZEValidationErrorView()
     private let topAlert = GZEValidationErrorView()
     private let actionAlert = GZEActionAlertView()
+    
+    private var onTopAlertTapped: (() -> ())?
+    
+    init() {
+        self.topAlert.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(topAlertTappedHandler)))
+    }
 
     func showBottomAlert(superview: UIView, text: String) {
         superview.addSubview(self.bottomAlert)
@@ -29,16 +35,19 @@ class GZEAlertService {
         self.bottomAlert.dismiss()
     }
 
-    func showTopAlert(superview: UIView, text: String) {
+    func showTopAlert(superview: UIView, text: String, onTapped: (() -> ())? = nil) {
+        self.onTopAlertTapped = onTapped
         superview.addSubview(self.topAlert)
-        self.topAlert.textLabel.numberOfLines = 4
-        //self.topAlert.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        self.topAlert.heightAnchor.constraint(equalTo: self.topAlert.textLabel.heightAnchor, multiplier: 1.1).isActive = true
+        self.topAlert.heightAnchor.constraint(equalToConstant: 60).isActive = true
         superview.widthAnchor.constraint(equalTo: self.topAlert.widthAnchor).isActive = true
         superview.topAnchor.constraint(equalTo: self.topAlert.topAnchor).isActive = true
         superview.centerXAnchor.constraint(equalTo: self.topAlert.centerXAnchor).isActive = true
 
         self.topAlert.text = text
+    }
+    
+    @objc func topAlertTappedHandler() {
+        self.onTopAlertTapped?()
     }
 
     func dismissTopAlert() {

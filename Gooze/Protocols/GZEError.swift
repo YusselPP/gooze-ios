@@ -11,6 +11,8 @@ import Foundation
 enum GZEError: Error {
     case validation(error: GZEValidationError)
     case repository(error: GZERepositoryError)
+    case datesSocket(error: DatesSocketError)
+    case chatSocket(error: ChatSocketError)
 }
 
 extension GZEError: LocalizedError {
@@ -23,8 +25,13 @@ extension GZEError: LocalizedError {
 
         case .repository(let error):
             message = error.localizedDescription
+            
+        case .datesSocket(let error):
+            message = error.localizedDescription
+        case .chatSocket(let error):
+            message = error.localizedDescription
         }
-
+        
         return message
     }
 }

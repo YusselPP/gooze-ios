@@ -14,8 +14,10 @@ class DatesSocket: GZESocket {
     enum DateEvent: String {
         case dateRequestSent
         case dateRequestReceived
-        case dateRequestResponseSent
-        case dateRequestResponseReceived
+        case dateRequestReceivedAck
+        
+        case acceptRequest
+        case requestAccepted
     }
 
     static let namespace = "/dates"
@@ -28,20 +30,65 @@ class DatesSocket: GZESocket {
     }
 
     private func addEventHandlers() {
+        log.debug("adding dates socket handlers")
         self.on(.dateRequestReceived) {data, ack in
             guard let dateRequestJson = data[0] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
                 log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")
                 return
             }
-            log.debug("Date request received : \(String(describing: dateRequest.toJSON()))")
+            log.debug("Date request received: \(String(describing: dateRequest.toJSON()))")
 
-            var newSet = Set(GZEDatesService.shared.receivedRequests.value)
-            let (inserted, _) = newSet.insert(dateRequest)
 
-            if (inserted) {
-                GZEDatesService.shared.receivedRequests.value = newSet
-                GZEDatesService.shared.lastReceivedRequest.value = dateRequest
+            GZEDatesService.shared.receivedRequests.value.upsert(dateRequest) {$0 == dateRequest}
+            GZEDatesService.shared.lastReceivedRequest.value = dateRequest
+
+            ack.with()
+        }
+        
+        self.on(.dateRequestReceivedAck) {data, ack in
+            guard let dateRequestJson = data[0] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
+                log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")
+                return
             }
+            log.debug("Date request received ack: \(String(describing: dateRequest.toJSON()))")
+
+            GZEDatesService.shared.sentRequests.value.upsert(dateRequest) {$0 == dateRequest}
+            
+            ack.with()
+        }
+        
+        self.on(.requestAccepted) {[weak self] data, ack in
+            guard let dateRequestJson = data[0] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
+                log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")
+                return
+            }
+            log.debug("Accepted date request: \(String(describing: dateRequest.toJSON()))")
+            
+            
+            GZEDatesService.shared.sentRequests.value.upsert(dateRequest) {$0 == dateRequest}
+            
+            if let topVC = self?.topViewController, let recipient = dateRequest.recipient {
+                GZEAlertService.shared.showTopAlert(superview: topVC.view, text: "\(recipient.username!) ha aceptado tu solicitud") {
+                    // Open chat
+                    log.debug("Trying to show chat controller...")
+                    let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                    
+                    if let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController {
+                        
+                        log.debug("chat controller instantiated. Setting up its view model")
+                        // Set up initial view model
+                        chatController.viewModel = GZEChatViewModelDates(mode: .client, recipient: recipient)
+                        chatController.onDismissTapped = {
+                            topVC.dismiss(animated: true)
+                        }
+                        topVC.present(chatController, animated: true)
+                    } else {
+                        log.error("Unable to instantiate GZEChatViewController")
+                        GZEAlertService.shared.showBottomAlert(superview: topVC.view, text: GZERepositoryError.UnexpectedError.localizedDescription)
+                    }
+                }
+            }
+            
             ack.with()
         }
     }

@@ -21,6 +21,10 @@
 "validation.exists"="El %@ ya existe";
 "validation.underAge"="Debes ser mayor de edad";
 
+// Protocols/DatesSocketError
+"error.socket.dates.requestAlreadySent"="Se ha enviado tu solicitud";
+"error.socket.dates.unexpected"="Error inesperado. Porfavor contacta a soporte";
+
 // Models/GZEUser
 "user.username.fieldName"="Usuario";
 "user.email.fieldName"="Correo electrónico";
@@ -117,6 +121,10 @@
 
 // AuthService
 "vm.authService.sessionExpired"="Tu sesión ha expirado. Inicia sesión nuevamente";
+
+// Services/GZEDatesService
+"service.dates.requestSuccessfullySent"="Se ha enviado tu solicitud";
+"service.dates.requestSuccessfullyAccepted"="Has aceptado la solicitud";
 
 // GoozeApi/GZEApiError
 "username"="usuario";

@@ -10,9 +10,12 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class GZEChatViewController: UIViewController {
+class GZEChatViewController: UIViewController, UITextViewDelegate {
 
     var viewModel: GZEChatViewModel!
+    var onDismissTapped: (() -> ())?
+    
+    let backButton = GZEBackUIBarButtonItem()
 
     @IBOutlet weak var topButton: GZEButton! {
         didSet {
@@ -21,30 +24,47 @@ class GZEChatViewController: UIViewController {
     }
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var messagesTableView: GZEMessagesTableView!
-    @IBOutlet weak var messageTextView: UITextView!
+    @IBOutlet weak var messageTextView: UITextView! {
+        didSet {
+            self.messageTextView.delegate = self
+            self.messageTextView.layer.cornerRadius = 10
+            self.messageTextView.layer.masksToBounds = true
+            self.messageTextView.tintColor = .black
+        }
+    }
+    @IBOutlet weak var messageInputContainer: UIView!
     @IBOutlet weak var sendButton: UIButton!
-
+    @IBOutlet weak var messageInputContainerBottomSpacing: NSLayoutConstraint!
+    @IBOutlet weak var messageInputHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var myVavigationItem: UINavigationItem!
+    
+    
     override func viewDidLoad() {
         log.debug("\(self) init")
         super.viewDidLoad()
 
         GZESocketManager.createChatSocket()
-
-        let recipient = GZEUser()
-        recipient.id = "asdf"
-        self.viewModel = GZEChatViewModelDates(mode: .client, recipient: recipient)
-
-        self.messagesTableView.messages.value.append(GZEChatMessage(chatId: "12345", text: "dummy message", senderId: "123", recipientId: "123", status: .sent, createdAt: Date()))
-
-        self.messagesTableView.messages.value.append(GZEChatMessage(chatId: "12345", text: "very large dummy messa gagas dg asd g asd gas dg asd ga sdg asd gas dg asdg ads ga dsg asd gas dg asdg asd g asdg gasdg g ds gas dg asdg asdg ", senderId: "myid", recipientId: "123", status: .sent,  createdAt: Date()))
-        self.messagesTableView.messages.value.append(GZEChatMessage(chatId: "12345", text: "dummy message", senderId: "123", recipientId: "123", status: .sent, createdAt: Date()))
-
-        self.messagesTableView.messages.value.append(GZEChatMessage(chatId: "12345", text: "very large dummy messa gagas dg asd g asd gas dg asd ga sdg asd gas dg asdg ads ga dsg asd gas dg asdg asd g asdg gasdg g ds gas dg asdg asdg ", senderId: "myid", recipientId: "123", status: .sent,  createdAt: Date()))
-        self.messagesTableView.messages.value.append(GZEChatMessage(chatId: "12345", text: "dummy message", senderId: "123", recipientId: "123", status: .sent, createdAt: Date()))
-
-        self.messagesTableView.messages.value.append(GZEChatMessage(chatId: "12345", text: "very large dummy messa gagas dg asd g asd gas dg asd ga sdg asd gas dg asdg ads ga dsg asd gas dg asdg asd g asdg gasdg g ds gas dg asdg asdg ", senderId: "myid", recipientId: "123", status: .sent,  createdAt: Date()))
+        
+        backButton.onButtonTapped = {[weak self] _ in
+            self?.onDismissTapped?()
+        }
+        self.myVavigationItem.setLeftBarButton(backButton, animated: false)
 
         setupBindings()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        registerForKeyboarNotifications(
+            observer: self,
+            willShowSelector: #selector(keyboardWillShow(notification:)),
+            willHideSelector: #selector(keyboardWillHide(notification:))
+        )
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        deregisterFromKeyboardNotifications(observer: self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,20 +74,42 @@ class GZEChatViewController: UIViewController {
 
     func setupBindings() {
         self.viewModel.inputMessage <~ self.messageTextView.reactive.continuousTextValues
+        
+        self.viewModel.inputMessage.signal.observeValues {[weak self] text in
+            guard let this = self else {return}
+            this.messageTextView.text = text
+        }
 
+        self.messagesTableView.messages.bindingTarget <~ self.viewModel.messages
 
         self.sendButton.reactive.pressed = self.viewModel.sendButtonAction
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    // MARK: UITextViewDelegate
+    func textViewDidChange(_ textView: UITextView)
+    {
+        self.view.layoutIfNeeded()
+        if textView.contentSize.height >= self.messageInputHeightConstraint.constant
+        {
+            textView.isScrollEnabled = true
+        }
+        else
+        {
+            textView.isScrollEnabled = false
+        }
     }
-    */
+    
+
+    // MARK: - KeyboardNotifications
+    func keyboardWillShow(notification: Notification) {
+        log.debug("keyboard will show")
+        resizeViewWithKeyboard(keyboardShow: true, constraint: self.messageInputContainerBottomSpacing, notification: notification)
+    }
+    
+    func keyboardWillHide(notification: Notification) {
+        log.debug("keyboard will hide")
+        resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification)
+    }
 
     // MARK: - Deinitializer
     deinit {

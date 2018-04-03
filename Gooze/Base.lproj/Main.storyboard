@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="PUS-7J-BoG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="5Xc-gj-GU4">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -1399,7 +1399,7 @@
         <!--Chat View Controller-->
         <scene sceneID="3GA-DI-cO5">
             <objects>
-                <viewController id="PUS-7J-BoG" customClass="GZEChatViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GZEChatViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PUS-7J-BoG" customClass="GZEChatViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="p7d-ob-vnO"/>
                         <viewControllerLayoutGuide type="bottom" id="Zyn-UR-ztN"/>
@@ -1434,26 +1434,28 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xcj-iX-hX9" userLabel="user-bg-image">
                                 <rect key="frame" x="0.0" y="119" width="320" height="449"/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0M6-cH-qhn" customClass="GZEMessagesTableView" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="16" y="119" width="288" height="395"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0M6-cH-qhn" customClass="GZEMessagesTableView" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="16" y="119" width="288" height="385"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <view alpha="0.59999999999999998" contentMode="scaleToFill" verticalCompressionResistancePriority="753" translatesAutoresizingMaskIntoConstraints="NO" id="ATA-Lh-gmd" userLabel="message-input-bg">
-                                <rect key="frame" x="0.0" y="514" width="320" height="54"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ATA-Lh-gmd" userLabel="message-input-bg">
+                                <rect key="frame" x="0.0" y="504" width="320" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cnS-1k-LUP" userLabel="message-input-container">
-                                <rect key="frame" x="0.0" y="514" width="320" height="54"/>
+                                <rect key="frame" x="0.0" y="504" width="320" height="64"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="252" verticalCompressionResistancePriority="755" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bKa-QG-jUT">
-                                        <rect key="frame" x="10" y="10" width="255" height="34"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bKa-QG-jUT">
+                                        <rect key="frame" x="15" y="15" width="240" height="34"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="80" id="NW5-jH-Mpj"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        <dataDetectorType key="dataDetectorTypes" lookupSuggestion="YES"/>
                                     </textView>
-                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e1P-j5-Our">
-                                        <rect key="frame" x="275" y="9" width="35" height="35"/>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e1P-j5-Our">
+                                        <rect key="frame" x="270" y="14" width="35" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="35" id="DrT-aG-bet"/>
                                             <constraint firstAttribute="height" constant="35" id="c0k-Lh-UI9"/>
@@ -1462,12 +1464,12 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="bKa-QG-jUT" secondAttribute="bottom" constant="10" id="66q-8V-bDG"/>
-                                    <constraint firstAttribute="trailing" secondItem="e1P-j5-Our" secondAttribute="trailing" constant="10" id="7WO-Sr-200"/>
-                                    <constraint firstItem="e1P-j5-Our" firstAttribute="leading" secondItem="bKa-QG-jUT" secondAttribute="trailing" constant="10" id="JsY-eX-6B9"/>
-                                    <constraint firstAttribute="bottom" secondItem="e1P-j5-Our" secondAttribute="bottom" constant="10" id="TkI-O2-PA1"/>
-                                    <constraint firstItem="bKa-QG-jUT" firstAttribute="leading" secondItem="cnS-1k-LUP" secondAttribute="leading" constant="10" id="lrF-4i-uNe"/>
-                                    <constraint firstItem="bKa-QG-jUT" firstAttribute="top" secondItem="cnS-1k-LUP" secondAttribute="top" constant="10" id="nyN-cV-uN1"/>
+                                    <constraint firstAttribute="bottom" secondItem="bKa-QG-jUT" secondAttribute="bottom" constant="15" id="66q-8V-bDG"/>
+                                    <constraint firstAttribute="trailing" secondItem="e1P-j5-Our" secondAttribute="trailing" constant="15" id="7WO-Sr-200"/>
+                                    <constraint firstItem="e1P-j5-Our" firstAttribute="leading" secondItem="bKa-QG-jUT" secondAttribute="trailing" constant="15" id="JsY-eX-6B9"/>
+                                    <constraint firstAttribute="bottom" secondItem="e1P-j5-Our" secondAttribute="bottom" constant="15" id="TkI-O2-PA1"/>
+                                    <constraint firstItem="bKa-QG-jUT" firstAttribute="leading" secondItem="cnS-1k-LUP" secondAttribute="leading" constant="15" id="lrF-4i-uNe"/>
+                                    <constraint firstItem="bKa-QG-jUT" firstAttribute="top" secondItem="cnS-1k-LUP" secondAttribute="top" constant="15" id="nyN-cV-uN1"/>
                                 </constraints>
                             </view>
                             <navigationBar contentMode="scaleToFill" verticalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="lix-bB-hed">
@@ -1495,7 +1497,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="111-cl-Dgn" secondAttribute="trailing" id="OWb-QF-4Vf"/>
                             <constraint firstItem="lix-bB-hed" firstAttribute="leading" secondItem="4Eg-af-7Vm" secondAttribute="leading" id="OXc-BO-JVC"/>
                             <constraint firstItem="ATA-Lh-gmd" firstAttribute="leading" secondItem="cnS-1k-LUP" secondAttribute="leading" id="QAv-kY-Mpu"/>
-                            <constraint firstItem="ATA-Lh-gmd" firstAttribute="top" secondItem="0M6-cH-qhn" secondAttribute="bottom" id="Qkj-WX-m4Q"/>
+                            <constraint firstItem="cnS-1k-LUP" firstAttribute="top" secondItem="0M6-cH-qhn" secondAttribute="bottom" id="Qkj-WX-m4Q"/>
                             <constraint firstItem="xcj-iX-hX9" firstAttribute="leading" secondItem="4Eg-af-7Vm" secondAttribute="leading" id="Qo0-lI-Wki"/>
                             <constraint firstAttribute="bottom" secondItem="Alr-vg-DKr" secondAttribute="bottom" id="TIb-Hz-eYA"/>
                             <constraint firstAttribute="trailing" secondItem="xcj-iX-hX9" secondAttribute="trailing" id="VJb-Wl-yRT"/>
@@ -1512,8 +1514,12 @@
                     </view>
                     <connections>
                         <outlet property="backgroundImage" destination="xcj-iX-hX9" id="J8e-NA-WAO"/>
+                        <outlet property="messageInputContainer" destination="cnS-1k-LUP" id="dJ0-96-0Jf"/>
+                        <outlet property="messageInputContainerBottomSpacing" destination="Klo-ci-QJD" id="Sjt-R1-fx5"/>
+                        <outlet property="messageInputHeightConstraint" destination="NW5-jH-Mpj" id="cRm-BC-dVX"/>
                         <outlet property="messageTextView" destination="bKa-QG-jUT" id="myh-VT-c0G"/>
                         <outlet property="messagesTableView" destination="0M6-cH-qhn" id="r6r-Oc-Hi4"/>
+                        <outlet property="myVavigationItem" destination="GIY-eJ-joF" id="CKM-h2-wHQ"/>
                         <outlet property="sendButton" destination="e1P-j5-Our" id="V5u-Kq-aXT"/>
                         <outlet property="topButton" destination="k5a-Rk-5Dw" id="UgN-zU-gRn"/>
                     </connections>
@@ -2312,7 +2318,7 @@
         <image name="5841762-image" width="500" height="250"/>
         <image name="camera-153-icon" width="52" height="40"/>
         <image name="camera-white-icon" width="52" height="40"/>
-        <image name="chat-send-button" width="29" height="43"/>
+        <image name="chat-send-button" width="17" height="25"/>
         <image name="gooze-logo-1" width="119" height="154"/>
         <image name="gooze-text" width="120" height="37"/>
         <image name="main-background" width="750" height="1334"/>

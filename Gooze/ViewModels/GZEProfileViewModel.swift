@@ -16,27 +16,15 @@ protocol GZEProfileViewModel {
 
     var contactButtonTitle: String { get }
     var acceptRequestButtonTitle: String { get }
+    
+    var chatViewModel: GZEChatViewModel { get }
 
-    // basic data
-    var username: MutableProperty<String?> { get }
+    func contact()
 
-    // additional data
-    var phrase: MutableProperty<String?> { get }
-    var gender: MutableProperty<String?> { get }
-    var age: MutableProperty<String?> { get }
-    var height: MutableProperty<String?> { get }
-    var weight: MutableProperty<String?> { get }
-    var origin: MutableProperty<String?> { get }
-    var languages: MutableProperty<String?> { get }
-    var interestedIn: MutableProperty<String?> { get }
-    // TODO: Implement ocupation in user model
-    var ocupation: MutableProperty<String?> { get }
-
-    var profilePic: MutableProperty<URLRequest?> { get }
-
-    func contact();
-
-    func acceptRequest();
+    func acceptRequest()
+    
+    func observeMessages()
+    func stopObservingMessages()
 }
 
 enum GZEProfileMode {

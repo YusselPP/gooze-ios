@@ -2,18 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "chat-send-button.png",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "chat-send-button-1.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "chat-send-button-2.png",
-      "scale" : "3x"
+      "filename" : "chat-send-button.png"
     }
   ],
   "info" : {

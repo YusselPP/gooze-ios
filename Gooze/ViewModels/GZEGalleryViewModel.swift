@@ -9,19 +9,10 @@
 import Foundation
 import ReactiveSwift
 
-protocol GZEGalleryViewModel {
+protocol GZEGalleryViewModel: GZEProfileViewModel {
 
-    var mode: MutableProperty<GZEProfileMode> { get }
-    var error: MutableProperty<String?> { get }
-
-    var contactButtonTitle: String { get }
-    var acceptRequestButtonTitle: String { get }
-    
     var username: MutableProperty<String?> { get }
 
     var thumbnails: [MutableProperty<URLRequest?>] { get }
-
-    func contact();
-
-    func acceptRequest();
+    
 }

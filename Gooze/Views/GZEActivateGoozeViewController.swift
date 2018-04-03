@@ -305,7 +305,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     @IBAction func topSliderChanged(_ sender: UISlider) {
         let roundedValue = round(sender.value / sliderStep) * sliderStep
         sender.value = roundedValue
-        log.debug("map region \(mapView.centerCoordinate)")
     }
 
     func userBalloonTapped(_ tapRecognizer: UITapGestureRecognizer, _ userBalloon: GZEUserBalloon) {
@@ -417,7 +416,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             let pageViewController = segue.destination as? GZEProfilePageViewController {
 
             if let user = sender as? GZEUser {
-                pageViewController.profileVm = GZEProfileViewModelReadOnly(user: user)
+                pageViewController.profileVm = GZEProfileUserInfoViewModelReadOnly(user: user)
                 pageViewController.galleryVm = GZEGalleryViewModelReadOnly(user: user)
                 pageViewController.ratingsVm = GZERatingsViewModelReadOnly(user: user)
 

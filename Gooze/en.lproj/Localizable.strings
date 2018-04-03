@@ -21,6 +21,10 @@
 "validation.exists"="%@ already exists";
 "validation.underAge"="You must be of legal age";
 
+// Protocols/DatesSocketError
+"error.socket.dates.requestAlreadySent"="Your request has been sent";
+"error.socket.dates.unexpected"="Unexpected Error. Please contact support";
+
 // Models/GZEUser
 "user.username.fieldName"="Username";
 "user.email.fieldName"="Email";
@@ -117,6 +121,10 @@
 
 // AuthService
 "vm.authService.sessionExpired"="Your session has expired. Please log in";
+
+// Services/GZEDatesService
+"service.dates.requestSuccessfullySent"="Your request has been sent";
+"service.dates.requestSuccessfullyAccepted"="The request has been accepted";
 
 "login failed"="Invalid username or password";
 

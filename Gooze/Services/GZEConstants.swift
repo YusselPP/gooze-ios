@@ -30,6 +30,9 @@ class GZEConstants {
         static let mainTextColor = UIColor.white
 
         static let validationErrorViewBg = UIColor(white: 0.6, alpha: 0.9)
+        
+        //Chat
+        static let chatBubbleTextColor = UIColor.black
     }
 
     // Fonts

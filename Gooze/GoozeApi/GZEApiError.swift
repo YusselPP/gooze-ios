@@ -28,7 +28,11 @@ struct GZEApiError: Glossy {
 
     func toJSON() -> JSON? {
         return jsonify([
-
+            "statusCode" ~~> self.statusCode,
+            "name" ~~> self.name,
+            "message" ~~> self.message,
+            "code" ~~> self.code,
+            "details" ~~> self.details
         ])
     }
 
@@ -57,7 +61,9 @@ struct GZEApiErrorDetail: Glossy {
 
     func toJSON() -> JSON? {
         return jsonify([
-
+            "context" ~~> self.context,
+            "codes" ~~> self.codes,
+            "messages" ~~> self.messages
             ])
     }
 

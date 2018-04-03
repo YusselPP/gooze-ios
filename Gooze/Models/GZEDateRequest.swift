@@ -23,13 +23,15 @@ class GZEDateRequest: NSObject, Glossy {
     let senderId: String
     let recipientId: String
     let sender: GZEUser
+    let recipient: GZEUser?
 
-    init(id: String, status: Status, senderId: String, recipientId: String, sender: GZEUser) {
+    init(id: String, status: Status, senderId: String, recipientId: String, sender: GZEUser, recipient: GZEUser? =  nil) {
         self.id = id
         self.status = status
         self.senderId = senderId
         self.recipientId = recipientId
         self.sender = sender
+        self.recipient = recipient
     }
 
     required init?(json: JSON) {
@@ -48,6 +50,7 @@ class GZEDateRequest: NSObject, Glossy {
         self.senderId = senderId
         self.recipientId = recipientId
         self.sender = sender
+        self.recipient = "recipient" <~~ json
     }
 
     func toJSON() -> JSON? {
@@ -56,6 +59,8 @@ class GZEDateRequest: NSObject, Glossy {
             "status" ~~> self.status,
             "senderId" ~~> self.senderId,
             "recipientId" ~~> self.recipientId,
+            "sender" ~~> self.sender,
+            "recipient" ~~> self.recipient,
         ]);
     }
 }

@@ -11,10 +11,10 @@ import Gloss
 
 class GZEChatMessage: NSObject, Glossy {
 
-    enum Status {
-        case sent
-        case received
-        case read
+    enum Status: String {
+        case sent = "sent"
+        case received = "received"
+        case read = "read"
     }
 
     let chatId: String?

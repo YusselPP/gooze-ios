@@ -10,7 +10,7 @@ import UIKit
 
 class GZEProfilePageViewController: UIPageViewController {
 
-    var profileVm: GZEProfileViewModel!
+    var profileVm: GZEProfileUserInfoViewModel!
     var galleryVm: GZEGalleryViewModel!
     var ratingsVm: GZERatingsViewModel!
 
