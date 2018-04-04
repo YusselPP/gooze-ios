@@ -18,8 +18,8 @@ class GZEActivateGoozeViewModel {
     let sliderValue = MutableProperty<Float>(1)
     let searchLimit = MutableProperty<Int>(5)
 
-    let userResults = MutableProperty<[GZEUser]>([])
-    let userOtherResults = MutableProperty<[GZEUser]>([])
+    let userResults = MutableProperty<[GZEChatUser]>([])
+    let userOtherResults = MutableProperty<[GZEChatUser]>([])
 
     let searchViewTitle = "vm.search.viewTitle".localized()
     let zeroResultsMessage = "vm.search.zeroResultsMessage".localized()
@@ -96,12 +96,11 @@ class GZEActivateGoozeViewModel {
             }
 
 
-            guard let userId = GZEAuthService.shared.authUser?.id else {
+            guard let authUser = GZEAuthService.shared.authUser else {
                 return SignalProducer(error: .repository(error: .AuthRequired))
             }
 
-            let user = GZEUser()
-            user.id = userId
+            let user = GZEUser(id: authUser.id, username: authUser.username, email: authUser.email)
             user.currentLocation = GZEUser.GeoPoint(CLCoord: this.currentLocation.value)
             user.activeUntil = Date(timeIntervalSinceNow: Double(this.sliderValue.value * 60 * 60))
 
@@ -138,12 +137,11 @@ class GZEActivateGoozeViewModel {
     }
 
     private func deactivateGoozeHandler() -> SignalProducer<GZEUser, GZEError> {
-        guard let userId = GZEApi.instance.accessToken?.userId else {
+        guard let authUser = GZEAuthService.shared.authUser else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
 
-        let user = GZEUser()
-        user.id = userId
+        let user = GZEUser(id: authUser.id, username: authUser.username, email: authUser.email)
         user.activeUntil = Date().addingTimeInterval(-1000)
 
         log.debug(user.toJSON() as Any)

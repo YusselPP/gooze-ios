@@ -97,14 +97,15 @@ class GZEMessageTableCell: UITableViewCell {
                 return
             }
 
-            if message.isInfo {
+            if message.type == .info {
                 self.messageType = .info
                 self.infoLabel.text = message.text
-            } else if message.sent(by: GZEAuthService.shared.authUser?.id) {
-                self.messageType = .sent
-                self.bubble.text = message.text
-            } else if message.hasRecipient {
-                self.messageType = .received
+            } else if message.type == .user {
+                if message.sent(by: GZEAuthService.shared.authUser?.toChatUser()) {
+                    self.messageType = .sent
+                } else {
+                    self.messageType = .received
+                }
                 self.bubble.text = message.text
             } else {
                 log.debug("Invalid message: \(String(describing: message.toJSON()))")

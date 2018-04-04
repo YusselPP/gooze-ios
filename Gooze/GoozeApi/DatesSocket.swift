@@ -66,26 +66,12 @@ class DatesSocket: GZESocket {
             
             
             GZEDatesService.shared.sentRequests.value.upsert(dateRequest) {$0 == dateRequest}
-            
-            if let topVC = self?.topViewController, let recipient = dateRequest.recipient {
-                GZEAlertService.shared.showTopAlert(superview: topVC.view, text: "\(recipient.username!) ha aceptado tu solicitud") {
-                    // Open chat
-                    log.debug("Trying to show chat controller...")
-                    let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                    
-                    if let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController {
-                        
-                        log.debug("chat controller instantiated. Setting up its view model")
-                        // Set up initial view model
-                        chatController.viewModel = GZEChatViewModelDates(mode: .client, recipient: recipient)
-                        chatController.onDismissTapped = {
-                            topVC.dismiss(animated: true)
-                        }
-                        topVC.present(chatController, animated: true)
-                    } else {
-                        log.error("Unable to instantiate GZEChatViewController")
-                        GZEAlertService.shared.showBottomAlert(superview: topVC.view, text: GZERepositoryError.UnexpectedError.localizedDescription)
-                    }
+
+            let recipient = dateRequest.recipient
+            if let topVC = self?.topViewController {
+                let message = String(format: "service.dates.requestAccepted".localized(), recipient.username)
+                GZEAlertService.shared.showTopAlert(superview: topVC.view, text: message) {
+                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(recipient: recipient))
                 }
             }
             

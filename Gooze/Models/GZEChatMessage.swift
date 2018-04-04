@@ -17,49 +17,57 @@ class GZEChatMessage: NSObject, Glossy {
         case read = "read"
     }
 
-    let chatId: String?
+    enum MessageType: String {
+        case info
+        case user
+    }
+
+    let id: String?
     let text: String
-    let senderId: String?
-    let recipientId: String?
+    let sender: GZEChatUser
+    let recipient: GZEChatUser
+    let type: MessageType
     let status: Status
 
     let createdAt: Date
 
 
     var isInfo: Bool {
-        return self.senderId == nil && self.recipientId == nil
-    }
-
-    var hasRecipient: Bool {
-        return self.recipientId != nil
-    }
-
-    var hasSender: Bool {
-        return self.senderId != nil
-    }
-
-    var isValid: Bool {
-        return self.isInfo || self.hasSender && self.hasRecipient
+        return self.type == .info
     }
 
     // MARK: - init
-    // new message
-    init(text: String, senderId: String, recipientId: String) {
-        self.chatId = nil
+    // new user message
+    init(text: String, sender: GZEChatUser, recipient: GZEChatUser) {
+        self.id = nil
         self.text = text
-        self.senderId = senderId
-        self.recipientId = recipientId
+        self.sender = sender
+        self.recipient = recipient
+        self.type = .user
+        self.status = .sent
+        self.createdAt = Date()
+        super.init()
+    }
+
+    // new message
+    init(text: String, sender: GZEChatUser, recipient: GZEChatUser, type: MessageType) {
+        self.id = nil
+        self.text = text
+        self.sender = sender
+        self.recipient = recipient
+        self.type = type
         self.status = .sent
         self.createdAt = Date()
         super.init()
     }
 
     // Existing message
-    init(chatId: String, text: String, senderId: String, recipientId: String, status: Status, createdAt: Date) {
-        self.chatId = chatId
+    init(id: String, text: String, sender: GZEChatUser, recipient: GZEChatUser, type: MessageType, status: Status, createdAt: Date) {
+        self.id = id
         self.text = text
-        self.senderId = senderId
-        self.recipientId = recipientId
+        self.sender = sender
+        self.recipient = recipient
+        self.type = type
         self.status = status
         self.createdAt = createdAt
         super.init()
@@ -69,6 +77,9 @@ class GZEChatMessage: NSObject, Glossy {
     required init?(json: JSON) {
         guard
             let text: String = "text" <~~ json,
+            let sender: GZEChatUser = "sender" <~~ json,
+            let recipient: GZEChatUser = "recipient" <~~ json,
+            let type: MessageType = "type" <~~ json,
             let status: Status = "status" <~~ json,
             let createdAt: Date = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json)
         else {
@@ -76,19 +87,15 @@ class GZEChatMessage: NSObject, Glossy {
             return nil
         }
 
-        self.chatId = "chatId" <~~ json
+        self.id = "id" <~~ json
         self.text = text
-        self.senderId = "senderId" <~~ json
-        self.recipientId = "recipientId" <~~ json
+        self.sender = sender
+        self.recipient = recipient
+        self.type = type
         self.status = status
         self.createdAt = createdAt
 
         super.init()
-
-        if !self.isValid {
-            log.debug("Unable to instantiate. Invalid json: \(json)")
-            return nil
-        }
 
         log.debug("\(self) init")
     }
@@ -96,18 +103,19 @@ class GZEChatMessage: NSObject, Glossy {
     func toJSON() -> JSON? {
         return jsonify([
             "text" ~~> self.text,
-            "senderId" ~~> self.senderId,
-            "recipientId" ~~> self.recipientId,
+            "sender" ~~> self.sender,
+            "recipient" ~~> self.recipient,
+            "type" ~~> self.type,
             "status" ~~> self.status,
             Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(self.createdAt),
         ])
     }
 
-    func sent(by userId: String?) -> Bool {
-        guard let userId = userId else {
+    func sent(by user: GZEChatUser?) -> Bool {
+        guard let user = user else {
             return false
         }
-        return self.senderId == userId
+        return self.sender == user
     }
 
     // MARK: - Deinitializer
@@ -115,3 +123,21 @@ class GZEChatMessage: NSObject, Glossy {
         log.debug("\(self) disposed")
     }
 }
+
+// MARK: Hashable
+
+extension GZEChatMessage {
+    override var hashValue: Int {
+        return self.id?.hashValue ?? 0
+    }
+}
+
+// MARK: Equatable
+
+func ==(lhs: GZEChatMessage, rhs: GZEChatMessage) -> Bool {
+    if let lhsId = lhs.id, let rhsId = rhs.id {
+        return lhsId == rhsId
+    }
+    return false
+}
+

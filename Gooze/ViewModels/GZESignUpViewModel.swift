@@ -14,12 +14,15 @@ import Validator
 class GZESignUpViewModel: NSObject {
 
     let userRepository: GZEUserRepositoryProtocol
-    var user: GZEUser {
-        set(newUser) {
-            _user = newUser
+    var user: GZEUser? {
+        didSet {
+            guard let newUser = self.user else {
+                return
+            }
+
             username.value = newUser.username
             email.value = newUser.email
-            password.value = newUser.password
+            //password.value = newUser.password
             registerCode.value = newUser.registerCode
 
             phrase.value = newUser.phrase
@@ -35,9 +38,7 @@ class GZESignUpViewModel: NSObject {
             languages.value = newUser.languages?.first
             interestedIn.value = newUser.interestedIn?.first
         }
-        get { return _user! }
     }
-    var _user: GZEUser?
 
     var dismiss: (() -> ())?
 
@@ -133,7 +134,7 @@ class GZESignUpViewModel: NSObject {
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
         self.userRepository = userRepository
-        self._user = GZEUser()
+        // self._user = GZEUser()
 
         var genders: [GZEUser.Gender?] = GZEUser.Gender.array
         genders.insert(nil, at: 0)
@@ -230,17 +231,30 @@ class GZESignUpViewModel: NSObject {
     }
 
     private func onSignupAction() -> SignalProducer<GZEUser, GZEError> {
-        user.username = username.value
-        user.email = email.value
-        user.password = password.value
 
-        log.debug("User data = \(user.toJSON() as Any)")
+        guard let aUsername = username.value else {
+            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.username.fieldName)))
+        }
 
-        return self.userRepository.signUp(user)
+        guard let aEmail = username.value else {
+            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.email.fieldName)))
+        }
+
+        guard let aPassword = username.value else {
+            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.password.fieldName)))
+        }
+
+        return self.userRepository.signUp(username: aUsername, email: aEmail, password: aPassword)
     }
 
     private func onUpdateAction() -> SignalProducer<GZEUser, GZEError> {
-        fillUser()
+
+        guard var user = self.user else {
+            log.error("User not set")
+            return SignalProducer(error: .repository(error: .Unexpected))
+        }
+
+        user = fillUser(user)
 
         log.debug("User data = \(user.toJSON() as Any)")
 
@@ -270,7 +284,7 @@ class GZESignUpViewModel: NSObject {
         return self.userRepository.saveSearchPic(self.user)
     }
 
-    private func fillUser() {
+    private func fillUser(_ user: GZEUser) -> GZEUser {
         if let birthday = birthday.value {
             user.birthday = birthday
         }
@@ -289,6 +303,8 @@ class GZESignUpViewModel: NSObject {
         }
 
         log.debug(user.toJSON() as Any)
+
+        return user
     }
 
     // MARK: - Deinitializers

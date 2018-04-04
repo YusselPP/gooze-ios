@@ -20,26 +20,20 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     let acceptRequestButtonTitle = "vm.profile.acceptRequestTitle".localized().uppercased()
 
     var chatViewModel: GZEChatViewModel {
-        return GZEChatViewModelDates(mode: .gooze, recipient: self.user)
+        return GZEChatViewModelDates(recipient: self.user.toChatUser())
     }
     
     func contact() {
-        guard let userId = user.id else {
-            log.error("User in profile doesn't have an id")
-            error.value = GZERepositoryError.UnexpectedError.localizedDescription
-            return
-        }
-        GZEDatesService.shared.requestDate(to: userId)
+        GZEDatesService.shared.requestDate(to: user.id)
     }
 
     func acceptRequest() {
-        guard let userId = user.id else {
-            log.error("User in profile doesn't have an id")
-            error.value = GZERepositoryError.UnexpectedError.localizedDescription
-            return
+        if let requestId = self.dateRequestId {
+            GZEDatesService.shared.acceptDateRequest(withId: requestId)
+        } else {
+            log.error("RequestId not found")
+            self.error.value = GZERepositoryError.UnexpectedError.localizedDescription
         }
-        
-        GZEDatesService.shared.acceptDateRequest(from: userId)
     }
     
     func observeMessages() {
@@ -60,16 +54,17 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     }
     
     let user: GZEUser
+    let dateRequestId: String?
 
     var messagesObserver: Disposable?
 
     // MARK - init
-    init(user: GZEUser) {
+    init(user: GZEUser, dateRequestId: String? = nil) {
         self.user = user
+        self.dateRequestId = dateRequestId
         super.init()
         log.debug("\(self) init")
     }
-    
     
 
     // MARK: - Deinitializers

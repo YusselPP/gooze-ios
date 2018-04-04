@@ -125,6 +125,9 @@
 // Services/GZEDatesService
 "service.dates.requestSuccessfullySent"="Your request has been sent";
 "service.dates.requestSuccessfullyAccepted"="The request has been accepted";
+"service.dates.requestAccepted"="%@ has accepted your request";
+
+"service.chat.messageReceived"="%@ has sent you a message";
 
 "login failed"="Invalid username or password";
 

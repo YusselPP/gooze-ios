@@ -125,6 +125,9 @@
 // Services/GZEDatesService
 "service.dates.requestSuccessfullySent"="Se ha enviado tu solicitud";
 "service.dates.requestSuccessfullyAccepted"="Has aceptado la solicitud";
+"service.dates.requestAccepted"="%@ ha aceptado tu solicitud";
+
+"service.chat.messageReceived"="%@ te ha enviado mensaje";
 
 // GoozeApi/GZEApiError
 "username"="usuario";

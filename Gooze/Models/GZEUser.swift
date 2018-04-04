@@ -15,7 +15,7 @@ import Localize_Swift
 import CoreLocation
 
 
-class GZEUser: Glossy {
+class GZEUser: NSObject, Glossy {
 
     enum Gender: String {
         case male = "male"
@@ -94,6 +94,10 @@ class GZEUser: Glossy {
         var blocked: Bool?
         var image: UIImage?
 
+        init() {
+
+        }
+
         init?(image: UIImage?) {
             if let image = image {
                 self.image = image
@@ -135,11 +139,11 @@ class GZEUser: Glossy {
     static let ageUnit = "vm.user.ageUnit".localized()
 
     // Mark: Instance members
-    var id: String?
+    var id: String
+    var username: String
+    var email: String
 
-    var username: String?
-    var email: String?
-    var password: String?
+    //var password: String?
 
     var birthday: Date?
     var gender: Gender?
@@ -174,7 +178,6 @@ class GZEUser: Glossy {
     var dateRating: Float?
     var goozeRating: Float?
 
-
     var overallRating: Float? {
         let rates = [Float?](arrayLiteral:
             self.imagesRating,
@@ -201,7 +204,11 @@ class GZEUser: Glossy {
         }
     }
 
-    init() {
+    init(id: String, username: String, email: String) {
+        self.id = id
+        self.username = username
+        self.email = email
+        super.init()
         log.debug("\(self) init")
     }
 
@@ -209,11 +216,19 @@ class GZEUser: Glossy {
 
     required init?(json: JSON) {
 
-        self.id = "id" <~~ json
+        guard
+            let id: String = "id" <~~ json,
+            let username: String = "username" <~~ json,
+            let email: String = "email" <~~ json
+        else {
+            log.error("Unable to instantiate GZEUser, missing required properties: \(json)")
+            return nil
+        }
 
-        self.username = "username" <~~ json
-        self.email = "email" <~~ json
-        self.password = "password" <~~ json
+        self.id = id
+        self.username = username
+        self.email = email
+        // self.password = "password" <~~ json
 
         self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
         self.gender = "gender" <~~ json
@@ -247,6 +262,8 @@ class GZEUser: Glossy {
         self.dateRating = "dateRating" <~~ json
         self.goozeRating = "goozeRating" <~~ json
 
+        super.init()
+        
         log.debug("\(self) init")
     }
 
@@ -258,7 +275,7 @@ class GZEUser: Glossy {
 
             "username" ~~> self.username,
             "email" ~~> self.email,
-            "password" ~~> self.password,
+            //"password" ~~> self.password,
 
             "gender" ~~> self.gender,
             "weight" ~~> self.weight,
@@ -292,6 +309,19 @@ class GZEUser: Glossy {
             "dateRating" ~~> self.dateRating,
             "goozeRating" ~~> self.goozeRating,
         ])
+    }
+
+    func toChatUser() -> GZEChatUser {
+        return GZEChatUser(
+            id: id,
+            username: username,
+            searchPic: self.searchPic,
+            imagesRating: self.imagesRating,
+            complianceRating: self.complianceRating,
+            dateQualityRating: self.dateQualityRating,
+            dateRating: self.dateRating,
+            goozeRating: self.goozeRating
+        )
     }
 
     // MARK: Validation
@@ -425,3 +455,18 @@ class GZEUser: Glossy {
         log.debug("\(self) disposed")
     }
 }
+
+// MARK: Hashable
+
+extension GZEUser {
+    override var hashValue: Int {
+        return  self.id.hashValue
+    }
+}
+
+// MARK: Equatable
+
+func ==(lhs: GZEUser, rhs: GZEUser) -> Bool {
+    return lhs.id == rhs.id
+}
+

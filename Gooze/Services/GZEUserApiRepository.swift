@@ -23,7 +23,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     // MARK: CRUD
 
-    func create(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
+    func create(username: String, email: String, password: String, userJSON: JSON? = nil) -> SignalProducer<GZEUser, GZEError> {
 
         return SignalProducer<GZEUser, GZEError> { sink, disposable in
 
@@ -33,14 +33,18 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
             log.debug("trying to create user")
 
-            guard let userJSON = user.toJSON() else {
-                log.error("Unable to serialize the user")
-                sink.send(error: .repository(error: .UnexpectedError))
-                sink.sendInterrupted()
-                return
+            var unwrappedUserJSON: JSON
+            if userJSON == nil {
+                unwrappedUserJSON = JSON()
+            } else {
+                unwrappedUserJSON = userJSON!
             }
 
-            Alamofire.request(GZEUserRouter.createUser(parameters: userJSON))
+            unwrappedUserJSON["username"] = username
+            unwrappedUserJSON["email"] = email
+            unwrappedUserJSON["password"] = password
+
+            Alamofire.request(GZEUserRouter.createUser(parameters: unwrappedUserJSON))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
         }
     }
@@ -66,12 +70,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 return
             }
 
-            guard let userId = user.id else {
-                log.error("The user instance must have an id in order to update it")
-                sink.send(error: .repository(error: .UnexpectedError))
-                sink.sendInterrupted()
-                return
-            }
+            let userId = user.id
 
             Alamofire.request(GZEUserRouter.updateUser(id: userId, parameters: userJSON))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
@@ -327,8 +326,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                             return SignalProducer(error: .repository(error: .UnexpectedError))
                         }
 
-                        let user = GZEUser()
-                        user.id = aUser.id
+                        let user = GZEUser(id: aUser.id, username: aUser.username, email: aUser.email)
                         user.profilePic = aUser.profilePic
 
                         return this.update(user)
@@ -382,8 +380,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                         return SignalProducer(error: .repository(error: .UnexpectedError))
                     }
 
-                    let user = GZEUser()
-                    user.id = aUser.id
+                    let user = GZEUser(id: aUser.id, username: aUser.username, email: aUser.email)
                     user.searchPic = aUser.searchPic
 
                     return this.update(user)
@@ -437,8 +434,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                         return SignalProducer(error: .repository(error: .UnexpectedError))
                     }
 
-                    let user = GZEUser()
-                    user.id = aUser.id
+                    let user = GZEUser(id: aUser.id, username: aUser.username, email: aUser.email)
                     user.photos = aUser.photos
 
                     return this.update(user)
@@ -450,15 +446,15 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     }
 
-    func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
+    func signUp(username: String, email: String, password: String) -> SignalProducer<GZEUser, GZEError> {
         return (
-            self.create(user)
+            self.create(username: username, email: email, password: password)
             .flatMap(FlattenStrategy.latest, transform: {[weak self] _ -> SignalProducer<GZEUser, GZEError> in
                 guard let this = self else {
                     log.error("Unable to complete the task. Self has been disposed.")
                     return SignalProducer(error: .repository(error: .UnexpectedError))
                 }
-                return this.login(user.email, user.password).flatMap(FlattenStrategy.latest) { token -> SignalProducer<GZEUser, GZEError> in
+                return this.login(email, password).flatMap(FlattenStrategy.latest) { token -> SignalProducer<GZEUser, GZEError> in
                     if let user = token.user {
                         return SignalProducer(value: user)
                     } else {

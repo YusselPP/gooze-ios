@@ -13,7 +13,7 @@ class GZEUsersList: UIView {
     // MARK: - public vars
     var onDismiss: (() -> ())?
 
-    var users: [GZEUser] {
+    var users: [GZEChatUser] {
         set(users) {
             self.usersListCollectionView.users = users
             self.usersListCollectionView.reloadData()

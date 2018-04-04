@@ -354,7 +354,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 scene = .activate
 
             case .searching:
-                if let users = user as? [GZEUser] {
+                if let users = user as? [GZEChatUser] {
                     viewModel.userResults.value = users
                 }
                 updateBalloons()

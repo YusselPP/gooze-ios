@@ -12,7 +12,7 @@ import Gloss
 
 protocol GZEUserRepositoryProtocol {
 
-    func create(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
+    func create(username: String, email: String, password: String, userJSON: JSON?) -> SignalProducer<GZEUser, GZEError>
     func update(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func delete(byId id: String) -> SignalProducer<Bool, GZEError>
     func usernameExists(_ username: String) -> SignalProducer<Bool, GZEError>
@@ -24,7 +24,7 @@ protocol GZEUserRepositoryProtocol {
 
     @discardableResult
     func logout() -> SignalProducer<Void, GZEError>
-    func signUp(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
+    func signUp(username: String, email: String, password: String) -> SignalProducer<GZEUser, GZEError>
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func saveSearchPic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func savePhotos(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>

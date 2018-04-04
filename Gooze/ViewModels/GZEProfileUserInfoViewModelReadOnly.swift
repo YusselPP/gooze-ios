@@ -33,15 +33,15 @@ class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfi
     
     
     // MARK - init
-    override init(user: GZEUser) {
-        super.init(user: user)
+    override init(user: GZEUser, dateRequestId: String?) {
+        super.init(user: user, dateRequestId: dateRequestId)
         log.debug("\(self) init")
         
         populate(user)
     }
     
     private func populate(_ user: GZEUser) {
-        username.value = user.username?.uppercased()
+        username.value = user.username.uppercased()
         
         if let birthday = user.birthday {
             self.age.value = "\(GZEDateHelper.years(from: birthday, to: Date())) \(GZEUser.ageUnit)"

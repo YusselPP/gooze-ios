@@ -11,7 +11,7 @@ import AlamofireImage
 
 class GZEUserBalloon: UIView {
 
-    var user: GZEUser?
+    var user: GZEChatUser?
     var rating: Float? {
         didSet {
             starsView.setRating(rating)
@@ -84,13 +84,12 @@ class GZEUserBalloon: UIView {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
     }
 
-    func setUser(_ user: GZEUser?, completion: ( () -> ())? = nil) {
+    func setUser(_ user: GZEChatUser?, completion: ( () -> ())? = nil) {
 
         self.user = user
 
         if let user = user {
-            // TODO: set with user.rating
-            self.rating = 4.5
+            self.rating = user.overallRating
             self.setImage(urlRequest: user.searchPic?.urlRequest, completion: completion)
         } else {
             log.error("Empty user set. Hidding balloon")
@@ -103,7 +102,7 @@ class GZEUserBalloon: UIView {
 
     func setImage(urlRequest: URLRequest?, completion: ( () -> ())? = nil){
         if let urlRequest = urlRequest {
-            imageView.af_setImage(withURLRequest: urlRequest, completion: { [weak self] _ in
+            imageView.af_setImage(withURLRequest: urlRequest, completion: { _ in
                 //self?.setVisible(true)
                 completion?()
             })

@@ -147,23 +147,7 @@ class GZEGalleryViewController: UIViewController {
     }
 
     func acceptRequest() {
-        // Open chat
-        log.debug("Trying to show chat controller...")
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        if let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController {
-            
-            log.debug("chat controller instantiated. Setting up its view model")
-            // Set up initial view model
-            chatController.viewModel = self.viewModel.chatViewModel
-            chatController.onDismissTapped = {[weak self] in
-                self?.dismiss(animated: true)
-            }
-            self.present(chatController, animated: true)
-        } else {
-            log.error("Unable to instantiate GZEChatViewController")
-            GZEAlertService.shared.showBottomAlert(superview: self.view, text: GZERepositoryError.UnexpectedError.localizedDescription)
-        }
+        GZEChatService.shared.openChat(presenter: self, viewModel: viewModel.chatViewModel)
         viewModel.acceptRequest()
     }
 

@@ -34,9 +34,8 @@ class ChatSocket: GZESocket {
             }
             log.debug("Message received : \(String(describing: message.toJSON()))")
 
-            GZEChatService.shared.addReceivedMessage(message: message)
-            GZEChatService.shared.lastReceivedMessage.value = message
-
+            GZEChatService.shared.addReceivedMessage(message)
+            
             ack.with()
         }
     }

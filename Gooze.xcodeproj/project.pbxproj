@@ -65,6 +65,7 @@
 		8D9711B31FC307D200E98F95 /* GZEConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9711B21FC307D200E98F95 /* GZEConstants.swift */; };
 		8D9FF9F120422847003BE951 /* GZENavButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9FF9F020422847003BE951 /* GZENavButton.swift */; };
 		8D9FF9F32042292B003BE951 /* GZENextUIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9FF9F22042292B003BE951 /* GZENextUIBarButtonItem.swift */; };
+		8DA1B1A9207451E600F616A4 /* GZEChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA1B1A8207451E600F616A4 /* GZEChat.swift */; };
 		8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */; };
 		8DA575AD1FC3D6470001CE2A /* GZEChooseModeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA575AC1FC3D6470001CE2A /* GZEChooseModeViewController.swift */; };
 		8DA95238206B59F9000A0BAA /* GZEDateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA95237206B59F9000A0BAA /* GZEDateRequest.swift */; };
@@ -91,6 +92,7 @@
 		8DD035301FB5143C008EBEAD /* GZEBlurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD0352E1FB5143C008EBEAD /* GZEBlurViewController.swift */; };
 		8DD035311FB5143C008EBEAD /* GZEBlurViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DD0352F1FB5143C008EBEAD /* GZEBlurViewController.xib */; };
 		8DD035331FB55105008EBEAD /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD035321FB55105008EBEAD /* UIImageView+Extension.swift */; };
+		8DD5D6952074E4F5001192ED /* GZEChatUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD5D6942074E4F5001192ED /* GZEChatUser.swift */; };
 		8DE23E9920260912000B7422 /* UIScrollView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE23E9820260912000B7422 /* UIScrollView+Extension.swift */; };
 		8DEB60A81FF162300099B3C5 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB60A71FF162300099B3C5 /* UILabel+Extension.swift */; };
 		8DEC4E201FA57A1000B5EA8E /* GZEUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEC4E1F1FA57A1000B5EA8E /* GZEUserTests.swift */; };
@@ -208,6 +210,7 @@
 		8D9711B21FC307D200E98F95 /* GZEConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConstants.swift; sourceTree = "<group>"; };
 		8D9FF9F020422847003BE951 /* GZENavButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENavButton.swift; sourceTree = "<group>"; };
 		8D9FF9F22042292B003BE951 /* GZENextUIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENextUIBarButtonItem.swift; sourceTree = "<group>"; };
+		8DA1B1A8207451E600F616A4 /* GZEChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChat.swift; sourceTree = "<group>"; };
 		8DA28BEB1FA1897300EE1362 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		8DA575AC1FC3D6470001CE2A /* GZEChooseModeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChooseModeViewController.swift; sourceTree = "<group>"; };
 		8DA95237206B59F9000A0BAA /* GZEDateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateRequest.swift; sourceTree = "<group>"; };
@@ -234,6 +237,7 @@
 		8DD0352E1FB5143C008EBEAD /* GZEBlurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBlurViewController.swift; sourceTree = "<group>"; };
 		8DD0352F1FB5143C008EBEAD /* GZEBlurViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GZEBlurViewController.xib; sourceTree = "<group>"; };
 		8DD035321FB55105008EBEAD /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		8DD5D6942074E4F5001192ED /* GZEChatUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatUser.swift; sourceTree = "<group>"; };
 		8DE23E9820260912000B7422 /* UIScrollView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extension.swift"; sourceTree = "<group>"; };
 		8DEB60A71FF162300099B3C5 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		8DEC4E1F1FA57A1000B5EA8E /* GZEUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserTests.swift; sourceTree = "<group>"; };
@@ -514,6 +518,8 @@
 				8D14B3631FB2BB41005CE9A9 /* GZEFile.swift */,
 				8DA95237206B59F9000A0BAA /* GZEDateRequest.swift */,
 				8DBAB6E7206F4CA8009586A5 /* GZEChatMessage.swift */,
+				8DA1B1A8207451E600F616A4 /* GZEChat.swift */,
+				8DD5D6942074E4F5001192ED /* GZEChatUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -943,6 +949,7 @@
 				8D07BC55206075E700ACE09A /* ChatSocket.swift in Sources */,
 				8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */,
 				8D07BC5920607A6000ACE09A /* GZESocketManager.swift in Sources */,
+				8DD5D6952074E4F5001192ED /* GZEChatUser.swift in Sources */,
 				8D61FB631FEED49A009B1E45 /* GZESignUpProfileViewController.swift in Sources */,
 				8D413CB220412D0700CB4B93 /* GZEBackUIBarButtonItem.swift in Sources */,
 				8D6C8D511FB418D200EDBC69 /* GZEImageHelper.swift in Sources */,
@@ -1019,6 +1026,7 @@
 				8D572DBB1F9D352F00B824FA /* GZEUser.swift in Sources */,
 				8D19238A204ED18A005F6F5F /* GZERatingsViewController.swift in Sources */,
 				8D6F2F212066DEB500414405 /* GZEValidationErrorView.swift in Sources */,
+				8DA1B1A9207451E600F616A4 /* GZEChat.swift in Sources */,
 				8DAC9A18203FE0F000E87814 /* GZEProfileViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,7 +10,7 @@ import UIKit
 
 class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    var users = [GZEUser]()
+    var users = [GZEChatUser]()
     var onUserTap: ((UITapGestureRecognizer, GZEUserBalloon) -> ())?
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,7 +77,7 @@ class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, 
 
 class GZEUserCollectionViewCell: UICollectionViewCell {
 
-    var user: GZEUser? {
+    var user: GZEChatUser? {
         didSet {
             setUser(self.user)
         }
@@ -125,7 +125,7 @@ class GZEUserCollectionViewCell: UICollectionViewCell {
         self.rightAnchor.constraint(equalTo: userBalloon.rightAnchor).isActive = true
     }
 
-    private func setUser(_ user: GZEUser?) {
+    private func setUser(_ user: GZEChatUser?) {
         userBalloon.setUser(user)
     }
 

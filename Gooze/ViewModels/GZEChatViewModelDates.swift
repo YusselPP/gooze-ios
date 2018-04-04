@@ -29,17 +29,27 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let sendButtonEnabled = MutableProperty<Bool>(true)
     var sendButtonAction: CocoaAction<UIButton>!
 
-    let recipient: GZEUser
+    let recipient: GZEChatUser
 
     // MARK: - init
-    init(mode: GZEChatViewMode, recipient: GZEUser) {
+    init(recipient: GZEChatUser) {
+        var mode: GZEChatViewMode
+        if let isActivated = GZEAuthService.shared.authUser?.isActivated, isActivated {
+            mode = .gooze
+        } else {
+            mode = .client
+        }
+
         self.mode = mode
         self.recipient = recipient
 
         self.topButtonAction = CocoaAction(self.createTopButtonAction())
         self.sendButtonAction = CocoaAction(self.createSendAction())
 
-        messages.bindingTarget <~ GZEChatService.shared.receivedMessages
+        GZEChatService.shared.activeRecipientId = recipient.id
+        messages.bindingTarget <~ GZEChatService.shared.receivedMessages.map {
+            $0[recipient.id] ?? []
+        }
     }
 
     // MARK: - Actions
@@ -54,8 +64,8 @@ class GZEChatViewModelDates: GZEChatViewModel {
         }
     }
 
-    private func createSendAction() -> Action<Void, Bool, GZEError> {
-        return Action(enabledIf: sendButtonEnabled) {[weak self] () -> SignalProducer<Bool, GZEError> in
+    private func createSendAction() -> Action<Void, Void, GZEError> {
+        return Action(enabledIf: sendButtonEnabled) {[weak self] () -> SignalProducer<Void, GZEError> in
             guard let this = self else {
                 log.error("self disposed before executing action")
                 return SignalProducer(error: .repository(error: .UnexpectedError))
@@ -71,26 +81,23 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 return SignalProducer(error: .validation(error: .required(fieldName: "messageText")))
             }
             
-            guard let senderId = GZEAuthService.shared.authUser?.id else {
-                log.error("senderId is nil")
-                return SignalProducer(error: .repository(error: .UnexpectedError))
-            }
-            guard let recipientId = this.recipient.id else {
-                log.error("recipientId is nil")
+            guard let sender = GZEAuthService.shared.authUser else {
+                log.error("sender is nil")
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
+
             let message = GZEChatMessage(
                 text: messageTextTrim,
-                senderId: senderId,
-                recipientId: recipientId
+                sender: sender.toChatUser(),
+                recipient: this.recipient
             )
 
             GZEChatService.shared.send(message: message)
             
             this.inputMessage.value = ""
 
-            return SignalProducer(value: true)
+            return SignalProducer.empty
         }
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftOverlays
 
 class GZEAlertService {
     static let shared = GZEAlertService()
@@ -37,16 +38,21 @@ class GZEAlertService {
 
     func showTopAlert(superview: UIView, text: String, onTapped: (() -> ())? = nil) {
         self.onTopAlertTapped = onTapped
+        //self.topAlert.isUserInteractionEnabled = true
         superview.addSubview(self.topAlert)
-        self.topAlert.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        self.topAlert.heightAnchor.constraint(equalToConstant: 500).isActive = true
+        self.topAlert.widthAnchor.constraint(equalToConstant: 500).isActive = true
         superview.widthAnchor.constraint(equalTo: self.topAlert.widthAnchor).isActive = true
         superview.topAnchor.constraint(equalTo: self.topAlert.topAnchor).isActive = true
         superview.centerXAnchor.constraint(equalTo: self.topAlert.centerXAnchor).isActive = true
+
+        //SwiftOverlays.showAnnoyingNotificationOnTopOfStatusBar(self.topAlert, duration: 30)
 
         self.topAlert.text = text
     }
     
     @objc func topAlertTappedHandler() {
+        log.debug("top alert tapped")
         self.onTopAlertTapped?()
     }
 

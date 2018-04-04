@@ -20,16 +20,12 @@ class GZEDateRequest: NSObject, Glossy {
 
     let id: String
     let status: Status
-    let senderId: String
-    let recipientId: String
-    let sender: GZEUser
-    let recipient: GZEUser?
+    let sender: GZEChatUser
+    let recipient: GZEChatUser
 
-    init(id: String, status: Status, senderId: String, recipientId: String, sender: GZEUser, recipient: GZEUser? =  nil) {
+    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser) {
         self.id = id
         self.status = status
-        self.senderId = senderId
-        self.recipientId = recipientId
         self.sender = sender
         self.recipient = recipient
     }
@@ -38,27 +34,22 @@ class GZEDateRequest: NSObject, Glossy {
         guard
             let id: String = "id" <~~ json,
             let status: Status = "status" <~~ json,
-            let senderId: String = "senderId" <~~ json,
-            let recipientId: String = "recipientId" <~~ json,
-            let sender: GZEUser = "sender" <~~ json
+            let sender: GZEChatUser = "sender" <~~ json,
+            let recipient: GZEChatUser = "recipient" <~~ json
         else {
             log.error("Unable to instantiate. JSON doesn't include a required property")
             return nil
         }
         self.id = id
         self.status = status
-        self.senderId = senderId
-        self.recipientId = recipientId
         self.sender = sender
-        self.recipient = "recipient" <~~ json
+        self.recipient = recipient
     }
 
     func toJSON() -> JSON? {
         return jsonify([
             "id" ~~> self.id,
             "status" ~~> self.status,
-            "senderId" ~~> self.senderId,
-            "recipientId" ~~> self.recipientId,
             "sender" ~~> self.sender,
             "recipient" ~~> self.recipient,
         ]);
