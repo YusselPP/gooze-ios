@@ -29,7 +29,11 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let sendButtonEnabled = MutableProperty<Bool>(true)
     var sendButtonAction: CocoaAction<UIButton>!
 
-    let recipient: GZEChatUser
+    var recipient: GZEChatUser {
+        didSet {
+            self.recipientDidSet(self.recipient)
+        }
+    }
 
     // MARK: - init
     init(recipient: GZEChatUser) {
@@ -42,6 +46,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
         self.mode = mode
         self.recipient = recipient
+        
+        log.debug("\(self) init")
+        
+        self.recipientDidSet(self.recipient)
 
         self.topButtonAction = CocoaAction(self.createTopButtonAction())
         self.sendButtonAction = CocoaAction(self.createSendAction())
@@ -50,6 +58,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
         messages.bindingTarget <~ GZEChatService.shared.receivedMessages.map {
             $0[recipient.id] ?? []
         }
+    }
+    
+    private func recipientDidSet(_ recipient: GZEChatUser) {
+        self.username.value = self.recipient.username
     }
 
     // MARK: - Actions
@@ -99,5 +111,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
             return SignalProducer.empty
         }
+    }
+    
+    // MARK: - Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

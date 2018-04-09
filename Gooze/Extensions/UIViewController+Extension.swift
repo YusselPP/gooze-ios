@@ -93,28 +93,6 @@ extension UIViewController {
         scrollView.scrollIndicatorInsets = contentInsets
     }
 
-    func resizeViewWithKeyboard(keyboardShow: Bool, constraint: NSLayoutConstraint, notification: Notification) {
-        if
-            keyboardShow,
-            let info = notification.userInfo,
-            let kbSize = info[UIKeyboardFrameEndUserInfoKey] as? CGRect
-        {
-            let duration = info[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.35
-            let curve = UIViewAnimationCurve(
-                rawValue: info[UIKeyboardAnimationCurveUserInfoKey] as? Int ?? UIViewAnimationCurve.linear.rawValue
-            )
-            let options = curve?.toOptions() ?? UIViewAnimationOptions.curveLinear
-
-            constraint.constant = kbSize.height
-
-            UIView.animate(withDuration: duration, delay: 0, options: options, animations: { [weak self] in
-                self?.view.layoutIfNeeded()
-            }, completion: nil)
-        } else {
-            constraint.constant = 0
-        }
-    }
-
     func previousController(animated: Bool) {
         navigationController?.popViewController(animated: animated)
     }

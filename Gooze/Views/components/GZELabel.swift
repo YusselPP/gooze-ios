@@ -24,10 +24,10 @@ class GZELabel: UILabel {
         translatesAutoresizingMaskIntoConstraints = false
     }
 
-    func setWhiteFontFormat() {
+    func setWhiteFontFormat(align: NSTextAlignment = .center) {
         self.font = GZEConstants.Font.main
         self.textColor = UIColor.white
-        self.textAlignment = .center
+        self.textAlignment = align
     }
 
 }

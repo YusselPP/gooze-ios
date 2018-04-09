@@ -11,8 +11,13 @@ import ReactiveSwift
 
 class GZERatingView: UIView {
 
+    var showInfoLabel = true {
+        didSet {
+            self.infoLabel.isHidden = !self.showInfoLabel
+        }
+    }
     private let ratingView = FloatRatingView()
-    private let infoLabel = GZELabel()
+    let infoLabel = GZELabel()
 
     private let infoLabelText = "vm.ratingView.unrated".localized()
 
@@ -38,7 +43,9 @@ class GZERatingView: UIView {
             self.infoLabel.isHidden = true
         } else {
             self.ratingView.isHidden = true
-            self.infoLabel.isHidden = false
+            if self.showInfoLabel {
+                self.infoLabel.isHidden = false
+            }
         }
     }
 
@@ -58,6 +65,8 @@ class GZERatingView: UIView {
         // infoLabel
         self.infoLabel.setWhiteFontFormat()
         self.infoLabel.text = infoLabelText
+        self.infoLabel.adjustsFontSizeToFitWidth = true
+        self.infoLabel.minimumScaleFactor = 0.5
 
         // GZERatingView
         self.backgroundColor = nil
@@ -76,10 +85,10 @@ class GZERatingView: UIView {
         self.topAnchor.constraint(equalTo: infoLabel.topAnchor).isActive = true
         self.bottomAnchor.constraint(equalTo: ratingView.bottomAnchor).isActive = true
         self.bottomAnchor.constraint(equalTo: infoLabel.bottomAnchor).isActive = true
-        self.leftAnchor.constraint(equalTo: ratingView.leftAnchor).isActive = true
-        self.leftAnchor.constraint(equalTo: infoLabel.leftAnchor).isActive = true
-        self.rightAnchor.constraint(equalTo: ratingView.rightAnchor).isActive = true
-        self.rightAnchor.constraint(equalTo: infoLabel.rightAnchor).isActive = true
+        self.leadingAnchor.constraint(equalTo: ratingView.leadingAnchor).isActive = true
+        self.leadingAnchor.constraint(equalTo: infoLabel.leadingAnchor, constant: -8).isActive = true
+        self.trailingAnchor.constraint(equalTo: ratingView.trailingAnchor).isActive = true
+        self.trailingAnchor.constraint(equalTo: infoLabel.trailingAnchor, constant: 8).isActive = true
     }
 }
 

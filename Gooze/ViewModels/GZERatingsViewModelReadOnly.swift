@@ -34,15 +34,15 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
 
 
     // MARK - init
-    override init(user: GZEUser, dateRequestId: String?) {
-        super.init(user: user, dateRequestId: dateRequestId)
+    override init(user: GZEUser) {
+        super.init(user: user)
         log.debug("\(self) init")
 
         populate(user)
     }
 
     private func populate(_ user: GZEUser) {
-        username.value = user.username?.uppercased()
+        username.value = user.username.uppercased()
 
         profilePic.value = user.profilePic?.urlRequest
 
@@ -55,12 +55,12 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
         dateRatingDesc.value = GZEUser.Validation.dateRating.fieldName
         goozeRatingDesc.value = GZEUser.Validation.goozeRating.fieldName
 
-        imagesRating.value = user.imagesRating ?? 0
-        complianceRating.value = user.complianceRating ?? 0
-        dateQualityRating.value = user.dateQualityRating ?? 0
-        dateRating.value = user.dateRating ?? 0
-        goozeRating.value = user.goozeRating ?? 0
-        overallRating.value = user.overallRating ?? 0
+        imagesRating.value = user.imagesRating
+        complianceRating.value = user.complianceRating
+        dateQualityRating.value = user.dateQualityRating
+        dateRating.value = user.dateRating
+        goozeRating.value = user.goozeRating
+        overallRating.value = user.overallRating
     }
 
     // MARK: - Deinitializers

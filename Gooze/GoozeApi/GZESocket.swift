@@ -47,8 +47,11 @@ class GZESocket: SocketIOClient {
         }
 
         self.on(clientEvent: .disconnect) {data, ack in
-            log.error("Socket disconnected")
-            // TODO: send messag and give the user ability to reconect
+            log.error("Socket disconnected. Reason: \(data[0])")
+            GZEAlertService.shared.showBottomAlert(text: "socket.disconnected", duration: 0, animated: true, onTapped: {[weak self] in
+                self?.reconnect()
+                GZEAlertService.shared.dismissBottomAlert()
+            })
         }
 
         self.on(clientEvent: .reconnect) {data, ack in

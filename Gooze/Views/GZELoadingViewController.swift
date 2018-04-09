@@ -19,6 +19,9 @@ class GZELoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
+        
+        GZEConstants.horizontalSize = traitCollection.horizontalSizeClass
+        GZEConstants.verticalSize = traitCollection.verticalSizeClass
 
         // Wait until next tick for view to be loaded, if not it will try to present
         // login view controller over app loading screen and it will fail
@@ -53,7 +56,7 @@ class GZELoadingViewController: UIViewController {
             setRootController(controller: navController)
         } else {
             log.error("Unable to instantiate SearchGoozeNavController")
-            GZEAlertService.shared.showBottomAlert(superview: self.view, text: GZERepositoryError.UnexpectedError.localizedDescription)
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
         }
     }
 

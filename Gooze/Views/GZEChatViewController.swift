@@ -42,13 +42,13 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         log.debug("\(self) init")
         super.viewDidLoad()
-
-        GZESocketManager.createChatSocket()
         
         backButton.onButtonTapped = {[weak self] _ in
             self?.onDismissTapped?()
         }
         self.myVavigationItem.setLeftBarButton(backButton, animated: false)
+        
+        self.myVavigationItem.reactive.title <~ self.viewModel.username
 
         setupBindings()
     }
@@ -103,12 +103,12 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
     // MARK: - KeyboardNotifications
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
-        resizeViewWithKeyboard(keyboardShow: true, constraint: self.messageInputContainerBottomSpacing, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view)
     }
     
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view)
     }
 
     // MARK: - Deinitializer

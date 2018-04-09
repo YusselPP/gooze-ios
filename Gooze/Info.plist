@@ -68,5 +68,9 @@
 	<string>Gooze quiere usar tu ubicación para ubicarte en el mapa</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Gooze quiere usar tu ubicación para ubicarte en el mapa</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Gooze quiere usar tu ubicación para ubicarte en el mapa</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Gooze quiere usar tu ubicación para ubicarte en el mapa</string>
 </dict>
 </plist>

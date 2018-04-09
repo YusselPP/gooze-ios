@@ -18,7 +18,7 @@ protocol GZEUserRepositoryProtocol {
     func usernameExists(_ username: String) -> SignalProducer<Bool, GZEError>
     func emailExists(_ email: String) -> SignalProducer<Bool, GZEError>
     func find(byId id: String) -> SignalProducer<GZEUser, GZEError>
-    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int) -> SignalProducer<[GZEUser], GZEError>
+    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int) -> SignalProducer<[GZEUserConvertible], GZEError>
     func publicProfile(byId id: String) -> SignalProducer<GZEUser, GZEError>
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
 

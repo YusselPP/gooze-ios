@@ -14,7 +14,7 @@ class GZEChatMessage: NSObject, Glossy {
     enum Status: String {
         case sent = "sent"
         case received = "received"
-        case read = "read"
+        case read = "read" 
     }
 
     enum MessageType: String {

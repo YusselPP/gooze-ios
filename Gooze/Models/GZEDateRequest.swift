@@ -9,7 +9,7 @@
 import Foundation
 import Gloss
 
-class GZEDateRequest: NSObject, Glossy {
+class GZEDateRequest: GZEUserConvertible, Glossy {
 
     enum Status: String {
         case sent = "sent"
@@ -28,6 +28,7 @@ class GZEDateRequest: NSObject, Glossy {
         self.status = status
         self.sender = sender
         self.recipient = recipient
+        super.init()
     }
 
     required init?(json: JSON) {
@@ -44,6 +45,7 @@ class GZEDateRequest: NSObject, Glossy {
         self.status = status
         self.sender = sender
         self.recipient = recipient
+        super.init()
     }
 
     func toJSON() -> JSON? {
@@ -53,6 +55,22 @@ class GZEDateRequest: NSObject, Glossy {
             "sender" ~~> self.sender,
             "recipient" ~~> self.recipient,
         ]);
+    }
+    
+    // MARK: - GZEUserConvertible
+    enum UserMode {
+        case sender
+        case recipient
+    }
+    var userMode = UserMode.sender
+    
+    override func getUser() -> GZEChatUser {
+        switch self.userMode {
+        case .recipient:
+            return self.recipient
+        case .sender:
+            return self.sender
+        }
     }
 }
 
@@ -67,5 +85,15 @@ extension GZEDateRequest {
 // MARK: Equatable
 
 func ==(lhs: GZEDateRequest, rhs: GZEDateRequest) -> Bool {
+    log.debug("equals called")
     return lhs.id == rhs.id
+}
+
+func ==(lhs: GZEDateRequest?, rhs: GZEDateRequest?) -> Bool {
+    log.debug("optional equals called")
+    if let lhs = lhs, let rhs = rhs {
+        return lhs.id == rhs.id
+    } else {
+        return false
+    }
 }

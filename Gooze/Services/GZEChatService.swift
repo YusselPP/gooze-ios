@@ -9,6 +9,7 @@
 import UIKit
 import SocketIO
 import ReactiveSwift
+import Gloss
 
 class GZEChatService: NSObject {
     static let shared = GZEChatService()
@@ -25,7 +26,7 @@ class GZEChatService: NSObject {
     override init() {
         super.init()
     }
-
+              
     func send(message: GZEChatMessage) {
         log.debug("Sending message..\(String(describing: message.toJSON()))")
         guard let chatSocket = self.chatSocket else {
@@ -39,8 +40,26 @@ class GZEChatService: NSObject {
         }
 
         self.addSentMessage(message)
-        chatSocket.emitWithAck(.sendMessage, messageJson).timingOut(after: 5) { data in
+        chatSocket.emitWithAck(.sendMessage, messageJson).timingOut(after: 5) {[weak self] data in
             log.debug("Message sent. Ack data: \(data)")
+            
+            if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
+                log.error("No ack received from server")
+                return
+            }
+            
+            if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
+                
+                log.error("\(String(describing: error.toJSON()))")
+                
+            } else if let updatedMessageJson = data[1] as? JSON, let updatedMessage = GZEChatMessage(json: updatedMessageJson) {
+                
+                self?.addSentMessage(updatedMessage)
+                log.debug("Message successfully sent")
+                
+            } else {
+                log.error("Unable to parse data to expected objects")
+            }
         }
     }
 
@@ -62,7 +81,7 @@ class GZEChatService: NSObject {
             recipientMessages = []
         }
 
-        recipientMessages.append(message)
+        recipientMessages.upsert(message) {$0 == message}
         receivedMessages[recipientId] = recipientMessages
         self.receivedMessages.value = receivedMessages
     }
@@ -86,14 +105,14 @@ class GZEChatService: NSObject {
 
             if let topVC = UIApplication.topViewController() {
                 let messageReceived = String(format: "service.chat.messageReceived".localized(), message.sender.username)
-                GZEAlertService.shared.showTopAlert(superview: topVC.view, text: messageReceived) {
+                GZEAlertService.shared.showTopAlert(text: messageReceived) {
                     //TODO: manage chat mode with client mode property instead of sending to vm
                     GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(recipient: message.sender))
                 }
             }
         }
 
-        senderMessages.append(message)
+        senderMessages.upsert(message) {$0 == message}
         receivedMessages[senderId] = senderMessages
         self.receivedMessages.value = receivedMessages
     }
@@ -114,7 +133,7 @@ class GZEChatService: NSObject {
             presenter.present(chatController, animated: true)
         } else {
             log.error("Unable to instantiate GZEChatViewController")
-            GZEAlertService.shared.showBottomAlert(superview: presenter.view, text: GZERepositoryError.UnexpectedError.localizedDescription)
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
         }
     }
 }

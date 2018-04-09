@@ -126,12 +126,12 @@ class GZEAuthService: NSObject {
             }
             presenter.present(navController, animated: true) {
                 if showExpiredAlert {
-                    GZEAlertService.shared.showBottomAlert(superview: loginController.view, text: "vm.authService.sessionExpired".localized())
+                    GZEAlertService.shared.showBottomAlert(text: "vm.authService.sessionExpired".localized())
                 }
             }
         } else {
             log.error("Unable to instantiate LoginNavController")
-            GZEAlertService.shared.showBottomAlert(superview: presenter.view, text: GZEError.repository(error: .UnexpectedError).localizedDescription)
+            GZEAlertService.shared.showBottomAlert(text: GZEError.repository(error: .UnexpectedError).localizedDescription)
         }
     }
 

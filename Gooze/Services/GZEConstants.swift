@@ -10,8 +10,16 @@ import UIKit
 
 class GZEConstants {
 
-    static var horizontalSize: UIUserInterfaceSizeClass = .unspecified
-    static var verticalSize: UIUserInterfaceSizeClass = .unspecified
+    static var horizontalSize: UIUserInterfaceSizeClass = .unspecified {
+        didSet {
+            log.debug("horizontalSize set: \(GZEConstants.horizontalSize)")
+        }
+    }
+    static var verticalSize: UIUserInterfaceSizeClass = .unspecified {
+        didSet {
+            log.debug("verticalSize set: \(GZEConstants.verticalSize)")
+        }
+    }
 
     class Color {
         static let mainBackground = UIColor(red: 55/255, green: 56/255, blue: 61/255, alpha: 1.0)
@@ -29,7 +37,7 @@ class GZEConstants {
 
         static let mainTextColor = UIColor.white
 
-        static let validationErrorViewBg = UIColor(white: 0.6, alpha: 0.9)
+        static let validationErrorViewBg = UIColor(white: 0.6, alpha: 0.95)
         
         //Chat
         static let chatBubbleTextColor = UIColor.black

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="5Xc-gj-GU4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="5Xc-gj-GU4">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -553,7 +553,7 @@
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.20000000000000001" maximumZoomScale="5" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1l-1m-VOV">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="5841762-image" translatesAutoresizingMaskIntoConstraints="NO" id="4hT-lE-ril">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4hT-lE-ril">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                                             </imageView>
                                         </subviews>
@@ -628,10 +628,10 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsu-W6-Fua">
-                                        <rect key="frame" x="120" y="112" width="80" height="80"/>
+                                        <rect key="frame" x="100" y="92" width="120" height="120"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tsu-W6-Fua" secondAttribute="height" multiplier="1:1" id="8Bb-kh-ION"/>
-                                            <constraint firstAttribute="height" constant="80" id="CgV-eh-oPJ"/>
+                                            <constraint firstAttribute="height" constant="120" id="CgV-eh-oPJ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdP-PT-gBJ" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
@@ -1071,7 +1071,7 @@
                                                     <constraint firstItem="6SB-GO-3Wb" firstAttribute="leading" secondItem="GjZ-0r-Zlh" secondAttribute="leading" constant="20" id="twz-dd-neR"/>
                                                 </constraints>
                                             </view>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="QGV-rv-vPK">
+                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="QGV-rv-vPK" customClass="GZEMapSlider" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="66" y="0.0" width="186" height="46"/>
                                                 <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <constraints>
@@ -2315,7 +2315,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="5841762-image" width="500" height="250"/>
         <image name="camera-153-icon" width="52" height="40"/>
         <image name="camera-white-icon" width="52" height="40"/>
         <image name="chat-send-button" width="17" height="25"/>

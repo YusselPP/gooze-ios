@@ -23,6 +23,9 @@
 
 // Protocols/DatesSocketError
 "error.socket.dates.requestAlreadySent"="Se ha enviado tu solicitud";
+"error.socket.dates.invalidSatus"="No se pudo aceptar. La solicitud ya fue aceptada o rechazada";
+"error.socket.dates.noAck"="No se pudo establecer la comunicación con el servidor";
+
 "error.socket.dates.unexpected"="Error inesperado. Porfavor contacta a soporte";
 
 // Models/GZEUser
@@ -115,6 +118,9 @@
 // Views/GZEProfileViewController
 "vm.profile.contactTitle"="Contactar";
 "vm.profile.acceptRequestTitle"="Aceptar contacto";
+"vm.profile.acceptedRequestButtonTitle"="Ir al chat";
+"vm.profile.rejectedRequestButtonTitle"="Rechazado";
+"vm.profile.sentRequestButtonTitle"="Solicitud enviada";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Sin calificación";
@@ -128,6 +134,9 @@
 "service.dates.requestAccepted"="%@ ha aceptado tu solicitud";
 
 "service.chat.messageReceived"="%@ te ha enviado mensaje";
+
+// Services/Location
+"service.location.disabled"="No se pudo obtener tu ubicación, verifica que la aplicación tenga permiso.";
 
 // GoozeApi/GZEApiError
 "username"="usuario";

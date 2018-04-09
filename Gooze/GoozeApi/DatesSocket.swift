@@ -53,6 +53,7 @@ class DatesSocket: GZESocket {
             log.debug("Date request received ack: \(String(describing: dateRequest.toJSON()))")
 
             GZEDatesService.shared.sentRequests.value.upsert(dateRequest) {$0 == dateRequest}
+            GZEDatesService.shared.lastSentRequest.value = dateRequest
             
             ack.with()
         }
@@ -66,11 +67,12 @@ class DatesSocket: GZESocket {
             
             
             GZEDatesService.shared.sentRequests.value.upsert(dateRequest) {$0 == dateRequest}
+            GZEDatesService.shared.lastSentRequest.value = dateRequest
 
             let recipient = dateRequest.recipient
             if let topVC = self?.topViewController {
                 let message = String(format: "service.dates.requestAccepted".localized(), recipient.username)
-                GZEAlertService.shared.showTopAlert(superview: topVC.view, text: message) {
+                GZEAlertService.shared.showTopAlert(text: message) {
                     GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(recipient: recipient))
                 }
             }

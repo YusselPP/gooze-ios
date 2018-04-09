@@ -180,12 +180,12 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
-    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int = 5) -> SignalProducer<[GZEUser], GZEError> {
+    func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int = 5) -> SignalProducer<[GZEUserConvertible], GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
 
-        return SignalProducer<[GZEUser], GZEError> { sink, disposable in
+        return SignalProducer<[GZEUserConvertible], GZEError> { sink, disposable in
 
             disposable.add {
                 log.debug("find byLocation SignalProducer disposed")
@@ -204,7 +204,22 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             Alamofire.request(GZEUserRouter.findByLocation(parameters: params))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { jsonArray in
 
-                    return [GZEUser].from(jsonArray: jsonArray)
+//                    var models: [GZEUserConvertible] = []
+//
+//                    for json in jsonArray {
+//
+//                        if let dateRequest = GZEDateRequest(json: json) {
+//                            models.append(dateRequest)
+//                        } else if let chatUser = GZEChatUser(json: json) {
+//                            models.append(chatUser)
+//                        } else {
+//                            return nil
+//                        }
+//                    }
+//
+//                    return models
+                    
+                    return GZEUserConvertible.arrayFrom(jsonArray: jsonArray)
                 }))
         }
     }

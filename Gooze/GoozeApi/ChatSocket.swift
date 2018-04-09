@@ -14,6 +14,9 @@ class ChatSocket: GZESocket {
     enum ChatEvent: String {
         case sendMessage
         case messageReceived
+        case messageReceivedAck
+        
+        case retrieveHistory
     }
 
     static let namespace = "/chat"
@@ -34,6 +37,18 @@ class ChatSocket: GZESocket {
             }
             log.debug("Message received : \(String(describing: message.toJSON()))")
 
+            GZEChatService.shared.addReceivedMessage(message)
+            
+            ack.with()
+        }
+        
+        self.on(.dateRequestReceivedAck) {data, ack in
+            guard let messageJson = data[0] as? JSON, let message = GZEChatMessage(json: messageJson) else {
+                log.error("Unable to parse data[0], expected data[0] to be a messageJson, found: \(data[0])")
+                return
+            }
+            log.debug("Message received : \(String(describing: message.toJSON()))")
+            
             GZEChatService.shared.addReceivedMessage(message)
             
             ack.with()

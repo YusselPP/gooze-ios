@@ -205,7 +205,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     }
 
     func onError(_ error: GZEError) {
-        GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: error.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(text: error.localizedDescription)
     }
 
     // MARK: UIActions
@@ -299,7 +299,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             } else {
                 msg = viewModel.textFieldValidationFailed
             }
-            GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: msg)
+            GZEAlertService.shared.showBottomAlert(text: msg)
         }
     }
 
@@ -307,12 +307,12 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
-        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
     // MARK: - Navigation
@@ -321,10 +321,18 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if
-            segue.identifier == signUpToProfileSegue,
+            segue.identifier == self.signUpToProfileSegue,
             let viewController = segue.destination as? GZESignUpProfileViewController
         {
-            viewController.viewModel = viewModel
+            if let vm = self.viewModel.updateProfileViewModel {
+                viewController.viewModel = vm
+            } else {
+                log.error("Unable to initialize GZESignUpProfileViewController. Invalid GZEUpdateProfileViewModel")
+                self.onError(.repository(error: .UnexpectedError))
+            }
+        } else {
+            log.error("Unable to instantiate GZESignUpProfileViewController")
+            self.onError(.repository(error: .UnexpectedError))
         }
     }
 

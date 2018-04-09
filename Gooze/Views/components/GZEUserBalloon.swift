@@ -11,6 +11,7 @@ import AlamofireImage
 
 class GZEUserBalloon: UIView {
 
+    var userConvertible: GZEUserConvertible?
     var user: GZEChatUser?
     var rating: Float? {
         didSet {
@@ -84,11 +85,12 @@ class GZEUserBalloon: UIView {
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap(_:))))
     }
 
-    func setUser(_ user: GZEChatUser?, completion: ( () -> ())? = nil) {
+    func setUser(_ user: GZEUserConvertible?, completion: ( () -> ())? = nil) {
 
-        self.user = user
+        self.user = user?.getUser()
+        self.userConvertible = user
 
-        if let user = user {
+        if let user = self.user {
             self.rating = user.overallRating
             self.setImage(urlRequest: user.searchPic?.urlRequest, completion: completion)
         } else {
@@ -107,7 +109,7 @@ class GZEUserBalloon: UIView {
                 completion?()
             })
         } else {
-            log.error("Failed to set image url for user id=[\(String(describing: user?.id))]")
+            log.error("Failed to set image url for user id=[\(String(describing: self.user?.id))]")
             imageView.image = nil
             //setVisible(true)
             completion?()

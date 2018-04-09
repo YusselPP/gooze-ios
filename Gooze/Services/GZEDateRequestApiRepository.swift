@@ -36,10 +36,14 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                 [
                     "filter": [
                         "where": [
-                            "or": [["status": "sent"], ["status": "received"]],
+                            "or": [
+                                ["status": GZEDateRequest.Status.sent.rawValue],
+                                ["status": GZEDateRequest.Status.received.rawValue],
+                                ["status": GZEDateRequest.Status.accepted.rawValue]
+                            ],
                             "recipientId": userId
                         ],
-                        "include": "sender"
+                        "include": ["sender", "recipient"]
                     ]
                 ] as [String : Any]
             Alamofire.request(GZEDateRequestRouter.find(parameters: params))

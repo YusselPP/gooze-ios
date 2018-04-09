@@ -38,20 +38,22 @@ class GZERatingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        log.debug("\(self) init")
+        
+        viewModel.controller = self
 
         setupInterfaceObjects()
         setUpBindings()
-        setMode(mode: viewModel.mode.value)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.observeMessages()
+        self.viewModel.startObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.viewModel.stopObservingMessages()
+        self.viewModel.stopObservers()
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,17 +75,28 @@ class GZERatingsViewController: UIViewController {
     private func setupInterfaceObjects() {
         contactButton.enableAnimationOnPressed()
         contactButton.setGrayFormat()
+        
+        usernameLabel.setWhiteFontFormat()
+        phraseLabel.setWhiteFontFormat()
+        imagesRatingLabel.setWhiteFontFormat(align: .left)
+        complianceRatingLabel.setWhiteFontFormat(align: .left)
+        dateQualityRatingLabel.setWhiteFontFormat(align: .left)
+        dateRatingLabel.setWhiteFontFormat(align: .left)
+        goozeRatingLabel.setWhiteFontFormat(align: .left)
+        
+        overallRatingView.infoLabel.font = GZEConstants.Font.mainBig
+        
+        imagesRatingView.showInfoLabel = false
+        complianceRatingView.showInfoLabel = false
+        dateQualityRatingView.showInfoLabel = false
+        dateRatingView.showInfoLabel = false
+        goozeRatingView.showInfoLabel = false
     }
 
     private func setUpBindings() {
-        viewModel.mode.signal.observeValues {[weak self] mode in
-            guard let this = self else {return}
-            this.setMode(mode: mode)
-        }
-        
         viewModel.error.signal.observeValues { error in
             error.flatMap {
-                GZEAlertService.shared.showBottomAlert(superview: self.view, text: $0)
+                GZEAlertService.shared.showBottomAlert(text: $0)
             }
         }
         
@@ -104,29 +117,19 @@ class GZERatingsViewController: UIViewController {
         goozeRatingView.reactive.rating <~ viewModel.goozeRating
 
         overallRatingView.reactive.rating <~ viewModel.overallRating
-    }
-
-    func setMode(mode: GZEProfileMode) {
-        var btnTitle: String
-        var selector: Selector
-        if mode == .request {
-            btnTitle = self.viewModel.acceptRequestButtonTitle
-            selector = #selector(self.acceptRequest)
-        } else {
-            btnTitle = self.viewModel.contactButtonTitle
-            selector = #selector(self.contact)
+        
+        contactButton.reactive.title <~ viewModel.actionButtonTitle
+        contactButton.reactive.pressed = CocoaAction(self.viewModel.acceptRequestAction) { [weak self] _ in
+            self?.showLoading()
         }
-        self.contactButton.setTitle(btnTitle, for: .normal)
-        self.contactButton.removeAllTargets()
-        self.contactButton.addTarget(self, action: selector, for: .touchUpInside)
+        
+        viewModel.acceptRequestAction.events.observeValues {[weak self] _ in
+            self?.hideLoading()
+        }
     }
-
-    func acceptRequest() {
-        GZEChatService.shared.openChat(presenter: self, viewModel: viewModel.chatViewModel)
-        viewModel.acceptRequest()
-    }
-
-    func contact() {
-        viewModel.contact()
+    
+    // MARK: - Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

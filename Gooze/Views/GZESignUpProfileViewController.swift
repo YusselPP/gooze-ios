@@ -15,7 +15,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     let profileToPhotoEditSegue = "profileToPhotoEditSegue"
 
-    var viewModel: GZESignUpViewModel!
+    var viewModel: GZEUpdateProfileViewModel!
 
     var updateAction: CocoaAction<UIButton>!
 
@@ -275,7 +275,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func onError(_ error: GZEError) {
-        GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: error.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(text: error.localizedDescription)
     }
 
     // MARK: - UIActions
@@ -434,12 +434,12 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
-        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
     
     // MARK: - Validation
@@ -461,7 +461,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
             }
             msg += error.localizedDescription
         }
-        GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: msg)
+        GZEAlertService.shared.showBottomAlert(text: msg)
     }
 
     // MARK: - Navigation

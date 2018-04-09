@@ -18,12 +18,15 @@
 		8D07BC532060757800ACE09A /* DatesSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D07BC522060757800ACE09A /* DatesSocket.swift */; };
 		8D07BC55206075E700ACE09A /* ChatSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D07BC54206075E700ACE09A /* ChatSocket.swift */; };
 		8D07BC5920607A6000ACE09A /* GZESocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D07BC5820607A6000ACE09A /* GZESocketManager.swift */; };
+		8D0938032075B1B9008AEA00 /* GZEUpdateProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0938022075B1B9008AEA00 /* GZEUpdateProfileViewModel.swift */; };
+		8D0938052075CCE2008AEA00 /* GZEUserConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0938042075CCE2008AEA00 /* GZEUserConvertible.swift */; };
 		8D0E51A4205E2FC70075EA16 /* GZESocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E51A3205E2FC70075EA16 /* GZESocket.swift */; };
 		8D14B3621FB2B919005CE9A9 /* GZEStorageApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */; };
 		8D14B3641FB2BB41005CE9A9 /* GZEFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D14B3631FB2BB41005CE9A9 /* GZEFile.swift */; };
 		8D169AEC204FFC850025C803 /* GZERatingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D169AEB204FFC850025C803 /* GZERatingsViewModel.swift */; };
 		8D169AEE204FFCA20025C803 /* GZERatingsViewModelReadOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D169AED204FFCA20025C803 /* GZERatingsViewModelReadOnly.swift */; };
 		8D169AF020500D900025C803 /* GZERatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D169AEF20500D900025C803 /* GZERatingView.swift */; };
+		8D17C1CA2076F7D400F56D6E /* GZELocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D17C1C92076F7D400F56D6E /* GZELocationService.swift */; };
 		8D192384204EB78D005F6F5F /* GZEGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D192383204EB78D005F6F5F /* GZEGalleryViewController.swift */; };
 		8D192386204EB8FA005F6F5F /* GZEGalleryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D192385204EB8FA005F6F5F /* GZEGalleryViewModel.swift */; };
 		8D192388204EBEA8005F6F5F /* GZEGalleryViewModelReadOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D192387204EBEA8005F6F5F /* GZEGalleryViewModelReadOnly.swift */; };
@@ -41,6 +44,7 @@
 		8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */; };
 		8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2447301F9E9700004330AF /* GZERepositoryError.swift */; };
 		8D27D03E1FBEB14E00263B6C /* GZEDateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */; };
+		8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D290704207827D400C2F865 /* GZEMapSlider.swift */; };
 		8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29A6F82068778C00830E6D /* GZEAlertService.swift */; };
 		8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A4696204C626400581838 /* UIImage+Extension.swift */; };
 		8D357BAF1FD18C8000D6FB87 /* GZEApiStorageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */; };
@@ -162,12 +166,15 @@
 		8D07BC522060757800ACE09A /* DatesSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatesSocket.swift; sourceTree = "<group>"; };
 		8D07BC54206075E700ACE09A /* ChatSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSocket.swift; sourceTree = "<group>"; };
 		8D07BC5820607A6000ACE09A /* GZESocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZESocketManager.swift; sourceTree = "<group>"; };
+		8D0938022075B1B9008AEA00 /* GZEUpdateProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUpdateProfileViewModel.swift; sourceTree = "<group>"; };
+		8D0938042075CCE2008AEA00 /* GZEUserConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserConvertible.swift; sourceTree = "<group>"; };
 		8D0E51A3205E2FC70075EA16 /* GZESocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZESocket.swift; sourceTree = "<group>"; };
 		8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEStorageApiRepository.swift; sourceTree = "<group>"; };
 		8D14B3631FB2BB41005CE9A9 /* GZEFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEFile.swift; sourceTree = "<group>"; };
 		8D169AEB204FFC850025C803 /* GZERatingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERatingsViewModel.swift; sourceTree = "<group>"; };
 		8D169AED204FFCA20025C803 /* GZERatingsViewModelReadOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERatingsViewModelReadOnly.swift; sourceTree = "<group>"; };
 		8D169AEF20500D900025C803 /* GZERatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERatingView.swift; sourceTree = "<group>"; };
+		8D17C1C92076F7D400F56D6E /* GZELocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELocationService.swift; sourceTree = "<group>"; };
 		8D192383204EB78D005F6F5F /* GZEGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEGalleryViewController.swift; sourceTree = "<group>"; };
 		8D192385204EB8FA005F6F5F /* GZEGalleryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEGalleryViewModel.swift; sourceTree = "<group>"; };
 		8D192387204EBEA8005F6F5F /* GZEGalleryViewModelReadOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEGalleryViewModelReadOnly.swift; sourceTree = "<group>"; };
@@ -185,6 +192,7 @@
 		8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserApiRepository.swift; sourceTree = "<group>"; };
 		8D2447301F9E9700004330AF /* GZERepositoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERepositoryError.swift; sourceTree = "<group>"; };
 		8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateHelper.swift; sourceTree = "<group>"; };
+		8D290704207827D400C2F865 /* GZEMapSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapSlider.swift; sourceTree = "<group>"; };
 		8D29A6F82068778C00830E6D /* GZEAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAlertService.swift; sourceTree = "<group>"; };
 		8D2A4696204C626400581838 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApiStorageResponse.swift; sourceTree = "<group>"; };
@@ -337,6 +345,7 @@
 				8D216AAE207144AE008EF7A2 /* DatesSocketError.swift */,
 				8D216AB020714513008EF7A2 /* ChatSocketError.swift */,
 				8D358AC51FBBFA4200F261DC /* GZEError.swift */,
+				8D0938042075CCE2008AEA00 /* GZEUserConvertible.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -385,6 +394,7 @@
 				8DABD903206BDEC600DF9C56 /* GZEActionAlertView.swift */,
 				8DCD97F2206913EE00117030 /* DismissView.swift */,
 				8DBAB6E4206F42FE009586A5 /* Chat */,
+				8D290704207827D400C2F865 /* GZEMapSlider.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -494,6 +504,7 @@
 				8DF32FE02052A97600FC8D14 /* datasources */,
 				8DF32FDF2052A95300FC8D14 /* delegates */,
 				8DA575AB1FC3D5DF0001CE2A /* components */,
+				8DF5CEF3206274B1006C2702 /* GZELoadingViewController.swift */,
 				8DF720D51F9BA8F900485566 /* GZELoginViewController.swift */,
 				8D0551F71FC0164900BC3915 /* GZERegisterCodeViewController.swift */,
 				8D61FB621FEED49A009B1E45 /* GZESignUpProfileViewController.swift */,
@@ -504,7 +515,6 @@
 				8DAC9A17203FE0F000E87814 /* GZEProfileViewController.swift */,
 				8D192383204EB78D005F6F5F /* GZEGalleryViewController.swift */,
 				8D192389204ED189005F6F5F /* GZERatingsViewController.swift */,
-				8DF5CEF3206274B1006C2702 /* GZELoadingViewController.swift */,
 				8D033C5B206EB26400AF47E6 /* GZEChatViewController.swift */,
 			);
 			path = Views;
@@ -530,6 +540,7 @@
 				8DF5CEF5206275A5006C2702 /* GZELoadingViewModel.swift */,
 				8D572DB81F9D334000B824FA /* GZELoginViewModel.swift */,
 				8DC3FED51FA2C8AD00483A0D /* GZESignUpViewModel.swift */,
+				8D0938022075B1B9008AEA00 /* GZEUpdateProfileViewModel.swift */,
 				8DAE96531FC6868200E56740 /* GZEChooseModeViewModel.swift */,
 				8DAE964F1FC684E100E56740 /* GZEActivateGoozeViewModel.swift */,
 				F0DDECE31FA1295600450B2D /* GZESearchGoozeViewModel.swift */,
@@ -562,6 +573,7 @@
 				8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */,
 				8D06CC4F2043A9400034A90C /* GZEMethodPointer.swift */,
 				8D9322B520497C1D00A039B1 /* GZEValidationPattern.swift */,
+				8D17C1C92076F7D400F56D6E /* GZELocationService.swift */,
 				8D29A6F82068778C00830E6D /* GZEAlertService.swift */,
 				8D220734206A740900BC0895 /* GZEDatesService.swift */,
 				8DFAC995206FECC90040DFFB /* GZEChatService.swift */,
@@ -940,10 +952,12 @@
 				F0339AA720408F5E00C675AA /* GZEProfilePageViewController.swift in Sources */,
 				8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */,
 				8D216AB520715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift in Sources */,
+				8D0938032075B1B9008AEA00 /* GZEUpdateProfileViewModel.swift in Sources */,
 				8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */,
 				8D216AB120714513008EF7A2 /* ChatSocketError.swift in Sources */,
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
 				8DF5CEF4206274B1006C2702 /* GZELoadingViewController.swift in Sources */,
+				8D17C1CA2076F7D400F56D6E /* GZELocationService.swift in Sources */,
 				8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */,
 				F00355181FB61244004C778C /* GZEValidationError.swift in Sources */,
 				8D07BC55206075E700ACE09A /* ChatSocket.swift in Sources */,
@@ -954,6 +968,7 @@
 				8D413CB220412D0700CB4B93 /* GZEBackUIBarButtonItem.swift in Sources */,
 				8D6C8D511FB418D200EDBC69 /* GZEImageHelper.swift in Sources */,
 				8DFAC992206FD8840040DFFB /* GZEChatViewModel.swift in Sources */,
+				8D0938052075CCE2008AEA00 /* GZEUserConvertible.swift in Sources */,
 				8DFAC994206FDA910040DFFB /* GZEChatViewModelDates.swift in Sources */,
 				8D5253BC206CC2E6003D95A4 /* GZEDateRequestRepositoryProtocol.swift in Sources */,
 				8D192388204EBEA8005F6F5F /* GZEGalleryViewModelReadOnly.swift in Sources */,
@@ -1017,6 +1032,7 @@
 				8DCD97F12069133900117030 /* GZEUsersList.swift in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,
 				8DAC9A1A203FE17E00E87814 /* GZEProfileViewModel.swift in Sources */,
+				8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */,
 				8D5253BE206CC3A7003D95A4 /* GZEDateRequestApiRepository.swift in Sources */,
 				8DE23E9920260912000B7422 /* UIScrollView+Extension.swift in Sources */,
 				8DC81BEC204E45810099B417 /* GZEProfileViewModelReadOnly.swift in Sources */,

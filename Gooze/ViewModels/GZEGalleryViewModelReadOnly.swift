@@ -23,15 +23,15 @@ class GZEGalleryViewModelReadOnly: GZEProfileViewModelReadOnly, GZEGalleryViewMo
 
     
     // MARK - init
-    override init(user: GZEUser, dateRequestId: String?) {
-        super.init(user: user, dateRequestId: dateRequestId)
+    override init(user: GZEUser) {
+        super.init(user: user)
         log.debug("\(self) init")
 
         populate(user)
     }
 
     private func populate(_ user: GZEUser) {
-        username.value = user.username?.uppercased()
+        username.value = user.username.uppercased()
 
         if let photos = user.photos {
             for (i, photo) in photos.enumerated() {

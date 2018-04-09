@@ -14,6 +14,7 @@ class GZESocketManager: NSObject {
 
     static func createSockets() {
         createDateSocket()
+        createChatSocket()
     }
 
     static func destroyAllSockets() {
@@ -29,6 +30,7 @@ class GZESocketManager: NSObject {
             } else {
                 dateSocket.connect()
             }
+            return
         }
 
         log.debug("Creating dates socket..")
@@ -53,6 +55,7 @@ class GZESocketManager: NSObject {
             } else {
                 chatSocket.connect()
             }
+            return
         }
 
         log.debug("Creating chat socket..")

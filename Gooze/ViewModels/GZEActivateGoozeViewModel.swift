@@ -18,8 +18,8 @@ class GZEActivateGoozeViewModel {
     let sliderValue = MutableProperty<Float>(1)
     let searchLimit = MutableProperty<Int>(5)
 
-    let userResults = MutableProperty<[GZEChatUser]>([])
-    let userOtherResults = MutableProperty<[GZEChatUser]>([])
+    let userResults = MutableProperty<[GZEUserConvertible]>([])
+    let userOtherResults = MutableProperty<[GZEUserConvertible]>([])
 
     let searchViewTitle = "vm.search.viewTitle".localized()
     let zeroResultsMessage = "vm.search.zeroResultsMessage".localized()
@@ -43,14 +43,14 @@ class GZEActivateGoozeViewModel {
     }
     private var _activateGoozeAction: Action<Void, GZEUser, GZEError>?
 
-    var searchGoozeAction: Action<Void, [GZEUser], GZEError> {
+    var searchGoozeAction: Action<Void, [GZEUserConvertible], GZEError> {
         if let searchGoozeAction = _searchGoozeAction {
             return searchGoozeAction
         }
         _searchGoozeAction = createSearchGoozeAction()
         return _searchGoozeAction!
     }
-    private var _searchGoozeAction: Action<Void, [GZEUser], GZEError>?
+    private var _searchGoozeAction: Action<Void, [GZEUserConvertible], GZEError>?
 
     var findGoozeAction: Action<String, GZEUser, GZEError> {
         if let findGoozeAction = _findGoozeAction {
@@ -110,9 +110,9 @@ class GZEActivateGoozeViewModel {
         }
     }
 
-    private func createSearchGoozeAction() -> Action<Void, [GZEUser], GZEError> {
+    private func createSearchGoozeAction() -> Action<Void, [GZEUserConvertible], GZEError> {
         log.debug("Creating search gooze action")
-        return Action<Void, [GZEUser], GZEError>{[weak self] in
+        return Action<Void, [GZEUserConvertible], GZEError>{[weak self] in
             guard let this = self else {
                 log.error("self disposed")
                 return SignalProducer(error: .repository(error: .UnexpectedError))

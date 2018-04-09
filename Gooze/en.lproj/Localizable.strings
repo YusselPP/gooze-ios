@@ -23,6 +23,9 @@
 
 // Protocols/DatesSocketError
 "error.socket.dates.requestAlreadySent"="Your request has been sent";
+"error.socket.dates.invalidSatus"="Request already accepted or rejected";
+"error.socket.dates.noAck"="Unable to establish communication with server";
+
 "error.socket.dates.unexpected"="Unexpected Error. Please contact support";
 
 // Models/GZEUser
@@ -115,6 +118,9 @@
 // Views/GZEProfileViewController
 "vm.profile.contactTitle"="Contact";
 "vm.profile.acceptRequestTitle"="Accept request";
+"vm.profile.acceptedRequestButtonTitle"="Chat";
+"vm.profile.rejectedRequestButtonTitle"="Rejected";
+"vm.profile.sentRequestButtonTitle"="Request sent";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Unrated";
@@ -129,6 +135,10 @@
 
 "service.chat.messageReceived"="%@ has sent you a message";
 
+// Services/Location
+"service.location.disabled"="Location service is disabled. Please enable it in Settings.";
+
+// GoozeApi/GZEApiError
 "login failed"="Invalid username or password";
 
 

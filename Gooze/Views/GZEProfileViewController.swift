@@ -31,23 +31,23 @@ class GZEProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         log.debug("\(self) init")
+        
+        viewModel.controller = self
+        
 
         setupInterfaceObjects()
         setUpBindings()
-        setMode(mode: viewModel.mode.value)
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.observeMessages()
+        self.viewModel.startObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.viewModel.stopObservingMessages()
+        self.viewModel.stopObservers()
     }
     
     override func didReceiveMemoryWarning() {
@@ -65,11 +65,6 @@ class GZEProfileViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
-    // MARK: - Deinitializers
-    deinit {
-        log.debug("\(self) disposed")
-    }
 
     private func setupInterfaceObjects() {
         usernameLabel.setWhiteFontFormat()
@@ -90,14 +85,9 @@ class GZEProfileViewController: UIViewController {
 
     private func setUpBindings() {
 
-        viewModel.mode.signal.observeValues {[weak self] mode in
-            guard let this = self else {return}
-            this.setMode(mode: mode)
-        }
-
         viewModel.error.signal.observeValues { error in
             error.flatMap {
-                GZEAlertService.shared.showBottomAlert(superview: self.view, text: $0)
+                GZEAlertService.shared.showBottomAlert(text: $0)
             }
         }
 
@@ -113,29 +103,19 @@ class GZEProfileViewController: UIViewController {
         interestsLabel.reactive.text <~ viewModel.interestedIn
 
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
-    }
-
-    func setMode(mode: GZEProfileMode) {
-        var btnTitle: String
-        var selector: Selector
-        if mode == .request {
-            btnTitle = self.viewModel.acceptRequestButtonTitle
-            selector = #selector(self.acceptRequest)
-        } else {
-            btnTitle = self.viewModel.contactButtonTitle
-            selector = #selector(self.contact)
+        
+        contactButton.reactive.title <~ viewModel.actionButtonTitle
+        contactButton.reactive.pressed = CocoaAction(self.viewModel.acceptRequestAction) { [weak self] _ in
+            self?.showLoading()
         }
-        self.contactButton.setTitle(btnTitle, for: .normal)
-        self.contactButton.removeAllTargets()
-        self.contactButton.addTarget(self, action: selector, for: .touchUpInside)
+        
+        viewModel.acceptRequestAction.events.observeValues {[weak self] _ in
+            self?.hideLoading()
+        }
     }
-
-    func contact() {
-        viewModel.contact()
-    }
-
-    func acceptRequest() {
-        GZEChatService.shared.openChat(presenter: self, viewModel: viewModel.chatViewModel)
-        viewModel.acceptRequest()
+    
+    // MARK: - Deinitializers
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

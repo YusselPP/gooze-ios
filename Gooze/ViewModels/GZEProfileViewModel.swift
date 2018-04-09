@@ -11,20 +11,19 @@ import ReactiveSwift
 
 protocol GZEProfileViewModel {
 
-    var mode: MutableProperty<GZEProfileMode> { get }
+    var mode: GZEProfileMode { get set}
+    var dateRequest: GZEDateRequest? { get set }
+    var acceptRequestAction: Action<Void, GZEDateRequest, GZEError>! {get set}
     var error: MutableProperty<String?> { get }
 
-    var contactButtonTitle: String { get }
-    var acceptRequestButtonTitle: String { get }
+    var actionButtonTitle: MutableProperty<String> { get }
     
     var chatViewModel: GZEChatViewModel { get }
-
-    func contact()
-
-    func acceptRequest()
     
-    func observeMessages()
-    func stopObservingMessages()
+    weak var controller: UIViewController? { get set }
+
+    func startObservers()
+    func stopObservers()
 }
 
 enum GZEProfileMode {

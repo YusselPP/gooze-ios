@@ -133,7 +133,7 @@ class GZEChooseModeViewController: UIViewController {
                 viewController.scene = goozeScene
             } else {
                 log.error("Unable to instantiate GZEActivateGoozeViewController")
-                GZEAlertService.shared.showBottomAlert(superview: self.view, text: GZEError.repository(error: .UnexpectedError).localizedDescription)
+                GZEAlertService.shared.showBottomAlert(text: GZEError.repository(error: .UnexpectedError).localizedDescription)
             }
         }
     }

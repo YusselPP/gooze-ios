@@ -10,8 +10,17 @@ import UIKit
 
 class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    var users = [GZEChatUser]()
+    var users = [GZEUserConvertible]()
     var onUserTap: ((UITapGestureRecognizer, GZEUserBalloon) -> ())?
+    
+    private var padding: CGFloat {
+        switch GZEConstants.horizontalSize {
+        case .compact:
+            return 8
+        default:
+            return 15
+        }
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -36,18 +45,24 @@ class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         log.debug("bounds: \(self.bounds)")
 
-        let minSize = min(bounds.width, bounds.height)
-        let size = max(minSize/3 - 2 * 15, 100)
+        let maxSize: CGFloat = 200
+        let minViewSize = min(bounds.width, bounds.height)
+        
+        var size = minViewSize/2 - 2 * self.padding
+
+        if size > maxSize {
+            size = minViewSize/3 - 2 * self.padding
+        }
 
         return CGSize(width: size, height: size);
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 15
+        return self.padding
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(15, 15, 15, 15)
+        return UIEdgeInsetsMake(self.padding, self.padding, self.padding, self.padding)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -77,7 +92,7 @@ class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, 
 
 class GZEUserCollectionViewCell: UICollectionViewCell {
 
-    var user: GZEChatUser? {
+    var user: GZEUserConvertible? {
         didSet {
             setUser(self.user)
         }
@@ -125,7 +140,7 @@ class GZEUserCollectionViewCell: UICollectionViewCell {
         self.rightAnchor.constraint(equalTo: userBalloon.rightAnchor).isActive = true
     }
 
-    private func setUser(_ user: GZEChatUser?) {
+    private func setUser(_ user: GZEUserConvertible?) {
         userBalloon.setUser(user)
     }
 

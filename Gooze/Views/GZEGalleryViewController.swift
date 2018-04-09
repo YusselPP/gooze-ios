@@ -35,6 +35,7 @@ class GZEGalleryViewController: UIViewController {
         super.viewDidLoad()
         log.debug("\(self) init")
 
+        viewModel.controller = self
         // Do any additional setup after loading the view.
         thumbnailImages.append(thumbnail1)
         thumbnailImages.append(thumbnail2)
@@ -44,8 +45,6 @@ class GZEGalleryViewController: UIViewController {
         setupInterfaceObjects()
 
         setupBindings()
-
-        setMode(mode: viewModel.mode.value)
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,12 +54,12 @@ class GZEGalleryViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.observeMessages()
+        self.viewModel.startObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.viewModel.stopObservingMessages()
+        self.viewModel.stopObservers()
     }
 
     // MARK: - UIAction
@@ -92,18 +91,14 @@ class GZEGalleryViewController: UIViewController {
 
         contactButton.enableAnimationOnPressed()
         contactButton.setGrayFormat()
+        usernameLabel.setWhiteFontFormat()
         view.layoutIfNeeded()
     }
 
     private func setupBindings() {
-        viewModel.mode.signal.observeValues {[weak self] mode in
-            guard let this = self else {return}
-            this.setMode(mode: mode)
-        }
-        
         viewModel.error.signal.observeValues { error in
             error.flatMap {
-                GZEAlertService.shared.showBottomAlert(superview: self.view, text: $0)
+                GZEAlertService.shared.showBottomAlert(text: $0)
             }
         }
         
@@ -116,6 +111,14 @@ class GZEGalleryViewController: UIViewController {
             }
             thumbnailImage.reactive.imageUrlRequest <~ viewModel.thumbnails[i]
         }
+        
+        contactButton.reactive.title <~ viewModel.actionButtonTitle
+        contactButton.reactive.pressed = CocoaAction(self.viewModel.acceptRequestAction) { [weak self] _ in
+            self?.showLoading()
+        }
+        viewModel.acceptRequestAction.events.observeValues {[weak self] _ in
+            self?.hideLoading()
+        }
 
         // UI bindings
         mainImageView.reactive.image <~ selectedThumbnail
@@ -125,30 +128,6 @@ class GZEGalleryViewController: UIViewController {
         if pos < thumbnailImages.count {
             selectedThumbnail.value = thumbnailImages[pos].image
         }
-    }
-
-    func setMode(mode: GZEProfileMode) {
-        var btnTitle: String
-        var selector: Selector
-        if mode == .request {
-            btnTitle = self.viewModel.acceptRequestButtonTitle
-            selector = #selector(self.acceptRequest)
-        } else {
-            btnTitle = self.viewModel.contactButtonTitle
-            selector = #selector(self.contact)
-        }
-        self.contactButton.setTitle(btnTitle, for: .normal)
-        self.contactButton.removeAllTargets()
-        self.contactButton.addTarget(self, action: selector, for: .touchUpInside)
-    }
-
-    func contact() {
-        viewModel.contact()
-    }
-
-    func acceptRequest() {
-        GZEChatService.shared.openChat(presenter: self, viewModel: viewModel.chatViewModel)
-        viewModel.acceptRequest()
     }
 
     // MARK: - Deinitializers

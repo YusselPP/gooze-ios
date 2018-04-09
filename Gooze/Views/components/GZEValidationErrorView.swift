@@ -13,12 +13,20 @@ class GZEValidationErrorView: UIView {
     open var text: String = "" {
         didSet {
             self.textLabel.text = self.text
-            UIView.animate(withDuration: 0.5) {
-                self.alpha = 1
-            }
         }
     }
 
+    open var onTapped: (() -> ())?
+    open var onDismiss: (() -> ())?
+    
+    private var shown = false
+    private var isShowing = false
+    private var isDismissing = false
+    private var dismissWhenShown = false
+    private var dismissWhenShownCompletion: (() -> Void)?
+    private var showWhenDismessed = false
+    private var showWhenDismessedCompletion: (() -> Void)?
+    
     private let discardButton = DismissView()
 
     private let textView = UIView()
@@ -33,11 +41,80 @@ class GZEValidationErrorView: UIView {
         super.init(coder: aDecoder)
         initialize()
     }
-
-    open func dismiss() {
-        UIView.animate(withDuration: 0.5) {[weak self] in
-            self?.alpha = 0
+    
+    open func show(completion onComplete: (() -> Void)? = nil) {
+        
+        if self.isShowing || shown {
+            return
         }
+        
+        if self.isDismissing {
+            self.showWhenDismessed = true
+            self.showWhenDismessedCompletion = onComplete
+            return
+        }
+        
+        self.isShowing = true
+        
+        UIView.animate(withDuration: 0.5, animations: {[weak self] in
+            self?.alpha = 1
+        }, completion: {[weak self] _ in
+            guard let this = self else {
+                log.error("self disposed")
+                return
+            }
+            
+            this.isShowing = false
+            this.shown = true
+            onComplete?()
+            
+            if this.dismissWhenShown {
+                this.dismissWhenShown = false
+                this.dismiss(completion: onComplete)
+            }
+        })
+    }
+
+    open func dismiss(completion onComplete: (() -> Void)? = nil) {
+        
+        if self.isDismissing || !shown {
+            return
+        }
+        
+        if self.isShowing {
+            self.dismissWhenShown = true
+            self.dismissWhenShownCompletion = onComplete
+            return
+        }
+        
+        self.onDismiss?()
+        self.isDismissing = true
+        
+        UIView.animate(withDuration: 0.5, animations: {[weak self] in
+            self?.alpha = 0
+        }, completion: {[weak self] _ in
+            guard let this = self else {
+                log.error("self disposed")
+                return
+            }
+            
+            this.isDismissing = false
+            this.shown = false
+            onComplete?()
+            
+            if this.showWhenDismessed {
+                this.showWhenDismessed = false
+                this.show(completion: onComplete)
+            }
+        })
+    }
+    
+    open func handleTapped() {
+        self.onTapped?()
+    }
+    
+    func handleDismiss() {
+        self.dismiss()
     }
 
     private func initialize() {
@@ -48,7 +125,8 @@ class GZEValidationErrorView: UIView {
 
         self.alpha = 0
         self.backgroundColor = GZEConstants.Color.validationErrorViewBg
-        self.discardButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismiss)))
+        self.discardButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapped)))
 
 
         self.textLabel.font = GZEConstants.Font.main

@@ -51,8 +51,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         log.debug("\(self) init")
 
-        GZEConstants.horizontalSize = traitCollection.horizontalSizeClass
-
         setupInterfaceObjects()
         setupBindings()
 
@@ -148,7 +146,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     func onError(_ error: GZEError) {
-        GZEAlertService.shared.showBottomAlert(superview: self.scrollView, text: error.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(text: error.localizedDescription)
     }
 
     func onLogin(_ accesToken: GZEAccesToken) -> Void {
@@ -284,12 +282,12 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     // MARK: - KeyboardNotifications
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
-        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
     // MARK: - Deinitializers

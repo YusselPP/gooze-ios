@@ -9,7 +9,7 @@
 import Foundation
 import Gloss
 
-class GZEChatUser: NSObject, Glossy {
+class GZEChatUser: GZEUserConvertible, Glossy {
 
     let id: String
     let username: String
@@ -102,12 +102,18 @@ class GZEChatUser: NSObject, Glossy {
             "goozeRating" ~~> self.goozeRating,
             ])
     }
+    
+    // MARK: - GZEUserConvertible
+    override func getUser() -> GZEChatUser {
+        return self
+    }
 
     // MARK: - deinitializer
     deinit {
         log.debug("\(self) disposed")
     }
 }
+
 
 // MARK: Hashable
 

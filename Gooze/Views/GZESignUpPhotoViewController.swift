@@ -16,7 +16,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     var blur: GZEBlur?
 
-    var viewModel: GZESignUpViewModel!
+    var viewModel: GZEUpdateProfileViewModel!
 
     var saveProfileAction: CocoaAction<UIButton>!
     var saveSearchAction: CocoaAction<UIButton>!
@@ -516,7 +516,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         let transform = view.transform.scaledBy(x: xScale, y: yScale)
 
-        guard transform.a >= 1 && transform.d >= 1 else {
+        guard transform.a >= 0.6 && transform.d >= 0.6 else {
             log.debug("Reached min size")
             return
         }
@@ -737,7 +737,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func onError(err: GZEError) {
-        GZEAlertService.shared.showBottomAlert(superview: self.view, text: err.localizedDescription)
+        GZEAlertService.shared.showBottomAlert(text: err.localizedDescription)
     }
 
     // MARK: - Scenes
