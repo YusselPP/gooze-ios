@@ -34,7 +34,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     
     var chatViewModel: GZEChatViewModel {
         log.debug("chatViewModel called")
-        return GZEChatViewModelDates(recipient: self.user.toChatUser())
+        return GZEChatViewModelDates(recipientId: self.user.id, username: self.user.username)
     }
     weak var controller: UIViewController?
     

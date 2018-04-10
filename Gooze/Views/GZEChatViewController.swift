@@ -55,6 +55,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        GZEChatService.shared.activeRecipientId = self.viewModel.recipientId
         registerForKeyboarNotifications(
             observer: self,
             willShowSelector: #selector(keyboardWillShow(notification:)),
@@ -64,6 +65,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        GZEChatService.shared.activeRecipientId = nil
         deregisterFromKeyboardNotifications(observer: self)
     }
 

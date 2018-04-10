@@ -24,12 +24,15 @@ class GZEChatMessage: NSObject, Glossy {
 
     let id: String?
     let text: String
-    let sender: GZEChatUser
-    let recipient: GZEChatUser
+    //let sender: GZEChatUser
+    let senderId: String
+    let recipientId: String
+    //let recipient: GZEChatUser
     let type: MessageType
     let status: Status
 
     let createdAt: Date
+    let updatedAt: Date
 
 
     var isInfo: Bool {
@@ -38,38 +41,47 @@ class GZEChatMessage: NSObject, Glossy {
 
     // MARK: - init
     // new user message
-    init(text: String, sender: GZEChatUser, recipient: GZEChatUser) {
+    init(text: String, senderId: String, recipientId: String /*sender: GZEChatUser, recipient: GZEChatUser*/) {
         self.id = nil
         self.text = text
-        self.sender = sender
-        self.recipient = recipient
+        // self.sender = sender
+        // self.recipient = recipient
+        self.senderId = senderId
+        self.recipientId = recipientId
         self.type = .user
         self.status = .sent
         self.createdAt = Date()
+        self.updatedAt = Date()
         super.init()
     }
 
     // new message
-    init(text: String, sender: GZEChatUser, recipient: GZEChatUser, type: MessageType) {
+    init(text: String, senderId: String, recipientId: String /*sender: GZEChatUser, recipient: GZEChatUser*/, type: MessageType) {
         self.id = nil
         self.text = text
-        self.sender = sender
-        self.recipient = recipient
+        // self.sender = sender
+        // self.recipient = recipient
+        self.senderId = senderId
+        self.recipientId = recipientId
         self.type = type
         self.status = .sent
         self.createdAt = Date()
+        self.updatedAt = Date()
         super.init()
     }
 
     // Existing message
-    init(id: String, text: String, sender: GZEChatUser, recipient: GZEChatUser, type: MessageType, status: Status, createdAt: Date) {
+    init(id: String, text: String, senderId: String, recipientId: String /*sender: GZEChatUser, recipient: GZEChatUser*/, type: MessageType, status: Status, createdAt: Date, updatedAt: Date) {
         self.id = id
         self.text = text
-        self.sender = sender
-        self.recipient = recipient
+        // self.sender = sender
+        // self.recipient = recipient
+        self.senderId = senderId
+        self.recipientId = recipientId
         self.type = type
         self.status = status
         self.createdAt = createdAt
+        self.updatedAt = updatedAt
         super.init()
     }
 
@@ -77,11 +89,14 @@ class GZEChatMessage: NSObject, Glossy {
     required init?(json: JSON) {
         guard
             let text: String = "text" <~~ json,
-            let sender: GZEChatUser = "sender" <~~ json,
-            let recipient: GZEChatUser = "recipient" <~~ json,
+            //let sender: GZEChatUser = "sender" <~~ json,
+            //let recipient: GZEChatUser = "recipient" <~~ json,
+            let senderId: String = "senderId" <~~ json,
+            let recipientId: String = "recipientId" <~~ json,
             let type: MessageType = "type" <~~ json,
             let status: Status = "status" <~~ json,
-            let createdAt: Date = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json)
+            let createdAt: Date = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json),
+            let updatedAt: Date = Decoder.decode(dateForKey: "updatedAt", dateFormatter: GZEApi.dateFormatter)(json)
         else {
             log.debug("Unable to instantiate. Missing required parameter: \(json)")
             return nil
@@ -89,11 +104,14 @@ class GZEChatMessage: NSObject, Glossy {
 
         self.id = "id" <~~ json
         self.text = text
-        self.sender = sender
-        self.recipient = recipient
+        //self.sender = sender
+        //self.recipient = recipient
+        self.senderId = senderId
+        self.recipientId = recipientId
         self.type = type
         self.status = status
         self.createdAt = createdAt
+        self.updatedAt = updatedAt
 
         super.init()
 
@@ -102,12 +120,16 @@ class GZEChatMessage: NSObject, Glossy {
 
     func toJSON() -> JSON? {
         return jsonify([
+            "id" ~~> self.id,
             "text" ~~> self.text,
-            "sender" ~~> self.sender,
-            "recipient" ~~> self.recipient,
+            //"sender" ~~> self.sender,
+            //"recipient" ~~> self.recipient,
+            "senderId" ~~> self.senderId,
+            "recipientId" ~~> self.recipientId,
             "type" ~~> self.type,
             "status" ~~> self.status,
             Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(self.createdAt),
+            Encoder.encode(dateForKey: "updatedAt", dateFormatter: GZEApi.dateFormatter)(self.updatedAt),
         ])
     }
 
@@ -115,7 +137,7 @@ class GZEChatMessage: NSObject, Glossy {
         guard let user = user else {
             return false
         }
-        return self.sender == user
+        return self.senderId == user.id
     }
 
     // MARK: - Deinitializer

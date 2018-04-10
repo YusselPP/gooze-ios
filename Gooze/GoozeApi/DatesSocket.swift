@@ -73,7 +73,7 @@ class DatesSocket: GZESocket {
             if let topVC = self?.topViewController {
                 let message = String(format: "service.dates.requestAccepted".localized(), recipient.username)
                 GZEAlertService.shared.showTopAlert(text: message) {
-                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(recipient: recipient))
+                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(recipientId: recipient.id, username: recipient.username))
                 }
             }
             

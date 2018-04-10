@@ -29,14 +29,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let sendButtonEnabled = MutableProperty<Bool>(true)
     var sendButtonAction: CocoaAction<UIButton>!
 
-    var recipient: GZEChatUser {
-        didSet {
-            self.recipientDidSet(self.recipient)
-        }
-    }
+    let recipientId: String
 
     // MARK: - init
-    init(recipient: GZEChatUser) {
+    init(recipientId: String, username: String) {
         var mode: GZEChatViewMode
         if let isActivated = GZEAuthService.shared.authUser?.isActivated, isActivated {
             mode = .gooze
@@ -45,23 +41,17 @@ class GZEChatViewModelDates: GZEChatViewModel {
         }
 
         self.mode = mode
-        self.recipient = recipient
+        self.recipientId = recipientId
+        self.username.value = username
         
         log.debug("\(self) init")
-        
-        self.recipientDidSet(self.recipient)
 
         self.topButtonAction = CocoaAction(self.createTopButtonAction())
         self.sendButtonAction = CocoaAction(self.createSendAction())
 
-        GZEChatService.shared.activeRecipientId = recipient.id
         messages.bindingTarget <~ GZEChatService.shared.receivedMessages.map {
-            $0[recipient.id] ?? []
+            $0[recipientId] ?? []
         }
-    }
-    
-    private func recipientDidSet(_ recipient: GZEChatUser) {
-        self.username.value = self.recipient.username
     }
 
     // MARK: - Actions
@@ -101,11 +91,13 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
             let message = GZEChatMessage(
                 text: messageTextTrim,
-                sender: sender.toChatUser(),
-                recipient: this.recipient
+                //sender: sender.toChatUser(),
+                //recipient: this.recipient
+                senderId: sender.id,
+                recipientId: this.recipientId
             )
 
-            GZEChatService.shared.send(message: message)
+            GZEChatService.shared.send(message: message, username: sender.username)
             
             this.inputMessage.value = ""
 

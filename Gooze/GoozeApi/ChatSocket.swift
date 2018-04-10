@@ -35,21 +35,23 @@ class ChatSocket: GZESocket {
                 log.error("Unable to parse data[0], expected data[0] to be a messageJson, found: \(data[0])")
                 return
             }
+            let username: String = data[1] as? String ?? ""
             log.debug("Message received : \(String(describing: message.toJSON()))")
+            log.debug("Message username: \(username)")
 
-            GZEChatService.shared.addReceivedMessage(message)
+            GZEChatService.shared.addReceivedMessage(message, username: username)
             
             ack.with()
         }
         
-        self.on(.dateRequestReceivedAck) {data, ack in
+        self.on(.messageReceivedAck) {data, ack in
             guard let messageJson = data[0] as? JSON, let message = GZEChatMessage(json: messageJson) else {
                 log.error("Unable to parse data[0], expected data[0] to be a messageJson, found: \(data[0])")
                 return
             }
             log.debug("Message received : \(String(describing: message.toJSON()))")
             
-            GZEChatService.shared.addReceivedMessage(message)
+            GZEChatService.shared.addSentMessage(message)
             
             ack.with()
         }

@@ -51,9 +51,19 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
 
         self.messages.signal.observeValues {[weak self] messages in
             // TODO: reload only changes
-            log.debug("messages changed, reloading table data")
-            self?.reloadData()
-            self?.scrollToBottom()
+            guard let this = self else {return}
+            log.debug("messages changed: \(String(describing: messages.toJSONArray()))")
+            // self?.reloadData()
+            let numberOfRows = this.numberOfRows(inSection: 0)
+            let numberOfMessages = messages.count
+            
+            log.debug("number of rows: \(numberOfRows)")
+            log.debug("number of messages: \(messages.count)")
+            
+            if numberOfMessages > numberOfRows {
+                this.insertRows(at: [IndexPath(row: numberOfRows, section: 0)], with: UITableViewRowAnimation.automatic)
+                //this.scrollToBottom()
+            }
         }
     }
 

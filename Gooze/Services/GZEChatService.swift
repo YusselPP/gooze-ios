@@ -27,7 +27,7 @@ class GZEChatService: NSObject {
         super.init()
     }
               
-    func send(message: GZEChatMessage) {
+    func send(message: GZEChatMessage, username: String) {
         log.debug("Sending message..\(String(describing: message.toJSON()))")
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
@@ -39,8 +39,9 @@ class GZEChatService: NSObject {
             return
         }
 
+        log.debug("timestamp: \(Date().timeIntervalSince1970)")
         self.addSentMessage(message)
-        chatSocket.emitWithAck(.sendMessage, messageJson).timingOut(after: 5) {[weak self] data in
+        chatSocket.emitWithAck(.sendMessage, messageJson, username).timingOut(after: 5) {[weak self] data in
             log.debug("Message sent. Ack data: \(data)")
             
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -54,7 +55,12 @@ class GZEChatService: NSObject {
                 
             } else if let updatedMessageJson = data[1] as? JSON, let updatedMessage = GZEChatMessage(json: updatedMessageJson) {
                 
-                self?.addSentMessage(updatedMessage)
+                if let index = self?.receivedMessages.value[message.recipientId]?.index(where: { $0 === message} ) {
+                    log.debug("message found, at index: \(index)")
+                    self?.receivedMessages.value[message.recipientId]?[index] = updatedMessage
+                }
+                
+                // self?.addSentMessage(updatedMessage)
                 log.debug("Message successfully sent")
                 
             } else {
@@ -67,7 +73,7 @@ class GZEChatService: NSObject {
         var receivedMessages = self.receivedMessages.value
         var recipientMessages: [GZEChatMessage]
 
-        let recipientId = message.recipient.id 
+        let recipientId = message.recipientId
 
         if
             receivedMessages[recipientId] != nil,
@@ -81,16 +87,16 @@ class GZEChatService: NSObject {
             recipientMessages = []
         }
 
-        recipientMessages.upsert(message) {$0 == message}
+        recipientMessages.upsert(message) { $0 == message }
         receivedMessages[recipientId] = recipientMessages
         self.receivedMessages.value = receivedMessages
     }
     
-    func addReceivedMessage(_ message: GZEChatMessage) {
+    func addReceivedMessage(_ message: GZEChatMessage, username: String) {
         var receivedMessages = self.receivedMessages.value
         var senderMessages: [GZEChatMessage]
 
-        let senderId = message.sender.id
+        let senderId = message.senderId
 
         if
             receivedMessages[senderId] != nil,
@@ -104,10 +110,10 @@ class GZEChatService: NSObject {
             senderMessages = []
 
             if let topVC = UIApplication.topViewController() {
-                let messageReceived = String(format: "service.chat.messageReceived".localized(), message.sender.username)
+                let messageReceived = String(format: "service.chat.messageReceived".localized(), username)
                 GZEAlertService.shared.showTopAlert(text: messageReceived) {
                     //TODO: manage chat mode with client mode property instead of sending to vm
-                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(recipient: message.sender))
+                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(recipientId: message.senderId, username: username))
                 }
             }
         }
