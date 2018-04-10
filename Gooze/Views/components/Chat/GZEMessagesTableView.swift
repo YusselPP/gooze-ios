@@ -32,11 +32,11 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
     
     func scrollToBottom(){
         if self.messages.value.count > 0 {
-            DispatchQueue.main.async { [weak self] in
-                guard let this = self else {return}
-                let indexPath = IndexPath(row: this.messages.value.count-1, section: 0)
-                this.scrollToRow(at: indexPath, at: .bottom, animated: true)
-            }
+            //DispatchQueue.main.async { [weak self] in
+                //guard let this = self else {return}
+                let indexPath = IndexPath(row: self.messages.value.count-1, section: 0)
+                self.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            //}
         }
     }
 
@@ -52,8 +52,7 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         self.messages.signal.observeValues {[weak self] messages in
             // TODO: reload only changes
             guard let this = self else {return}
-            log.debug("messages changed: \(String(describing: messages.toJSONArray()))")
-            // self?.reloadData()
+            //log.debug("messages changed: \(String(describing: messages.toJSONArray()))")
             let numberOfRows = this.numberOfRows(inSection: 0)
             let numberOfMessages = messages.count
             
@@ -61,8 +60,10 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
             log.debug("number of messages: \(messages.count)")
             
             if numberOfMessages > numberOfRows {
-                this.insertRows(at: [IndexPath(row: numberOfRows, section: 0)], with: UITableViewRowAnimation.automatic)
-                //this.scrollToBottom()
+                this.insertRows(at: [IndexPath(row: numberOfRows, section: 0)], with: UITableViewRowAnimation.none)
+                this.scrollToBottom()
+            } else if numberOfMessages < numberOfRows {
+                // TODO: delete rows
             }
         }
     }
