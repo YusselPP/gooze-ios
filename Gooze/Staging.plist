@@ -5,9 +5,9 @@
 	<key>AppTitle</key>
 	<string>Gooze</string>
 	<key>GoozeApiUrl</key>
-	<string>http://727adae6.ngrok.io/api</string>
+	<string>http://216.250.114.156/staging/api</string>
 	<key>LogLevel</key>
-	<string>debug</string>
+	<string>error</string>
 	<key>LogAppID</key>
 	<string>v6g2XV</string>
 	<key>LogAppSecret</key>
