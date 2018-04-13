@@ -11,6 +11,16 @@ import SocketIO
 
 class GZESocketManager: NSObject {
     static let shared = SocketClientManager.sharedManager
+    
+    static func getSocketConfig() -> SocketIOClientConfiguration {
+        var config: SocketIOClientConfiguration = [.compress, .log(false)]
+        
+        if let socketPath = GZEAppConfig.socketPath {
+            config.insert(.path(socketPath))
+        }
+        
+        return config
+    }
 
     static func createSockets() {
         createDateSocket()
@@ -34,7 +44,7 @@ class GZESocketManager: NSObject {
         }
 
         log.debug("Creating dates socket..")
-        let socket = DatesSocket(socketURL: URL(string: GZEAppConfig.goozeApiUrl)!, config: [.compress, .log(false)])
+        let socket = DatesSocket(socketURL: URL(string: GZEAppConfig.goozeApiUrl)!, config: getSocketConfig())
 
         socket.joinNamespace(DatesSocket.namespace)
         socket.connect()
@@ -59,7 +69,7 @@ class GZESocketManager: NSObject {
         }
 
         log.debug("Creating chat socket..")
-        let socket = ChatSocket(socketURL: URL(string: GZEAppConfig.goozeApiUrl)!, config: [.compress, .log(false)])
+        let socket = ChatSocket(socketURL: URL(string: GZEAppConfig.goozeApiUrl)!, config: getSocketConfig())
 
         socket.joinNamespace(ChatSocket.namespace)
         socket.connect()

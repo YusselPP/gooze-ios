@@ -71,6 +71,11 @@ class GZEAppConfig {
     static var appTitle: String {
         return getValue("AppTitle", defaultValue: "Gooze")
     }
+    
+    // "/staging/socket.io"
+    static var socketPath: String? {
+        return getValue("SocketPath", defaultValue: nil)
+    }
 
 
     // Mark: Load config file

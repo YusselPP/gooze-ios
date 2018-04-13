@@ -14,5 +14,7 @@
 	<string>ypzfjdx2bffbxSqjoxebh3qmoiznmohu</string>
 	<key>LogAppKey</key>
 	<string>vskgnz6i2hmIdQ04Q0mjmelZz7bf7txR</string>
+	<key>SocketPath</key>
+	<string>/staging/socket.io</string>
 </dict>
 </plist>
