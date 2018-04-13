@@ -53,9 +53,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
         setupInterfaceObjects()
         setupBindings()
-
-        viewModel.email.value = "admin@gooze.com"
-        viewModel.password.value = "123admin"
     }
 
     override func viewWillAppear(_ animated: Bool) {
