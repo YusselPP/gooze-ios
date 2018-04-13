@@ -29,6 +29,7 @@ class GZESocketManager: NSObject {
 
     static func destroyAllSockets() {
         destroyDateSocket()
+        destroyChatSocket()
     }
 
     static func createDateSocket() {
