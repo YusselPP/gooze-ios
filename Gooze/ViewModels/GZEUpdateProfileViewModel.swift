@@ -8,7 +8,6 @@
 
 import Foundation
 import ReactiveSwift
-import iCarousel
 import Validator
 
 class GZEUpdateProfileViewModel: NSObject {

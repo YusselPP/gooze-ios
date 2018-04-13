@@ -14,7 +14,7 @@ target 'Gooze' do
   pod 'Alamofire', '~> 4.5'
   pod 'AlamofireImage', '~> 3.3'
   pod 'ALCameraViewController', '~> 2.0.3'
-  pod 'iCarousel', '~> 1.8.3'
+  # pod 'iCarousel', '~> 1.8.3'
   pod 'Validator'
   # pod 'Cosmos', '~> 11.0'
   pod 'FloatRatingView', '~> 2.0.0'
