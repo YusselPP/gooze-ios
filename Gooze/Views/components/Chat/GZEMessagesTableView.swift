@@ -70,6 +70,13 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
 
 
     // MARK: - UITableViewDelegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < 40 {
+            log.debug("scroll top limit reached. Requesting older messages")
+            
+            // retrieveHistory(offset: self.messages.value.count + 20, limit: 20)
+        }
+    }
 
 
     // MARK: - UITableViewDataSource

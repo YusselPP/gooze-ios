@@ -18,7 +18,7 @@ protocol GZEProfileViewModel {
 
     var actionButtonTitle: MutableProperty<String> { get }
     
-    var chatViewModel: GZEChatViewModel { get }
+    var chatViewModel: GZEChatViewModel? { get }
     
     weak var controller: UIViewController? { get set }
 

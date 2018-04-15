@@ -41,7 +41,7 @@ class GZEValidationErrorView: UIView {
         super.init(coder: aDecoder)
         initialize()
     }
-    
+
     open func show(completion onComplete: (() -> Void)? = nil) {
         
         if self.isShowing || shown {

@@ -23,10 +23,11 @@ class GZEChatMessage: NSObject, Glossy {
     }
 
     let id: String?
+    let chatId: String
     let text: String
     //let sender: GZEChatUser
     let senderId: String
-    let recipientId: String
+    //let recipientId: String
     //let recipient: GZEChatUser
     let type: MessageType
     let status: Status
@@ -41,13 +42,14 @@ class GZEChatMessage: NSObject, Glossy {
 
     // MARK: - init
     // new user message
-    init(text: String, senderId: String, recipientId: String /*sender: GZEChatUser, recipient: GZEChatUser*/) {
+    init(text: String, senderId: String, chatId: String/*, recipientId: String, sender: GZEChatUser, recipient: GZEChatUser*/) {
         self.id = nil
         self.text = text
         // self.sender = sender
         // self.recipient = recipient
         self.senderId = senderId
-        self.recipientId = recipientId
+        self.chatId = chatId
+        //self.recipientId = recipientId
         self.type = .user
         self.status = .sent
         self.createdAt = Date()
@@ -56,13 +58,14 @@ class GZEChatMessage: NSObject, Glossy {
     }
 
     // new message
-    init(text: String, senderId: String, recipientId: String /*sender: GZEChatUser, recipient: GZEChatUser*/, type: MessageType) {
+    init(text: String, senderId: String, chatId: String/*, recipientId: String sender: GZEChatUser, recipient: GZEChatUser*/, type: MessageType) {
         self.id = nil
         self.text = text
         // self.sender = sender
         // self.recipient = recipient
         self.senderId = senderId
-        self.recipientId = recipientId
+        self.chatId = chatId
+        //self.recipientId = recipientId
         self.type = type
         self.status = .sent
         self.createdAt = Date()
@@ -71,13 +74,14 @@ class GZEChatMessage: NSObject, Glossy {
     }
 
     // Existing message
-    init(id: String, text: String, senderId: String, recipientId: String /*sender: GZEChatUser, recipient: GZEChatUser*/, type: MessageType, status: Status, createdAt: Date, updatedAt: Date) {
+    init(id: String, text: String, senderId: String, chatId: String/*, recipientId: String sender: GZEChatUser, recipient: GZEChatUser*/, type: MessageType, status: Status, createdAt: Date, updatedAt: Date) {
         self.id = id
         self.text = text
         // self.sender = sender
         // self.recipient = recipient
         self.senderId = senderId
-        self.recipientId = recipientId
+        self.chatId = chatId
+        //self.recipientId = recipientId
         self.type = type
         self.status = status
         self.createdAt = createdAt
@@ -92,7 +96,8 @@ class GZEChatMessage: NSObject, Glossy {
             //let sender: GZEChatUser = "sender" <~~ json,
             //let recipient: GZEChatUser = "recipient" <~~ json,
             let senderId: String = "senderId" <~~ json,
-            let recipientId: String = "recipientId" <~~ json,
+            let chatId: String = "chatId" <~~ json,
+            //let recipientId: String = "recipientId" <~~ json,
             let type: MessageType = "type" <~~ json,
             let status: Status = "status" <~~ json,
             let createdAt: Date = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json),
@@ -107,7 +112,8 @@ class GZEChatMessage: NSObject, Glossy {
         //self.sender = sender
         //self.recipient = recipient
         self.senderId = senderId
-        self.recipientId = recipientId
+        self.chatId = chatId
+        //self.recipientId = recipientId
         self.type = type
         self.status = status
         self.createdAt = createdAt
@@ -125,7 +131,8 @@ class GZEChatMessage: NSObject, Glossy {
             //"sender" ~~> self.sender,
             //"recipient" ~~> self.recipient,
             "senderId" ~~> self.senderId,
-            "recipientId" ~~> self.recipientId,
+            "chatId" ~~> self.chatId,
+            //"recipientId" ~~> self.recipientId,
             "type" ~~> self.type,
             "status" ~~> self.status,
             Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(self.createdAt),

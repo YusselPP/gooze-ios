@@ -45,9 +45,6 @@ class GZEDatesService: NSObject {
                 log.debug("event received: \(event)")
                 switch event {
                 case .value(let dateRequests):
-//                    for dateRequest in dateRequests {
-//                        self?.receivedRequests.value.upsert(dateRequest) {$0 == dateRequest}
-//                    }
                     self?.receivedRequests.value = dateRequests
                 default: break
                 }

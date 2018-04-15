@@ -26,7 +26,7 @@ protocol GZEChatViewModel {
     var sendButtonImage: MutableProperty<UIImage?> { get }
     var sendButtonAction: CocoaAction<UIButton>! { get }
     
-    var recipientId: String { get }
+    var chat: GZEChat { get }
 }
 
 enum GZEChatViewMode {

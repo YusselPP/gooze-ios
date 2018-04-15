@@ -29,10 +29,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let sendButtonEnabled = MutableProperty<Bool>(true)
     var sendButtonAction: CocoaAction<UIButton>!
 
-    let recipientId: String
+    let chat: GZEChat
 
     // MARK: - init
-    init(recipientId: String, username: String) {
+    init(chat: GZEChat, username: String) {
         var mode: GZEChatViewMode
         if let isActivated = GZEAuthService.shared.authUser?.isActivated, isActivated {
             mode = .gooze
@@ -41,7 +41,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
         }
 
         self.mode = mode
-        self.recipientId = recipientId
+        self.chat = chat
         self.username.value = username
         
         log.debug("\(self) init")
@@ -49,8 +49,8 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.topButtonAction = CocoaAction(self.createTopButtonAction())
         self.sendButtonAction = CocoaAction(self.createSendAction())
 
-        messages.bindingTarget <~ GZEChatService.shared.receivedMessages.map {
-            $0[recipientId] ?? []
+        messages.bindingTarget <~ GZEChatService.shared.messages.map {
+            $0[chat.id] ?? []
         }
     }
 
@@ -94,10 +94,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 //sender: sender.toChatUser(),
                 //recipient: this.recipient
                 senderId: sender.id,
-                recipientId: this.recipientId
+                chatId: this.chat.id
             )
 
-            GZEChatService.shared.send(message: message, username: sender.username)
+            GZEChatService.shared.send(message: message, chat: this.chat, username: sender.username)
             
             this.inputMessage.value = ""
 

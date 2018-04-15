@@ -133,6 +133,7 @@
 "service.dates.requestSuccessfullyAccepted"="The request has been accepted";
 "service.dates.requestAccepted"="%@ has accepted your request";
 
+"service.chat.invalidChatId"="An error ocurred while opening the chat";
 "service.chat.messageReceived"="%@ has sent you a message";
 
 // Services/Location

@@ -20,4 +20,11 @@ extension Array {
             self.append(newElement)
         }
     }
+    
+    mutating func upsert<S>(contentsOf collection: S, comparator: ((Element) -> Bool)) where S: Collection, Element == S.Element {
+        
+        for element in collection {
+            self.upsert(element, comparator: comparator)
+        }
+    }
 }

@@ -32,9 +32,15 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     let actionButtonTitle = MutableProperty<String>("")
     
-    var chatViewModel: GZEChatViewModel {
+    var chatViewModel: GZEChatViewModel? {
         log.debug("chatViewModel called")
-        return GZEChatViewModelDates(recipientId: self.user.id, username: self.user.username)
+        guard let chat = dateRequest?.chat else {
+            log.error("Unable to open the chat, found nil chat on date request")
+            error.value = "service.chat.invalidChatId".localized()
+            return nil
+        }
+        
+        return GZEChatViewModelDates(chat: chat, username: self.user.username)
     }
     weak var controller: UIViewController?
     
@@ -214,7 +220,12 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             return
         }
         
-        GZEChatService.shared.openChat(presenter: controller, viewModel: self.chatViewModel)
+        guard let chatViewModel = self.chatViewModel else {
+            log.error("Unable to open chat chat, failed to instantiate chat view model")
+            return
+        }
+        
+        GZEChatService.shared.openChat(presenter: controller, viewModel: chatViewModel)
     }
     
     private func observeRequests() {
