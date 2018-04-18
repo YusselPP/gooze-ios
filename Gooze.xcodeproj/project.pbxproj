@@ -47,6 +47,7 @@
 		8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D290704207827D400C2F865 /* GZEMapSlider.swift */; };
 		8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29A6F82068778C00830E6D /* GZEAlertService.swift */; };
 		8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A4696204C626400581838 /* UIImage+Extension.swift */; };
+		8D2C951520837E0D004DAE3E /* GZEChatActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2C951420837E0D004DAE3E /* GZEChatActionView.swift */; };
 		8D357BAF1FD18C8000D6FB87 /* GZEApiStorageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */; };
 		8D358AC41FBBF75F00F261DC /* ValidatorAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D358AC31FBBF75F00F261DC /* ValidatorAliases.swift */; };
 		8D358AC61FBBFA4200F261DC /* GZEError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D358AC51FBBFA4200F261DC /* GZEError.swift */; };
@@ -195,6 +196,7 @@
 		8D290704207827D400C2F865 /* GZEMapSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapSlider.swift; sourceTree = "<group>"; };
 		8D29A6F82068778C00830E6D /* GZEAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAlertService.swift; sourceTree = "<group>"; };
 		8D2A4696204C626400581838 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		8D2C951420837E0D004DAE3E /* GZEChatActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatActionView.swift; sourceTree = "<group>"; };
 		8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApiStorageResponse.swift; sourceTree = "<group>"; };
 		8D358AC01FBBDD9300F261DC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D358AC31FBBF75F00F261DC /* ValidatorAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorAliases.swift; sourceTree = "<group>"; };
@@ -394,7 +396,6 @@
 				8DABD903206BDEC600DF9C56 /* GZEActionAlertView.swift */,
 				8DCD97F2206913EE00117030 /* DismissView.swift */,
 				8DBAB6E4206F42FE009586A5 /* Chat */,
-				8D290704207827D400C2F865 /* GZEMapSlider.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -402,6 +403,8 @@
 		8DBAB6E4206F42FE009586A5 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				8D2C951420837E0D004DAE3E /* GZEChatActionView.swift */,
+				8D290704207827D400C2F865 /* GZEMapSlider.swift */,
 				8DBAB6E2206F42ED009586A5 /* GZEMessagesTableView.swift */,
 				8D033C5D206EC9A500AF47E6 /* GZEChatBubbleView.swift */,
 			);
@@ -959,6 +962,7 @@
 				8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */,
 				F00355181FB61244004C778C /* GZEValidationError.swift in Sources */,
 				8D07BC55206075E700ACE09A /* ChatSocket.swift in Sources */,
+				8D2C951520837E0D004DAE3E /* GZEChatActionView.swift in Sources */,
 				8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */,
 				8D07BC5920607A6000ACE09A /* GZESocketManager.swift in Sources */,
 				8DD5D6952074E4F5001192ED /* GZEChatUser.swift in Sources */,

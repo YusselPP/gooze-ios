@@ -1417,24 +1417,34 @@
                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="Sym-4P-Jx8" userLabel="TopButtonContainer">
                                 <rect key="frame" x="0.0" y="64" width="320" height="55"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" verticalCompressionResistancePriority="754" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k5a-Rk-5Dw" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="137" y="10" width="46" height="35"/>
+                                    <view verifyAmbiguity="ignoreSizes" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uu3-SP-25Y" customClass="GZEChatActionView" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="147.5" y="10" width="25" height="35"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="blU-Gy-tlI"/>
+                                            <constraint firstAttribute="height" constant="35" id="8Ip-4U-Wzl"/>
                                         </constraints>
-                                        <state key="normal" title="Button"/>
-                                    </button>
+                                    </view>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6hE-Od-5hh">
+                                        <rect key="frame" x="147.5" y="10" width="25" height="35"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="k5a-Rk-5Dw" secondAttribute="bottom" constant="10" id="eE7-6W-Wps"/>
-                                    <constraint firstItem="k5a-Rk-5Dw" firstAttribute="top" secondItem="Sym-4P-Jx8" secondAttribute="top" constant="10" id="g1w-hQ-BCh"/>
-                                    <constraint firstItem="k5a-Rk-5Dw" firstAttribute="centerX" secondItem="Sym-4P-Jx8" secondAttribute="centerX" id="zXI-za-WlA"/>
+                                    <constraint firstItem="6hE-Od-5hh" firstAttribute="bottom" secondItem="uu3-SP-25Y" secondAttribute="bottom" id="5Ha-s6-ZbW"/>
+                                    <constraint firstItem="uu3-SP-25Y" firstAttribute="centerX" secondItem="Sym-4P-Jx8" secondAttribute="centerX" id="6h2-2k-eZK"/>
+                                    <constraint firstItem="6hE-Od-5hh" firstAttribute="trailing" secondItem="uu3-SP-25Y" secondAttribute="trailing" id="6hH-Ak-Ajj"/>
+                                    <constraint firstItem="6hE-Od-5hh" firstAttribute="top" secondItem="uu3-SP-25Y" secondAttribute="top" id="dGi-6W-5fE"/>
+                                    <constraint firstItem="6hE-Od-5hh" firstAttribute="leading" secondItem="uu3-SP-25Y" secondAttribute="leading" id="iIg-JD-1Wj"/>
+                                    <constraint firstAttribute="bottom" secondItem="uu3-SP-25Y" secondAttribute="bottom" constant="10" id="pl0-es-7Ic"/>
+                                    <constraint firstItem="uu3-SP-25Y" firstAttribute="top" secondItem="Sym-4P-Jx8" secondAttribute="top" constant="10" id="xDn-xc-lhk"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xcj-iX-hX9" userLabel="user-bg-image">
                                 <rect key="frame" x="0.0" y="119" width="320" height="449"/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0M6-cH-qhn" customClass="GZEMessagesTableView" customModule="Gooze" customModuleProvider="target">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" bouncesZoom="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0M6-cH-qhn" customClass="GZEMessagesTableView" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="16" y="119" width="288" height="385"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableView>
@@ -1521,7 +1531,8 @@
                         <outlet property="messagesTableView" destination="0M6-cH-qhn" id="r6r-Oc-Hi4"/>
                         <outlet property="myVavigationItem" destination="GIY-eJ-joF" id="CKM-h2-wHQ"/>
                         <outlet property="sendButton" destination="e1P-j5-Our" id="V5u-Kq-aXT"/>
-                        <outlet property="topButton" destination="k5a-Rk-5Dw" id="UgN-zU-gRn"/>
+                        <outlet property="topActionView" destination="uu3-SP-25Y" id="bQW-im-X1r"/>
+                        <outlet property="topTextInput" destination="6hE-Od-5hh" id="U0J-zJ-r1W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VLa-fn-mmo" userLabel="First Responder" sceneMemberID="firstResponder"/>

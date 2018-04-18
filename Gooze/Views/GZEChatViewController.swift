@@ -10,16 +10,27 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class GZEChatViewController: UIViewController, UITextViewDelegate {
+class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
     var viewModel: GZEChatViewModel!
     var onDismissTapped: (() -> ())?
     
     let backButton = GZEBackUIBarButtonItem()
 
-    @IBOutlet weak var topButton: GZEButton! {
+    @IBOutlet weak var topActionView: GZEChatActionView!
+    @IBOutlet weak var topTextInput: UITextField! {
         didSet {
-            self.topButton.setGrayFormat()
+            self.topTextInput.layer.borderWidth = 1
+            self.topTextInput.layer.borderColor = GZEConstants.Color.mainGreen.cgColor
+            self.topTextInput.layer.cornerRadius = 5
+            self.topTextInput.layer.masksToBounds = true
+            
+            self.topTextInput.textAlignment = .center
+            self.topTextInput.backgroundColor = GZEConstants.Color.buttonBackground
+            self.topTextInput.font = GZEConstants.Font.main
+            self.topTextInput.textColor = GZEConstants.Color.mainTextColor
+            self.topTextInput.tintColor = GZEConstants.Color.mainTextColor
+            self.topTextInput.delegate = self
         }
     }
     @IBOutlet weak var backgroundImage: UIImageView!
@@ -53,9 +64,12 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
         setupBindings()
     }
     
+    // TODO: scroll bottom on orientation change
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         GZEChatService.shared.activeChatId = self.viewModel.chat.id
+        self.viewModel.startObservers()
         registerForKeyboarNotifications(
             observer: self,
             willShowSelector: #selector(keyboardWillShow(notification:)),
@@ -65,6 +79,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.viewModel.stopObservers()
         GZEChatService.shared.activeChatId = nil
         deregisterFromKeyboardNotifications(observer: self)
     }
@@ -75,6 +90,23 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
     }
 
     func setupBindings() {
+        self.topActionView.mainButton.reactive.title <~ self.viewModel.topButtonTitle
+        self.topActionView.reactive.isHidden <~ self.viewModel.topButtonIsHidden
+        self.topActionView.mainButton.reactive.pressed = self.viewModel.topButtonAction
+        
+        self.topActionView.accessoryButton.reactive.isHidden <~ self.viewModel.topAccessoryButtonIsHidden
+        self.topActionView.accessoryButton.reactive.pressed = self.viewModel.topAccessoryButtonAction
+        
+        self.viewModel.topTextInput <~ self.topTextInput.reactive.continuousTextValues
+        self.topTextInput.reactive.text <~ self.viewModel.topTextInput
+        
+        self.viewModel.topTextInputIsHidden.producer.startWithValues {[weak self] isHidden in
+            self?.topTextInput.isHidden = isHidden
+            if !isHidden {
+                self?.topTextInput.becomeFirstResponder()
+            }
+        }
+
         self.viewModel.inputMessage <~ self.messageTextView.reactive.continuousTextValues
         
         self.viewModel.inputMessage.signal.observeValues {[weak self] text in
@@ -99,6 +131,20 @@ class GZEChatViewController: UIViewController, UITextViewDelegate {
         {
             textView.isScrollEnabled = false
         }
+    }
+    
+    // MARK: UITextFieldDelegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        log.debug("textFieldShouldReturn")
+        
+        // textField.resignFirstResponder()
+        
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        log.debug("textFieldDidEndEditing")
+        self.viewModel.topTextInputIsHidden.value = true
     }
     
 

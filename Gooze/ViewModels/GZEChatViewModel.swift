@@ -19,17 +19,29 @@ protocol GZEChatViewModel {
     var messages: MutableProperty<[GZEChatMessage]> { get }
     var backgroundImage: MutableProperty<URLRequest?> { get }
 
-    var topButtonTitle: MutableProperty<String?> { get }
-    var topButtonAction: CocoaAction<UIButton>! { get }
+    var topButtonTitle: MutableProperty<String> { get }
+    var topButtonEnabled: MutableProperty<Bool> { get }
+    var topButtonIsHidden: MutableProperty<Bool> { get }
+    var topButtonAction: CocoaAction<GZEButton>? { get }
+    
+    var topAccessoryButtonEnabled: MutableProperty<Bool> { get }
+    var topAccessoryButtonIsHidden: MutableProperty<Bool> { get }
+    var topAccessoryButtonAction: CocoaAction<UIButton>? { get }
+    
+    var topTextInput: MutableProperty<String?> { get }
+    var topTextInputIsHidden: MutableProperty<Bool> { get }
 
     var inputMessage: MutableProperty<String?> { get }
     var sendButtonImage: MutableProperty<UIImage?> { get }
     var sendButtonAction: CocoaAction<UIButton>! { get }
     
     var chat: GZEChat { get }
+    
+    func startObservers()
+    func stopObservers()
 }
 
-enum GZEChatViewMode {
+enum GZEChatViewMode: String {
     case gooze
     case client
 }

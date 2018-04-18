@@ -34,13 +34,26 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     
     var chatViewModel: GZEChatViewModel? {
         log.debug("chatViewModel called")
-        guard let chat = dateRequest?.chat else {
+        guard let dateRequestId = self.dateRequest?.id else {
+            log.error("Unable to open the chat, found nil date request")
+            error.value = "service.chat.invalidChatId".localized()
+            return nil
+        }
+        
+        guard let chat = self.dateRequest?.chat else {
             log.error("Unable to open the chat, found nil chat on date request")
             error.value = "service.chat.invalidChatId".localized()
             return nil
         }
         
-        return GZEChatViewModelDates(chat: chat, username: self.user.username)
+        var chatMode: GZEChatViewMode
+        if self.mode == .request {
+            chatMode = .gooze
+        } else {
+            chatMode = .client
+        }
+        
+        return GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: chatMode, username: self.user.username)
     }
     weak var controller: UIViewController?
     
@@ -48,10 +61,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     func startObservers() {
         self.observeMessages()
         self.observeRequests()
+        self.observeSocketEvents()
     }
     
     func stopObservers() {
-        // TODO: test that date requests continue updating correctly after this change
+        self.stopObservingSocketEvents()
         self.stopObservingRequests()
         self.stopObservingMessages()
     }
@@ -69,6 +83,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     var messagesObserver: Disposable?
     var requestsObserver: Disposable?
+    var socketEventsObserver: Disposable?
 
     // MARK - init
     init(user: GZEUser) {
@@ -280,6 +295,30 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         log.debug("stop observing messages")
         self.messagesObserver?.dispose()
         self.messagesObserver = nil
+    }
+    
+    private func observeSocketEvents() {
+        stopObservingSocketEvents()
+        self.socketEventsObserver = GZEDatesService.shared.dateSocket?
+            .socketEventsEmitter
+            .signal
+            .skipNil()
+            .filter { $0 == .authenticated }
+            .observeValues {[weak self] _ in
+                guard let this = self else {
+                    log.error("self was disposed")
+                    return
+                }
+                if let dateRequestId = this.dateRequest?.id {
+                    GZEDatesService.shared.find(byId: dateRequestId)
+                }
+        }
+    }
+    
+    private func stopObservingSocketEvents() {
+        log.debug("stop observing SocketEvents")
+        self.socketEventsObserver?.dispose()
+        self.socketEventsObserver = nil
     }
 
     // MARK: - Deinitializers

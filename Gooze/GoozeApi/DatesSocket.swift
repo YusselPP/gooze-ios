@@ -12,6 +12,8 @@ import Gloss
 
 class DatesSocket: GZESocket {
     enum DateEvent: String {
+        case findRequestById
+        
         case dateRequestSent
         case dateRequestReceived
         case dateRequestReceivedAck
@@ -78,7 +80,8 @@ class DatesSocket: GZESocket {
                         GZEDatesService.shared.errorMessage.value = "service.chat.invalidChatId".localized()
                         return
                     }
-                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(chat: chat, username: recipient.username))
+                    
+                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequest.id, mode: .client, username: recipient.username))
                 }
             }
             

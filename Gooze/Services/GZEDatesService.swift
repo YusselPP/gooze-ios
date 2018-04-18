@@ -51,6 +51,36 @@ class GZEDatesService: NSObject {
             }
         }
     }
+    
+    func find(byId id: String) {
+        guard let dateSocket = self.dateSocket else {
+            log.error("Date socket not found")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return
+        }
+        
+        dateSocket.emitWithAck(.findRequestById, id).timingOut(after: 5) {[weak self] data in
+            if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
+                log.error("No ack received from server")
+                self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
+                return
+            }
+            
+            if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
+                
+                log.error("\(String(describing: error.toJSON()))")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+                
+            } else if let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) {
+                
+                self?.upsert(dateRequest: dateRequest)
+
+            } else {
+                log.error("Unable to parse data to expected objects")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            }
+        }
+    }
 
     func requestDate(to recipientId: String) -> SignalProducer<GZEDateRequest, GZEError> {
         guard let dateSocket = self.dateSocket else {
@@ -159,6 +189,22 @@ class GZEDatesService: NSObject {
                     sink.send(error: .datesSocket(error: .unexpected))
                 }
             }
+        }
+    }
+    
+    func upsert(dateRequest: GZEDateRequest) {
+        // TODO: add to received or sent request depending on sender and recipient id
+        guard let authUser = GZEAuthService.shared.authUser else {
+            log.error("auth user not found")
+            return
+        }
+        
+        if dateRequest.sender.id == authUser.id {
+            self.sentRequests.value.upsert(dateRequest){$0 == dateRequest}
+            self.lastSentRequest.value = dateRequest
+        } else if dateRequest.recipient.id == authUser.id {
+            self.receivedRequests.value.upsert(dateRequest) {$0 == dateRequest}
+            self.lastReceivedRequest.value = dateRequest
         }
     }
 }

@@ -16,6 +16,9 @@ class ChatSocket: GZESocket {
         case messageReceived
         case messageReceivedAck
         
+        case requestAmount
+        case amountRequestReceived
+        
         case retrieveHistory
     }
 
@@ -36,16 +39,27 @@ class ChatSocket: GZESocket {
                 return
             }
             
-            guard let chatJson = data[1] as? JSON, let chat = GZEChat(json: chatJson) else {
-                log.error("Unable to parse data[1], expected data[1] to be a chatJson, found: \(data[1])")
+            let username: String = data[1] as? String ?? ""
+            
+            guard let chatJson = data[2] as? JSON, let chat = GZEChat(json: chatJson) else {
+                log.error("Unable to parse data[2], expected data[2] to be a chatJson, found: \(data[2])")
                 return
             }
             
-            let username: String = data[2] as? String ?? ""
+            guard let dateRequestId = data[3] as? String else {
+                log.error("Unable to parse data[3], expected data[3] to be a String, found: \(data[3])")
+                return
+            }
+            
+            guard let mode = GZEChatViewMode(rawValue: (data[4] as? String) ?? "") else {
+                log.error("Unable to parse data[4], expected data[4] to be a chatJson, found: \(data[4])")
+                return
+            }
+            
             log.debug("Message from username[\(username)] received")
             log.debug("Message: \(String(describing: message.toJSON()))")
 
-            GZEChatService.shared.receive(message: message, chat: chat, username: username)
+            GZEChatService.shared.receive(message: message, username: username, chat: chat, dateRequestId: dateRequestId, mode: mode)
             
             ack.with()
         }
@@ -58,6 +72,20 @@ class ChatSocket: GZESocket {
             log.debug("Recipient has received the message: \(String(describing: message.toJSON()))")
             
             GZEChatService.shared.upsert(message: message)
+            
+            ack.with()
+        }
+        
+        self.on(.amountRequestReceived) {data, ack in
+
+            guard let dateRequestJson = data[0] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
+                log.error("Unable to parse data[0], expected data[0] to be a GZEDateRequest, found: \(data[0])")
+                return
+            }
+
+            log.debug("Amount request received")
+            
+            GZEDatesService.shared.sentRequests.value.upsert(dateRequest){$0 == dateRequest}
             
             ack.with()
         }

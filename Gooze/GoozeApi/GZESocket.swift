@@ -23,6 +23,8 @@ class GZESocket: SocketIOClient {
         return UIApplication.topViewController()
     }
     
+    let socketEventsEmitter = MutableProperty<GZESocket.Event?>(nil)
+    
     // MARK - init
     override init(socketURL: URL, config: SocketIOClientConfiguration) {
         super.init(socketURL: socketURL, config: config)
@@ -59,7 +61,8 @@ class GZESocket: SocketIOClient {
         }
 
         self.on(.authenticated) {data, ack in
-            log.debug("Socket is authenticated");
+            log.debug("Socket is authenticated")
+            self.socketEventsEmitter.value = .authenticated
         }
 
         self.on(.unauthorized) {data, ack in

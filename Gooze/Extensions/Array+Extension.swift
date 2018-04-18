@@ -10,21 +10,28 @@ import Foundation
 
 extension Array {
     
-    mutating func upsert(_ newElement: Element, comparator: ((Element) -> Bool)) {
+    mutating func upsert(_ newElement: Element, prepend: Bool = false, comparator: ((Element) -> Bool)) {
 
         if let index = self.index(where: comparator) {
             log.debug("Object already in array, replacing it")
             self[index] = newElement
         } else {
             log.debug("Element not found, it will be inserted")
-            self.append(newElement)
+            if prepend {
+                self.insert(newElement, at: 0)
+            } else {
+                self.append(newElement)
+            }
         }
     }
     
-    mutating func upsert<S>(contentsOf collection: S, comparator: ((Element) -> Bool)) where S: Collection, Element == S.Element {
+    mutating func upsert<S>(contentsOf collection: S, prepend: Bool = false, comparator: (Element, Element) -> Bool) where S: Collection, Element == S.Element {
+        var newArray = self
         
         for element in collection {
-            self.upsert(element, comparator: comparator)
+            newArray.upsert(element, prepend: prepend) { comparator($0, element) }
         }
+        
+        self = newArray
     }
 }

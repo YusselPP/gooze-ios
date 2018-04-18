@@ -13,6 +13,7 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
 
     let cellIdentifier = "GZEMessageTableCell"
     let messages = MutableProperty<[GZEChatMessage]>([])
+    var isObservingMessages = false
 
     // MARK: - init
     required init?(coder aDecoder: NSCoder) {
@@ -48,8 +49,19 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         self.register(GZEMessageTableCell.self, forCellReuseIdentifier: cellIdentifier)
         self.delegate = self
         self.dataSource = self
-
-        self.messages.signal.observeValues {[weak self] messages in
+        
+        // Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startObservingMessages), userInfo: nil, repeats: false)
+        startObservingMessages()
+    }
+    
+    @objc private func startObservingMessages() {
+        if isObservingMessages {
+           return
+        }
+        
+        isObservingMessages = true
+        
+        self.messages.producer.startWithValues {[weak self] messages in
             // TODO: reload only changes
             guard let this = self else {return}
             //log.debug("messages changed: \(String(describing: messages.toJSONArray()))")
@@ -60,7 +72,7 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
             log.debug("number of messages: \(messages.count)")
             
             if numberOfMessages > numberOfRows {
-                this.insertRows(at: [IndexPath(row: numberOfRows, section: 0)], with: UITableViewRowAnimation.none)
+                this.insertRows(at: (numberOfRows..<numberOfMessages).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.none)
                 this.scrollToBottom()
             } else if numberOfMessages < numberOfRows {
                 // TODO: delete rows
@@ -72,7 +84,7 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
     // MARK: - UITableViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 40 {
-            log.debug("scroll top limit reached. Requesting older messages")
+            // log.debug("scroll top limit reached. Requesting older messages")
             
             // retrieveHistory(offset: self.messages.value.count + 20, limit: 20)
         }
@@ -97,6 +109,17 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.messages.value.count
     }
+    
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        log.debug("willDisplay cell at indexPath: \(indexPath)")
+//
+//        if let lastVisibleRow = tableView.indexPathsForVisibleRows?.last?.row, indexPath.row == lastVisibleRow {
+//            log.debug("last row will display")
+//            // startObservingMessages()
+//        }
+//    }
+    
+    
 
 
     // MARK: - Deinitializer

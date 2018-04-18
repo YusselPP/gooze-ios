@@ -9,7 +9,7 @@
 import UIKit
 
 class GZEButton: UIButton {
-
+    
     var adjustsWidthToTitle: Bool = true {
         didSet {
             if adjustsWidthToTitle {
@@ -19,6 +19,8 @@ class GZEButton: UIButton {
     }
     var widthConstraint: NSLayoutConstraint!
     var heightConstraint: NSLayoutConstraint!
+    
+    var maxWidth: CGFloat?
 
     init() {
         super.init(frame: CGRect.zero)
@@ -39,6 +41,8 @@ class GZEButton: UIButton {
 
         titleEdgeInsets.left = 10
         titleEdgeInsets.right = 10
+        
+        setTitleColor(.gray, for: .highlighted)
     }
 
     func setGrayFormat() {
@@ -80,9 +84,12 @@ class GZEButton: UIButton {
             log.debug("current title: \(title)")
             log.debug("font: \(titleLabel!.font!)")
             let titleSize = title.size(attributes: [NSFontAttributeName: titleLabel!.font!])
-            let width = titleSize.width + titleEdgeInsets.left + titleEdgeInsets.right + 20
+            var width = titleSize.width + titleEdgeInsets.left + titleEdgeInsets.right + 20
             log.debug("titleSize: \(titleSize)")
             log.debug("width: \(width)")
+            if let maxWidth = self.maxWidth {
+                width = min(maxWidth, width)
+            }
             widthConstraint.constant = width
         }
     }

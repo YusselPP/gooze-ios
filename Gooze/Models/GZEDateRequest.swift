@@ -23,13 +23,15 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     let sender: GZEChatUser
     let recipient: GZEChatUser
     let chat: GZEChat?
+    let amount: Double?
 
-    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, chat: GZEChat? = nil) {
+    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, chat: GZEChat? = nil, amount: Double? = nil) {
         self.id = id
         self.status = status
         self.sender = sender
         self.recipient = recipient
         self.chat = chat
+        self.amount = amount
         super.init()
     }
 
@@ -48,6 +50,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.sender = sender
         self.recipient = recipient
         self.chat = "chat" <~~ json
+        self.amount = "amount" <~~ json
         super.init()
     }
 
@@ -58,6 +61,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             "sender" ~~> self.sender,
             "recipient" ~~> self.recipient,
             "chat" ~~> self.chat,
+            "amount" ~~> self.amount,
         ]);
     }
     

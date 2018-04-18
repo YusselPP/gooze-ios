@@ -108,6 +108,10 @@
 "vm.activate.searchButtonTitle"="Buscar gooze";
 "vm.activate.allResultsButtonTitle"="Ver listado completo";
 
+// ViewModel/GZEChatViewModelDates
+"vm.datesChat.setAmountButtonTitle"="Establecer monto";
+"vm.datesChat.acceptAmountButtonTitle"="Aceptar %@";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.doneButton.title"="Siguiente";

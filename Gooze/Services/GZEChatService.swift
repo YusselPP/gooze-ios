@@ -58,13 +58,13 @@ class GZEChatService: NSObject {
                 if var chat = self?.messages.value[chatId] {
                     log.debug("chat found inserting new messages")
                     
-                    chat.insert(contentsOf: historyMessages, at: 0)
+                    chat.upsert(contentsOf: historyMessages, prepend: true) { $0 == $1 }
                     
                     self?.messages.value[chatId] = chat
                     
                     log.debug("Messages history successfully retrieved")
                 } else {
-                    log.error("chat not found, creating it")
+                    log.debug("chat not found, creating it")
                     
                     self?.messages.value[chatId] = historyMessages
                 }
@@ -74,7 +74,7 @@ class GZEChatService: NSObject {
         }
     }
               
-    func send(message: GZEChatMessage, chat: GZEChat, username: String) {
+    func send(message: GZEChatMessage, username: String, chat: GZEChat, dateRequestId: String, mode: String) {
         log.debug("Sending message..\(String(describing: message.toJSON()))")
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
@@ -92,7 +92,7 @@ class GZEChatService: NSObject {
         }
 
         self.upsert(message: message)
-        chatSocket.emitWithAck(.sendMessage, messageJson, chatJson, username).timingOut(after: 5) {[weak self] data in
+        chatSocket.emitWithAck(.sendMessage, messageJson, username, chatJson, dateRequestId, mode).timingOut(after: 5) {[weak self] data in
             log.debug("Message sent. Ack data: \(data)")
             
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -115,17 +115,70 @@ class GZEChatService: NSObject {
         }
     }
     
-    func receive(message: GZEChatMessage, chat: GZEChat, username: String) {
+    func receive(message: GZEChatMessage, username: String, chat: GZEChat, dateRequestId: String, mode: GZEChatViewMode) {
         log.debug("adding received message")
         
         if self.activeChatId == nil || self.activeChatId! != message.chatId {
             clear(chatId: message.chatId)
-            showNotification(chat: chat, username: username)
+            showNotification(chat: chat, dateRequestId: dateRequestId, mode: mode, username: username)
         } else {
             log.debug("Received message on active chat, notification won't be shown")
         }
         
         self.upsert(message: message)
+    }
+    
+    func request(amount: Double, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<Bool, GZEError> {
+        guard let chatSocket = self.chatSocket else {
+            log.error("Chat socket not found")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+        
+        guard let chatJson = chat.toJSON() else {
+            log.error("Failed to parse GZEChat to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+        
+        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequestReceived", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
+            log.error("Failed to parse GZEChatMessage to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+        
+        return SignalProducer { sink, disposable in
+            
+            disposable.add {
+                log.debug("requestAmount signal disposed")
+            }
+            
+            chatSocket.emitWithAck(.requestAmount, messageJson, username, chatJson, dateRequestId, mode.rawValue, amount).timingOut(after: 5) { data in
+                log.debug("Message sent. Ack data: \(data)")
+                
+                if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
+                    log.error("No ack received from server")
+                    sink.send(error: .datesSocket(error: .noAck))
+                    return
+                }
+                
+                if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
+                    
+                    log.error("\(String(describing: error.toJSON()))")
+                    sink.send(error: .repository(error: .UnexpectedError))
+                    
+                } else if data[1] is Bool {
+                    
+                    sink.send(value: true)
+                    sink.sendCompleted()
+                    log.debug("Message successfully sent")
+                    
+                } else {
+                    log.error("Unable to parse data to expected objects")
+                    sink.send(error: .repository(error: .UnexpectedError))
+                }
+            }
+        }
     }
 
     func upsert(message: GZEChatMessage, comparator: ((GZEChatMessage) -> Bool)? = nil) {
@@ -160,7 +213,7 @@ class GZEChatService: NSObject {
         self.messages.value[chatId] = []
     }
     
-    func showNotification(chat: GZEChat, username: String) {
+    func showNotification(chat: GZEChat, dateRequestId: String, mode: GZEChatViewMode, username: String) {
         if let topVC = UIApplication.topViewController() {
             let messageReceived = String(format: "service.chat.messageReceived".localized(), username)
             
@@ -168,7 +221,7 @@ class GZEChatService: NSObject {
                 //TODO: manage chat mode with client mode property instead of sending to vm
                 GZEChatService.shared.openChat(
                     presenter: topVC,
-                    viewModel: GZEChatViewModelDates(chat: chat, username: username)
+                    viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: mode, username: username)
                 )
             }
         } else {
