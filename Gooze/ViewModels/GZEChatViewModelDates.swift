@@ -20,6 +20,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
     let username = MutableProperty<String?>(nil)
     let messages = MutableProperty<[GZEChatMessage]>([])
+    let messagesEvents = MutableProperty<CollectionEvent?>(nil)
     let backgroundImage = MutableProperty<URLRequest?>(nil)
 
     let topButtonTitle = MutableProperty<String>("")
@@ -52,16 +53,23 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.stopObservingRequests()
         self.stopObservingMessages()
     }
+    
+    func retrieveHistory() {
+        self.retrieveHistoryProducer?.start()
+    }
     // End GZEChatViewModel protocol
 
     
+    // MARK: - private properties
     let dateRequestId: String
     
     var requestsObserver: Disposable?
     var messagesObserver: Disposable?
     var socketEventsObserver: Disposable?
+    var messagesEventsObserver: Disposable?
     
-    // MARK: - private properties
+    var retrieveHistoryProducer: SignalProducer<Void, GZEError>?
+    
     let setAmountButtonTitle = "vm.datesChat.setAmountButtonTitle".localized().uppercased()
     let acceptAmountButtonTitle = "vm.datesChat.acceptAmountButtonTitle".localized().uppercased()
     let amount = MutableProperty<Double?>(nil)
@@ -84,6 +92,13 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.sendButtonAction = CocoaAction(self.createSendAction())
         
         self.currencyFormatter.numberStyle = .currency
+        
+        self.retrieveHistoryProducer = SignalProducer {[weak self] sink, disposable in
+            log.debug("retrieve history producer called")
+            guard let this = self else {return}
+            GZEChatService.shared.retrieveHistory(chatId: this.chat.id)
+            sink.sendCompleted()
+        }.debounce(60, on: QueueScheduler.main)
         
         GZEDatesService.shared.find(byId: dateRequestId)
         GZEChatService.shared.retrieveHistory(chatId: chat.id)
@@ -281,12 +296,15 @@ class GZEChatViewModelDates: GZEChatViewModel {
             guard let this = self else { log.error("self was disposed");  return [] }
             return $0[this.chat.id] ?? []
         }
+        self.messagesEventsObserver = self.messagesEvents.bindingTarget <~ GZEChatService.shared.chatEventEmmiter
     }
     
     private func stopObservingMessages() {
         log.debug("stop observing messages")
         self.messagesObserver?.dispose()
         self.messagesObserver = nil
+        self.messagesEventsObserver?.dispose()
+        self.messagesEventsObserver = nil
     }
     
     private func observeSocketEvents() {
@@ -315,6 +333,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
     
     // MARK: - Deinitializers
     deinit {
+        GZEChatService.shared.clear(chatId: self.chat.id)
         log.debug("\(self) disposed")
     }
 }

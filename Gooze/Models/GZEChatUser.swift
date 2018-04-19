@@ -60,7 +60,7 @@ class GZEChatUser: GZEUserConvertible, Glossy {
         self.goozeRating = goozeRating
 
         super.init()
-        log.debug("\(self) init")
+        //log.debug("\(self) init")
     }
 
     // MARK: - Gloss Deserialization
@@ -86,7 +86,7 @@ class GZEChatUser: GZEUserConvertible, Glossy {
         self.goozeRating = "goozeRating" <~~ json
 
         super.init()
-        log.debug("\(self) init")
+        //log.debug("\(self) init")
     }
 
     func toJSON() -> JSON? {
@@ -110,7 +110,7 @@ class GZEChatUser: GZEUserConvertible, Glossy {
 
     // MARK: - deinitializer
     deinit {
-        log.debug("\(self) disposed")
+        //log.debug("\(self) disposed")
     }
 }
 

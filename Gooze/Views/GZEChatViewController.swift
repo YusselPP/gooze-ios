@@ -60,6 +60,31 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.myVavigationItem.setLeftBarButton(backButton, animated: false)
         
         self.myVavigationItem.reactive.title <~ self.viewModel.username
+        
+        
+        self.messagesTableView
+            .topScrollSignal
+            .debounce(0.5, on: QueueScheduler.main)
+            .flatMap(.latest, transform: {[weak self] _ -> SignalProducer<Void, GZEError> in
+                guard let this = self else {
+                    log.error("self was disposed")
+                    return SignalProducer.empty
+                }
+                guard let retrieveHistoryProducer = this.viewModel.retrieveHistoryProducer else {
+                    log.error("found nil retrieveHistoryProducer")
+                    return SignalProducer.empty
+                }
+                return (
+                    retrieveHistoryProducer
+                        .flatMapError{ error in
+                            log.error(error.localizedDescription)
+                            return SignalProducer.empty
+                        }
+                )
+            })
+            .observe { event in
+                log.debug("event: \(event)")
+            }
 
         setupBindings()
     }
@@ -114,6 +139,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             this.messageTextView.text = text
         }
 
+        self.messagesTableView.messagesEvents.bindingTarget <~ self.viewModel.messagesEvents
         self.messagesTableView.messages.bindingTarget <~ self.viewModel.messages
 
         self.sendButton.reactive.pressed = self.viewModel.sendButtonAction

@@ -8,12 +8,18 @@
 
 import UIKit
 import ReactiveSwift
+import enum Result.NoError
 
 class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     let cellIdentifier = "GZEMessageTableCell"
     let messages = MutableProperty<[GZEChatMessage]>([])
+    let messagesEvents = MutableProperty<CollectionEvent?>(nil)
     var isObservingMessages = false
+    var (topScrollSignal, topScrollSignalObserver) = Signal<Bool, NoError>.pipe()
+    
+    private var lastContentOffset: CGFloat = 0
+
 
     // MARK: - init
     required init?(coder aDecoder: NSCoder) {
@@ -33,11 +39,9 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
     
     func scrollToBottom(){
         if self.messages.value.count > 0 {
-            //DispatchQueue.main.async { [weak self] in
-                //guard let this = self else {return}
-                let indexPath = IndexPath(row: self.messages.value.count-1, section: 0)
-                self.scrollToRow(at: indexPath, at: .bottom, animated: false)
-            //}
+            log.debug("scrolling to bottom")
+            let indexPath = IndexPath(row: self.messages.value.count - 1, section: 0)
+            self.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
     }
 
@@ -49,8 +53,7 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         self.register(GZEMessageTableCell.self, forCellReuseIdentifier: cellIdentifier)
         self.delegate = self
         self.dataSource = self
-        
-        // Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startObservingMessages), userInfo: nil, repeats: false)
+
         startObservingMessages()
     }
     
@@ -61,33 +64,61 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         
         isObservingMessages = true
         
-        self.messages.producer.startWithValues {[weak self] messages in
-            // TODO: reload only changes
+        self.messagesEvents.signal.skipNil().observeValues {[weak self] event in
             guard let this = self else {return}
-            //log.debug("messages changed: \(String(describing: messages.toJSONArray()))")
-            let numberOfRows = this.numberOfRows(inSection: 0)
-            let numberOfMessages = messages.count
             
-            log.debug("number of rows: \(numberOfRows)")
-            log.debug("number of messages: \(messages.count)")
+            let beforeContentSize = this.contentSize
+            log.debug("messages event received: \(event)")
+ 
+            let atEndOfTable = this.contentOffset.y >= (this.contentSize.height - this.frame.size.height - GZEChatBubbleView.minSize)
             
-            if numberOfMessages > numberOfRows {
-                this.insertRows(at: (numberOfRows..<numberOfMessages).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.none)
-                this.scrollToBottom()
-            } else if numberOfMessages < numberOfRows {
-                // TODO: delete rows
+            UIView.setAnimationsEnabled(false)
+            
+            switch event {
+            case .add(let at, let count):
+                
+                this.insertRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
+
+                if atEndOfTable {
+                    log.debug("At end of the table")
+                    this.scrollToBottom()
+                } else {
+                    //this.contentOffset = CGPoint(x: this.contentOffset.x, y: max(0, this.contentOffset.y + this.contentSize.height - beforeContentSize.height - GZEChatBubbleView.minSize))
+                    this.contentOffset.y = max(
+                        0,
+                        this.contentOffset.y +
+                        this.contentSize.height -
+                        beforeContentSize.height -
+                        GZEChatBubbleView.minSize
+                    )
+                }
+            case .remove(let at, let count):
+                this.deleteRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
+            case .update(let at, let count):
+                this.reloadRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
             }
+            
+            UIView.setAnimationsEnabled(true)
         }
     }
 
 
     // MARK: - UITableViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        //log.debug("scrollview content size: \(scrollView.contentSize)")
+        //log.debug("scrollview content offset: \(scrollView.contentOffset)")
+        
         if scrollView.contentOffset.y < 40 {
-            // log.debug("scroll top limit reached. Requesting older messages")
             
-            // retrieveHistory(offset: self.messages.value.count + 20, limit: 20)
+            if (self.lastContentOffset > scrollView.contentOffset.y) {
+                // moving up
+                topScrollSignalObserver.send(value: true)
+            }
         }
+        
+        // update the new position acquired
+        self.lastContentOffset = scrollView.contentOffset.y
     }
 
 
@@ -110,16 +141,23 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         return self.messages.value.count
     }
     
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        log.debug("willDisplay cell at indexPath: \(indexPath)")
-//
-//        if let lastVisibleRow = tableView.indexPathsForVisibleRows?.last?.row, indexPath.row == lastVisibleRow {
-//            log.debug("last row will display")
-//            // startObservingMessages()
-//        }
-//    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return calcCellHeight(indexPath: indexPath)
+    }
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return calcCellHeight(indexPath: indexPath)
+    }
     
+    func calcCellHeight(indexPath: IndexPath) -> CGFloat {
+        let message = self.messages.value[indexPath.row]
+        
+        let minBubbleSize: CGFloat = GZEChatBubbleView.minSize
+        let textHeight = ceil(message.text.size(font: GZEChatBubbleView.font).height)
+        let cellPadding = GZEChatBubbleView.labelPadding * 2 + GZEChatBubbleView.bubblePadding * 2
+        
+        return max(minBubbleSize, cellPadding + textHeight)
+    }
 
 
     // MARK: - Deinitializer
@@ -189,10 +227,11 @@ class GZEMessageTableCell: UITableViewCell {
 
     // MARK: private methods
     private func initialize() {
-        log.debug("initializing \(self)")
+        // log.debug("initializing \(self)")
         self.backgroundColor = .clear
         self.infoLabel.textColor = GZEConstants.Color.mainTextColor
         self.infoLabel.textAlignment = .center
+        self.infoLabel.font = GZEChatBubbleView.font
         self.addSubview(self.bubble)
         self.addSubview(self.infoLabel)
 
@@ -234,6 +273,6 @@ class GZEMessageTableCell: UITableViewCell {
 
     // MARK: - Deinitializer
     deinit {
-        log.debug("\(self) disposed")
+        //log.debug("\(self) disposed")
     }
 }

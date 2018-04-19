@@ -9,6 +9,11 @@
 import UIKit
 
 class GZEChatBubbleView: UIView {
+    
+    static let minSize: CGFloat = 57
+    static let font = GZEConstants.Font.main
+    static let labelPadding: CGFloat = 10
+    static let bubblePadding: CGFloat = 5
 
     let bubbleImageView = UIImageView()
     let textLabel = UILabel()
@@ -72,8 +77,11 @@ class GZEChatBubbleView: UIView {
         self.backgroundColor = .clear
         self.textLabel.textColor = GZEConstants.Color.chatBubbleTextColor
         self.textLabel.numberOfLines = 0
+        self.textLabel.font = GZEChatBubbleView.font
         self.fakeTextLabel.numberOfLines = 0
         self.fakeTextLabel.textColor = .clear
+        self.fakeTextLabel.font = GZEChatBubbleView.font
+        
 
         self.bubbleImageView.addSubview(self.fakeTextLabel)
         self.addSubview(self.bubbleImageView)
@@ -85,8 +93,8 @@ class GZEChatBubbleView: UIView {
         self.bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
 
 
-        self.bubbleImageView.topAnchor.constraint(equalTo: self.fakeTextLabel.topAnchor, constant: -10).isActive = true
-        self.bubbleImageView.bottomAnchor.constraint(equalTo: self.fakeTextLabel.bottomAnchor, constant: 10).isActive = true
+        self.bubbleImageView.topAnchor.constraint(equalTo: self.fakeTextLabel.topAnchor, constant: -GZEChatBubbleView.labelPadding).isActive = true
+        self.bubbleImageView.bottomAnchor.constraint(equalTo: self.fakeTextLabel.bottomAnchor, constant: GZEChatBubbleView.labelPadding).isActive = true
         
         
         self.textLabelLeadingConstraint = self.bubbleImageView.leadingAnchor.constraint(equalTo: self.fakeTextLabel.leadingAnchor)
@@ -99,8 +107,8 @@ class GZEChatBubbleView: UIView {
         self.textLabel.leadingAnchor.constraint(equalTo: self.fakeTextLabel.leadingAnchor).isActive = true
         self.textLabel.trailingAnchor.constraint(equalTo: self.fakeTextLabel.trailingAnchor).isActive = true
 
-        self.topAnchor.constraint(equalTo: self.bubbleImageView.topAnchor, constant: -5).isActive = true
-        self.bottomAnchor.constraint(equalTo: self.bubbleImageView.bottomAnchor, constant: 5).isActive = true
+        self.topAnchor.constraint(equalTo: self.bubbleImageView.topAnchor, constant: -GZEChatBubbleView.bubblePadding).isActive = true
+        self.bottomAnchor.constraint(equalTo: self.bubbleImageView.bottomAnchor, constant: GZEChatBubbleView.bubblePadding).isActive = true
 
         self.bubbleImageView.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 0.6).isActive = true
 

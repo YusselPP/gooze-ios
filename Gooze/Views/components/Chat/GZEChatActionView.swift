@@ -61,6 +61,7 @@ class GZEChatActionView: UIView {
         addSubview(accessoryButton)
         
         // Constraints
+        translatesAutoresizingMaskIntoConstraints = false
         mainButton.translatesAutoresizingMaskIntoConstraints = false
         accessoryButton.translatesAutoresizingMaskIntoConstraints = false
         

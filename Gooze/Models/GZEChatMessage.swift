@@ -121,7 +121,7 @@ class GZEChatMessage: NSObject, Glossy {
 
         super.init()
 
-        log.debug("\(self) init")
+        // log.debug("\(self) init")
     }
 
     func toJSON() -> JSON? {
@@ -149,7 +149,7 @@ class GZEChatMessage: NSObject, Glossy {
 
     // MARK: - Deinitializer
     deinit {
-        log.debug("\(self) disposed")
+        //log.debug("\(self) disposed")
     }
 }
 

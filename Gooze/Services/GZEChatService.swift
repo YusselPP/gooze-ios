@@ -22,7 +22,9 @@ class GZEChatService: NSObject {
     var chatSocket: ChatSocket? {
         return GZESocketManager.shared[ChatSocket.namespace] as? ChatSocket
     }
-
+    
+    let chatEventEmmiter = MutableProperty<CollectionEvent?>(nil)
+    
     var activeChatId: String?
 
     override init() {
@@ -37,10 +39,12 @@ class GZEChatService: NSObject {
             return
         }
         
-        let offset = (messages.value[chatId]?.count ?? 0) + messagesChunkSize
+        // let offset = (messages.value[chatId]?.count ?? 0) //+ messagesChunkSize
+        let olderMessageDate: Date = self.messages.value[chatId]?.first?.createdAt ?? Date()
+        let olderMessageDateJson = GZEApi.dateFormatter.string(from: olderMessageDate)
         
-        chatSocket.emitWithAck(.retrieveHistory, chatId, offset).timingOut(after: 5) {[weak self] data in
-            log.debug("Message sent. Ack data: \(data)")
+        chatSocket.emitWithAck(.retrieveHistory, chatId, olderMessageDateJson, messagesChunkSize).timingOut(after: 5) {[weak self] data in
+            //log.debug("Message sent. Ack data: \(data)")
             
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
                 log.error("No ack received from server")
@@ -55,18 +59,24 @@ class GZEChatService: NSObject {
                 let historyMessagesJson = data[1] as? [JSON],
                 let historyMessages = [GZEChatMessage].from(jsonArray: historyMessagesJson)
             {
+                if historyMessages.count <= 0 {
+                    log.debug("There's no more messages in the chat history")
+                    return
+                }
+                
                 if var chat = self?.messages.value[chatId] {
                     log.debug("chat found inserting new messages")
                     
                     chat.upsert(contentsOf: historyMessages, prepend: true) { $0 == $1 }
-                    
                     self?.messages.value[chatId] = chat
+                    self?.chatEventEmmiter.value = .add(at: 0, count: historyMessages.count)
                     
                     log.debug("Messages history successfully retrieved")
                 } else {
                     log.debug("chat not found, creating it")
                     
-                    self?.messages.value[chatId] = historyMessages
+                    self?.messages.value[chatId] = historyMessages.reversed()
+                    self?.chatEventEmmiter.value = .add(at: 0, count: historyMessages.count)
                 }
             } else {
                 log.error("Unable to parse data to expected objects")
@@ -141,7 +151,7 @@ class GZEChatService: NSObject {
             return SignalProducer(error: .datesSocket(error: .unexpected))
         }
         
-        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequestReceived", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
+        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequestReceivedasdfasdfasdfasdfasdfasfdasdfasdf", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
             log.error("Failed to parse GZEChatMessage to JSON")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return SignalProducer(error: .datesSocket(error: .unexpected))
@@ -153,7 +163,7 @@ class GZEChatService: NSObject {
                 log.debug("requestAmount signal disposed")
             }
             
-            chatSocket.emitWithAck(.requestAmount, messageJson, username, chatJson, dateRequestId, mode.rawValue, amount).timingOut(after: 5) { data in
+            chatSocket.emitWithAck(.requestAmount, messageJson, username, chatJson, dateRequestId, mode.rawValue, amount).timingOut(after: 5) {[weak self] data in
                 log.debug("Message sent. Ack data: \(data)")
                 
                 if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -167,8 +177,9 @@ class GZEChatService: NSObject {
                     log.error("\(String(describing: error.toJSON()))")
                     sink.send(error: .repository(error: .UnexpectedError))
                     
-                } else if data[1] is Bool {
+                } else if let messageJson = data[1] as? JSON, let message = GZEChatMessage(json: messageJson) {
                     
+                    self?.upsert(message: message)
                     sink.send(value: true)
                     sink.sendCompleted()
                     log.debug("Message successfully sent")
@@ -185,6 +196,7 @@ class GZEChatService: NSObject {
         var resolvedComparator: (GZEChatMessage) -> Bool
         var messages = self.messages.value
         var currentChatMessages: [GZEChatMessage]
+        var inserted: Bool
 
         let chatId = message.chatId
         
@@ -199,17 +211,24 @@ class GZEChatService: NSObject {
         {
             log.debug("Chat[id=\(chatId)] exists, new messages will be appended")
             currentChatMessages = messages[chatId]!
-            currentChatMessages.upsert(message, comparator: resolvedComparator)
+            inserted = currentChatMessages.upsert(message, comparator: resolvedComparator)
         } else {
             log.debug("Chat[id=\(chatId)] not found, creating the chat with the new messages")
             currentChatMessages = [message]
+            inserted = true
         }
         
         messages[chatId] = currentChatMessages
         self.messages.value = messages
+        if inserted {
+            self.chatEventEmmiter.value = .add(at: currentChatMessages.count - 1, count: 1)
+        }
     }
     
     func clear(chatId: String) {
+        if let messagesCount = self.messages.value[chatId]?.count {
+            self.chatEventEmmiter.value = .remove(at: 0, count: messagesCount)
+        }
         self.messages.value[chatId] = []
     }
     

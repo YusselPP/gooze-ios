@@ -17,6 +17,7 @@ protocol GZEChatViewModel {
 
     var username: MutableProperty<String?> { get }
     var messages: MutableProperty<[GZEChatMessage]> { get }
+    var messagesEvents: MutableProperty<CollectionEvent?> { get }
     var backgroundImage: MutableProperty<URLRequest?> { get }
 
     var topButtonTitle: MutableProperty<String> { get }
@@ -39,6 +40,9 @@ protocol GZEChatViewModel {
     
     func startObservers()
     func stopObservers()
+    
+    var retrieveHistoryProducer: SignalProducer<Void, GZEError>? { get }
+    func retrieveHistory()
 }
 
 enum GZEChatViewMode: String {
