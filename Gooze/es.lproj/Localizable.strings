@@ -139,6 +139,8 @@
 
 "service.chat.invalidChatId"="Ocurrió un error al intentar abrir el chat";
 "service.chat.messageReceived"="%@ te ha enviado mensaje";
+"service.chat.amountRequest.sent"="Has solicitado %@";
+"service.chat.amountRequest.received"="%@ ha solicitado %@";
 
 // Services/Location
 "service.location.disabled"="No se pudo obtener tu ubicación, verifica que la aplicación tenga permiso.";

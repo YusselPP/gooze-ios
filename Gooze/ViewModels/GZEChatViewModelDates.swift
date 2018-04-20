@@ -74,7 +74,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let acceptAmountButtonTitle = "vm.datesChat.acceptAmountButtonTitle".localized().uppercased()
     let amount = MutableProperty<Double?>(nil)
     
-    let currencyFormatter = NumberFormatter()
+    
     
     // MARK: - init
     init(chat: GZEChat, dateRequestId: String, mode: GZEChatViewMode, username: String) {
@@ -91,8 +91,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.topAccessoryButtonAction = CocoaAction(self.createTopAccessoryButtonAction())
         self.sendButtonAction = CocoaAction(self.createSendAction())
         
-        self.currencyFormatter.numberStyle = .currency
-        
         self.retrieveHistoryProducer = SignalProducer {[weak self] sink, disposable in
             log.debug("retrieve history producer called")
             guard let this = self else {return}
@@ -107,7 +105,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
             // validate max double val
             self.topButtonTitle <~ self.amount.map{[weak self] in
                 guard let this = self else {return ""}
-                if let amount = $0, let formattedAmount = this.currencyFormatter.string(from: NSNumber(value: amount)) {
+                if let amount = $0, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
                     this.topAccessoryButtonIsHidden.value = false
                     return "\(formattedAmount)"
                 } else {
@@ -126,7 +124,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
         } else {
             self.topButtonTitle <~ self.amount.map{[weak self] in
                 guard let this = self else {return ""}
-                if let amount = $0, let formattedAmount = this.currencyFormatter.string(from: NSNumber(value: amount)) {
+                if let amount = $0, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
                     this.topButtonIsHidden.value = false
                     return "\(String(format: this.acceptAmountButtonTitle, formattedAmount))"
                 } else {
@@ -198,7 +196,8 @@ class GZEChatViewModelDates: GZEChatViewModel {
                     senderId: sender.id,
                     username: username,
                     chat: this.chat,
-                    mode: .client
+                    mode: .client,
+                    senderUsername: sender.username
                 )
             }
         }

@@ -138,7 +138,7 @@ class GZEChatService: NSObject {
         self.upsert(message: message)
     }
     
-    func request(amount: Double, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<Bool, GZEError> {
+    func request(amount: Double, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode, senderUsername: String) -> SignalProducer<Bool, GZEError> {
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
@@ -151,7 +151,9 @@ class GZEChatService: NSObject {
             return SignalProducer(error: .datesSocket(error: .unexpected))
         }
         
-        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequestReceivedasdfasdfasdfasdfasdfasfdasdfasdf", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
+        let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
+        
+        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequest.received,\(senderUsername),\(formattedAmount)", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
             log.error("Failed to parse GZEChatMessage to JSON")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return SignalProducer(error: .datesSocket(error: .unexpected))

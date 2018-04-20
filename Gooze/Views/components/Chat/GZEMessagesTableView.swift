@@ -69,6 +69,9 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
             
             let beforeContentSize = this.contentSize
             log.debug("messages event received: \(event)")
+            
+            log.debug("scroll content size: \(this.contentSize)")
+            log.debug("scroll content offset: \(this.contentOffset)")
  
             let atEndOfTable = this.contentOffset.y >= (this.contentSize.height - this.frame.size.height - GZEChatBubbleView.minSize)
             
@@ -78,19 +81,25 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
             case .add(let at, let count):
                 
                 this.insertRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
+                this.layoutIfNeeded()
 
                 if atEndOfTable {
                     log.debug("At end of the table")
                     this.scrollToBottom()
                 } else {
                     //this.contentOffset = CGPoint(x: this.contentOffset.x, y: max(0, this.contentOffset.y + this.contentSize.height - beforeContentSize.height - GZEChatBubbleView.minSize))
-                    this.contentOffset.y = max(
-                        0,
-                        this.contentOffset.y +
-                        this.contentSize.height -
-                        beforeContentSize.height -
-                        GZEChatBubbleView.minSize
-                    )
+                    DispatchQueue.main.async {
+                        log.debug("scroll content size: \(this.contentSize)")
+                        log.debug("scroll content offset: \(this.contentOffset)")
+                        this.contentOffset.y = max(
+                            0,
+                            this.contentOffset.y +
+                                this.contentSize.height -
+                                beforeContentSize.height -
+                                GZEChatBubbleView.minSize
+                        )
+                        UIView.setAnimationsEnabled(true)
+                    }
                 }
             case .remove(let at, let count):
                 this.deleteRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
@@ -98,7 +107,10 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
                 this.reloadRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
             }
             
-            UIView.setAnimationsEnabled(true)
+            
+            
+            log.debug("scroll content size: \(this.contentSize)")
+            log.debug("scroll content offset: \(this.contentOffset)")
         }
     }
 
@@ -178,7 +190,7 @@ class GZEMessageTableCell: UITableViewCell {
 
             if message.type == .info {
                 self.messageType = .info
-                self.infoLabel.text = message.text
+                self.infoLabel.text = message.localizedText()
             } else if message.type == .user {
                 if message.sent(by: GZEAuthService.shared.authUser?.toChatUser()) {
                     self.messageType = .sent

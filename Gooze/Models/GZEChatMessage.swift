@@ -146,6 +146,21 @@ class GZEChatMessage: NSObject, Glossy {
         }
         return self.senderId == user.id
     }
+    
+    func localizedText() -> String {
+        var text = self.text
+        
+        if self.type == .info {
+            
+            var textArr = text.split(separator: ",").map{String($0)}
+            
+            let textKey = textArr.remove(at: 0)
+            
+            text = String(format: String(textKey).localized(), arguments: textArr as [CVarArg])
+        }
+        
+        return text
+    }
 
     // MARK: - Deinitializer
     deinit {
