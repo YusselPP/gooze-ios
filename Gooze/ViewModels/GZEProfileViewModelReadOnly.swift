@@ -230,7 +230,15 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     
     private func openChat() {
         log.debug("open chat called")
-        guard let controller = self.controller else {
+
+        guard let navcontroller = self.controller?.navigationController else {
+            log.debug("Unable to open chat view navcontroller is not set")
+            return
+        }
+
+        navcontroller.popViewController(animated: true)
+
+        guard let controller = navcontroller.topViewController else {
             log.debug("Unable to open chat view controller is not set")
             return
         }
@@ -239,7 +247,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             log.error("Unable to open chat chat, failed to instantiate chat view model")
             return
         }
-        
+
         GZEChatService.shared.openChat(presenter: controller, viewModel: chatViewModel)
     }
     

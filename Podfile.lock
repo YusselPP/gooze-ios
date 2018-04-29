@@ -3,6 +3,7 @@ PODS:
   - AlamofireImage (3.3.0):
     - Alamofire (~> 4.5)
   - ALCameraViewController (2.0.3)
+  - DeepDiff (1.1.2)
   - FloatRatingView (2.0)
   - Gloss (1.2.4)
   - Localize-Swift (2.0.0)
@@ -22,6 +23,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.5)
   - AlamofireImage (~> 3.3)
   - ALCameraViewController (~> 2.0.3)
+  - DeepDiff
   - FloatRatingView (~> 2.0.0)
   - Gloss (~> 1.2.0)
   - Localize-Swift (~> 2.0)
@@ -35,6 +37,7 @@ SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
   ALCameraViewController: 7b86c2888df0e63f53a801e9d96fe194f51157ec
+  DeepDiff: 35c661301baeb2db083ea1b9af183daab6af1c05
   FloatRatingView: 857ab8f10040d06a42fc979f486c8f9fecd2f2e5
   Gloss: 4e036074610fdb993abcb958ebcd7332588e2333
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
@@ -47,6 +50,6 @@ SPEC CHECKSUMS:
   SwiftyBeaver: 91057725648ee4980308f1650af077d04b3654a0
   Validator: 7d9828daffabc757604603052e407f208fa9b6d5
 
-PODFILE CHECKSUM: 6dbf4d1cf87e06fe8d31732e29645b58e9b635f2
+PODFILE CHECKSUM: 4e396475a413c9dc7376262da9119c19409de714
 
 COCOAPODS: 1.4.0

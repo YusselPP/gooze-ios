@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import enum Result.NoError
 
 class GZEChatViewModelDates: GZEChatViewModel {
 
@@ -20,7 +21,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
     let username = MutableProperty<String?>(nil)
     let messages = MutableProperty<[GZEChatMessage]>([])
-    let messagesEvents = MutableProperty<CollectionEvent?>(nil)
     let backgroundImage = MutableProperty<URLRequest?>(nil)
 
     let topButtonTitle = MutableProperty<String>("")
@@ -39,6 +39,16 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let sendButtonImage = MutableProperty<UIImage?>(nil)
     let sendButtonEnabled = MutableProperty<Bool>(true)
     var sendButtonAction: CocoaAction<UIButton>!
+
+    var paymentViewModel: GZEPaymentViewModel? {
+        return getPaymentViewModel()
+    }
+
+    var mapViewModel: GZEMapViewModel {
+        return GZEMapViewModelDate()
+    }
+    
+    let (showPaymentViewSignal, showPaymentViewObserver) = Signal<Bool, NoError>.pipe()
     
     let chat: GZEChat
     
@@ -72,8 +82,9 @@ class GZEChatViewModelDates: GZEChatViewModel {
     
     let setAmountButtonTitle = "vm.datesChat.setAmountButtonTitle".localized().uppercased()
     let acceptAmountButtonTitle = "vm.datesChat.acceptAmountButtonTitle".localized().uppercased()
+    let dateButtonTitle = "vm.datesChat.dateButtonTitle".localized().uppercased()
     let amount = MutableProperty<Double?>(nil)
-    
+    let dateRequest = MutableProperty<GZEDateRequest?>(nil)
     
     
     // MARK: - init
@@ -99,20 +110,29 @@ class GZEChatViewModelDates: GZEChatViewModel {
         }.debounce(60, on: QueueScheduler.main)
         
         GZEDatesService.shared.find(byId: dateRequestId)
-        GZEChatService.shared.retrieveHistory(chatId: chat.id)
         
         if mode == .gooze {
             // validate max double val
-            self.topButtonTitle <~ self.amount.map{[weak self] in
-                guard let this = self else {return ""}
-                if let amount = $0, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
+            //self.topButtonTitle <~ (
+            SignalProducer.combineLatest(
+                self.amount.producer,
+                self.dateRequest.producer
+            )
+            .startWithValues{[weak self] (amount, dateRequest) in
+                guard let this = self else {return}
+
+                if dateRequest?.date != nil {
+                    this.topButtonTitle.value = this.dateButtonTitle
+
+                } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
                     this.topAccessoryButtonIsHidden.value = false
-                    return "\(formattedAmount)"
+                    this.topButtonTitle.value = "\(formattedAmount)"
                 } else {
                     this.topAccessoryButtonIsHidden.value = true
-                    return this.setAmountButtonTitle
+                    this.topButtonTitle.value = this.setAmountButtonTitle
                 }
             }
+            //)
             
             self.amount <~ self.topTextInput.map{ amountText -> Double? in
                 if let amountText = amountText {
@@ -122,14 +142,24 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 }
             }
         } else {
-            self.topButtonTitle <~ self.amount.map{[weak self] in
-                guard let this = self else {return ""}
-                if let amount = $0, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
+            // self.topButtonTitle <~ self.amount.map
+            SignalProducer.combineLatest(
+                self.amount.producer,
+                self.dateRequest.producer
+            )
+            .startWithValues{[weak self] (amount, dateRequest) in
+                guard let this = self else {return}
+
+                if dateRequest?.date != nil {
                     this.topButtonIsHidden.value = false
-                    return "\(String(format: this.acceptAmountButtonTitle, formattedAmount))"
+                    this.topButtonTitle.value = this.dateButtonTitle
+
+                } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
+                    this.topButtonIsHidden.value = false
+                    this.topButtonTitle.value =  "\(String(format: this.acceptAmountButtonTitle, formattedAmount))"
                 } else {
                     this.topButtonIsHidden.value = true
-                    return ""
+                    this.topButtonTitle.value =  ""
                 }
             }
         }
@@ -158,7 +188,8 @@ class GZEChatViewModelDates: GZEChatViewModel {
             log.debug("mode: \(this.mode)")
             
             switch this.mode {
-            case .client: break
+            case .client:
+                this.showPaymentView()
             case .gooze:
                 this.topTextInputIsHidden.value = false
             }
@@ -228,8 +259,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
             let message = GZEChatMessage(
                 text: messageTextTrim,
-                //sender: sender.toChatUser(),
-                //recipient: this.recipient
                 senderId: sender.id,
                 chatId: this.chat.id
             )
@@ -273,6 +302,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 .startWithValues {[weak self] updatedDateRequest in
                     log.debug("updatedDateRequest: \(String(describing: updatedDateRequest))")
                     guard let this = self else { log.error("self was disposed"); return }
+                    this.dateRequest.value = updatedDateRequest
                     this.amount.value = updatedDateRequest.amount
                     if let amount = updatedDateRequest.amount {
                         this.topTextInput.value = "\(amount)"
@@ -295,18 +325,22 @@ class GZEChatViewModelDates: GZEChatViewModel {
             guard let this = self else { log.error("self was disposed");  return [] }
             return $0[this.chat.id] ?? []
         }
-        self.messagesEventsObserver = self.messagesEvents.bindingTarget <~ GZEChatService.shared.chatEventEmmiter
+        GZEChatService.shared.retrieveHistory(chatId: chat.id)
     }
     
     private func stopObservingMessages() {
         log.debug("stop observing messages")
-        self.messagesObserver?.dispose()
-        self.messagesObserver = nil
-        self.messagesEventsObserver?.dispose()
-        self.messagesEventsObserver = nil
+        if self.messagesObserver != nil {
+            GZEChatService.shared.clear(chatId: self.chat.id)
+            self.messagesObserver?.dispose()
+            self.messagesObserver = nil
+            self.messagesEventsObserver?.dispose()
+            self.messagesEventsObserver = nil
+        }
     }
     
     private func observeSocketEvents() {
+        log.debug("start observing socket events")
         stopObservingSocketEvents()
         self.socketEventsObserver = GZEDatesService.shared.dateSocket?
             .socketEventsEmitter
@@ -319,20 +353,45 @@ class GZEChatViewModelDates: GZEChatViewModel {
                     return
                 }
                 GZEDatesService.shared.find(byId: this.dateRequestId)
-                GZEChatService.shared.retrieveHistory(chatId: this.chat.id)
-                // TODO: should we retrieve al unreceived messages?
+                GZEChatService.shared.retrieveNewMessages(chatId: this.chat.id)
             }
     }
     
     private func stopObservingSocketEvents() {
         log.debug("stop observing SocketEvents")
-        self.socketEventsObserver?.dispose()
-        self.socketEventsObserver = nil
+        if self.socketEventsObserver != nil {
+            self.socketEventsObserver?.dispose()
+            self.socketEventsObserver = nil
+        }
+    }
+    
+    private func showPaymentView() {
+        self.showPaymentViewObserver.send(value: true)
+    }
+
+    private func getPaymentViewModel() -> GZEPaymentViewModel? {
+        guard let sender = GZEAuthService.shared.authUser else {
+            log.error("authUser is nil")
+            return nil
+        }
+
+        var mode: GZEChatViewMode
+        switch self.mode {
+        case .client: mode = .gooze
+        case .gooze: mode = .client
+        }
+
+        return GZEPaymentViewModelDate(
+            dateRequestId: self.dateRequestId,
+            senderId: sender.id,
+            username: sender.username,
+            chat: self.chat,
+            mode: mode
+        )
     }
     
     // MARK: - Deinitializers
     deinit {
-        GZEChatService.shared.clear(chatId: self.chat.id)
         log.debug("\(self) disposed")
     }
 }

@@ -18,8 +18,8 @@ class ChatSocket: GZESocket {
         
         case requestAmount
         case amountRequestReceived
-        
-        case retrieveHistory
+
+        case retrieveMessages
     }
 
     static let namespace = "/chat"

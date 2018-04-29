@@ -191,9 +191,64 @@ class GZEDatesService: NSObject {
             }
         }
     }
+
+    func createCharge(requestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<Void, GZEError> {
+        guard let dateSocket = self.dateSocket else {
+            log.error("Date socket not found")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        guard let chatJson = chat.toJSON() else {
+            log.error("Failed to parse GZEChat to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        guard let messageJson = GZEChatMessage(text: "service.dates.dateCreated", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
+            log.error("Failed to parse GZEChatMessage to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        return SignalProducer { sink, disposable in
+            log.debug("emitting create date event...")
+            dateSocket.emitWithAck(.createCharge, requestId, messageJson, username, chatJson, mode.rawValue).timingOut(after: 5) {[weak self] data in
+                log.debug("ack data: \(data)")
+
+                disposable.add {
+                    log.debug("acceptDateRequest signal disposed")
+                }
+
+                if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
+                    log.error("No ack received from server")
+                    self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
+                    sink.send(error: .datesSocket(error: .noAck))
+                    return
+                }
+
+                if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
+
+                    log.error("\(String(describing: error.toJSON()))")
+                    self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+                    sink.send(error: .datesSocket(error: .unexpected))
+
+                } else if let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) {
+
+                    log.debug("Date successfully created")
+                    GZEDatesService.shared.upsert(dateRequest: dateRequest)
+                    sink.sendCompleted()
+
+                } else {
+                    log.error("Unable to parse data to expected objects")
+                    self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+                    sink.send(error: .datesSocket(error: .unexpected))
+                }
+            }
+        }
+    }
     
     func upsert(dateRequest: GZEDateRequest) {
-        // TODO: add to received or sent request depending on sender and recipient id
         guard let authUser = GZEAuthService.shared.authUser else {
             log.error("auth user not found")
             return

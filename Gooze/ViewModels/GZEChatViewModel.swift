@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import enum Result.NoError
 
 protocol GZEChatViewModel {
 
@@ -17,7 +18,6 @@ protocol GZEChatViewModel {
 
     var username: MutableProperty<String?> { get }
     var messages: MutableProperty<[GZEChatMessage]> { get }
-    var messagesEvents: MutableProperty<CollectionEvent?> { get }
     var backgroundImage: MutableProperty<URLRequest?> { get }
 
     var topButtonTitle: MutableProperty<String> { get }
@@ -35,6 +35,11 @@ protocol GZEChatViewModel {
     var inputMessage: MutableProperty<String?> { get }
     var sendButtonImage: MutableProperty<UIImage?> { get }
     var sendButtonAction: CocoaAction<UIButton>! { get }
+
+    var paymentViewModel: GZEPaymentViewModel? { get }
+    var mapViewModel: GZEMapViewModel { get }
+
+    var showPaymentViewSignal: Signal<Bool, NoError> { get }
     
     var chat: GZEChat { get }
     

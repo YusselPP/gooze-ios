@@ -51,6 +51,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     var showRequestResultsListAction: CocoaAction<GZEButton>!
     var showRequestOtherResultsListAction: CocoaAction<GZEButton>!
 
+    var isObservingRequests = false
     var disposeRequestsObserver: Disposable?
     var isInitialPositionSet = false
 
@@ -78,11 +79,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     var backButton = GZEBackUIBarButtonItem()
 
-    @IBOutlet weak var mapView: MKMapView! {
-        didSet {
-            mapView.delegate = self
-        }
-    }
+    @IBOutlet weak var mapViewContainer: UIView!
+    var mapView: MKMapView!
+    let isUserInteractionEnabled = MutableProperty<Bool>(false)
 
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activateGoozeButton: GZEButton!
@@ -117,18 +116,32 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        self.initMapKit()
+
         if self.shouldRestartSearchingAnmiation {
             self.shouldRestartSearchingAnmiation = false
             self.isSearchingAnimationEnabled = true
+        }
+
+        if self.isObservingRequests {
+            self.observeRequests()
         }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+
+        if self.isObservingRequests {
+            self.stopObservingRequests()
+        }
+
         if self.isSearchingAnimationEnabled {
             self.shouldRestartSearchingAnmiation = true
             self.isSearchingAnimationEnabled = false
         }
+
+        self.deinitMapKit()
     }
 
     override func didReceiveMemoryWarning() {
@@ -137,7 +150,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func setupInterfaceObjects() {
-        mapView.showsUserLocation = true
         navIcon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(centerMapToUserLocation)))
 
         backButton.onButtonTapped = ptr(self, GZEActivateGoozeViewController.backButtonTapped)
@@ -420,6 +432,30 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
+    // MARK: - Mapkit
+
+    func initMapKit() {
+        self.mapView = GZEMapService.shared.mapView
+        self.mapView.delegate = self
+        self.mapView.showsUserLocation = true
+
+        GZEMapService.shared.disposables.append(
+            self.mapView.reactive.isUserInteractionEnabled <~ self.isUserInteractionEnabled
+        )
+
+        self.mapView.translatesAutoresizingMaskIntoConstraints = false
+        self.mapViewContainer.addSubview(self.mapView)
+        self.mapViewContainer.topAnchor.constraint(equalTo: self.mapView.topAnchor).isActive = true
+        self.mapViewContainer.bottomAnchor.constraint(equalTo: self.mapView.bottomAnchor).isActive = true
+        self.mapViewContainer.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor).isActive = true
+        self.mapViewContainer.trailingAnchor.constraint(equalTo: self.mapView.trailingAnchor).isActive = true
+    }
+
+    func deinitMapKit() {
+        GZEMapService.shared.cleanMap()
+        self.mapView = nil
+    }
+
     // MARK: - Map Delegate
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -440,7 +476,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         if let authorizationMessage = locationService.requestAuthorization() {
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
         } else {
-            mapView.setRegion(MKCoordinateRegionMake(mapView.userLocation.coordinate, MKCoordinateSpanMake(0.1, 0.1)), animated: true)
+            mapView.setRegion(MKCoordinateRegionMake(mapView.userLocation.coordinate, MKCoordinateSpanMake(0.01, 0.01)), animated: true)
         }
     }
 
@@ -473,6 +509,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 
                 let dateRequest = tappedUserConvertible as? GZEDateRequest
                 
+                pageViewController.profileVm.dateRequest = dateRequest
+                pageViewController.galleryVm.dateRequest = dateRequest
+                pageViewController.ratingsVm.dateRequest = dateRequest
+
                 pageViewController.profileVm.dateRequest = dateRequest
                 pageViewController.galleryVm.dateRequest = dateRequest
                 pageViewController.ratingsVm.dateRequest = dateRequest
@@ -523,17 +563,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         
         hideBalloons()
 
-        mapView.isUserInteractionEnabled = true
+        isUserInteractionEnabled.value = true
         isSearchingAnimationEnabled = false
 
         activateGoozeButton.setTitle(viewModel.activateButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = activateGoozeAction
-        disposeRequestsObserver?.dispose()
-        disposeRequestsObserver = nil
+        stopObservingRequests()
+        isObservingRequests = false
     }
 
     func showRequestResultsScene() {
-        mapView.isUserInteractionEnabled = false
+        isUserInteractionEnabled.value = false
         isSearchingAnimationEnabled = true
         activateGoozeButton.isHidden = false
         activateGoozeButton.isEnabled = true
@@ -575,7 +615,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         topControlsBackground.isHidden = false
         activateGoozeButton.isHidden = false
 
-        mapView.isUserInteractionEnabled = true
+        isUserInteractionEnabled.value = true
         isSearchingAnimationEnabled = false
 
         viewModel.searchLimit.value = MAX_RESULTS
@@ -588,7 +628,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func showSearchingScene() {
-        mapView.isUserInteractionEnabled = false
+        isUserInteractionEnabled.value = false
         activateGoozeButton.isHidden = false
 
         isSearchingAnimationEnabled = true
@@ -645,14 +685,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                         this.showBalloons()
                     }
             }
+            isObservingRequests = true
         }
+    }
+
+    func stopObservingRequests() {
+        disposeRequestsObserver?.dispose()
+        disposeRequestsObserver = nil
     }
 
     // MARK: - Deinitializers
     deinit {
-        disposeRequestsObserver?.dispose()
-        disposeRequestsObserver = nil
-        mapView.delegate = nil
         log.debug("\(self) disposed")
     }
 }

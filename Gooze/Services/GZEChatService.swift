@@ -23,38 +23,115 @@ class GZEChatService: NSObject {
         return GZESocketManager.shared[ChatSocket.namespace] as? ChatSocket
     }
     
-    let chatEventEmmiter = MutableProperty<CollectionEvent?>(nil)
-    
     var activeChatId: String?
 
     override init() {
         super.init()
     }
-    
-    func retrieveHistory(chatId: String) {
-        log.debug("Retrieving messages history...")
-        
+
+    func retrieveNewMessages(chatId: String) {
+        log.debug("Retrieving new messages...")
+
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
             return
         }
-        
-        // let offset = (messages.value[chatId]?.count ?? 0) //+ messagesChunkSize
-        let olderMessageDate: Date = self.messages.value[chatId]?.first?.createdAt ?? Date()
-        let olderMessageDateJson = GZEApi.dateFormatter.string(from: olderMessageDate)
-        
-        chatSocket.emitWithAck(.retrieveHistory, chatId, olderMessageDateJson, messagesChunkSize).timingOut(after: 5) {[weak self] data in
+
+        guard let lastMessage = self.messages.value[chatId]?.last else {
+            self.retrieveHistory(chatId: chatId)
+            return
+        }
+
+        let lastMessageDate: Date = lastMessage.createdAt
+        let lastMessageDateJson = GZEApi.dateFormatter.string(from: lastMessageDate)
+
+        let filter =
+            [
+                "where": [
+                    "createdAt": [
+                        "gt": lastMessageDateJson
+                    ]
+                ],
+                "limit": 100,
+                "order": "createdAt DESC"
+
+            ] as [String : Any]
+
+        chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: 5) {[weak self] data in
             //log.debug("Message sent. Ack data: \(data)")
-            
+
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
                 log.error("No ack received from server")
                 return
             }
-            
+
             if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
-                
+
                 log.error("\(String(describing: error.toJSON()))")
-                
+
+            } else if
+                let newMessagesJson = data[1] as? [JSON],
+                let newMessages = [GZEChatMessage].from(jsonArray: newMessagesJson)
+            {
+                if newMessages.count <= 0 {
+                    log.debug("There's no more new messages")
+                    return
+                }
+
+                let reversedNewMessages: [GZEChatMessage] = newMessages.reversed()
+
+                if var chat = self?.messages.value[chatId] {
+                    log.debug("chat found, current messages count: \(chat.count). Inserting \(newMessages.count) new messages")
+
+                    chat.upsert(contentsOf: reversedNewMessages) { $0 == $1 }
+                    self?.messages.value[chatId] = chat
+
+                    log.debug("New messages successfully retrieved")
+                } else {
+                    log.debug("chat not found, creating it")
+
+                    self?.messages.value[chatId] = reversedNewMessages
+                }
+            } else {
+                log.error("Unable to parse data to expected objects")
+            }
+        }
+    }
+
+    func retrieveHistory(chatId: String) {
+        log.debug("Retrieving messages history...")
+
+        guard let chatSocket = self.chatSocket else {
+            log.error("Chat socket not found")
+            return
+        }
+
+        let olderMessageDate: Date = self.messages.value[chatId]?.first?.createdAt ?? Date()
+        let olderMessageDateJson = GZEApi.dateFormatter.string(from: olderMessageDate)
+
+        let filter =
+            [
+                "where": [
+                    "createdAt": [
+                        "lt": olderMessageDateJson
+                    ]
+                ],
+                "limit": messagesChunkSize,
+                "order": "createdAt DESC"
+            ] as [String : Any]
+
+        chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: 5) {[weak self] data in
+            //log.debug("Message sent. Ack data: \(data)")
+
+            if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
+                log.error("No ack received from server")
+                return
+            }
+
+            if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
+
+                log.error("\(String(describing: error.toJSON()))")
+
             } else if
                 let historyMessagesJson = data[1] as? [JSON],
                 let historyMessages = [GZEChatMessage].from(jsonArray: historyMessagesJson)
@@ -63,27 +140,25 @@ class GZEChatService: NSObject {
                     log.debug("There's no more messages in the chat history")
                     return
                 }
-                
+
                 if var chat = self?.messages.value[chatId] {
-                    log.debug("chat found inserting new messages")
-                    
+                    log.debug("chat found, current messages count: \(chat.count). Inserting \(historyMessages.count) new messages")
+
                     chat.upsert(contentsOf: historyMessages, prepend: true) { $0 == $1 }
                     self?.messages.value[chatId] = chat
-                    self?.chatEventEmmiter.value = .add(at: 0, count: historyMessages.count)
-                    
+
                     log.debug("Messages history successfully retrieved")
                 } else {
                     log.debug("chat not found, creating it")
-                    
+
                     self?.messages.value[chatId] = historyMessages.reversed()
-                    self?.chatEventEmmiter.value = .add(at: 0, count: historyMessages.count)
                 }
             } else {
                 log.error("Unable to parse data to expected objects")
             }
         }
     }
-              
+
     func send(message: GZEChatMessage, username: String, chat: GZEChat, dateRequestId: String, mode: String) {
         log.debug("Sending message..\(String(describing: message.toJSON()))")
         guard let chatSocket = self.chatSocket else {
@@ -153,7 +228,7 @@ class GZEChatService: NSObject {
         
         let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
         
-        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequest.received,\(senderUsername),\(formattedAmount)", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
+        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequest.received|\(senderUsername),|\(formattedAmount)", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
             log.error("Failed to parse GZEChatMessage to JSON")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return SignalProducer(error: .datesSocket(error: .unexpected))
@@ -198,7 +273,6 @@ class GZEChatService: NSObject {
         var resolvedComparator: (GZEChatMessage) -> Bool
         var messages = self.messages.value
         var currentChatMessages: [GZEChatMessage]
-        var inserted: Bool
 
         let chatId = message.chatId
         
@@ -213,25 +287,21 @@ class GZEChatService: NSObject {
         {
             log.debug("Chat[id=\(chatId)] exists, new messages will be appended")
             currentChatMessages = messages[chatId]!
-            inserted = currentChatMessages.upsert(message, comparator: resolvedComparator)
+            currentChatMessages.upsert(message, comparator: resolvedComparator)
         } else {
             log.debug("Chat[id=\(chatId)] not found, creating the chat with the new messages")
             currentChatMessages = [message]
-            inserted = true
         }
-        
+
         messages[chatId] = currentChatMessages
         self.messages.value = messages
-        if inserted {
-            self.chatEventEmmiter.value = .add(at: currentChatMessages.count - 1, count: 1)
-        }
     }
     
     func clear(chatId: String) {
-        if let messagesCount = self.messages.value[chatId]?.count {
-            self.chatEventEmmiter.value = .remove(at: 0, count: messagesCount)
+        if let messagesCount = self.messages.value[chatId]?.count, messagesCount > 0 {
+            self.messages.value[chatId] = []
         }
-        self.messages.value[chatId] = []
+        log.debug("chat cleared, current messages count: \(self.messages.value[chatId]?.count ?? 0)")
     }
     
     func showNotification(chat: GZEChat, dateRequestId: String, mode: GZEChatViewMode, username: String) {

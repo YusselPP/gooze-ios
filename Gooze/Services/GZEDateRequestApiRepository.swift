@@ -43,7 +43,7 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                             ],
                             "recipientId": userId
                         ],
-                        "include": ["sender", "recipient", "chat"]
+                        "include": ["sender", "recipient", "chat", "date"]
                     ]
                 ] as [String : Any]
             Alamofire.request(GZEDateRequestRouter.find(parameters: params))

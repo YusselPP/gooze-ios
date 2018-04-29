@@ -14,8 +14,9 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
     var viewModel: GZEChatViewModel!
     var onDismissTapped: (() -> ())?
-    
+    var scrollTableOnShow = false
     let backButton = GZEBackUIBarButtonItem()
+    var collectionViewTopScrollDisposable: Disposable?
 
     @IBOutlet weak var topActionView: GZEChatActionView!
     @IBOutlet weak var topTextInput: UITextField! {
@@ -58,52 +59,34 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self?.onDismissTapped?()
         }
         self.myVavigationItem.setLeftBarButton(backButton, animated: false)
-        
         self.myVavigationItem.reactive.title <~ self.viewModel.username
-        
-        
-        self.messagesTableView
-            .topScrollSignal
-            .debounce(0.5, on: QueueScheduler.main)
-            .flatMap(.latest, transform: {[weak self] _ -> SignalProducer<Void, GZEError> in
-                guard let this = self else {
-                    log.error("self was disposed")
-                    return SignalProducer.empty
-                }
-                guard let retrieveHistoryProducer = this.viewModel.retrieveHistoryProducer else {
-                    log.error("found nil retrieveHistoryProducer")
-                    return SignalProducer.empty
-                }
-                return (
-                    retrieveHistoryProducer
-                        .flatMapError{ error in
-                            log.error(error.localizedDescription)
-                            return SignalProducer.empty
-                        }
-                )
-            })
-            .observe { event in
-                log.debug("event: \(event)")
-            }
 
         setupBindings()
     }
     
     // TODO: scroll bottom on orientation change
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        self.messagesTableView.collectionViewLayout.invalidateLayout()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         GZEChatService.shared.activeChatId = self.viewModel.chat.id
+        
         self.viewModel.startObservers()
+        self.observeCollectionViewTopScroll()
+  
         registerForKeyboarNotifications(
             observer: self,
             willShowSelector: #selector(keyboardWillShow(notification:)),
-            willHideSelector: #selector(keyboardWillHide(notification:))
+            willHideSelector: #selector(keyboardWillHide(notification:)),
+            didShowSelector: #selector(keyboardDidShow(notification:))
         )
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.collectionViewTopScrollDisposable?.dispose()
         self.viewModel.stopObservers()
         GZEChatService.shared.activeChatId = nil
         deregisterFromKeyboardNotifications(observer: self)
@@ -139,10 +122,41 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             this.messageTextView.text = text
         }
 
-        self.messagesTableView.messagesEvents.bindingTarget <~ self.viewModel.messagesEvents
-        self.messagesTableView.messages.bindingTarget <~ self.viewModel.messages
+        self.viewModel.messages.producer.startWithValues {[weak self] in
+            self?.messagesTableView.messagesObserver.send(value: $0)
+        }
 
         self.sendButton.reactive.pressed = self.viewModel.sendButtonAction
+        
+        self.viewModel.showPaymentViewSignal.observeValues {[weak self] _ in
+            self?.showPaymentView()
+        }
+    }
+
+    func observeCollectionViewTopScroll() {
+        collectionViewTopScrollDisposable = self.messagesTableView
+            .topScrollSignal
+            .debounce(0.5, on: QueueScheduler.main)
+            .flatMap(.latest, transform: {[weak self] _ -> SignalProducer<Void, GZEError> in
+                guard let this = self else {
+                    log.error("self was disposed")
+                    return SignalProducer.empty
+                }
+                guard let retrieveHistoryProducer = this.viewModel.retrieveHistoryProducer else {
+                    log.error("found nil retrieveHistoryProducer")
+                    return SignalProducer.empty
+                }
+                return (
+                    retrieveHistoryProducer
+                        .flatMapError{ error in
+                            log.error(error.localizedDescription)
+                            return SignalProducer.empty
+                    }
+                )
+            })
+            .observe { event in
+                log.debug("event: \(event)")
+        }
     }
     
     // MARK: UITextViewDelegate
@@ -177,12 +191,65 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     // MARK: - KeyboardNotifications
     func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
+        if self.messagesTableView.isAtBottom {
+            self.scrollTableOnShow = true
+        }
         resizeViewWithKeyboard(keyboardShow: true, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view)
+    }
+    
+    func keyboardDidShow(notification: Notification) {
+        if self.scrollTableOnShow {
+            self.scrollTableOnShow = false
+            self.messagesTableView.scrollToBottom(animated: false)
+        }
     }
     
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view)
+    }
+    
+    func showPaymentView() {
+        log.debug("Trying to show payment view...")
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if let view = mainStoryboard.instantiateViewController(withIdentifier: "GZEPaymentViewController") as? GZEPaymentViewController {
+            
+            log.debug("payment view instantiated. Setting up its view model")
+            guard let vm = self.viewModel.paymentViewModel else {
+                log.error("Unable to instantiate payment view model")
+                GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+                return
+            }
+
+
+            view.viewModel = vm
+            view.onDismissTapped = {
+                self.dismiss(animated: true)
+            }
+            self.present(view, animated: true)
+        } else {
+            log.error("Unable to instantiate GZEPaymentViewController")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
+
+    func showDatesMapView() {
+        log.debug("Trying to dates map view...")
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+
+        if let view = mainStoryboard.instantiateViewController(withIdentifier: "GZEMapViewController") as? GZEMapViewController {
+
+            log.debug("dates map view instantiated. Setting up its view model")
+            view.viewModel = self.viewModel.mapViewModel
+            view.onDismissTapped = {
+                self.dismiss(animated: true)
+            }
+            self.present(view, animated: true)
+        } else {
+            log.error("Unable to instantiate GZEMapViewController")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
     }
 
     // MARK: - Deinitializer

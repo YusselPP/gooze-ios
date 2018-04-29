@@ -111,6 +111,7 @@
 // ViewModel/GZEChatViewModelDates
 "vm.datesChat.setAmountButtonTitle"="Establecer monto";
 "vm.datesChat.acceptAmountButtonTitle"="Aceptar %@";
+"vm.datesChat.dateButtonTitle"="Ver cita";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
@@ -136,6 +137,7 @@
 "service.dates.requestSuccessfullySent"="Se ha enviado tu solicitud";
 "service.dates.requestSuccessfullyAccepted"="Has aceptado la solicitud";
 "service.dates.requestAccepted"="%@ ha aceptado tu solicitud";
+"service.dates.dateCreated"="Se ha generado una cita";
 
 "service.chat.invalidChatId"="Ocurrió un error al intentar abrir el chat";
 "service.chat.messageReceived"="%@ te ha enviado mensaje";

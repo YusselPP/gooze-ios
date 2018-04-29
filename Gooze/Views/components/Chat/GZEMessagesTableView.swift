@@ -9,15 +9,21 @@
 import UIKit
 import ReactiveSwift
 import enum Result.NoError
+import DeepDiff
 
-class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
+class GZEMessagesTableView: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     let cellIdentifier = "GZEMessageTableCell"
-    let messages = MutableProperty<[GZEChatMessage]>([])
-    let messagesEvents = MutableProperty<CollectionEvent?>(nil)
-    var isObservingMessages = false
-    var (topScrollSignal, topScrollSignalObserver) = Signal<Bool, NoError>.pipe()
-    
+
+    let (messagesSignal, messagesObserver) = Signal<[GZEChatMessage], NoError>.pipe()
+    var messagesDisposable: Disposable?
+
+    let (topScrollSignal, topScrollSignalObserver) = Signal<Bool, NoError>.pipe()
+    var isAtBottom: Bool {
+        return self.contentOffset.y >= (self.contentSize.height - self.frame.size.height - GZEChatBubbleView.minSize)
+    }
+
+    private var messages = [GZEChatMessage]()
     private var lastContentOffset: CGFloat = 0
 
 
@@ -27,102 +33,81 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
         initialize()
     }
 
-    override init(frame: CGRect, style: UITableViewStyle) {
-        super.init(frame: frame, style: style)
+    override init(frame: CGRect, collectionViewLayout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: collectionViewLayout)
         initialize()
     }
 
     init() {
-        super.init(frame: CGRect.zero, style: .plain)
+        super.init(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
         initialize()
     }
     
-    func scrollToBottom(){
-        if self.messages.value.count > 0 {
-            log.debug("scrolling to bottom")
-            let indexPath = IndexPath(row: self.messages.value.count - 1, section: 0)
-            self.scrollToRow(at: indexPath, at: .bottom, animated: false)
-        }
-    }
-
-
-    // MARK: - private methods
-    private func initialize() {
+    func initialize() {
         log.debug("initializing \(self)")
-        self.separatorStyle = .none
-        self.register(GZEMessageTableCell.self, forCellReuseIdentifier: cellIdentifier)
+        self.register(GZEMessageTableCell.self, forCellWithReuseIdentifier: cellIdentifier)
         self.delegate = self
         self.dataSource = self
 
         startObservingMessages()
     }
-    
-    @objc private func startObservingMessages() {
-        if isObservingMessages {
-           return
-        }
-        
-        isObservingMessages = true
-        
-        self.messagesEvents.signal.skipNil().observeValues {[weak self] event in
-            guard let this = self else {return}
-            
-            let beforeContentSize = this.contentSize
-            log.debug("messages event received: \(event)")
-            
-            log.debug("scroll content size: \(this.contentSize)")
-            log.debug("scroll content offset: \(this.contentOffset)")
- 
-            let atEndOfTable = this.contentOffset.y >= (this.contentSize.height - this.frame.size.height - GZEChatBubbleView.minSize)
-            
-            UIView.setAnimationsEnabled(false)
-            
-            switch event {
-            case .add(let at, let count):
-                
-                this.insertRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
-                this.layoutIfNeeded()
 
-                if atEndOfTable {
-                    log.debug("At end of the table")
-                    this.scrollToBottom()
-                } else {
-                    //this.contentOffset = CGPoint(x: this.contentOffset.x, y: max(0, this.contentOffset.y + this.contentSize.height - beforeContentSize.height - GZEChatBubbleView.minSize))
-                    DispatchQueue.main.async {
-                        log.debug("scroll content size: \(this.contentSize)")
-                        log.debug("scroll content offset: \(this.contentOffset)")
-                        this.contentOffset.y = max(
-                            0,
-                            this.contentOffset.y +
-                                this.contentSize.height -
-                                beforeContentSize.height -
-                                GZEChatBubbleView.minSize
-                        )
-                        UIView.setAnimationsEnabled(true)
-                    }
-                }
-            case .remove(let at, let count):
-                this.deleteRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
-            case .update(let at, let count):
-                this.reloadRows(at: (at..<(at + count)).map{IndexPath(row: $0, section: 0)}, with: UITableViewRowAnimation.automatic)
-            }
-            
-            
-            
-            log.debug("scroll content size: \(this.contentSize)")
-            log.debug("scroll content offset: \(this.contentOffset)")
+    // MARK - Scroll
+    func scrollToBottom(animated: Bool){
+        if self.numberOfSections == 0 {
+            return
         }
+
+        log.debug("scrolling to bottom")
+        let lastCell = IndexPath(item: self.numberOfItems(inSection: 0) - 1, section: 0)
+        self.scrollTo(indexPath: lastCell, animated: animated)
     }
 
+    func scrollTo(indexPath: IndexPath, animated: Bool) {
+        if self.numberOfSections <= indexPath.section {
+            return
+        }
 
-    // MARK: - UITableViewDelegate
+        let numberOfItems = self.numberOfItems(inSection: indexPath.section)
+        if (numberOfItems == 0) {
+            return
+        }
+
+        let collectionViewContentHeight = self.collectionViewLayout.collectionViewContentSize.height
+        let isContentTooSmall = collectionViewContentHeight < self.bounds.height
+
+        if (isContentTooSmall) {
+            //  workaround for the first few messages not scrolling
+            //  when the collection view content size is too small, `scrollToItemAtIndexPath:` doesn't work properly
+            //  this seems to be a UIKit bug, see #256 on GitHub
+            self.scrollRectToVisible(
+                CGRect(x: 0.0, y: collectionViewContentHeight - 1.0, width: 1.0, height: 1.0),
+                animated:animated
+            )
+            return
+        }
+
+        let item = max(min(indexPath.item, numberOfItems - 1), 0);
+        let indexPath = IndexPath(item: item, section: 0)
+
+        //  workaround for really long messages not scrolling
+        //  if last message is too long, use scroll position bottom for better appearance, else use top
+        //  possibly a UIKit bug, see #480 on GitHub
+        let cellSize = self.collectionView(self, layout: self.collectionViewLayout, sizeForItemAt: indexPath)
+        let maxHeightForVisibleMessage = self.bounds.height
+            - self.contentInset.top
+            - self.contentInset.bottom
+        let scrollPosition: UICollectionViewScrollPosition = (cellSize.height > maxHeightForVisibleMessage) ? .bottom : .top
+
+        self.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
+    }
+
+    
+    // MARK: - UICollectionViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        //log.debug("scrollview content size: \(scrollView.contentSize)")
-        //log.debug("scrollview content offset: \(scrollView.contentOffset)")
-        
-        if scrollView.contentOffset.y < 40 {
-            
+        if scrollView.contentOffset.y < GZEChatBubbleView.minSize {
+            // Reaching top of the collection view
             if (self.lastContentOffset > scrollView.contentOffset.y) {
                 // moving up
                 topScrollSignalObserver.send(value: true)
@@ -135,34 +120,104 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
 
 
     // MARK: - UITableViewDataSource
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath as IndexPath)
-
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.messages.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
+        
         guard let msgCell = cell as? GZEMessageTableCell else {
-            log.debug("unable to cast cell to \(GZEMessageTableCell.self)")
+            log.error("Unable to cast cell to \(GZEMessageTableCell.self)")
             return cell
         }
 
-        msgCell.message = self.messages.value[indexPath.row]
-
+        guard indexPath.row >= 0 && indexPath.row < self.messages.count else {
+            log.error("Index path out of messages array bounds")
+            return msgCell
+        }
+        
+        msgCell.message = self.messages[indexPath.row]
+        
         return msgCell
     }
+    
+    // MARK: - UICollectionViewDelegateFlowLayout
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.frame.size.width, height: calcCellHeight(indexPath: indexPath))
+    }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.messages.value.count
+    // MARK: - Helpers
+    private func startObservingMessages() {
+
+        self.messagesDisposable?.dispose()
+
+        self.messagesDisposable = (
+            self.messagesSignal
+                .flatMap(.concat) { messages -> SignalProducer<([GZEChatMessage], Observer<Void, NoError>), NoError> in
+                    log.debug("messages signal received")
+                    let (signal, observer) = Signal<Void, NoError>.pipe()
+
+                    return SignalProducer {sink, dispose in
+                        dispose.add {
+                            log.debug("messages signal disposed")
+                        }
+                        sink.send(value: (messages, observer))
+                        }
+                        .take(until: signal)
+
+                }.observeValues {[weak self] (messages, observer) in
+                    log.debug("messages value received: \(messages)")
+
+                    guard let this = self else {return}
+
+                    let atEndOfTable = this.isAtBottom
+                    let firstCell = this.indexPathsForVisibleItems.sorted{$0.0.row < $0.1.row}.first
+
+                    let changes = diff(old: this.messages, new: messages)
+                    this.messages = messages
+
+                    log.debug("Changes: \(changes)")
+
+                    UIView.setAnimationsEnabled(false)
+                    this.reload(changes: changes, section: 0) { _ in
+                        observer.sendCompleted()
+                    }
+
+                    if atEndOfTable {
+                        log.debug("At end of the table")
+                        this.scrollToBottom(animated: false)
+                    } else {
+                        log.debug("firstCell.indexPath: \(String(describing: firstCell))")
+
+                        if var firstCell = firstCell {
+                            let initialRow = firstCell.row
+
+                            changes.forEach{change in
+                                if let insert = change.insert, insert.index <= firstCell.row {
+                                    firstCell.row += 1
+                                } else if let delete = change.delete, delete.index < firstCell.row {
+                                    firstCell.row -= 1
+                                }
+                            }
+
+                            if firstCell.row > initialRow {
+                                firstCell.row -= 1
+                            }
+                            log.debug("firstCell indexPath: \(firstCell)")
+                            this.scrollTo(indexPath: firstCell, animated: false)
+                        }
+                    }
+                    UIView.setAnimationsEnabled(true)
+            }
+        )
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return calcCellHeight(indexPath: indexPath)
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return calcCellHeight(indexPath: indexPath)
-    }
-    
-    func calcCellHeight(indexPath: IndexPath) -> CGFloat {
-        let message = self.messages.value[indexPath.row]
+    private func calcCellHeight(indexPath: IndexPath) -> CGFloat {
+        guard indexPath.row >= 0 && indexPath.row < self.messages.count else {return 0}
+
+        let message = self.messages[indexPath.row]
         
         let minBubbleSize: CGFloat = GZEChatBubbleView.minSize
         let textHeight = ceil(message.text.size(font: GZEChatBubbleView.font).height)
@@ -178,7 +233,7 @@ class GZEMessagesTableView: UITableView, UITableViewDelegate, UITableViewDataSou
     }
 }
 
-class GZEMessageTableCell: UITableViewCell {
+class GZEMessageTableCell: UICollectionViewCell {
 
     var message: GZEChatMessage? {
         didSet {
@@ -226,13 +281,13 @@ class GZEMessageTableCell: UITableViewCell {
         initialize()
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         initialize()
     }
 
     init() {
-        super.init(style: .default, reuseIdentifier: "GZEMessageTableCell")
+        super.init(frame: CGRect.zero)
         initialize()
     }
 

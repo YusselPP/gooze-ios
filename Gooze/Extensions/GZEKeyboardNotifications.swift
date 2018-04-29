@@ -8,10 +8,12 @@
 
 import UIKit
 
-func registerForKeyboarNotifications(observer: Any, willShowSelector: Selector, willHideSelector: Selector) {
+func registerForKeyboarNotifications(observer: Any, willShowSelector: Selector, willHideSelector: Selector, didShowSelector: Selector? = nil) {
 
     let notifications = NotificationCenter.default
-    // notifications.addObserver(observer, selector: didShowSelector, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+    if let showSelector = didShowSelector {
+        notifications.addObserver(observer, selector: showSelector, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+    }
     notifications.addObserver(observer, selector: willHideSelector, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     notifications.addObserver(observer, selector: willShowSelector, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 }
@@ -19,7 +21,7 @@ func registerForKeyboarNotifications(observer: Any, willShowSelector: Selector, 
 func deregisterFromKeyboardNotifications(observer: Any) {
 
     let notifications = NotificationCenter.default
-    // notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+    notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
     notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 }

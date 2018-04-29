@@ -152,7 +152,7 @@ class GZEChatMessage: NSObject, Glossy {
         
         if self.type == .info {
             
-            var textArr = text.split(separator: ",").map{String($0)}
+            var textArr = text.split(separator: "|").map{String($0)}
             
             let textKey = textArr.remove(at: 0)
             
