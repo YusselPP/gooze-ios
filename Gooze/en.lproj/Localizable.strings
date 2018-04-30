@@ -124,8 +124,9 @@
 "vm.profile.contactTitle"="Contact";
 "vm.profile.acceptRequestTitle"="Accept request";
 "vm.profile.acceptedRequestButtonTitle"="Chat";
-"vm.profile.rejectedRequestButtonTitle"="Rejected";
+"vm.profile.rejectedRequestButtonTitle"="Request rejected";
 "vm.profile.sentRequestButtonTitle"="Request sent";
+"vm.profile.endedRequestButtonTitle"="Date ended";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Unrated";

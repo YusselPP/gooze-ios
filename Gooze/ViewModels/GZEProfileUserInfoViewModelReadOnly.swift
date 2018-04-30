@@ -33,8 +33,8 @@ class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfi
     
     
     // MARK - init
-    override init(user: GZEUser) {
-        super.init(user: user)
+    override init(user: GZEUser, dateRequestId: String?) {
+        super.init(user: user, dateRequestId: dateRequestId)
         log.debug("\(self) init")
         
         populate(user)

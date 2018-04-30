@@ -285,7 +285,6 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
-    @discardableResult
     func logout() -> SignalProducer<Void, GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))

@@ -21,8 +21,6 @@ protocol GZEUserRepositoryProtocol {
     func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int) -> SignalProducer<[GZEUserConvertible], GZEError>
     func publicProfile(byId id: String) -> SignalProducer<GZEUser, GZEError>
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
-
-    @discardableResult
     func logout() -> SignalProducer<Void, GZEError>
     func signUp(username: String, email: String, password: String) -> SignalProducer<GZEUser, GZEError>
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>

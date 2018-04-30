@@ -124,8 +124,9 @@
 "vm.profile.contactTitle"="Contactar";
 "vm.profile.acceptRequestTitle"="Aceptar contacto";
 "vm.profile.acceptedRequestButtonTitle"="Ir al chat";
-"vm.profile.rejectedRequestButtonTitle"="Rechazado";
+"vm.profile.rejectedRequestButtonTitle"="Solicitud rechazada";
 "vm.profile.sentRequestButtonTitle"="Solicitud enviada";
+"vm.profile.endedRequestButtonTitle"="Cita finalizada";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Sin calificación";

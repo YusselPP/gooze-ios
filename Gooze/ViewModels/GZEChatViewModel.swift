@@ -40,6 +40,7 @@ protocol GZEChatViewModel {
     var mapViewModel: GZEMapViewModel { get }
 
     var showPaymentViewSignal: Signal<Bool, NoError> { get }
+    var showMapViewSignal: Signal<Void, NoError> { get }
     
     var chat: GZEChat { get }
     

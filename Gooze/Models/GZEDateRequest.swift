@@ -16,6 +16,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         case received = "received"
         case accepted = "accepted"
         case rejected = "rejected"
+        case ended = "ended"
     }
 
     let id: String

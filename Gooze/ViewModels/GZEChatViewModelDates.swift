@@ -10,6 +10,7 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
+import SwiftOverlays
 
 class GZEChatViewModelDates: GZEChatViewModel {
 
@@ -49,6 +50,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
     }
     
     let (showPaymentViewSignal, showPaymentViewObserver) = Signal<Bool, NoError>.pipe()
+    let (showMapViewSignal, showMapViewObserver) = Signal<Void, NoError>.pipe()
     
     let chat: GZEChat
     
@@ -109,11 +111,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
             sink.sendCompleted()
         }.debounce(60, on: QueueScheduler.main)
         
-        GZEDatesService.shared.find(byId: dateRequestId)
-        
+        self.getUpdatedRequest(dateRequestId)
+
         if mode == .gooze {
             // validate max double val
-            //self.topButtonTitle <~ (
             SignalProducer.combineLatest(
                 self.amount.producer,
                 self.dateRequest.producer
@@ -132,7 +133,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
                     this.topButtonTitle.value = this.setAmountButtonTitle
                 }
             }
-            //)
             
             self.amount <~ self.topTextInput.map{ amountText -> Double? in
                 if let amountText = amountText {
@@ -142,7 +142,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 }
             }
         } else {
-            // self.topButtonTitle <~ self.amount.map
             SignalProducer.combineLatest(
                 self.amount.producer,
                 self.dateRequest.producer
@@ -184,7 +183,13 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 log.error("self disposed before executing action")
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
-            
+
+
+            if let date = this.dateRequest.value?.date {
+                this.showMapView()
+                return SignalProducer.empty
+            }
+
             log.debug("mode: \(this.mode)")
             
             switch this.mode {
@@ -352,7 +357,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
                     log.error("self was disposed")
                     return
                 }
-                GZEDatesService.shared.find(byId: this.dateRequestId)
+                this.getUpdatedRequest(this.dateRequestId)
                 GZEChatService.shared.retrieveNewMessages(chatId: this.chat.id)
             }
     }
@@ -362,6 +367,25 @@ class GZEChatViewModelDates: GZEChatViewModel {
         if self.socketEventsObserver != nil {
             self.socketEventsObserver?.dispose()
             self.socketEventsObserver = nil
+        }
+    }
+
+    private func getUpdatedRequest(_ dateRequestId: String) {
+
+        SwiftOverlays.showBlockingWaitOverlay()
+
+        GZEDatesService.shared.find(byId: dateRequestId)
+            .start{event in
+                log.debug("find request event received: \(event)")
+
+                SwiftOverlays.removeAllBlockingOverlays()
+
+                switch event {
+                // case .value(let dateRequest): handled by request observer
+                case .failed(let error):
+                    log.error(error.localizedDescription)
+                default: break
+                }
         }
     }
     
@@ -388,6 +412,10 @@ class GZEChatViewModelDates: GZEChatViewModel {
             chat: self.chat,
             mode: mode
         )
+    }
+
+    private func showMapView() {
+        self.showMapViewObserver.send(value: ())
     }
     
     // MARK: - Deinitializers

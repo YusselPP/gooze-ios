@@ -2494,31 +2494,31 @@
                                             <constraint firstAttribute="width" constant="55" id="EWi-Bt-cCs"/>
                                         </constraints>
                                     </imageView>
-                                    <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Kx-Ow-IJh" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                    <view hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Kx-Ow-IJh" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="120" y="61" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="1Kx-Ow-IJh" secondAttribute="height" multiplier="1:1" id="Iir-gH-zS9"/>
                                         </constraints>
                                     </view>
-                                    <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gyk-i2-FuY" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                    <view hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gyk-i2-FuY" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="24" y="156.5" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="gyk-i2-FuY" secondAttribute="height" multiplier="1:1" id="kVq-Mz-L1S"/>
                                         </constraints>
                                     </view>
-                                    <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="112-oD-ppJ" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                    <view hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="112-oD-ppJ" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="216" y="141.5" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="112-oD-ppJ" secondAttribute="height" multiplier="1:1" id="KL0-TX-9qH"/>
                                         </constraints>
                                     </view>
-                                    <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e89-nM-dk2" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                    <view hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e89-nM-dk2" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="56" y="300" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="e89-nM-dk2" secondAttribute="height" multiplier="1:1" id="uM1-7d-oEl"/>
                                         </constraints>
                                     </view>
-                                    <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UVq-3e-Nhg" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                    <view hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UVq-3e-Nhg" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="184" y="300" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="UVq-3e-Nhg" secondAttribute="height" multiplier="1:1" id="zsH-Rz-SXW"/>
@@ -2595,6 +2595,11 @@
                         <outlet property="navItem" destination="yVQ-Y2-M2f" id="25S-iE-Bx2"/>
                         <outlet property="topLabel" destination="T4v-kW-80l" id="mMb-4E-tCn"/>
                         <outlet property="topSliderContainer" destination="4oW-hK-aCu" id="6dC-Ve-4Hx"/>
+                        <outlet property="userBalloon1" destination="1Kx-Ow-IJh" id="tKA-cZ-b0Q"/>
+                        <outlet property="userBalloon2" destination="gyk-i2-FuY" id="KQ3-JH-p9P"/>
+                        <outlet property="userBalloon3" destination="112-oD-ppJ" id="CST-Oy-yuh"/>
+                        <outlet property="userBalloon4" destination="e89-nM-dk2" id="gTJ-Gf-24t"/>
+                        <outlet property="userBalloon5" destination="UVq-3e-Nhg" id="MfJ-GK-qQt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m2o-Wf-tkR" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -13,6 +13,8 @@ import Gloss
 
 class GZESocket: SocketIOClient {
 
+    static let ackTimeout: Double = 60
+
     enum Event: String {
         case authentication
         case authenticated

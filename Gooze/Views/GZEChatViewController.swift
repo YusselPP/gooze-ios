@@ -131,6 +131,10 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.viewModel.showPaymentViewSignal.observeValues {[weak self] _ in
             self?.showPaymentView()
         }
+
+        self.viewModel.showMapViewSignal.observeValues {[weak self] _ in
+            self?.showDatesMapView()
+        }
     }
 
     func observeCollectionViewTopScroll() {

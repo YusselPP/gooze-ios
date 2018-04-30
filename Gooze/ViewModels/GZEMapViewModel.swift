@@ -7,12 +7,22 @@
 //
 
 import UIKit
+import MapKit
 import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
 
-protocol GZEMapViewModel {
+protocol GZEMapViewModel: MKMapViewDelegate {
+
+    var topSliderHidden: MutableProperty<Bool> { get }
+
+    var topLabelText: MutableProperty<String?> { get }
+    var topLabelHidden: MutableProperty<Bool> { get }
+
+    var bottomButtonTitle: MutableProperty<String> { get }
     var bottomButtonAction: CocoaAction<GZEButton>? { get }
     var bottomButtonActionEnabled: MutableProperty<Bool> { get }
     var dismissSignal: Signal<Bool, NoError> { get }
+
+    var isMapUserInteractionEnabled: MutableProperty<Bool> { get }
 }

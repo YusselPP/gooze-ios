@@ -57,7 +57,7 @@ class GZEChatService: NSObject {
 
             ] as [String : Any]
 
-        chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: 5) {[weak self] data in
+        chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
             //log.debug("Message sent. Ack data: \(data)")
 
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -120,7 +120,7 @@ class GZEChatService: NSObject {
                 "order": "createdAt DESC"
             ] as [String : Any]
 
-        chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: 5) {[weak self] data in
+        chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
             //log.debug("Message sent. Ack data: \(data)")
 
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -177,7 +177,7 @@ class GZEChatService: NSObject {
         }
 
         self.upsert(message: message)
-        chatSocket.emitWithAck(.sendMessage, messageJson, username, chatJson, dateRequestId, mode).timingOut(after: 5) {[weak self] data in
+        chatSocket.emitWithAck(.sendMessage, messageJson, username, chatJson, dateRequestId, mode).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
             log.debug("Message sent. Ack data: \(data)")
             
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -228,7 +228,7 @@ class GZEChatService: NSObject {
         
         let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
         
-        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequest.received|\(senderUsername),|\(formattedAmount)", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
+        guard let messageJson = GZEChatMessage(text: "service.chat.amountRequest.received|\(senderUsername)|\(formattedAmount)", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
             log.error("Failed to parse GZEChatMessage to JSON")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return SignalProducer(error: .datesSocket(error: .unexpected))
@@ -240,7 +240,7 @@ class GZEChatService: NSObject {
                 log.debug("requestAmount signal disposed")
             }
             
-            chatSocket.emitWithAck(.requestAmount, messageJson, username, chatJson, dateRequestId, mode.rawValue, amount).timingOut(after: 5) {[weak self] data in
+            chatSocket.emitWithAck(.requestAmount, messageJson, username, chatJson, dateRequestId, mode.rawValue, amount).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
                 log.debug("Message sent. Ack data: \(data)")
                 
                 if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -320,7 +320,7 @@ class GZEChatService: NSObject {
         }
     }
 
-    func openChat(presenter: UIViewController, viewModel: GZEChatViewModel) {
+    func openChat(presenter: UIViewController, viewModel: GZEChatViewModel, completion: (() -> Void)? = nil) {
         // Open chat
         log.debug("Trying to show chat controller...")
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -333,10 +333,11 @@ class GZEChatService: NSObject {
             chatController.onDismissTapped = {
                 presenter.dismiss(animated: true)
             }
-            presenter.present(chatController, animated: true)
+            presenter.present(chatController, animated: true, completion: completion)
         } else {
             log.error("Unable to instantiate GZEChatViewController")
             GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+            completion?()
         }
     }
 }

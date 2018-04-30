@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import Result
+import SwiftOverlays
 
 class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
@@ -79,6 +80,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     let acceptedRequestButtonTitle = "vm.profile.acceptedRequestButtonTitle".localized().uppercased()
     let rejectedRequestButtonTitle = "vm.profile.rejectedRequestButtonTitle".localized().uppercased()
     let sentRequestButtonTitle = "vm.profile.sentRequestButtonTitle".localized().uppercased()
+    let endedRequestButtonTitle = "vm.profile.endedRequestButtonTitle".localized().uppercased()
     let isContactButtonEnabled = MutableProperty<Bool>(false)
 
     var messagesObserver: Disposable?
@@ -86,11 +88,13 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     var socketEventsObserver: Disposable?
 
     // MARK - init
-    init(user: GZEUser) {
+    init(user: GZEUser, dateRequestId: String? = nil) {
         self.user = user
         super.init()
         log.debug("\(self) init")
-        
+
+        self.getUpdatedRequest(dateRequestId)
+
         self.setMode()
         self.acceptRequestAction = self.createAcceptRequestAction()
         self.acceptRequestAction.events.observeValues {[weak self] in
@@ -114,7 +118,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     case .accepted:
                         this.openChat()
                         return SignalProducer.empty
-                    case .rejected:
+                    case .rejected, .ended:
                         return SignalProducer.empty
                     }
                 } else {
@@ -125,12 +129,12 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 if let dateRequest = this.dateRequest {
                     switch dateRequest.status {
                     case .sent,
-                         .received:
+                         .received,
+                         .rejected,
+                         .ended:
                         break
                     case .accepted:
                         this.openChat()
-                    case .rejected: // should not be received, defaulting to contact if happens
-                        return GZEDatesService.shared.requestDate(to: this.user.id)
                     }
                 } else {
                     return GZEDatesService.shared.requestDate(to: this.user.id)
@@ -143,10 +147,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     private func onAcceptRequestAction(_ event: Event<GZEDateRequest, GZEError>) {
         log.debug("event received: \(event)")
         switch event {
-        case .value:
+        case .value(let dateRequest):
+            self.dateRequest = dateRequest
             switch self.mode {
             case .request: self.openChat()
-            default: break// self.dateRequest = dateReq
+            default: break
             }
         case .failed(let error):
             onError(error)
@@ -175,9 +180,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                      self.actionButtonTitle.value = self.acceptedRequestButtonTitle
                 case .rejected:
                     self.actionButtonTitle.value = self.rejectedRequestButtonTitle
+                case .ended:
+                    self.actionButtonTitle.value = self.endedRequestButtonTitle
                 }
             } else {
-                isContactButtonEnabled.value = false
+                self.actionButtonTitle.value = ""
             }
         } else {
             if let dateRequest = self.dateRequest {
@@ -187,8 +194,10 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     self.actionButtonTitle.value = self.sentRequestButtonTitle
                 case .accepted:
                     self.actionButtonTitle.value = self.acceptedRequestButtonTitle
-                case .rejected: // should not be received, defaulting to contact if happens
-                     self.actionButtonTitle.value = self.contactButtonTitle
+                case .rejected:
+                    self.actionButtonTitle.value = self.rejectedRequestButtonTitle
+                case .ended:
+                    self.actionButtonTitle.value = self.endedRequestButtonTitle
                 }
             } else {
                 self.actionButtonTitle.value = self.contactButtonTitle
@@ -201,11 +210,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         if mode == .request {
             if let dateRequest = self.dateRequest {
                 switch dateRequest.status {
-                    case .sent,
-                         .received,
-                         .accepted:
+                case .sent,
+                     .received,
+                     .accepted:
                     isContactButtonEnabled.value = true
-                case .rejected:
+                case .rejected, .ended:
                     isContactButtonEnabled.value = false
                 }
             } else {
@@ -215,11 +224,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             if let dateRequest = self.dateRequest {
                 switch dateRequest.status {
                 case .sent,
-                     .received:
+                     .received,
+                     .rejected,
+                     .ended:
                     isContactButtonEnabled.value = false
                 case .accepted:
-                    isContactButtonEnabled.value = true
-                case .rejected: // should not be received, defaulting to contact if happens
                     isContactButtonEnabled.value = true
                 }
             } else {
@@ -230,9 +239,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     
     private func openChat() {
         log.debug("open chat called")
+        SwiftOverlays.showBlockingWaitOverlay()
 
         guard let navcontroller = self.controller?.navigationController else {
             log.debug("Unable to open chat view navcontroller is not set")
+            SwiftOverlays.removeAllBlockingOverlays()
             return
         }
 
@@ -240,15 +251,19 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
         guard let controller = navcontroller.topViewController else {
             log.debug("Unable to open chat view controller is not set")
+            SwiftOverlays.removeAllBlockingOverlays()
             return
         }
         
         guard let chatViewModel = self.chatViewModel else {
             log.error("Unable to open chat chat, failed to instantiate chat view model")
+            SwiftOverlays.removeAllBlockingOverlays()
             return
         }
 
-        GZEChatService.shared.openChat(presenter: controller, viewModel: chatViewModel)
+        GZEChatService.shared.openChat(presenter: controller, viewModel: chatViewModel) {
+            SwiftOverlays.removeAllBlockingOverlays()
+        }
     }
     
     private func observeRequests() {
@@ -317,9 +332,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     log.error("self was disposed")
                     return
                 }
-                if let dateRequestId = this.dateRequest?.id {
-                    GZEDatesService.shared.find(byId: dateRequestId)
-                }
+                this.getUpdatedRequest(this.dateRequest?.id)
         }
     }
     
@@ -327,6 +340,28 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         log.debug("stop observing SocketEvents")
         self.socketEventsObserver?.dispose()
         self.socketEventsObserver = nil
+    }
+
+    private func getUpdatedRequest(_ dateRequestId: String?) {
+        if let dateRequestId = dateRequestId {
+            SwiftOverlays.showBlockingWaitOverlay()
+
+            GZEDatesService.shared.find(byId: dateRequestId)
+                .start{[weak self] event in
+                    log.debug("find request event received: \(event)")
+
+                    SwiftOverlays.removeAllBlockingOverlays()
+
+                    guard let this = self else {return}
+                    switch event {
+                    case .value(let dateRequest):
+                        this.dateRequest = dateRequest
+                    case .failed(let error):
+                        log.error(error.localizedDescription)
+                    default: break
+                    }
+            }
+        }
     }
 
     // MARK: - Deinitializers

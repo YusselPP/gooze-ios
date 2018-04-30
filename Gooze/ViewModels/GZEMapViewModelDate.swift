@@ -15,15 +15,17 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
 
     // MARK - GZEMapViewModel protocol
 
-    let topSliderVisible = MutableProperty<Bool>(false)
+    let topSliderHidden = MutableProperty<Bool>(true)
 
     let topLabelText = MutableProperty<String?>("")
-    let topLabelVisible = MutableProperty<Bool>(false)
+    let topLabelHidden = MutableProperty<Bool>(true)
 
     var bottomButtonAction: CocoaAction<GZEButton>?
     let bottomButtonTitle = MutableProperty<String>("")
-    let bottomButtonActionEnabled = MutableProperty<Bool>(true)
+    let bottomButtonActionEnabled = MutableProperty<Bool>(false)
     let (dismissSignal, dismissObserver) = Signal<Bool, NoError>.pipe()
+
+    let isMapUserInteractionEnabled = MutableProperty<Bool>(false)
 
     // End GZEMapViewModel protocol
 

@@ -493,9 +493,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             let pageViewController = segue.destination as? GZEProfilePageViewController {
 
             if let user = sender as? GZEUser {
-                pageViewController.profileVm = GZEProfileUserInfoViewModelReadOnly(user: user)
-                pageViewController.galleryVm = GZEGalleryViewModelReadOnly(user: user)
-                pageViewController.ratingsVm = GZERatingsViewModelReadOnly(user: user)
+                let dateRequest = tappedUserConvertible as? GZEDateRequest
+
+                pageViewController.profileVm = GZEProfileUserInfoViewModelReadOnly(user: user, dateRequestId: dateRequest?.id)
+                pageViewController.galleryVm = GZEGalleryViewModelReadOnly(user: user, dateRequestId: dateRequest?.id)
+                pageViewController.ratingsVm = GZERatingsViewModelReadOnly(user: user, dateRequestId: dateRequest?.id)
                 
                 if
                     scene == .requestResults ||
@@ -506,12 +508,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                     pageViewController.galleryVm.mode = .request
                     pageViewController.ratingsVm.mode = .request
                 }
-                
-                let dateRequest = tappedUserConvertible as? GZEDateRequest
-                
-                pageViewController.profileVm.dateRequest = dateRequest
-                pageViewController.galleryVm.dateRequest = dateRequest
-                pageViewController.ratingsVm.dateRequest = dateRequest
 
                 pageViewController.profileVm.dateRequest = dateRequest
                 pageViewController.galleryVm.dateRequest = dateRequest

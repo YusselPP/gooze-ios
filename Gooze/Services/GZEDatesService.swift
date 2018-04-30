@@ -51,33 +51,45 @@ class GZEDatesService: NSObject {
             }
         }
     }
-    
-    func find(byId id: String) {
+
+    func find(byId id: String) -> SignalProducer<GZEDateRequest, GZEError> {
         guard let dateSocket = self.dateSocket else {
             log.error("Date socket not found")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
-            return
+            return SignalProducer(error: .datesSocket(error: DatesSocketError.unexpected))
         }
-        
-        dateSocket.emitWithAck(.findRequestById, id).timingOut(after: 5) {[weak self] data in
-            if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
-                log.error("No ack received from server")
-                self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
-                return
-            }
-            
-            if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
-                
-                log.error("\(String(describing: error.toJSON()))")
-                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
-                
-            } else if let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) {
-                
-                self?.upsert(dateRequest: dateRequest)
 
-            } else {
-                log.error("Unable to parse data to expected objects")
-                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+        log.debug("finding date request... [id=\(id)]")
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("find request signal disposed")
+            }
+
+            dateSocket.emitWithAck(.findRequestById, id).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
+                if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
+                    log.error("No ack received from server")
+                    self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
+                    sink.send(error: .datesSocket(error: .noAck))
+                    return
+                }
+
+                if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
+
+                    log.error("\(String(describing: error.toJSON()))")
+                    self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+                    sink.send(error: .datesSocket(error: .unexpected))
+
+                } else if let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) {
+
+                    self?.upsert(dateRequest: dateRequest)
+                    sink.send(value: dateRequest)
+
+                } else {
+                    log.error("Unable to parse data to expected objects")
+                    self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+                    sink.send(error: .datesSocket(error: .unexpected))
+                }
             }
         }
     }
@@ -91,7 +103,7 @@ class GZEDatesService: NSObject {
 
         log.debug("sending date request...")
         return SignalProducer { sink, disposable in
-            dateSocket.emitWithAck(.dateRequestSent, recipientId).timingOut(after: 5) {[weak self] data in
+            dateSocket.emitWithAck(.dateRequestSent, recipientId).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
                 log.debug("ack data: \(data)")
                 
                 disposable.add {
@@ -149,7 +161,7 @@ class GZEDatesService: NSObject {
         
         return SignalProducer { sink, disposable in
             log.debug("emitting accept request...")
-            dateSocket.emitWithAck(.acceptRequest, requestId).timingOut(after: 5) {[weak self] data in
+            dateSocket.emitWithAck(.acceptRequest, requestId).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
                 log.debug("ack data: \(data)")
                 
                 disposable.add {
@@ -213,7 +225,7 @@ class GZEDatesService: NSObject {
 
         return SignalProducer { sink, disposable in
             log.debug("emitting create date event...")
-            dateSocket.emitWithAck(.createCharge, requestId, messageJson, username, chatJson, mode.rawValue).timingOut(after: 5) {[weak self] data in
+            dateSocket.emitWithAck(.createCharge, requestId, messageJson, username, chatJson, mode.rawValue).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
                 log.debug("ack data: \(data)")
 
                 disposable.add {

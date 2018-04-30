@@ -11,23 +11,39 @@ import MapKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class GZEMapViewController: UIViewController, MKMapViewDelegate {
+class GZEMapViewController: UIViewController {
 
     var viewModel: GZEMapViewModel!
     var onDismissTapped: (() -> ())?
 
     var mapView: MKMapView!
-    let isUserInteractionEnabled = MutableProperty<Bool>(false)
+
+    var userBalloons = [GZEUserBalloon]()
 
     let backButton = GZEBackUIBarButtonItem()
 
     @IBOutlet weak var navItem: UINavigationItem!
 
-
     @IBOutlet weak var topLabel: UILabel!
     @IBOutlet weak var topSliderContainer: UIView!
 
     @IBOutlet weak var mapViewContainer: UIView!
+
+    @IBOutlet weak var userBalloon1: GZEUserBalloon!{
+        didSet{ self.userBalloons.append(self.userBalloon1) }
+    }
+    @IBOutlet weak var userBalloon2: GZEUserBalloon!{
+        didSet{ self.userBalloons.append(self.userBalloon2) }
+    }
+    @IBOutlet weak var userBalloon3: GZEUserBalloon!{
+        didSet{ self.userBalloons.append(self.userBalloon3) }
+    }
+    @IBOutlet weak var userBalloon4: GZEUserBalloon!{
+        didSet{ self.userBalloons.append(self.userBalloon4) }
+    }
+    @IBOutlet weak var userBalloon5: GZEUserBalloon!{
+        didSet{ self.userBalloons.append(self.userBalloon5) }
+    }
     
     @IBOutlet weak var bottomButton: GZEButton!
     
@@ -66,6 +82,15 @@ class GZEMapViewController: UIViewController, MKMapViewDelegate {
     }
 
     private func setupBindings() {
+
+        self.topLabel.reactive.isHidden <~ self.viewModel.topLabelHidden
+        self.topLabel.reactive.text <~ self.viewModel.topLabelText
+
+        self.topSliderContainer.reactive.isHidden <~ self.viewModel.topSliderHidden
+
+        self.bottomButton.reactive.title <~ self.viewModel.bottomButtonTitle
+
+        // signals
         self.viewModel.dismissSignal.observeValues{[weak self] _ in
             self?.onDismissTapped?()
         }
@@ -78,12 +103,11 @@ class GZEMapViewController: UIViewController, MKMapViewDelegate {
 
     func initMapKit() {
         self.mapView = GZEMapService.shared.mapView
-        // TODO: move delegate to vm
-        self.mapView.delegate = self
+        self.mapView.delegate = self.viewModel
         self.mapView.showsUserLocation = true
 
         GZEMapService.shared.disposables.append(
-            self.mapView.reactive.isUserInteractionEnabled <~ self.isUserInteractionEnabled
+            self.mapView.reactive.isUserInteractionEnabled <~ self.viewModel.isMapUserInteractionEnabled
         )
 
         self.mapView.translatesAutoresizingMaskIntoConstraints = false
