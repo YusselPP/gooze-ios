@@ -54,6 +54,36 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
+    func findActiveDate(by: String) -> SignalProducer<[GZEDateRequest], GZEError> {
+        guard let userId = GZEApi.instance.accessToken?.userId else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer<[GZEDateRequest], GZEError> { sink, disposable in
+
+            disposable.add {
+                log.debug("findActiveDate SignalProducer disposed")
+            }
+
+            log.debug("trying to find user active date")
+
+            let params =
+                [
+                    "filter": [
+                        "where": [
+                            "status": GZEDateRequest.Status.onDate.rawValue,
+                            by: userId
+                        ]
+                    ]
+                    ] as [String : Any]
+            Alamofire.request(GZEDateRequestRouter.find(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { jsonArray in
+
+                    return [GZEDateRequest].from(jsonArray: jsonArray)
+                }))
+        }
+    }
+
 
     // MARK: Deinitializers
     deinit {

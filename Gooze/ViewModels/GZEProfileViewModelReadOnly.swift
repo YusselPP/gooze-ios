@@ -115,7 +115,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     case .sent,
                          .received:
                         return GZEDatesService.shared.acceptDateRequest(withId: this.dateRequest?.id)
-                    case .accepted:
+                    case .accepted, .onDate:
                         this.openChat()
                         return SignalProducer.empty
                     case .rejected, .ended:
@@ -133,7 +133,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                          .rejected,
                          .ended:
                         break
-                    case .accepted:
+                    case .accepted, .onDate:
                         this.openChat()
                     }
                 } else {
@@ -176,7 +176,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 case .sent,
                      .received:
                     self.actionButtonTitle.value = self.acceptRequestButtonTitle
-                case .accepted:
+                case .accepted, .onDate:
                      self.actionButtonTitle.value = self.acceptedRequestButtonTitle
                 case .rejected:
                     self.actionButtonTitle.value = self.rejectedRequestButtonTitle
@@ -192,7 +192,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 case .sent,
                      .received:
                     self.actionButtonTitle.value = self.sentRequestButtonTitle
-                case .accepted:
+                case .accepted, .onDate:
                     self.actionButtonTitle.value = self.acceptedRequestButtonTitle
                 case .rejected:
                     self.actionButtonTitle.value = self.rejectedRequestButtonTitle
@@ -212,7 +212,8 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 switch dateRequest.status {
                 case .sent,
                      .received,
-                     .accepted:
+                     .accepted,
+                     .onDate:
                     isContactButtonEnabled.value = true
                 case .rejected, .ended:
                     isContactButtonEnabled.value = false
@@ -228,7 +229,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                      .rejected,
                      .ended:
                     isContactButtonEnabled.value = false
-                case .accepted:
+                case .accepted, .onDate:
                     isContactButtonEnabled.value = true
                 }
             } else {

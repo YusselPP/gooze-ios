@@ -59,7 +59,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self?.onDismissTapped?()
         }
         self.myVavigationItem.setLeftBarButton(backButton, animated: false)
-        self.myVavigationItem.reactive.title <~ self.viewModel.username
+        self.myVavigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
 
         setupBindings()
     }
@@ -245,7 +245,15 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         if let view = mainStoryboard.instantiateViewController(withIdentifier: "GZEMapViewController") as? GZEMapViewController {
 
             log.debug("dates map view instantiated. Setting up its view model")
-            view.viewModel = self.viewModel.mapViewModel
+
+            guard let vm = self.viewModel.mapViewModel else {
+                log.error("Unable to instantiate map view model")
+                GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+                return
+            }
+
+            view.viewModel = vm
+
             view.onDismissTapped = {
                 self.dismiss(animated: true)
             }

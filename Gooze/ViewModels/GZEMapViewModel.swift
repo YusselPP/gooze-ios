@@ -25,4 +25,9 @@ protocol GZEMapViewModel: MKMapViewDelegate {
     var dismissSignal: Signal<Bool, NoError> { get }
 
     var isMapUserInteractionEnabled: MutableProperty<Bool> { get }
+    var userAnnotationLocation: MutableProperty<CLLocationCoordinate2D> { get }
+    var annotationUser: MutableProperty<GZEChatUser?> { get }
+
+    func viewWillAppear()
+    func viewDidDisappear()
 }

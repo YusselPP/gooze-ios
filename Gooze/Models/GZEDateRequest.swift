@@ -15,6 +15,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         case sent = "sent"
         case received = "received"
         case accepted = "accepted"
+        case onDate = "onDate"
         case rejected = "rejected"
         case ended = "ended"
     }

@@ -40,6 +40,7 @@ class GZEUser: NSObject, Glossy {
     enum Status: String {
         case available = "available"
         case unavailable = "unavailable"
+        case onDate = "onDate"
     }
 
     enum Mode: String {

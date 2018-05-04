@@ -45,8 +45,12 @@ class GZEChatViewModelDates: GZEChatViewModel {
         return getPaymentViewModel()
     }
 
-    var mapViewModel: GZEMapViewModel {
-        return GZEMapViewModelDate()
+    var mapViewModel: GZEMapViewModel? {
+        if let dateRequest = self.dateRequest.value {
+            return GZEMapViewModelDate(dateRequest: dateRequest, mode: self.mode)
+        } else {
+            return nil
+        }
     }
     
     let (showPaymentViewSignal, showPaymentViewObserver) = Signal<Bool, NoError>.pipe()

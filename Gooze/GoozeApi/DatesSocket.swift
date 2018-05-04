@@ -23,6 +23,9 @@ class DatesSocket: GZESocket {
 
         case createCharge
         case createChargeSuccess
+
+        case updateLocation
+        case locationUpdateReceived
     }
 
     static let namespace = "/dates"
@@ -99,6 +102,19 @@ class DatesSocket: GZESocket {
             log.debug("Charge success on date request [id=\(dateRequest.id)]")
 
             GZEDatesService.shared.upsert(dateRequest: dateRequest)
+            GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id)
+
+            ack.with()
+        }
+
+        self.on(.locationUpdateReceived) { data, ack in
+            guard let userJson = data[0] as? JSON, let user = GZEUser(json: userJson) else {
+                log.error("Unable to parse data[0], expected data[0] to be a GZEUser, found: \(data[0])")
+                return
+            }
+            log.debug("locationUpdateReceived [user=\(String(describing: user.toJSON()))]")
+
+            GZEDatesService.shared.userLastLocation.value = user
 
             ack.with()
         }

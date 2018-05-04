@@ -48,29 +48,27 @@ class GZEAuthService: NSObject {
     }
     private var _userRepository: GZEUserRepositoryProtocol?
 
-    private var loadUserAction: Action<Void, GZEUser, GZEError>!
-
     // MARK - init
     override init() {
         super.init()
         log.debug("\(self) init")
-
-        loadUserAction = Action { [unowned self] in
-            return self._loadAuthUser()
-        }
     }
 
     func loginStoredUser(completion: ((Bool) -> ())? = nil) {
         log.debug("Attemp to log in stored user")
         if let token = self.token {
-            self.loadStoredUser {[weak self] user in
-                if let user = user, let this = self {
+            self.loadAuthUser().start {[weak self] event in
+                guard let this = self else { completion?(false); return }
+
+                switch event {
+                case .value(let user):
                     log.debug("Stored user loaded successfuly")
                     this.login(token: token, user: user)
                     completion?(true)
-                } else {
-                    log.debug("Stored user load failed")
+                case .failed(let error):
+                    log.debug("Stored user load failed: \(error.localizedDescription)")
                     completion?(false)
+                default: break
                 }
             }
         } else {
@@ -79,17 +77,14 @@ class GZEAuthService: NSObject {
         }
     }
 
-    func loadStoredUser(completion: ((GZEUser?) -> ())? = nil) {
-        self.loadUserAction.events.take(first: 1).observeValues {
-            log.debug("load user event received: \($0)")
-            switch $0 {
-            case .value(let user):
-                completion?(user)
-            default:
-                completion?(nil)
-            }
+    func loadAuthUser() -> SignalProducer<GZEUser, GZEError> {
+        log.debug("Loading stored user")
+        if let token = self.token {
+            return self.userRepository.find(byId: token.userId)
+        } else {
+            log.debug("No stored user found")
+            return SignalProducer(error: .repository(error: .AuthRequired))
         }
-        self.loadUserAction.apply().start()
     }
 
     func checkAuth(presenter: UIViewController, completion: ((Bool) -> ())? = nil) {
@@ -140,6 +135,7 @@ class GZEAuthService: NSObject {
         self.token = token
         self.authUser = user
         GZESocketManager.createSockets()
+        GZEDatesService.shared.listenSocketEvents()
     }
 
     func logout(presenter: UIViewController, completion: ((Bool) -> ())? = nil) {
@@ -153,15 +149,6 @@ class GZEAuthService: NSObject {
 
     // MARK: - private methods
 
-    private func _loadAuthUser() -> SignalProducer<GZEUser, GZEError> {
-        log.debug("Loading stored user")
-        if let token = self.token {
-            return self.userRepository.find(byId: token.userId)
-        } else {
-            log.debug("No stored user found")
-            return SignalProducer(error: .repository(error: .AuthRequired))
-        }
-    }
 
     // MARK: - Deinitializers
     deinit {

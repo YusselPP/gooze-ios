@@ -17,6 +17,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case count(parameters: Parameters)
 
     case findByLocation(parameters: Parameters)
+    case sendLocationUpdate(parameters: Parameters)
     case publicProfile(id: String)
 
     case login(parameters: Parameters, queryParams: Parameters)
@@ -35,7 +36,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .login,
              .logout,
              .reset,
-             .resetPassword:
+             .resetPassword,
+             .sendLocationUpdate:
             return .post
         case .readUser,
              .count,
@@ -63,6 +65,8 @@ enum GZEUserRouter: URLRequestConvertible {
             return "\(GZEUserRouter.route)/count"
         case .findByLocation:
             return "\(GZEUserRouter.route)/findByLocation"
+        case .sendLocationUpdate:
+            return "\(GZEUserRouter.route)/sendLocationUpdate"
         case .publicProfile(let id):
             return "\(GZEUserRouter.route)/\(id)/publicProfile"
 
@@ -95,6 +99,7 @@ enum GZEUserRouter: URLRequestConvertible {
              .updateUser,
              .logout,
              .findByLocation,
+             .sendLocationUpdate,
              .publicProfile,
              .photo:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
@@ -107,7 +112,8 @@ enum GZEUserRouter: URLRequestConvertible {
         case .createUser(let parameters),
              .updateUser(_, let parameters),
              .reset(let parameters),
-             .resetPassword(let parameters):
+             .resetPassword(let parameters),
+             .sendLocationUpdate(let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
 
         case .count(let parameters),
@@ -117,7 +123,6 @@ enum GZEUserRouter: URLRequestConvertible {
         case .login(let parameters, let queryParams):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
             urlRequest = try URLEncoding.queryString.encode(urlRequest, with: queryParams)
-
 
         default:
             break

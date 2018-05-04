@@ -16,13 +16,16 @@ class GZELocationService: NSObject, CLLocationManagerDelegate {
     
     let locationManager  = CLLocationManager()
     let lastLocation = MutableProperty<CLLocation?>(nil)
-    let lastError = MutableProperty<Error?>(nil)
-    var continuousLocation = false
+    let lastError = MutableProperty<String?>(nil)
     
     // MARK: - init
     override init() {
         super.init()
         self.locationManager.delegate = self
+        self.locationManager.distanceFilter = 100
+        self.locationManager.pausesLocationUpdatesAutomatically = false
+        self.locationManager.allowsBackgroundLocationUpdates = false // enable background updates only when needed
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
     }
     
     func requestAuthorization() -> String? {
@@ -39,24 +42,46 @@ class GZELocationService: NSObject, CLLocationManagerDelegate {
         
         return nil
     }
-    
-    func startUpdatingLocation(continuousLocation: Bool = false) {
-        self.continuousLocation = continuousLocation
-        self.locationManager.startUpdatingLocation()
+
+    func requestLocation() {
+        if let authorizationMessage = self.requestAuthorization() {
+            self.lastError.value = authorizationMessage
+        } else {
+            self.locationManager.requestLocation()
+        }
     }
     
+    func startUpdatingLocation(background: Bool = false) {
+        if let authorizationMessage = self.requestAuthorization() {
+            self.lastError.value = authorizationMessage
+        } else {
+            self.locationManager.allowsBackgroundLocationUpdates = background
+            self.locationManager.startUpdatingLocation()
+        }
+    }
+
+    func stopUpdatingLocation() {
+        self.locationManager.stopUpdatingLocation()
+    }
+
+    // MARK - CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let currentLocation = locations.last!
         log.debug("Current location: \(currentLocation)")
         self.lastLocation.value = currentLocation
-        if !self.continuousLocation {
-            self.locationManager.stopUpdatingLocation()
-        }
     }
-    
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         log.error("Error \(error)")
-        self.lastError.value = error
+        self.lastError.value = error.localizedDescription
     }
+
+    func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
+        log.debug("location manager did pause")
+    }
+
+    func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
+        log.debug("location manager did resume")
+    }
+
 }

@@ -49,6 +49,10 @@
 	<string>Gooze quiere usar tu ubicación para ubicarte en el mapa</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pick a photo from your library as your profile image</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

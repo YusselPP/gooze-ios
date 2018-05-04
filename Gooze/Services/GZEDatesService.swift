@@ -10,16 +10,22 @@ import Foundation
 import Gloss
 import SocketIO
 import ReactiveSwift
+import Alamofire
 
 class GZEDatesService: NSObject {
 
     static let shared = GZEDatesService()
+
+    let bgSessionManager: SessionManager
 
     let lastReceivedRequest = MutableProperty<GZEDateRequest?>(nil)
     let receivedRequests = MutableProperty<[GZEDateRequest]>([])
     
     let lastSentRequest = MutableProperty<GZEDateRequest?>(nil)
     let sentRequests = MutableProperty<[GZEDateRequest]>([])
+
+    let userLastLocation = MutableProperty<GZEUser?>(nil)
+    var sendLocationDisposable: Disposable?
 
     var dateSocket: DatesSocket? {
         return GZESocketManager.shared[DatesSocket.namespace] as? DatesSocket
@@ -30,6 +36,9 @@ class GZEDatesService: NSObject {
     var errorMessage = MutableProperty<String?>(nil)
 
     override init() {
+        let configuration = URLSessionConfiguration.background(withIdentifier: "com.gooze.app.background")
+        self.bgSessionManager = Alamofire.SessionManager(configuration: configuration)
+
         super.init()
         receivedRequests.signal.observeValues {
             log.debug("receivedRequests changed: \(String(describing: $0.toJSONArray()))")
@@ -249,6 +258,7 @@ class GZEDatesService: NSObject {
 
                     log.debug("Date successfully created")
                     GZEDatesService.shared.upsert(dateRequest: dateRequest)
+                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id)
                     sink.sendCompleted()
 
                 } else {
@@ -257,6 +267,114 @@ class GZEDatesService: NSObject {
                     sink.send(error: .datesSocket(error: .unexpected))
                 }
             }
+        }
+    }
+
+    func sendLocationUpdate(to recipientId: String) {
+        guard let authUser = GZEAuthService.shared.authUser else {return}
+
+        let user = GZEUser(
+            id: authUser.id,
+            username: authUser.username,
+            email: authUser.email
+        )
+
+        sendLocationDisposable?.dispose()
+
+        sendLocationDisposable = GZELocationService.shared.lastLocation.signal.skipNil().throttle(5.0, on: QueueScheduler.main)
+            .flatMap(.latest){location -> SignalProducer<Bool, GZEError> in
+                user.currentLocation = GZEUser.GeoPoint(CLCoord: location.coordinate)
+
+                if UIApplication.shared.applicationState == .background {
+                    return self.sendLocationUpdateInBackground(to: recipientId, user: user).flatMapError{ error in
+                        log.error(error.localizedDescription)
+                        return SignalProducer.empty
+                    }
+                } else {
+                    return self.sendLocationUpdateInForeground(to: recipientId, user: user).flatMapError{ error in
+                        log.error(error.localizedDescription)
+                        return SignalProducer.empty
+                    }
+                }
+            }.observe { event in
+                log.debug("send location event received: \(event)")
+            }
+
+        GZELocationService.shared.startUpdatingLocation(background: true)
+    }
+
+    func sendLocationUpdateInForeground(to recipientId: String, user: GZEUser) -> SignalProducer<Bool, GZEError> {
+        log.debug("sendLocationUpdateInForeground")
+        guard let dateSocket = self.dateSocket else {
+            log.error("Date socket not found")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        guard let userJson = user.toJSON() else {
+            log.error("Failed to parse GZEUser to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        return SignalProducer { sink, disposable in
+            log.debug("emitting updateLocation...")
+            dateSocket.emitWithAck(.updateLocation, recipientId, userJson).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
+                log.debug("ack data: \(data)")
+
+                disposable.add {
+                    log.debug("sendLocationUpdateInForeground signal disposed")
+                }
+
+                if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
+                    log.error("No ack received from server")
+                    self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
+                    sink.send(error: .datesSocket(error: .noAck))
+                    return
+                }
+
+                if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
+
+                    log.error("\(String(describing: error.toJSON()))")
+                    self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+                    sink.send(error: .datesSocket(error: .unexpected))
+
+                } else {
+                    log.debug("Location successfully updated")
+                    sink.sendCompleted()
+                }
+            }
+        }
+    }
+
+    func sendLocationUpdateInBackground(to recipientId: String, user: GZEUser) -> SignalProducer<Bool, GZEError> {
+        log.debug("sendLocationUpdateInBackground")
+        guard let userJson = user.toJSON() else {
+            log.error("Failed to parse GZEUser to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        return SignalProducer {[weak self] sink, disposable in
+            disposable.add {
+                log.debug("sendLocationUpdateInBackground signal disposed")
+            }
+
+            guard let this = self else {
+                log.error("self was disposed")
+                sink.send(error: .datesSocket(error: .unexpected))
+                return
+            }
+
+            let params: [String: Any] = ["location": [
+                "recipientId": recipientId,
+                "user": userJson
+            ]]
+
+            this.bgSessionManager.request(GZEUserRouter.sendLocationUpdate(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
+                    return true
+                }))
         }
     }
     
@@ -273,5 +391,62 @@ class GZEDatesService: NSObject {
             self.receivedRequests.value.upsert(dateRequest) {$0 == dateRequest}
             self.lastReceivedRequest.value = dateRequest
         }
+    }
+
+    func listenSocketEvents() {
+        self.dateSocket?.socketEventsEmitter
+            .signal
+            .combinePrevious(nil)
+            .filter {(prev, event) in
+                if let prev = prev, let event = event {
+                    return prev == .reconnect && event == .authenticated
+                }
+                return false
+            }
+            .flatMap(.latest) { _ -> SignalProducer<GZEUser, GZEError> in
+                return GZEAuthService.shared.loadAuthUser()
+                    .flatMapError{ error in
+                        log.error(error)
+                        return SignalProducer.empty
+                    }
+            }
+            .observe { event in
+
+                switch event {
+                case .value(let user):
+                    if user.status == .onDate {
+                        if user.mode == .gooze {
+                            GZEDateRequestApiRepository().findActiveDate(by: "recipientId")
+                                .map{$0.first}
+                                .skipNil()
+                                .start{event in
+                                    switch event {
+                                    case .value(let dateRequest):
+                                        GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id)
+                                    case .failed(let error):
+                                        log.error(error)
+                                    default: break
+                                    }
+                            }
+                        } else {
+                            GZEDateRequestApiRepository().findActiveDate(by: "senderId")
+                                .map{$0.first}
+                                .skipNil()
+                                .start{event in
+                                    switch event {
+                                    case .value(let dateRequest):
+                                        GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id)
+                                    case .failed(let error):
+                                        log.error(error)
+                                    default: break
+                                    }
+                            }
+                        }
+
+                    }
+                default: break
+                }
+
+            }
     }
 }

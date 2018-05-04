@@ -37,6 +37,7 @@
 		8D216AB320714E72008EF7A2 /* GZEProfileUserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D216AB220714E72008EF7A2 /* GZEProfileUserInfoViewModel.swift */; };
 		8D216AB520715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D216AB420715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift */; };
 		8D2171922018A20400337F6B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2171912018A20400337F6B /* String+Extension.swift */; };
+		8D2183412098FB0E00D21C26 /* GZEUserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2183402098FB0E00D21C26 /* GZEUserAnnotationView.swift */; };
 		8D219F0620895ED700BAEEE5 /* GZENumberHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D219F0520895ED700BAEEE5 /* GZENumberHelper.swift */; };
 		8D220735206A740900BC0895 /* GZEDatesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D220734206A740900BC0895 /* GZEDatesService.swift */; };
 		8D22DD9E2039AF3C0088D5F5 /* GZEBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */; };
@@ -47,6 +48,7 @@
 		8D261CD8208CC2E900DB5DF0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D261CD7208CC2E900DB5DF0 /* MapKit.framework */; };
 		8D261CDA208CCE1A00DB5DF0 /* GZEMapService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D261CD9208CCE1A00DB5DF0 /* GZEMapService.swift */; };
 		8D27D03E1FBEB14E00263B6C /* GZEDateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */; };
+		8D28835F209BC50D00F5C394 /* GZEUserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D28835E209BC50D00F5C394 /* GZEUserAnnotation.swift */; };
 		8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D290704207827D400C2F865 /* GZEMapSlider.swift */; };
 		8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29A6F82068778C00830E6D /* GZEAlertService.swift */; };
 		8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A4696204C626400581838 /* UIImage+Extension.swift */; };
@@ -196,6 +198,7 @@
 		8D216AB220714E72008EF7A2 /* GZEProfileUserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEProfileUserInfoViewModel.swift; sourceTree = "<group>"; };
 		8D216AB420715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEProfileUserInfoViewModelReadOnly.swift; sourceTree = "<group>"; };
 		8D2171912018A20400337F6B /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		8D2183402098FB0E00D21C26 /* GZEUserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserAnnotationView.swift; sourceTree = "<group>"; };
 		8D219F0520895ED700BAEEE5 /* GZENumberHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENumberHelper.swift; sourceTree = "<group>"; };
 		8D220734206A740900BC0895 /* GZEDatesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDatesService.swift; sourceTree = "<group>"; };
 		8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBlur.swift; sourceTree = "<group>"; };
@@ -206,6 +209,7 @@
 		8D261CD7208CC2E900DB5DF0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		8D261CD9208CCE1A00DB5DF0 /* GZEMapService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapService.swift; sourceTree = "<group>"; };
 		8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateHelper.swift; sourceTree = "<group>"; };
+		8D28835E209BC50D00F5C394 /* GZEUserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserAnnotation.swift; sourceTree = "<group>"; };
 		8D290704207827D400C2F865 /* GZEMapSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapSlider.swift; sourceTree = "<group>"; };
 		8D29A6F82068778C00830E6D /* GZEAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAlertService.swift; sourceTree = "<group>"; };
 		8D2A4696204C626400581838 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
@@ -358,6 +362,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		8D21833F2098F4E800D21C26 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				8D2183402098FB0E00D21C26 /* GZEUserAnnotationView.swift */,
+				8D28835E209BC50D00F5C394 /* GZEUserAnnotation.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		8D572DBE1F9D471B00B824FA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -397,6 +410,7 @@
 		8DA575AB1FC3D5DF0001CE2A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				8D21833F2098F4E800D21C26 /* Map */,
 				8DD0352E1FB5143C008EBEAD /* GZEBlurViewController.swift */,
 				8DD0352F1FB5143C008EBEAD /* GZEBlurViewController.xib */,
 				8DBAABE31FB8A12C00B15142 /* GZETextField.swift */,
@@ -721,6 +735,9 @@
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Maps.iOS = {
 								enabled = 1;
 							};
@@ -993,6 +1010,7 @@
 				8D216AB520715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift in Sources */,
 				8D2BC3A020914C0D00945D33 /* GZEDate.swift in Sources */,
 				8D0938032075B1B9008AEA00 /* GZEUpdateProfileViewModel.swift in Sources */,
+				8D28835F209BC50D00F5C394 /* GZEUserAnnotation.swift in Sources */,
 				8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */,
 				8D216AB120714513008EF7A2 /* ChatSocketError.swift in Sources */,
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
@@ -1073,6 +1091,7 @@
 				8D59DB0A208A660C0059CC46 /* GZEMapViewModelDate.swift in Sources */,
 				8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */,
 				8DFFD68F20514F6600C7290B /* GZEUsersListCollectionView.swift in Sources */,
+				8D2183412098FB0E00D21C26 /* GZEUserAnnotationView.swift in Sources */,
 				8D220735206A740900BC0895 /* GZEDatesService.swift in Sources */,
 				8DCD97F12069133900117030 /* GZEUsersList.swift in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,

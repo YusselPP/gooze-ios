@@ -22,6 +22,7 @@ class GZEMapService {
         self.mapView.removeFromSuperview()
         self.mapView.delegate = nil
         self.mapView.showsUserLocation = false
+        self.mapView.removeAnnotations(self.mapView.annotations)
 
         self.disposables.forEach{$0?.dispose()}
         self.disposables.removeAll()

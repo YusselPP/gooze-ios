@@ -56,12 +56,14 @@ class GZEMapViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.viewModel.viewWillAppear()
         self.initMapKit()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.deinitMapKit()
+        self.viewModel.viewDidDisappear()
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,10 +107,17 @@ class GZEMapViewController: UIViewController {
         self.mapView = GZEMapService.shared.mapView
         self.mapView.delegate = self.viewModel
         self.mapView.showsUserLocation = true
+        let annotation = GZEUserAnnotation()
+
+        self.mapView.addAnnotation(annotation)
 
         GZEMapService.shared.disposables.append(
             self.mapView.reactive.isUserInteractionEnabled <~ self.viewModel.isMapUserInteractionEnabled
         )
+
+        annotation.reactive.coordinate <~ self.viewModel.userAnnotationLocation
+
+            annotation.reactive.user <~ self.viewModel.annotationUser
 
         self.mapView.translatesAutoresizingMaskIntoConstraints = false
         self.mapViewContainer.addSubview(self.mapView)

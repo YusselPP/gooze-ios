@@ -16,6 +16,7 @@ class GZESocket: SocketIOClient {
     static let ackTimeout: Double = 60
 
     enum Event: String {
+        case reconnect
         case authentication
         case authenticated
         case unauthorized
@@ -52,7 +53,7 @@ class GZESocket: SocketIOClient {
 
         self.on(clientEvent: .disconnect) {data, ack in
             log.error("Socket disconnected. Reason: \(data[0])")
-            GZEAlertService.shared.showBottomAlert(text: "socket.disconnected", duration: 0, animated: true, onTapped: {[weak self] in
+            GZEAlertService.shared.showBottomAlert(text: "socket.disconnected".localized(), duration: 0, animated: true, onTapped: {[weak self] in
                 self?.reconnect()
                 GZEAlertService.shared.dismissBottomAlert()
             })
@@ -60,6 +61,7 @@ class GZESocket: SocketIOClient {
 
         self.on(clientEvent: .reconnect) {data, ack in
             log.debug("Reconecting...")
+            self.socketEventsEmitter.value = .reconnect
         }
 
         self.on(.authenticated) {data, ack in
