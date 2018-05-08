@@ -132,6 +132,8 @@ class GZEValidationErrorView: UIView {
         self.textLabel.font = GZEConstants.Font.main
         self.textLabel.textAlignment = .center
         self.textLabel.numberOfLines = 3
+        self.textLabel.isUserInteractionEnabled = true
+        self.textView.isUserInteractionEnabled = true
         self.textView.addSubview(textLabel)
 
 

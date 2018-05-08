@@ -26,6 +26,7 @@ class GZEDatesService: NSObject {
 
     let userLastLocation = MutableProperty<GZEUser?>(nil)
     var sendLocationDisposable: Disposable?
+    var socketEventsDisposable: Disposable?
 
     var dateSocket: DatesSocket? {
         return GZESocketManager.shared[DatesSocket.namespace] as? DatesSocket
@@ -281,22 +282,25 @@ class GZEDatesService: NSObject {
 
         sendLocationDisposable?.dispose()
 
-        sendLocationDisposable = GZELocationService.shared.lastLocation.signal.skipNil().throttle(5.0, on: QueueScheduler.main)
-            .flatMap(.latest){location -> SignalProducer<Bool, GZEError> in
+        sendLocationDisposable = GZELocationService.shared.lastLocation.signal.skipNil().throttle(1.0, on: QueueScheduler.main)
+            .flatMap(.latest){[weak self] location -> SignalProducer<Bool, GZEError> in
                 user.currentLocation = GZEUser.GeoPoint(CLCoord: location.coordinate)
+                guard let this = self else {return SignalProducer.empty}
 
                 if UIApplication.shared.applicationState == .background {
-                    return self.sendLocationUpdateInBackground(to: recipientId, user: user).flatMapError{ error in
+                    return this.sendLocationUpdateInBackground(to: recipientId, user: user).throttle(5.0, on: QueueScheduler.main).flatMapError{ error in
                         log.error(error.localizedDescription)
                         return SignalProducer.empty
                     }
                 } else {
-                    return self.sendLocationUpdateInForeground(to: recipientId, user: user).flatMapError{ error in
+                    return this.sendLocationUpdateInForeground(to: recipientId, user: user).flatMapError{ error in
                         log.error(error.localizedDescription)
                         return SignalProducer.empty
                     }
                 }
-            }.observe { event in
+            }
+            .take(during: self.reactive.lifetime)
+            .observe { event in
                 log.debug("send location event received: \(event)")
             }
 
@@ -394,15 +398,18 @@ class GZEDatesService: NSObject {
     }
 
     func listenSocketEvents() {
-        self.dateSocket?.socketEventsEmitter
+        self.socketEventsDisposable?.dispose()
+        self.socketEventsDisposable = self.dateSocket?.socketEventsEmitter
             .signal
-            .combinePrevious(nil)
-            .filter {(prev, event) in
-                if let prev = prev, let event = event {
-                    return prev == .reconnect && event == .authenticated
-                }
-                return false
-            }
+            //.combinePrevious(nil)
+            //.filter {(prev, event) in
+            //    if let prev = prev, let event = event {
+            //        return prev == .reconnect && event == .authenticated
+            //    }
+            //    return false
+            //}
+            .skipNil()
+            .filter{$0 == .authenticated}
             .flatMap(.latest) { _ -> SignalProducer<GZEUser, GZEError> in
                 return GZEAuthService.shared.loadAuthUser()
                     .flatMapError{ error in

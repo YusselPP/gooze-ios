@@ -24,15 +24,17 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     let status: Status
     let sender: GZEChatUser
     let recipient: GZEChatUser
+    let location: GZEUser.GeoPoint
     let chat: GZEChat?
     let amount: Double?
     let date: GZEDate?
 
-    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, chat: GZEChat? = nil, amount: Double? = nil, date: GZEDate? = nil) {
+    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Double? = nil, date: GZEDate? = nil) {
         self.id = id
         self.status = status
         self.sender = sender
         self.recipient = recipient
+        self.location = location
         self.chat = chat
         self.amount = amount
         self.date = date
@@ -44,7 +46,8 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             let id: String = "id" <~~ json,
             let status: Status = "status" <~~ json,
             let sender: GZEChatUser = "sender" <~~ json,
-            let recipient: GZEChatUser = "recipient" <~~ json
+            let recipient: GZEChatUser = "recipient" <~~ json,
+            let location: GZEUser.GeoPoint = "location" <~~ json
         else {
             log.error("Unable to instantiate. JSON doesn't include a required property")
             return nil
@@ -53,6 +56,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.status = status
         self.sender = sender
         self.recipient = recipient
+        self.location = location
         self.chat = "chat" <~~ json
         self.amount = "amount" <~~ json
         self.date = "date" <~~ json
@@ -65,6 +69,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             "status" ~~> self.status,
             "sender" ~~> self.sender,
             "recipient" ~~> self.recipient,
+            "location" ~~> self.location,
             "chat" ~~> self.chat,
             "amount" ~~> self.amount,
             "date" ~~> self.date,

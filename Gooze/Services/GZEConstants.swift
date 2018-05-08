@@ -41,6 +41,8 @@ class GZEConstants {
         
         //Chat
         static let chatBubbleTextColor = UIColor.black
+
+        static let pinColor = UIColor(red: 46/255, green: 185/255, blue: 154/255, alpha: 1.0)
     }
 
     // Fonts

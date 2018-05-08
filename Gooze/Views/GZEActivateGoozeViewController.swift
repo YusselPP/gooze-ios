@@ -435,14 +435,43 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     // MARK: - Mapkit
 
     func initMapKit() {
-        self.mapView = GZEMapService.shared.mapView
-        self.mapView.delegate = self
+        let mapService = GZEMapService.shared
+
+        self.mapView = mapService.mapView
+        self.mapView.delegate = mapService
         self.mapView.showsUserLocation = true
 
-        GZEMapService.shared.disposables.append(
+        mapService.disposables.append(
             self.mapView.reactive.isUserInteractionEnabled <~ self.isUserInteractionEnabled
         )
 
+        mapService.disposables.append(
+            mapService.centerCoordinate.producer
+                .skipNil()
+                .startWithValues{[weak self] coord in
+                    self?.viewModel.mapCenterLocation.value = coord
+                }
+        )
+
+        mapService.disposables.append(
+            mapService.userLocation.signal
+                .skipNil()
+                .take{[weak self] _ in
+                    log.debug("take while: \(!(self?.isInitialPositionSet ?? true))")
+                    guard let this = self else {return false}
+                    return !this.isInitialPositionSet
+                }
+                .observeValues{[weak self] location in
+                    log.debug("userLocation: \(location)")
+                    self?.isInitialPositionSet = true
+                    self?.centerMapToUserLocation()
+            }
+        )
+
+        self.mapView.setCenter(self.viewModel.mapCenterLocation.value, animated: false)
+
+
+        // Map Constraints
         self.mapView.translatesAutoresizingMaskIntoConstraints = false
         self.mapViewContainer.addSubview(self.mapView)
         self.mapViewContainer.topAnchor.constraint(equalTo: self.mapView.topAnchor).isActive = true
@@ -456,27 +485,12 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         self.mapView = nil
     }
 
-    // MARK: - Map Delegate
-
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        log.debug("Map region changed. Center=[\(mapView.centerCoordinate)]")
-        viewModel.currentLocation.value = mapView.centerCoordinate
-    }
-
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-
-        if isInitialPositionSet { return }
-
-        log.debug("User location updated: \(mapView.userLocation.coordinate)")
-        centerMapToUserLocation()
-        isInitialPositionSet = true
-    }
-
     func centerMapToUserLocation() {
         if let authorizationMessage = locationService.requestAuthorization() {
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
         } else {
             mapView.setRegion(MKCoordinateRegionMake(mapView.userLocation.coordinate, MKCoordinateSpanMake(0.01, 0.01)), animated: true)
+            GZEMapService.shared.centerCoordinate.value = mapView.userLocation.coordinate
         }
     }
 

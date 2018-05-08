@@ -39,7 +39,8 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                             "or": [
                                 ["status": GZEDateRequest.Status.sent.rawValue],
                                 ["status": GZEDateRequest.Status.received.rawValue],
-                                ["status": GZEDateRequest.Status.accepted.rawValue]
+                                ["status": GZEDateRequest.Status.accepted.rawValue],
+                                ["status": GZEDateRequest.Status.onDate.rawValue]
                             ],
                             "recipientId": userId
                         ],

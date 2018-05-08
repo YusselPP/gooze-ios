@@ -12,24 +12,10 @@ import ReactiveSwift
 
 class GZEUserAnnotation: NSObject, MKAnnotation {
 
-    var coordinate = CLLocationCoordinate2D()
+    dynamic var coordinate = CLLocationCoordinate2D()
     var user: GZEChatUser?
 
     override init() {
         super.init()
-    }
-}
-
-extension Reactive where Base: GZEUserAnnotation {
-    var coordinate: BindingTarget<CLLocationCoordinate2D> {
-        return makeBindingTarget {
-            $0.coordinate = $1
-        }
-    }
-
-    var user: BindingTarget<GZEChatUser?> {
-        return makeBindingTarget {
-            $0.user = $1
-        }
     }
 }

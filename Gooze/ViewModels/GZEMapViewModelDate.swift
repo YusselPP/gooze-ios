@@ -31,11 +31,13 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let userAnnotationLocation = MutableProperty<CLLocationCoordinate2D>(CLLocationCoordinate2D())
     let annotationUser = MutableProperty<GZEChatUser?>(nil)
 
-    func viewWillAppear() {
+    func viewWillAppear(mapViewContainer: UIView) {
         self.observeLocationUpdates()
+        self.initMap(mapViewContainer: mapViewContainer)
     }
 
     func viewDidDisappear() {
+        self.deinitMap()
         self.disposeObservers()
     }
 
@@ -44,6 +46,8 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     var disposableBag = [Disposable?]()
 
     var dateRequest: GZEDateRequest
+
+    var mapView: MKMapView?
 
     // MARK - init
     init(dateRequest: GZEDateRequest, mode: GZEChatViewMode) {
@@ -79,6 +83,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             .map{$0?.currentLocation?.toCoreLocationCoordinate2D()}
             .skipNil()
             .start {event in
+                log.debug("location update received: \(event)")
                 switch event {
                 case .value(let location):
                     self.userAnnotationLocation.value = location
@@ -94,26 +99,48 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
         self.disposableBag.removeAll()
     }
 
-    // MKMapViewDelegate
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        log.debug("requesting annotation view")
-        if annotation.isKind(of: MKUserLocation.self) {
-            return nil
+    // MARK - MapService
+
+    func initMap(mapViewContainer: UIView) {
+        let mapService = GZEMapService.shared
+        let mapView = mapService.mapView
+
+        mapView.delegate = mapService
+        mapView.showsUserLocation = true
+
+        let annotation = GZEUserAnnotation()
+        let pointAnnotation = GZEPinAnnotation()
+
+        pointAnnotation.coordinate = dateRequest.location.toCoreLocationCoordinate2D()
+
+        mapView.addAnnotation(annotation)
+        mapView.addAnnotation(pointAnnotation)
+
+        mapView.reactive.isUserInteractionEnabled <~ self.isMapUserInteractionEnabled
+
+        self.annotationUser.producer.startWithValues {user in
+            annotation.user = user
         }
 
-        // if annotation.isKind(of: GZEUserAnnotation.self) {
-        var userAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "GZEUserAnnotationView")
-
-        if userAnnotationView == nil {
-            userAnnotationView = GZEUserAnnotationView(annotation: annotation, reuseIdentifier: "GZEUserAnnotationView")
-
-            let screenSize = UIScreen.main.bounds
-            userAnnotationView?.widthAnchor.constraint(equalToConstant: min(min(screenSize.height, screenSize.width) / 3, 120)).isActive = true
-        } else {
-            userAnnotationView!.annotation = annotation
+        self.userAnnotationLocation.producer.startWithValues{coord in
+            UIView.animate(withDuration: 0.25) {
+                annotation.coordinate = coord
+            }
         }
 
-        return userAnnotationView
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        mapViewContainer.addSubview(mapView)
+        mapViewContainer.topAnchor.constraint(equalTo: mapView.topAnchor).isActive = true
+        mapViewContainer.bottomAnchor.constraint(equalTo: mapView.bottomAnchor).isActive = true
+        mapViewContainer.leadingAnchor.constraint(equalTo: mapView.leadingAnchor).isActive = true
+        mapViewContainer.trailingAnchor.constraint(equalTo: mapView.trailingAnchor).isActive = true
+
+        self.mapView = mapView
+    }
+
+    func deinitMap() {
+        GZEMapService.shared.cleanMap()
+        self.mapView = nil
     }
 
     // MARK - deinit

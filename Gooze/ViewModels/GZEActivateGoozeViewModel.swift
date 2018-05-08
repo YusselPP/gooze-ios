@@ -14,7 +14,7 @@ class GZEActivateGoozeViewModel {
 
     let userRepository: GZEUserRepositoryProtocol
 
-    let currentLocation = MutableProperty<CLLocationCoordinate2D>(CLLocationCoordinate2D())
+    let mapCenterLocation = MutableProperty<CLLocationCoordinate2D>(CLLocationCoordinate2D())
     let sliderValue = MutableProperty<Float>(1)
     let searchLimit = MutableProperty<Int>(5)
 
@@ -101,7 +101,7 @@ class GZEActivateGoozeViewModel {
             }
 
             let user = GZEUser(id: authUser.id, username: authUser.username, email: authUser.email)
-            user.currentLocation = GZEUser.GeoPoint(CLCoord: this.currentLocation.value)
+            user.currentLocation = GZEUser.GeoPoint(CLCoord: this.mapCenterLocation.value)
             user.activeUntil = Date(timeIntervalSinceNow: Double(this.sliderValue.value * 60 * 60))
 
             log.debug(user.toJSON() as Any)
@@ -118,7 +118,7 @@ class GZEActivateGoozeViewModel {
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
-            return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.currentLocation.value), maxDistance: this.sliderValue.value, limit: this.searchLimit.value)
+            return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.mapCenterLocation.value), maxDistance: this.sliderValue.value, limit: this.searchLimit.value)
         }
     }
 

@@ -131,6 +131,10 @@
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Sin calificación";
 
+// Views/components/Map/GZEPinAnnotation
+"vm.pinAnnotation.loading"="Cargando...";
+"vm.pinAnnotation.pinTitle"="Lugar de la cita";
+
 // AuthService
 "vm.authService.sessionExpired"="Tu sesión ha expirado. Inicia sesión nuevamente";
 

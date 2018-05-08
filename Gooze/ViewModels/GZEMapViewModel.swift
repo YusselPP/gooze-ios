@@ -12,7 +12,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
 
-protocol GZEMapViewModel: MKMapViewDelegate {
+protocol GZEMapViewModel {
 
     var topSliderHidden: MutableProperty<Bool> { get }
 
@@ -28,6 +28,6 @@ protocol GZEMapViewModel: MKMapViewDelegate {
     var userAnnotationLocation: MutableProperty<CLLocationCoordinate2D> { get }
     var annotationUser: MutableProperty<GZEChatUser?> { get }
 
-    func viewWillAppear()
+    func viewWillAppear(mapViewContainer: UIView)
     func viewDidDisappear()
 }

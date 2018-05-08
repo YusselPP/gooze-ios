@@ -157,6 +157,7 @@ class GZEUser: NSObject, Glossy {
     var interestedIn: [String]?
 
     var currentLocation: GeoPoint?
+    var dateLocation: GeoPoint?
     var activeUntil: Date?
 
     var registerCode: String?
@@ -242,6 +243,7 @@ class GZEUser: NSObject, Glossy {
         self.interestedIn = "interestedIn" <~~ json
 
         self.currentLocation = "currentLocation" <~~ json
+        self.dateLocation = "dateLocation" <~~ json
         self.activeUntil = Decoder.decode(dateForKey: "activeUntil", dateFormatter: GZEApi.dateFormatter)(json)
 
         self.registerCode = "registerCode" <~~ json
@@ -291,6 +293,7 @@ class GZEUser: NSObject, Glossy {
             "searchPic" ~~> self.searchPic,
 
             "currentLocation" ~~> self.currentLocation,
+            "dateLocation" ~~> self.dateLocation,
             Encoder.encode(dateForKey: "activeUntil", dateFormatter: GZEApi.dateFormatter)(self.activeUntil),
 
             "registerCode" ~~> self.registerCode,

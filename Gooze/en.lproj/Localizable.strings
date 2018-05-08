@@ -131,6 +131,10 @@
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Unrated";
 
+// Views/components/Map/GZEPinAnnotation
+"vm.pinAnnotation.loading"="Loading...";
+"vm.pinAnnotation.pinTitle"="Date place";
+
 // AuthService
 "vm.authService.sessionExpired"="Your session has expired. Please log in";
 

@@ -15,6 +15,8 @@ class GZEChatUser: GZEUserConvertible, Glossy {
     let username: String
     let searchPic: GZEUser.Photo?
 
+    let dateLocation: GZEUser.GeoPoint?
+
     // Ratings
     var imagesRating: Float?
     var complianceRating: Float?
@@ -44,6 +46,7 @@ class GZEChatUser: GZEUserConvertible, Glossy {
         id: String,
         username: String,
         searchPic: GZEUser.Photo? = nil,
+        dateLocation: GZEUser.GeoPoint? = nil,
         imagesRating: Float? = nil,
         complianceRating: Float? = nil,
         dateQualityRating: Float? = nil,
@@ -53,6 +56,7 @@ class GZEChatUser: GZEUserConvertible, Glossy {
         self.id = id
         self.username = username
         self.searchPic = searchPic
+        self.dateLocation = dateLocation
         self.imagesRating = imagesRating
         self.complianceRating = complianceRating
         self.dateQualityRating = dateQualityRating
@@ -79,6 +83,8 @@ class GZEChatUser: GZEUserConvertible, Glossy {
         self.username = username
         self.searchPic = "searchPic" <~~ json
 
+        self.dateLocation = "dateLocation" <~~ json
+
         self.imagesRating = "imagesRating" <~~ json
         self.complianceRating = "complianceRating" <~~ json
         self.dateQualityRating = "dateQualityRating" <~~ json
@@ -94,6 +100,8 @@ class GZEChatUser: GZEUserConvertible, Glossy {
             "id" ~~> self.id,
             "username" ~~> self.username,
             "searchPic" ~~> self.searchPic,
+
+            "dateLocation" ~~> self.dateLocation,
 
             "imagesRating" ~~> self.imagesRating,
             "complianceRating" ~~> self.complianceRating,

@@ -17,7 +17,7 @@ PODS:
   - StarscreamSocketIO (8.0.7)
   - SwiftOverlays (3.0.0)
   - SwiftyBeaver (1.4.2)
-  - Validator (3.0)
+  - Validator (3.0.2)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5)
@@ -48,7 +48,7 @@ SPEC CHECKSUMS:
   StarscreamSocketIO: 00b54e4208481ca5cef089545353aaf126bae16d
   SwiftOverlays: 4cdd9e4f5c7817fb6348882059eb697e11685fad
   SwiftyBeaver: 91057725648ee4980308f1650af077d04b3654a0
-  Validator: 7d9828daffabc757604603052e407f208fa9b6d5
+  Validator: bf211c1d71b3f910d230c09c70e62429d0fef63a
 
 PODFILE CHECKSUM: 4e396475a413c9dc7376262da9119c19409de714
 

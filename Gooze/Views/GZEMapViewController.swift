@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MapKit
 import ReactiveSwift
 import ReactiveCocoa
 
@@ -15,8 +14,6 @@ class GZEMapViewController: UIViewController {
 
     var viewModel: GZEMapViewModel!
     var onDismissTapped: (() -> ())?
-
-    var mapView: MKMapView!
 
     var userBalloons = [GZEUserBalloon]()
 
@@ -56,13 +53,11 @@ class GZEMapViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.viewWillAppear()
-        self.initMapKit()
+        self.viewModel.viewWillAppear(mapViewContainer: self.mapViewContainer                       )
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.deinitMapKit()
         self.viewModel.viewDidDisappear()
     }
 
@@ -99,37 +94,6 @@ class GZEMapViewController: UIViewController {
 
         // actions
         self.bottomButton.reactive.pressed = self.viewModel.bottomButtonAction
-    }
-
-    // MARK - MapKit
-
-    func initMapKit() {
-        self.mapView = GZEMapService.shared.mapView
-        self.mapView.delegate = self.viewModel
-        self.mapView.showsUserLocation = true
-        let annotation = GZEUserAnnotation()
-
-        self.mapView.addAnnotation(annotation)
-
-        GZEMapService.shared.disposables.append(
-            self.mapView.reactive.isUserInteractionEnabled <~ self.viewModel.isMapUserInteractionEnabled
-        )
-
-        annotation.reactive.coordinate <~ self.viewModel.userAnnotationLocation
-
-            annotation.reactive.user <~ self.viewModel.annotationUser
-
-        self.mapView.translatesAutoresizingMaskIntoConstraints = false
-        self.mapViewContainer.addSubview(self.mapView)
-        self.mapViewContainer.topAnchor.constraint(equalTo: self.mapView.topAnchor).isActive = true
-        self.mapViewContainer.bottomAnchor.constraint(equalTo: self.mapView.bottomAnchor).isActive = true
-        self.mapViewContainer.leadingAnchor.constraint(equalTo: self.mapView.leadingAnchor).isActive = true
-        self.mapViewContainer.trailingAnchor.constraint(equalTo: self.mapView.trailingAnchor).isActive = true
-    }
-
-    func deinitMapKit() {
-        GZEMapService.shared.cleanMap()
-        self.mapView = nil
     }
     
     
