@@ -34,13 +34,13 @@ class GZEMapService: NSObject, MKMapViewDelegate {
     }
 
     func cleanMap() {
+        self.disposables.forEach{$0?.dispose()}
+        self.disposables.removeAll()
+
         self.mapView.removeFromSuperview()
         self.mapView.delegate = nil
         self.mapView.showsUserLocation = false
         self.mapView.removeAnnotations(self.mapView.annotations)
-
-        self.disposables.forEach{$0?.dispose()}
-        self.disposables.removeAll()
     }
 
     // MARK: - Map Delegate
@@ -70,6 +70,7 @@ class GZEMapService: NSObject, MKMapViewDelegate {
 
             if userAnnotationView == nil {
                 userAnnotationView = GZEUserAnnotationView(annotation: userAnnotation, reuseIdentifier: "GZEUserAnnotationView")
+                userAnnotationView?.layer.zPosition = -1
 
                 let screenSize = UIScreen.main.bounds
                 userAnnotationView?.widthAnchor.constraint(equalToConstant: min(min(screenSize.height, screenSize.width) / 3, 120)).isActive = true

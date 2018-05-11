@@ -24,7 +24,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
 
     var bottomButtonAction: CocoaAction<GZEButton>?
     let bottomButtonTitle = MutableProperty<String>("")
-    let bottomButtonActionEnabled = MutableProperty<Bool>(false)
+    let bottomButtonActionEnabled = MutableProperty<Bool>(true)
     let (dismissSignal, dismissObserver) = Signal<Bool, NoError>.pipe()
 
     let isMapUserInteractionEnabled = MutableProperty<Bool>(true)
@@ -43,6 +43,10 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
 
     // End GZEMapViewModel protocol
 
+    let bottomButtonTitleChat = "vm.map.date.chat".localized().uppercased()
+    let topLabelDistance = "vm.map.date.distance".localized()
+    let topLabelArrived = "vm.map.date.arrived".localized()
+
     var disposableBag = [Disposable?]()
 
     var dateRequest: GZEDateRequest
@@ -55,12 +59,54 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
         super.init()
         log.debug("\(self) init")
 
+        self.topLabelHidden.value = false
+
+        var userId: String
+        var username: String
         if mode == .gooze {
+            userId = dateRequest.sender.id
+            username = dateRequest.sender.username
             self.annotationUser.value = dateRequest.sender
         } else {
+            userId = dateRequest.recipient.id
+            username = dateRequest.recipient.username
             self.annotationUser.value = dateRequest.recipient
         }
 
+        GZEUserApiRepository().publicProfile(byId: userId).start{[weak self] event in
+            switch event {
+            case .value(let user):
+                if let location = user.currentLocation?.toCoreLocationCoordinate2D() {
+                    self?.userAnnotationLocation.value = location
+                }
+            default: break
+            }
+        }
+
+        self.userAnnotationLocation.producer.take(during: self.reactive.lifetime)
+            .startWithValues {[weak self] location in
+                guard let this = self else {return}
+
+                var unit: String = "m."
+                var distance = (
+                    CLLocation(latitude: location.latitude, longitude: location.longitude)
+                        .distance(from: this.dateRequest.location.toCLLocation())
+                )
+
+                if distance < 50 {
+                    this.topLabelText.value = String(format: this.topLabelArrived, username)
+                    return
+                }
+
+                if distance >= 1000 {
+                    unit = "km."
+                    distance /= 1000
+                }
+
+                this.topLabelText.value = String(format: this.topLabelDistance, username, distance, unit)
+            }
+
+        self.bottomButtonTitle.value = self.bottomButtonTitleChat
         self.bottomButtonAction = CocoaAction(self.createBottomButtonAction())
     }
 

@@ -282,13 +282,15 @@ class GZEDatesService: NSObject {
 
         sendLocationDisposable?.dispose()
 
-        sendLocationDisposable = GZELocationService.shared.lastLocation.signal.skipNil().throttle(1.0, on: QueueScheduler.main)
+        GZELocationService.shared.startUpdatingLocation(background: true)
+
+        sendLocationDisposable = GZELocationService.shared.lastLocation.producer.skipNil().throttle(1.0, on: QueueScheduler.main)
             .flatMap(.latest){[weak self] location -> SignalProducer<Bool, GZEError> in
                 user.currentLocation = GZEUser.GeoPoint(CLCoord: location.coordinate)
                 guard let this = self else {return SignalProducer.empty}
 
                 if UIApplication.shared.applicationState == .background {
-                    return this.sendLocationUpdateInBackground(to: recipientId, user: user).throttle(5.0, on: QueueScheduler.main).flatMapError{ error in
+                    return this.sendLocationUpdateInBackground(to: recipientId, user: user).throttle(10.0, on: QueueScheduler.main).flatMapError{ error in
                         log.error(error.localizedDescription)
                         return SignalProducer.empty
                     }
@@ -300,11 +302,9 @@ class GZEDatesService: NSObject {
                 }
             }
             .take(during: self.reactive.lifetime)
-            .observe { event in
+            .start { event in
                 log.debug("send location event received: \(event)")
             }
-
-        GZELocationService.shared.startUpdatingLocation(background: true)
     }
 
     func sendLocationUpdateInForeground(to recipientId: String, user: GZEUser) -> SignalProducer<Bool, GZEError> {

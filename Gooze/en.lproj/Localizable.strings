@@ -113,6 +113,11 @@
 "vm.datesChat.acceptAmountButtonTitle"="Accept %@";
 "vm.datesChat.dateButtonTitle"="Date";
 
+// ViewModel/GZEMapViewModelDate
+"vm.map.date.chat"="Chat";
+"vm.map.date.distance"="%@ is %.2f %@ away";
+"vm.map.date.arrived"="%@ has arrived to date place";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.doneButton.title"="Next";

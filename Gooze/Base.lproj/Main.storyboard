@@ -2518,15 +2518,13 @@
                                             <constraint firstAttribute="width" secondItem="UVq-3e-Nhg" secondAttribute="height" multiplier="1:1" id="zsH-Rz-SXW"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R90-MA-Zqt" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="124.5" y="449" width="71" height="35"/>
-                                        <color key="backgroundColor" red="0.30196078430000001" green="0.30196078430000001" blue="0.30196078430000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <view verifyAmbiguity="ignoreSizes" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CSW-q7-vLL" customClass="GZEChatActionView" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="40" y="449" width="240" height="35"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="GAy-zz-QfO"/>
+                                            <constraint firstAttribute="height" constant="35" id="cXC-5D-zcH"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
-                                        <state key="normal" title="BUTTON"/>
-                                    </button>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="T0P-0T-sTB" firstAttribute="leading" secondItem="W8p-L4-gHi" secondAttribute="leading" id="3NC-fg-nXF"/>
@@ -2534,6 +2532,7 @@
                                     <constraint firstItem="1Kx-Ow-IJh" firstAttribute="centerX" secondItem="W8p-L4-gHi" secondAttribute="centerX" id="42E-NI-Meq"/>
                                     <constraint firstItem="4oW-hK-aCu" firstAttribute="bottom" secondItem="T0P-0T-sTB" secondAttribute="bottom" id="7T2-bF-8cx"/>
                                     <constraint firstItem="4oW-hK-aCu" firstAttribute="top" secondItem="T0P-0T-sTB" secondAttribute="top" id="7pm-O6-Zq7"/>
+                                    <constraint firstItem="CSW-q7-vLL" firstAttribute="centerX" secondItem="W8p-L4-gHi" secondAttribute="centerX" id="8O2-bg-N0A"/>
                                     <constraint firstItem="T4v-kW-80l" firstAttribute="centerY" secondItem="T0P-0T-sTB" secondAttribute="centerY" id="Ets-s2-2HP"/>
                                     <constraint firstAttribute="bottom" secondItem="otv-F8-wF9" secondAttribute="bottom" id="M40-PY-N7E"/>
                                     <constraint firstAttribute="trailing" secondItem="otv-F8-wF9" secondAttribute="trailing" id="MF3-rO-vmu"/>
@@ -2547,9 +2546,9 @@
                                     <constraint firstItem="gyk-i2-FuY" firstAttribute="centerY" secondItem="W8p-L4-gHi" secondAttribute="centerY" multiplier="0.78" id="btY-eD-1Xo"/>
                                     <constraint firstItem="e89-nM-dk2" firstAttribute="centerY" secondItem="W8p-L4-gHi" secondAttribute="centerY" multiplier="1.35" id="cuv-oo-Ke0"/>
                                     <constraint firstItem="4oW-hK-aCu" firstAttribute="trailing" secondItem="T0P-0T-sTB" secondAttribute="trailing" id="dd2-gL-xFv"/>
+                                    <constraint firstAttribute="bottom" secondItem="CSW-q7-vLL" secondAttribute="bottom" constant="20" id="eRw-1G-00D"/>
                                     <constraint firstItem="gyk-i2-FuY" firstAttribute="centerX" secondItem="W8p-L4-gHi" secondAttribute="centerX" multiplier="0.4" id="gSh-QT-ngW"/>
                                     <constraint firstItem="1Kx-Ow-IJh" firstAttribute="centerY" secondItem="W8p-L4-gHi" secondAttribute="centerY" multiplier="0.4" id="iDX-ME-IsW"/>
-                                    <constraint firstItem="R90-MA-Zqt" firstAttribute="centerX" secondItem="W8p-L4-gHi" secondAttribute="centerX" id="iwG-WK-kGD"/>
                                     <constraint firstItem="T4v-kW-80l" firstAttribute="centerX" secondItem="T0P-0T-sTB" secondAttribute="centerX" id="kdR-rD-ubq"/>
                                     <constraint firstItem="otv-F8-wF9" firstAttribute="leading" secondItem="W8p-L4-gHi" secondAttribute="leading" id="n7G-3o-cUC"/>
                                     <constraint firstItem="112-oD-ppJ" firstAttribute="centerY" secondItem="W8p-L4-gHi" secondAttribute="centerY" multiplier="0.78" id="oJR-HU-Qre"/>
@@ -2574,7 +2573,6 @@
                             <constraint firstItem="W8p-L4-gHi" firstAttribute="top" secondItem="kUv-HT-YI3" secondAttribute="bottom" id="7Z3-DO-SqH"/>
                             <constraint firstItem="kUv-HT-YI3" firstAttribute="leading" secondItem="oGm-gW-cBQ" secondAttribute="leading" id="CsB-MF-fyg"/>
                             <constraint firstItem="WGa-YB-gFf" firstAttribute="top" secondItem="W8p-L4-gHi" secondAttribute="bottom" id="Dgd-Wc-ENf"/>
-                            <constraint firstItem="WGa-YB-gFf" firstAttribute="top" secondItem="R90-MA-Zqt" secondAttribute="bottom" constant="20" id="HPX-nG-LGx"/>
                             <constraint firstAttribute="trailing" secondItem="JtS-kw-urX" secondAttribute="trailing" id="ZkG-Cp-GGf"/>
                             <constraint firstItem="W8p-L4-gHi" firstAttribute="leading" secondItem="oGm-gW-cBQ" secondAttribute="leading" id="gCI-yL-FoT"/>
                             <constraint firstAttribute="bottom" secondItem="JtS-kw-urX" secondAttribute="bottom" id="hcb-G4-5It"/>
@@ -2584,7 +2582,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="bottomButton" destination="R90-MA-Zqt" id="gfF-9N-b0k"/>
+                        <outlet property="bottomActionView" destination="CSW-q7-vLL" id="1kV-h0-GFV"/>
                         <outlet property="mapViewContainer" destination="otv-F8-wF9" id="ACU-bc-dR9"/>
                         <outlet property="navItem" destination="yVQ-Y2-M2f" id="25S-iE-Bx2"/>
                         <outlet property="topLabel" destination="T4v-kW-80l" id="mMb-4E-tCn"/>

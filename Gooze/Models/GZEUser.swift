@@ -84,6 +84,14 @@ class GZEUser: NSObject, Glossy {
         func toCoreLocationCoordinate2D() -> CLLocationCoordinate2D {
             return CLLocationCoordinate2D(latitude: self.lat, longitude: self.lng)
         }
+
+        func toCLLocation() -> CLLocation {
+            return CLLocation(latitude: self.lat, longitude: self.lng)
+        }
+
+        func distance(from: GeoPoint) -> CLLocationDistance {
+            return self.toCLLocation().distance(from: from.toCLLocation())
+        }
     }
 
     struct Photo: Glossy {

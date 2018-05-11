@@ -42,7 +42,7 @@ class GZEMapViewController: UIViewController {
         didSet{ self.userBalloons.append(self.userBalloon5) }
     }
     
-    @IBOutlet weak var bottomButton: GZEButton!
+    @IBOutlet weak var bottomActionView: GZEChatActionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +75,8 @@ class GZEMapViewController: UIViewController {
         self.topLabel.font = GZEConstants.Font.main
         self.topLabel.textColor = .black
 
-        self.bottomButton.setGrayFormat()
+        self.bottomActionView.accessoryButton.setImage(#imageLiteral(resourceName: "button-plus"), for: .normal)
+        self.bottomActionView.accessoryButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 5, bottom: 6, right: 5)
     }
 
     private func setupBindings() {
@@ -85,7 +86,7 @@ class GZEMapViewController: UIViewController {
 
         self.topSliderContainer.reactive.isHidden <~ self.viewModel.topSliderHidden
 
-        self.bottomButton.reactive.title <~ self.viewModel.bottomButtonTitle
+        self.bottomActionView.mainButton.reactive.title <~ self.viewModel.bottomButtonTitle
 
         // signals
         self.viewModel.dismissSignal.observeValues{[weak self] _ in
@@ -93,7 +94,7 @@ class GZEMapViewController: UIViewController {
         }
 
         // actions
-        self.bottomButton.reactive.pressed = self.viewModel.bottomButtonAction
+        self.bottomActionView.mainButton.reactive.pressed = self.viewModel.bottomButtonAction
     }
     
     

@@ -436,19 +436,12 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func initMapKit() {
         let mapService = GZEMapService.shared
-
         self.mapView = mapService.mapView
-        self.mapView.delegate = mapService
-        self.mapView.showsUserLocation = true
 
         mapService.disposables.append(
-            self.mapView.reactive.isUserInteractionEnabled <~ self.isUserInteractionEnabled
-        )
-
-        mapService.disposables.append(
-            mapService.centerCoordinate.producer
+            mapService.centerCoordinate.signal
                 .skipNil()
-                .startWithValues{[weak self] coord in
+                .observeValues{[weak self] coord in
                     self?.viewModel.mapCenterLocation.value = coord
                 }
         )
@@ -468,8 +461,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             }
         )
 
+        self.mapView.delegate = mapService
+        self.mapView.showsUserLocation = true
         self.mapView.setCenter(self.viewModel.mapCenterLocation.value, animated: false)
 
+        mapService.disposables.append(
+            self.mapView.reactive.isUserInteractionEnabled <~ self.isUserInteractionEnabled
+        )
 
         // Map Constraints
         self.mapView.translatesAutoresizingMaskIntoConstraints = false
