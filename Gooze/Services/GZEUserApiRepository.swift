@@ -202,23 +202,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
             let params = ["location": locationJSON, "maxDistance": maxDistance, "limit": limit] as [String : Any]
             Alamofire.request(GZEUserRouter.findByLocation(parameters: params))
-                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { jsonArray in
-
-//                    var models: [GZEUserConvertible] = []
-//
-//                    for json in jsonArray {
-//
-//                        if let dateRequest = GZEDateRequest(json: json) {
-//                            models.append(dateRequest)
-//                        } else if let chatUser = GZEChatUser(json: json) {
-//                            models.append(chatUser)
-//                        } else {
-//                            return nil
-//                        }
-//                    }
-//
-//                    return models
-                    
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { jsonArray in                    
                     return GZEUserConvertible.arrayFrom(jsonArray: jsonArray)
                 }))
         }
@@ -242,6 +226,33 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
             Alamofire.request(GZEUserRouter.publicProfile(id: id))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
+        }
+    }
+
+    func add(ratings: GZERatings, userId: String) -> SignalProducer<Bool, GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        guard !userId.isEmpty else {
+            log.error("userId is requiered, found empty string")
+            return SignalProducer(error: .repository(error: .UnexpectedError))
+        }
+
+        guard let ratingsJson = ratings.toJSON() else {
+            log.error("unable to parse ratings to json")
+            return SignalProducer(error: .repository(error: .UnexpectedError))
+        }
+
+        return SignalProducer { sink, disposable in
+            disposable.add {
+                log.debug("add ratings SignalProducer disposed")
+            }
+
+            Alamofire.request(GZEUserRouter.addRate(id: userId, parameters: ratingsJson))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
+                    Bool($0 as NSNumber)
+                }))
         }
     }
 

@@ -108,6 +108,9 @@
 "vm.activate.searchButtonTitle"="Buscar gooze";
 "vm.activate.allResultsButtonTitle"="Ver listado completo";
 
+// ViewModel/GZERatingsViewModelRateDate
+"vm.rate.date.comments"="Comentarios";
+
 // ViewModel/GZEChatViewModelDates
 "vm.datesChat.setAmountButtonTitle"="Establecer monto";
 "vm.datesChat.acceptAmountButtonTitle"="Aceptar %@";
@@ -117,6 +120,9 @@
 "vm.map.date.chat"="Ir a chat";
 "vm.map.date.distance"="%@ se encuentra a %.2f %@";
 "vm.map.date.arrived"="%@ ha llegado a la cita";
+"vm.map.date.start"="Empezar cita";
+"vm.map.date.end"="Finalizar cita";
+"vm.map.date.process"="Cita en proceso";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
@@ -132,6 +138,8 @@
 "vm.profile.rejectedRequestButtonTitle"="Solicitud rechazada";
 "vm.profile.sentRequestButtonTitle"="Solicitud enviada";
 "vm.profile.endedRequestButtonTitle"="Cita finalizada";
+
+"vm.profile.rate.date.rate"="Calificar";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Sin calificación";

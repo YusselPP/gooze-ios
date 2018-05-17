@@ -8,6 +8,7 @@
 
 import UIKit
 import ReactiveSwift
+import ReactiveCocoa
 import Result
 import SwiftOverlays
 
@@ -27,38 +28,18 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             setActionButtonState()
         }
     }
+
     var acceptRequestAction: Action<Void, GZEDateRequest, GZEError>!
-    
+
+    var bottomButtonAction: CocoaAction<GZEButton>?
+
+    let loading = MutableProperty<Bool>(false)
     let error = MutableProperty<String?>(nil)
 
     let actionButtonTitle = MutableProperty<String>("")
-    
-    var chatViewModel: GZEChatViewModel? {
-        log.debug("chatViewModel called")
-        guard let dateRequestId = self.dateRequest?.id else {
-            log.error("Unable to open the chat, found nil date request")
-            error.value = "service.chat.invalidChatId".localized()
-            return nil
-        }
-        
-        guard let chat = self.dateRequest?.chat else {
-            log.error("Unable to open the chat, found nil chat on date request")
-            error.value = "service.chat.invalidChatId".localized()
-            return nil
-        }
-        
-        var chatMode: GZEChatViewMode
-        if self.mode == .request {
-            chatMode = .gooze
-        } else {
-            chatMode = .client
-        }
-        
-        return GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: chatMode, username: self.user.username)
-    }
+
     weak var controller: UIViewController?
-    
-    
+
     func startObservers() {
         self.observeMessages()
         self.observeRequests()
@@ -87,6 +68,30 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     var requestsObserver: Disposable?
     var socketEventsObserver: Disposable?
 
+    var chatViewModel: GZEChatViewModel? {
+        log.debug("chatViewModel called")
+        guard let dateRequestId = self.dateRequest?.id else {
+            log.error("Unable to open the chat, found nil date request")
+            error.value = "service.chat.invalidChatId".localized()
+            return nil
+        }
+
+        guard let chat = self.dateRequest?.chat else {
+            log.error("Unable to open the chat, found nil chat on date request")
+            error.value = "service.chat.invalidChatId".localized()
+            return nil
+        }
+
+        var chatMode: GZEChatViewMode
+        if self.mode == .request {
+            chatMode = .gooze
+        } else {
+            chatMode = .client
+        }
+
+        return GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: chatMode, username: self.user.username)
+    }
+
     // MARK - init
     init(user: GZEUser, dateRequestId: String? = nil) {
         self.user = user
@@ -96,9 +101,14 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         self.getUpdatedRequest(dateRequestId)
 
         self.setMode()
-        self.acceptRequestAction = self.createAcceptRequestAction()
-        self.acceptRequestAction.events.observeValues {[weak self] in
+
+        let acceptRequestAction = self.createAcceptRequestAction()
+        acceptRequestAction.events.observeValues {[weak self] in
             self?.onAcceptRequestAction($0)
+        }
+
+        self.bottomButtonAction = CocoaAction(acceptRequestAction) { [weak self] _ in
+            self?.loading.value = true
         }
     }
     
@@ -146,6 +156,8 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     
     private func onAcceptRequestAction(_ event: Event<GZEDateRequest, GZEError>) {
         log.debug("event received: \(event)")
+        self.loading.value = false
+
         switch event {
         case .value(let dateRequest):
             self.dateRequest = dateRequest

@@ -85,6 +85,51 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
+    func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        guard let dateRequestJson = dateRequest.toJSON() else {
+            log.error("Unnable to parse dateRequest to JSON")
+            return SignalProducer(error: .repository(error: .UnexpectedError))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("startDate SignalProducer disposed")
+            }
+
+            log.debug("starting date...")
+
+            Alamofire.request(GZEDateRequestRouter.startDate(json: dateRequestJson))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
+        }
+    }
+
+    func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        guard let dateRequestJson = dateRequest.toJSON() else {
+            log.error("Unnable to parse dateRequest to JSON")
+            return SignalProducer(error: .repository(error: .UnexpectedError))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("endDate SignalProducer disposed")
+            }
+
+            log.debug("ending date...")
+
+            Alamofire.request(GZEDateRequestRouter.endDate(json: dateRequestJson))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
+        }
+    }
 
     // MARK: Deinitializers
     deinit {

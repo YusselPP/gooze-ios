@@ -26,4 +26,5 @@ protocol GZEUserRepositoryProtocol {
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func saveSearchPic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func savePhotos(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
+    func add(ratings: GZERatings, userId: String) -> SignalProducer<Bool, GZEError>
 }

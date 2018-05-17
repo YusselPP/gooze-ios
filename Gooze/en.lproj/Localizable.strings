@@ -108,6 +108,9 @@
 "vm.activate.searchButtonTitle"="Search gooze";
 "vm.activate.allResultsButtonTitle"="View all results";
 
+// ViewModel/GZERatingsViewModelRateDate
+"vm.rate.date.comments"="Comments";
+
 // ViewModel/GZEChatViewModelDates
 "vm.datesChat.setAmountButtonTitle"="Set amount";
 "vm.datesChat.acceptAmountButtonTitle"="Accept %@";
@@ -117,6 +120,9 @@
 "vm.map.date.chat"="Chat";
 "vm.map.date.distance"="%@ is %.2f %@ away";
 "vm.map.date.arrived"="%@ has arrived to date place";
+"vm.map.date.start"="Start date";
+"vm.map.date.end"="End date";
+"vm.map.date.process"="Date in process";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
@@ -132,6 +138,8 @@
 "vm.profile.rejectedRequestButtonTitle"="Request rejected";
 "vm.profile.sentRequestButtonTitle"="Request sent";
 "vm.profile.endedRequestButtonTitle"="Date ended";
+
+"vm.profile.rate.date.rate"="Rate";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Unrated";

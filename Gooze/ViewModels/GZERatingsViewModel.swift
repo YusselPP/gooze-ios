@@ -29,6 +29,12 @@ protocol GZERatingsViewModel: GZEProfileViewModel {
     var dateRating: MutableProperty<Float?> { get }
     var goozeRating: MutableProperty<Float?> { get }
 
+    var imagesRatingIsEditable: MutableProperty<Bool> { get }
+    var complianceRatingIsEditable: MutableProperty<Bool> { get }
+    var dateQualityRatingIsEditable: MutableProperty<Bool> { get }
+    var dateRatingIsEditable: MutableProperty<Bool> { get }
+    var goozeRatingIsEditable: MutableProperty<Bool> { get }
+
     var overallRating: MutableProperty<Float?> { get }
     
 }

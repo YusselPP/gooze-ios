@@ -81,6 +81,21 @@ class GZEMapViewController: UIViewController {
 
     private func setupBindings() {
 
+        self.viewModel.error.signal.skipNil().observeValues {
+            GZEAlertService.shared.showBottomAlert(text: $0)
+        }
+
+        self.viewModel.loading
+            .producer
+            .startWithValues {[weak self] loading in
+                guard let this = self else {return}
+                if loading {
+                    this.showLoading()
+                } else {
+                    this.hideLoading()
+                }
+            }
+
         self.topLabel.reactive.isHidden <~ self.viewModel.topLabelHidden
         self.topLabel.reactive.text <~ self.viewModel.topLabelText
 
@@ -89,15 +104,37 @@ class GZEMapViewController: UIViewController {
         self.bottomActionView.mainButton.reactive.title <~ self.viewModel.bottomButtonTitle
 
         // signals
-        self.viewModel.dismissSignal.observeValues{[weak self] _ in
+        self.viewModel.dismissSignal.observeValues{[weak self] in
             self?.onDismissTapped?()
         }
 
+        self.viewModel.ratingViewSignal.observeValues{[weak self] in
+            self?.showRatingView()
+        }
+
         // actions
-        self.bottomActionView.mainButton.reactive.pressed = self.viewModel.bottomButtonAction
+        self.viewModel.bottomButtonAction
+            .producer
+            .startWithValues{[weak self] in
+                guard let this = self else {return}
+                this.bottomActionView.mainButton.reactive.pressed = $0
+            }
     }
     
-    
+    func showRatingView() {
+        log.debug("Trying to show view...")
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+
+        if let view = mainStoryboard.instantiateViewController(withIdentifier: "ratingControllerId") as? GZERatingsViewController {
+
+            log.debug("view instantiated. Setting up its view model")
+            view.viewModel = self.viewModel.ratingViewModel
+            self.present(view, animated: true)
+        } else {
+            log.error("Unable to instantiate ViewController")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
 
     /*
     // MARK: - Navigation

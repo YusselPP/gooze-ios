@@ -182,19 +182,19 @@ class GZEUser: NSObject, Glossy {
     var photos: [Photo]?
 
     // Ratings
-    var imagesRating: Float?
-    var complianceRating: Float?
-    var dateQualityRating: Float?
-    var dateRating: Float?
-    var goozeRating: Float?
+    var imagesRating: GZERatings.Rating?
+    var complianceRating: GZERatings.Rating?
+    var dateQualityRating: GZERatings.Rating?
+    var dateRating: GZERatings.Rating?
+    var goozeRating: GZERatings.Rating?
 
     var overallRating: Float? {
         let rates = [Float?](arrayLiteral:
-            self.imagesRating,
-            self.complianceRating,
-            self.dateQualityRating,
-            self.dateRating,
-            self.goozeRating
+            self.imagesRating?.rate,
+            self.complianceRating?.rate,
+            self.dateQualityRating?.rate,
+            self.dateRating?.rate,
+            self.goozeRating?.rate
         ).flatMap{ $0 }
 
         guard rates.count > 0 else {
@@ -328,6 +328,7 @@ class GZEUser: NSObject, Glossy {
             id: id,
             username: username,
             searchPic: self.searchPic,
+            profilePic: self.profilePic,
             imagesRating: self.imagesRating,
             complianceRating: self.complianceRating,
             dateQualityRating: self.dateQualityRating,

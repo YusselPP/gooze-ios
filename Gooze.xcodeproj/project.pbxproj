@@ -41,6 +41,8 @@
 		8D219F0620895ED700BAEEE5 /* GZENumberHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D219F0520895ED700BAEEE5 /* GZENumberHelper.swift */; };
 		8D220735206A740900BC0895 /* GZEDatesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D220734206A740900BC0895 /* GZEDatesService.swift */; };
 		8D22DD9E2039AF3C0088D5F5 /* GZEBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */; };
+		8D23048020AAE8AF009A1E48 /* GZERatingsViewModelRateDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D23047F20AAE8AF009A1E48 /* GZERatingsViewModelRateDate.swift */; };
+		8D23048220AAF17D009A1E48 /* GZEProfileViewModelRateDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D23048120AAF17D009A1E48 /* GZEProfileViewModelRateDate.swift */; };
 		8D231A76206D331200512775 /* LBURLEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D231A75206D331200512775 /* LBURLEncoding.swift */; };
 		8D23F9742071D7EC00F0809D /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D23F9732071D7EC00F0809D /* Array+Extension.swift */; };
 		8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */; };
@@ -54,6 +56,7 @@
 		8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D290704207827D400C2F865 /* GZEMapSlider.swift */; };
 		8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29A6F82068778C00830E6D /* GZEAlertService.swift */; };
 		8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A4696204C626400581838 /* UIImage+Extension.swift */; };
+		8D2AF3DF20AC3EE600346E61 /* GZERatings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2AF3DE20AC3EE600346E61 /* GZERatings.swift */; };
 		8D2BC3A020914C0D00945D33 /* GZEDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BC39F20914C0D00945D33 /* GZEDate.swift */; };
 		8D2C951520837E0D004DAE3E /* GZEChatActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2C951420837E0D004DAE3E /* GZEChatActionView.swift */; };
 		8D357BAF1FD18C8000D6FB87 /* GZEApiStorageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */; };
@@ -204,6 +207,8 @@
 		8D219F0520895ED700BAEEE5 /* GZENumberHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENumberHelper.swift; sourceTree = "<group>"; };
 		8D220734206A740900BC0895 /* GZEDatesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDatesService.swift; sourceTree = "<group>"; };
 		8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBlur.swift; sourceTree = "<group>"; };
+		8D23047F20AAE8AF009A1E48 /* GZERatingsViewModelRateDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERatingsViewModelRateDate.swift; sourceTree = "<group>"; };
+		8D23048120AAF17D009A1E48 /* GZEProfileViewModelRateDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEProfileViewModelRateDate.swift; sourceTree = "<group>"; };
 		8D231A75206D331200512775 /* LBURLEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LBURLEncoding.swift; sourceTree = "<group>"; };
 		8D23F9732071D7EC00F0809D /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserApiRepository.swift; sourceTree = "<group>"; };
@@ -217,6 +222,7 @@
 		8D290704207827D400C2F865 /* GZEMapSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapSlider.swift; sourceTree = "<group>"; };
 		8D29A6F82068778C00830E6D /* GZEAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAlertService.swift; sourceTree = "<group>"; };
 		8D2A4696204C626400581838 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		8D2AF3DE20AC3EE600346E61 /* GZERatings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERatings.swift; sourceTree = "<group>"; };
 		8D2BC39F20914C0D00945D33 /* GZEDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDate.swift; sourceTree = "<group>"; };
 		8D2C951420837E0D004DAE3E /* GZEChatActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatActionView.swift; sourceTree = "<group>"; };
 		8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApiStorageResponse.swift; sourceTree = "<group>"; };
@@ -577,6 +583,7 @@
 				8DA1B1A8207451E600F616A4 /* GZEChat.swift */,
 				8DD5D6942074E4F5001192ED /* GZEChatUser.swift */,
 				8D2BC39F20914C0D00945D33 /* GZEDate.swift */,
+				8D2AF3DE20AC3EE600346E61 /* GZERatings.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -593,12 +600,14 @@
 				F0DDECE31FA1295600450B2D /* GZESearchGoozeViewModel.swift */,
 				8DAC9A19203FE17E00E87814 /* GZEProfileViewModel.swift */,
 				8DC81BEB204E45810099B417 /* GZEProfileViewModelReadOnly.swift */,
+				8D23048120AAF17D009A1E48 /* GZEProfileViewModelRateDate.swift */,
 				8D216AB220714E72008EF7A2 /* GZEProfileUserInfoViewModel.swift */,
 				8D216AB420715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift */,
 				8D192385204EB8FA005F6F5F /* GZEGalleryViewModel.swift */,
 				8D192387204EBEA8005F6F5F /* GZEGalleryViewModelReadOnly.swift */,
 				8D169AEB204FFC850025C803 /* GZERatingsViewModel.swift */,
 				8D169AED204FFCA20025C803 /* GZERatingsViewModelReadOnly.swift */,
+				8D23047F20AAE8AF009A1E48 /* GZERatingsViewModelRateDate.swift */,
 				8DFAC991206FD8840040DFFB /* GZEChatViewModel.swift */,
 				8DFAC993206FDA910040DFFB /* GZEChatViewModelDates.swift */,
 				8D59DB03208A57670059CC46 /* GZEPaymentViewModel.swift */,
@@ -1086,6 +1095,8 @@
 				8DBAABE41FB8A12C00B15142 /* GZETextField.swift in Sources */,
 				8DABD904206BDEC600DF9C56 /* GZEActionAlertView.swift in Sources */,
 				8D169AEE204FFCA20025C803 /* GZERatingsViewModelReadOnly.swift in Sources */,
+				8D2AF3DF20AC3EE600346E61 /* GZERatings.swift in Sources */,
+				8D23048020AAE8AF009A1E48 /* GZERatingsViewModelRateDate.swift in Sources */,
 				F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */,
 				8D358AC61FBBFA4200F261DC /* GZEError.swift in Sources */,
 				8D033C5E206EC9A500AF47E6 /* GZEChatBubbleView.swift in Sources */,
@@ -1116,6 +1127,7 @@
 				8D19238A204ED18A005F6F5F /* GZERatingsViewController.swift in Sources */,
 				8D59DB00208A52380059CC46 /* GZEPaymentViewController.swift in Sources */,
 				8D6F2F212066DEB500414405 /* GZEValidationErrorView.swift in Sources */,
+				8D23048220AAF17D009A1E48 /* GZEProfileViewModelRateDate.swift in Sources */,
 				8D59DB02208A52880059CC46 /* GZEMapViewController.swift in Sources */,
 				8DA1B1A9207451E600F616A4 /* GZEChat.swift in Sources */,
 				8D59DB06208A577C0059CC46 /* GZEMapViewModel.swift in Sources */,

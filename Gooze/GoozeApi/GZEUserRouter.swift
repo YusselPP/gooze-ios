@@ -19,6 +19,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case findByLocation(parameters: Parameters)
     case sendLocationUpdate(parameters: Parameters)
     case publicProfile(id: String)
+    case addRate(id: String, parameters: Parameters)
 
     case login(parameters: Parameters, queryParams: Parameters)
     case logout
@@ -37,7 +38,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .logout,
              .reset,
              .resetPassword,
-             .sendLocationUpdate:
+             .sendLocationUpdate,
+             .addRate:
             return .post
         case .readUser,
              .count,
@@ -69,6 +71,8 @@ enum GZEUserRouter: URLRequestConvertible {
             return "\(GZEUserRouter.route)/sendLocationUpdate"
         case .publicProfile(let id):
             return "\(GZEUserRouter.route)/\(id)/publicProfile"
+        case .addRate(let id, _):
+            return "\(GZEUserRouter.route)/\(id)/addRate"
 
         case .login:
             return "\(GZEUserRouter.route)/login"
@@ -101,6 +105,7 @@ enum GZEUserRouter: URLRequestConvertible {
              .findByLocation,
              .sendLocationUpdate,
              .publicProfile,
+             .addRate,
              .photo:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         default:
@@ -113,7 +118,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .updateUser(_, let parameters),
              .reset(let parameters),
              .resetPassword(let parameters),
-             .sendLocationUpdate(let parameters):
+             .sendLocationUpdate(let parameters),
+             .addRate(_, let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
 
         case .count(let parameters),

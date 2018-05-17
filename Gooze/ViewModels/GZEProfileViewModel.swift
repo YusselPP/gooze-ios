@@ -8,19 +8,21 @@
 
 import UIKit
 import ReactiveSwift
+import ReactiveCocoa
 
 protocol GZEProfileViewModel {
 
-    var mode: GZEProfileMode { get set}
+    var mode: GZEProfileMode { get set }
     var dateRequest: GZEDateRequest? { get set }
-    var acceptRequestAction: Action<Void, GZEDateRequest, GZEError>! {get set}
+
+    var bottomButtonAction: CocoaAction<GZEButton>? { get }
+
+    var loading: MutableProperty<Bool> { get }
     var error: MutableProperty<String?> { get }
 
     var actionButtonTitle: MutableProperty<String> { get }
-    
-    var chatViewModel: GZEChatViewModel? { get }
-    
-    weak var controller: UIViewController? { get set }
+
+    var controller: UIViewController? { get set }
 
     func startObservers()
     func stopObservers()

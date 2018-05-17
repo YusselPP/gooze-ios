@@ -32,6 +32,12 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
     let goozeRating = MutableProperty<Float?>(nil)
     let overallRating = MutableProperty<Float?>(nil)
 
+    let imagesRatingIsEditable = MutableProperty<Bool>(false)
+    let complianceRatingIsEditable = MutableProperty<Bool>(false)
+    let dateQualityRatingIsEditable = MutableProperty<Bool>(false)
+    let dateRatingIsEditable = MutableProperty<Bool>(false)
+    let goozeRatingIsEditable = MutableProperty<Bool>(false)
+
 
     // MARK - init
     override init(user: GZEUser, dateRequestId: String?) {
@@ -55,11 +61,11 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
         dateRatingDesc.value = GZEUser.Validation.dateRating.fieldName
         goozeRatingDesc.value = GZEUser.Validation.goozeRating.fieldName
 
-        imagesRating.value = user.imagesRating
-        complianceRating.value = user.complianceRating
-        dateQualityRating.value = user.dateQualityRating
-        dateRating.value = user.dateRating
-        goozeRating.value = user.goozeRating
+        imagesRating.value = user.imagesRating?.rate
+        complianceRating.value = user.complianceRating?.rate
+        dateQualityRating.value = user.dateQualityRating?.rate
+        dateRating.value = user.dateRating?.rate
+        goozeRating.value = user.goozeRating?.rate
         overallRating.value = user.overallRating
     }
 

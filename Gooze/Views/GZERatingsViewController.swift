@@ -85,6 +85,7 @@ class GZERatingsViewController: UIViewController {
         goozeRatingLabel.setWhiteFontFormat(align: .left)
         
         overallRatingView.infoLabel.font = GZEConstants.Font.mainBig
+        overallRatingView.setEditable(false)
         
         imagesRatingView.showInfoLabel = false
         complianceRatingView.showInfoLabel = false
@@ -94,11 +95,20 @@ class GZERatingsViewController: UIViewController {
     }
 
     private func setUpBindings() {
-        viewModel.error.signal.observeValues { error in
-            error.flatMap {
-                GZEAlertService.shared.showBottomAlert(text: $0)
-            }
+        viewModel.error.signal.skipNil().observeValues { error in
+            GZEAlertService.shared.showBottomAlert(text: error)
         }
+
+        viewModel.loading
+            .producer
+            .startWithValues {[weak self] loading in
+                guard let this = self else {return}
+                if loading {
+                    this.showLoading()
+                } else {
+                    this.hideLoading()
+                }
+            }
         
         usernameLabel.reactive.text <~ viewModel.username
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
@@ -116,16 +126,25 @@ class GZERatingsViewController: UIViewController {
         dateRatingView.reactive.rating <~ viewModel.dateRating
         goozeRatingView.reactive.rating <~ viewModel.goozeRating
 
+        imagesRatingView.reactive.isEditable <~ viewModel.imagesRatingIsEditable
+        complianceRatingView.reactive.isEditable <~ viewModel.complianceRatingIsEditable
+        dateQualityRatingView.reactive.isEditable <~ viewModel.dateQualityRatingIsEditable
+        dateRatingView.reactive.isEditable <~ viewModel.dateRatingIsEditable
+        goozeRatingView.reactive.isEditable <~ viewModel.goozeRatingIsEditable
+
         overallRatingView.reactive.rating <~ viewModel.overallRating
-        
+
+        // Input producers
+        viewModel.imagesRating <~ imagesRatingView.ratingProducer.on{log.debug($0)}
+        viewModel.complianceRating <~ complianceRatingView.ratingProducer.on{log.debug($0)}
+        viewModel.dateQualityRating <~ dateQualityRatingView.ratingProducer.on{log.debug($0)}
+        viewModel.dateRating <~ dateRatingView.ratingProducer.on{log.debug($0)}
+        viewModel.goozeRating <~ goozeRatingView.ratingProducer.on{log.debug($0)}
+
+        // Actions
+
         contactButton.reactive.title <~ viewModel.actionButtonTitle
-        contactButton.reactive.pressed = CocoaAction(self.viewModel.acceptRequestAction) { [weak self] _ in
-            self?.showLoading()
-        }
-        
-        viewModel.acceptRequestAction.events.observeValues {[weak self] _ in
-            self?.hideLoading()
-        }
+        contactButton.reactive.pressed = viewModel.bottomButtonAction
     }
     
     // MARK: - Deinitializers

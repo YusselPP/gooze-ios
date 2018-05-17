@@ -8,6 +8,7 @@
 
 import FloatRatingView
 import ReactiveSwift
+import enum Result.NoError
 
 class GZERatingView: UIView {
 
@@ -16,6 +17,9 @@ class GZERatingView: UIView {
             self.infoLabel.isHidden = !self.showInfoLabel
         }
     }
+    let (ratingSignal, ratingObserver) = Signal<Float, NoError>.pipe()
+    lazy var ratingProducer = SignalProducer(self.ratingSignal)
+
     private let ratingView = FloatRatingView()
     let infoLabel = GZELabel()
 
@@ -57,10 +61,12 @@ class GZERatingView: UIView {
 
         self.ratingView.fullImage = #imageLiteral(resourceName: "white-star")
         self.ratingView.emptyImage = #imageLiteral(resourceName: "white-star-empty")
+        self.ratingView.halfRatings = false
         self.ratingView.floatRatings = true
         self.ratingView.editable = false
         self.ratingView.contentMode = .scaleAspectFit
         self.ratingView.isHidden = true
+        self.ratingView.delegate = self
 
         // infoLabel
         self.infoLabel.setWhiteFontFormat()
@@ -92,10 +98,22 @@ class GZERatingView: UIView {
     }
 }
 
+extension GZERatingView: FloatRatingViewDelegate {
+    func floatRatingView(_ ratingView: FloatRatingView, didUpdate rating: Float) {
+        self.ratingObserver.send(value: rating)
+    }
+}
+
 extension Reactive where Base: GZERatingView {
     var rating: BindingTarget<Float?> {
         return makeBindingTarget {
             $0.setRating($1)
+        }
+    }
+
+    var isEditable: BindingTarget<Bool> {
+        return makeBindingTarget {
+            $0.setEditable($1)
         }
     }
 }

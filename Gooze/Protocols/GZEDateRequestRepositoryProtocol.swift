@@ -13,5 +13,7 @@ import Gloss
 protocol GZEDateRequestRepositoryProtocol {
 
     func findUnresponded() -> SignalProducer<[GZEDateRequest], GZEError>
-
+    func findActiveDate(by: String) -> SignalProducer<[GZEDateRequest], GZEError>
+    func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError>
+    func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError>
 }

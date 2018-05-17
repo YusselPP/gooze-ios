@@ -101,6 +101,17 @@ class GZEGalleryViewController: UIViewController {
                 GZEAlertService.shared.showBottomAlert(text: $0)
             }
         }
+
+        viewModel.loading
+            .producer
+            .startWithValues {[weak self] loading in
+                guard let this = self else {return}
+                if loading {
+                    this.showLoading()
+                } else {
+                    this.hideLoading()
+                }
+        }
         
         // Model bindings
         usernameLabel.reactive.text <~ viewModel.username
@@ -113,12 +124,7 @@ class GZEGalleryViewController: UIViewController {
         }
         
         contactButton.reactive.title <~ viewModel.actionButtonTitle
-        contactButton.reactive.pressed = CocoaAction(self.viewModel.acceptRequestAction) { [weak self] _ in
-            self?.showLoading()
-        }
-        viewModel.acceptRequestAction.events.observeValues {[weak self] _ in
-            self?.hideLoading()
-        }
+        contactButton.reactive.pressed = viewModel.bottomButtonAction
 
         // UI bindings
         mainImageView.reactive.image <~ selectedThumbnail

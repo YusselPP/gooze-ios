@@ -91,6 +91,17 @@ class GZEProfileViewController: UIViewController {
             }
         }
 
+        viewModel.loading
+            .producer
+            .startWithValues {[weak self] loading in
+                guard let this = self else {return}
+                if loading {
+                    this.showLoading()
+                } else {
+                    this.hideLoading()
+                }
+        }
+
         usernameLabel.reactive.text <~ viewModel.username
         phraseLabel.reactive.text <~ viewModel.phrase
         genderLabel.reactive.text <~ viewModel.gender
@@ -105,13 +116,7 @@ class GZEProfileViewController: UIViewController {
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
         
         contactButton.reactive.title <~ viewModel.actionButtonTitle
-        contactButton.reactive.pressed = CocoaAction(self.viewModel.acceptRequestAction) { [weak self] _ in
-            self?.showLoading()
-        }
-        
-        viewModel.acceptRequestAction.events.observeValues {[weak self] _ in
-            self?.hideLoading()
-        }
+        contactButton.reactive.pressed = viewModel.bottomButtonAction
     }
     
     // MARK: - Deinitializers

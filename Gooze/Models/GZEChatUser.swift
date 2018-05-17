@@ -14,24 +14,25 @@ class GZEChatUser: GZEUserConvertible, Glossy {
     let id: String
     let username: String
     let searchPic: GZEUser.Photo?
+    let profilePic: GZEUser.Photo?
 
     let dateLocation: GZEUser.GeoPoint?
 
     // Ratings
-    var imagesRating: Float?
-    var complianceRating: Float?
-    var dateQualityRating: Float?
-    var dateRating: Float?
-    var goozeRating: Float?
+    var imagesRating: GZERatings.Rating?
+    var complianceRating: GZERatings.Rating?
+    var dateQualityRating: GZERatings.Rating?
+    var dateRating: GZERatings.Rating?
+    var goozeRating: GZERatings.Rating?
 
     var overallRating: Float? {
         let rates = [Float?](arrayLiteral:
-            self.imagesRating,
-            self.complianceRating,
-            self.dateQualityRating,
-            self.dateRating,
-            self.goozeRating
-            ).flatMap{ $0 }
+            self.imagesRating?.rate,
+            self.complianceRating?.rate,
+            self.dateQualityRating?.rate,
+            self.dateRating?.rate,
+            self.goozeRating?.rate
+        ).flatMap{ $0 }
 
         guard rates.count > 0 else {
             return nil
@@ -46,16 +47,18 @@ class GZEChatUser: GZEUserConvertible, Glossy {
         id: String,
         username: String,
         searchPic: GZEUser.Photo? = nil,
+        profilePic: GZEUser.Photo? = nil,
         dateLocation: GZEUser.GeoPoint? = nil,
-        imagesRating: Float? = nil,
-        complianceRating: Float? = nil,
-        dateQualityRating: Float? = nil,
-        dateRating: Float? = nil,
-        goozeRating: Float? = nil
+        imagesRating: GZERatings.Rating? = nil,
+        complianceRating: GZERatings.Rating? = nil,
+        dateQualityRating: GZERatings.Rating? = nil,
+        dateRating: GZERatings.Rating? = nil,
+        goozeRating: GZERatings.Rating? = nil
     ) {
         self.id = id
         self.username = username
         self.searchPic = searchPic
+        self.profilePic = profilePic
         self.dateLocation = dateLocation
         self.imagesRating = imagesRating
         self.complianceRating = complianceRating
@@ -82,6 +85,7 @@ class GZEChatUser: GZEUserConvertible, Glossy {
         self.id = id
         self.username = username
         self.searchPic = "searchPic" <~~ json
+        self.profilePic = "profilePic" <~~ json
 
         self.dateLocation = "dateLocation" <~~ json
 
@@ -100,6 +104,7 @@ class GZEChatUser: GZEUserConvertible, Glossy {
             "id" ~~> self.id,
             "username" ~~> self.username,
             "searchPic" ~~> self.searchPic,
+            "profilePic" ~~> self.profilePic,
 
             "dateLocation" ~~> self.dateLocation,
 

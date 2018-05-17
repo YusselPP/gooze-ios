@@ -11,10 +11,14 @@ import Gloss
 import SocketIO
 import ReactiveSwift
 import Alamofire
+import enum Result.NoError
 
 class GZEDatesService: NSObject {
 
     static let shared = GZEDatesService()
+
+    let dateRequestRepository: GZEDateRequestRepositoryProtocol = GZEDateRequestApiRepository()
+    let userRepository: GZEUserRepositoryProtocol = GZEUserApiRepository()
 
     let bgSessionManager: SessionManager
 
@@ -271,6 +275,14 @@ class GZEDatesService: NSObject {
         }
     }
 
+    func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+        return self.dateRequestRepository.startDate(dateRequest)
+    }
+
+    func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+        return self.dateRequestRepository.endDate(dateRequest)
+    }
+
     func sendLocationUpdate(to recipientId: String) {
         guard let authUser = GZEAuthService.shared.authUser else {return}
 
@@ -305,6 +317,11 @@ class GZEDatesService: NSObject {
             .start { event in
                 log.debug("send location event received: \(event)")
             }
+    }
+
+    func stopSendingLocationUpdates() {
+        GZELocationService.shared.stopUpdatingLocation()
+        self.sendLocationDisposable?.dispose()
     }
 
     func sendLocationUpdateInForeground(to recipientId: String, user: GZEUser) -> SignalProducer<Bool, GZEError> {
@@ -401,59 +418,48 @@ class GZEDatesService: NSObject {
         self.socketEventsDisposable?.dispose()
         self.socketEventsDisposable = self.dateSocket?.socketEventsEmitter
             .signal
-            //.combinePrevious(nil)
-            //.filter {(prev, event) in
-            //    if let prev = prev, let event = event {
-            //        return prev == .reconnect && event == .authenticated
-            //    }
-            //    return false
-            //}
             .skipNil()
             .filter{$0 == .authenticated}
-            .flatMap(.latest) { _ -> SignalProducer<GZEUser, GZEError> in
+            .flatMap(.latest) { _ -> SignalProducer<GZEUser, NoError> in
                 return GZEAuthService.shared.loadAuthUser()
                     .flatMapError{ error in
                         log.error(error)
+                        GZEDatesService.shared.stopSendingLocationUpdates()
                         return SignalProducer.empty
                     }
             }
-            .observe { event in
-
-                switch event {
-                case .value(let user):
-                    if user.status == .onDate {
-                        if user.mode == .gooze {
-                            GZEDateRequestApiRepository().findActiveDate(by: "recipientId")
-                                .map{$0.first}
-                                .skipNil()
-                                .start{event in
-                                    switch event {
-                                    case .value(let dateRequest):
-                                        GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id)
-                                    case .failed(let error):
-                                        log.error(error)
-                                    default: break
-                                    }
-                            }
-                        } else {
-                            GZEDateRequestApiRepository().findActiveDate(by: "senderId")
-                                .map{$0.first}
-                                .skipNil()
-                                .start{event in
-                                    switch event {
-                                    case .value(let dateRequest):
-                                        GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id)
-                                    case .failed(let error):
-                                        log.error(error)
-                                    default: break
-                                    }
-                            }
-                        }
-
-                    }
-                default: break
+            .flatMap(.latest) { user -> SignalProducer<(GZEUser.Mode, GZEDateRequest?), NoError> in
+                guard let mode = user.mode, user.status == .onDate else {
+                    GZEDatesService.shared.stopSendingLocationUpdates()
+                    return SignalProducer.empty
                 }
 
+                let findBy: String
+                if mode == .gooze {
+                    findBy = "recipientId"
+                } else {
+                    findBy = "senderId"
+                }
+
+                return GZEDatesService.shared.dateRequestRepository.findActiveDate(by: findBy)
+                    .map{(mode, $0.first)}
+                    .flatMapError{ error in
+                        log.error(error)
+                        GZEDatesService.shared.stopSendingLocationUpdates()
+                        return SignalProducer.empty
+                }
+            }
+            .observeValues { (mode, dateRequest) in
+                guard let dateRequest = dateRequest, dateRequest.date?.status == .route else {
+                    GZEDatesService.shared.stopSendingLocationUpdates()
+                    return
+                }
+
+                if mode == .gooze {
+                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id)
+                } else {
+                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id)
+                }
             }
     }
 }
