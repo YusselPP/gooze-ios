@@ -12,14 +12,13 @@ import ReactiveCocoa
 
 class GZEMapViewController: UIViewController {
 
+    var segueToRatings = "segueToRatings"
+    var unwindToActivateGooze = "unwindToActivateGooze"
     var viewModel: GZEMapViewModel!
-    var onDismissTapped: (() -> ())?
 
     var userBalloons = [GZEUserBalloon]()
 
     let backButton = GZEBackUIBarButtonItem()
-
-    @IBOutlet weak var navItem: UINavigationItem!
 
     @IBOutlet weak var topLabel: UILabel!
     @IBOutlet weak var topSliderContainer: UIView!
@@ -68,9 +67,9 @@ class GZEMapViewController: UIViewController {
 
     func setupInterfaceObjects() {
         self.backButton.onButtonTapped = {[weak self] _ in
-            self?.onDismissTapped?()
+            self?.previousController(animated: true)
         }
-        self.navItem.setLeftBarButton(self.backButton, animated: false)
+        self.navigationItem.setLeftBarButton(self.backButton, animated: false)
 
         self.topLabel.font = GZEConstants.Font.main
         self.topLabel.textColor = .black
@@ -105,11 +104,17 @@ class GZEMapViewController: UIViewController {
 
         // signals
         self.viewModel.dismissSignal.observeValues{[weak self] in
-            self?.onDismissTapped?()
+            self?.previousController(animated: true)
         }
 
         self.viewModel.ratingViewSignal.observeValues{[weak self] in
-            self?.showRatingView()
+            guard let this = self else {return}
+            this.performSegue(withIdentifier: this.segueToRatings, sender: nil)
+        }
+
+        self.viewModel.exitSignal.observeValues{[weak self] in
+            guard let this = self else {return}
+            this.performSegue(withIdentifier: this.unwindToActivateGooze, sender: nil)
         }
 
         // actions
@@ -120,32 +125,39 @@ class GZEMapViewController: UIViewController {
                 this.bottomActionView.mainButton.reactive.pressed = $0
             }
     }
-    
-    func showRatingView() {
-        log.debug("Trying to show view...")
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
-        if let view = mainStoryboard.instantiateViewController(withIdentifier: "ratingControllerId") as? GZERatingsViewController {
 
-            log.debug("view instantiated. Setting up its view model")
-            view.viewModel = self.viewModel.ratingViewModel
-            self.present(view, animated: true)
-        } else {
-            log.error("Unable to instantiate ViewController")
-            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
-        }
-    }
-
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-    }
-    */
+        if segue.identifier == segueToRatings {
 
+            prepareRatingView(segue.destination)
+
+        } else {
+            log.error("Invalid segue identifier: \(String(describing: segue.identifier))")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
+
+    func prepareRatingView(_ viewController: UIViewController) {
+        log.debug("Trying to show ratings view...")
+
+        if let viewController = viewController as? GZERatingsViewController {
+            log.debug("view instantiated. Setting up its view model")
+
+            viewController.viewModel = self.viewModel.ratingViewModel
+
+        } else {
+            log.error("Unable to instantiate GZERatingsViewController")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
+
+    // MARK: - deinit
     deinit {
         log.debug("\(self) disposed")
     }

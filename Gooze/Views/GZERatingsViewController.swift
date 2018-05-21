@@ -12,6 +12,8 @@ import ReactiveCocoa
 
 class GZERatingsViewController: UIViewController {
 
+    var unwindToActivateGooze = "unwindToActivateGooze"
+
     var viewModel: GZERatingsViewModel!
 
     var contactButtonTitle = "vm.profile.contactTitle".localized().uppercased()
@@ -39,8 +41,6 @@ class GZERatingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
-        
-        viewModel.controller = self
 
         setupInterfaceObjects()
         setUpBindings()
@@ -73,6 +73,8 @@ class GZERatingsViewController: UIViewController {
     */
 
     private func setupInterfaceObjects() {
+        navigationItem.hidesBackButton = true
+
         contactButton.enableAnimationOnPressed()
         contactButton.setGrayFormat()
         
@@ -108,6 +110,12 @@ class GZERatingsViewController: UIViewController {
                 } else {
                     this.hideLoading()
                 }
+            }
+
+        viewModel.disposeToActivateGooze
+            .observeValues {[weak self] in
+                guard let this = self else {return}
+                this.performSegue(withIdentifier: this.unwindToActivateGooze, sender: nil)
             }
         
         usernameLabel.reactive.text <~ viewModel.username

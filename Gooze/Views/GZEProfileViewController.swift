@@ -32,9 +32,6 @@ class GZEProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
-        
-        viewModel.controller = self
-        
 
         setupInterfaceObjects()
         setUpBindings()

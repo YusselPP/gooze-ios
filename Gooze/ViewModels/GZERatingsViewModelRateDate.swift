@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import enum Result.NoError
 
 class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewModel {
     // MARK - GZERatingsViewModel protocol
@@ -38,6 +39,8 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
     let dateQualityRatingIsEditable = MutableProperty<Bool>(true)
     let dateRatingIsEditable = MutableProperty<Bool>(true)
     let goozeRatingIsEditable = MutableProperty<Bool>(true)
+
+    let (disposeToActivateGooze, disposeToActivateGoozeObs) = Signal<Void, NoError>.pipe()
 
     // END GZERatingsViewModel protocol
 
@@ -133,9 +136,9 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
 
         switch event {
         case .value:
-        break // TODO: dispose to search view
+            self.disposeToActivateGoozeObs.send(value: ())
         case .failed(let error):
-            onError(error)
+            self.onError(error)
         default:
             break
         }

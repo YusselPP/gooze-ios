@@ -11,7 +11,7 @@ import CoreLocation
 import ReactiveSwift
 
 class GZELocationService: NSObject, CLLocationManagerDelegate {
-    
+
     static let shared = GZELocationService()
     
     let locationManager  = CLLocationManager()

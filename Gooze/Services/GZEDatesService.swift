@@ -462,4 +462,16 @@ class GZEDatesService: NSObject {
                 }
             }
     }
+
+    func cleanup() {
+        self.socketEventsDisposable?.dispose()
+        self.sendLocationDisposable?.dispose()
+        self.sentRequests.value = []
+        self.receivedRequests.value = []
+    }
+
+    // MARK: deinit
+    deinit {
+        log.debug("\(self) disposed")
+    }
 }

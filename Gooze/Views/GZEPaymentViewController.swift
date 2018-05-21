@@ -13,13 +13,10 @@ import ReactiveCocoa
 class GZEPaymentViewController: UIViewController {
 
     var viewModel: GZEPaymentViewModel!
-    var onDismissTapped: (() -> ())?
-
 
     let backButton = GZEBackUIBarButtonItem()
     
     @IBOutlet weak var bottomButton: GZEButton!
-    @IBOutlet weak var navItem: UINavigationItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,16 +32,16 @@ class GZEPaymentViewController: UIViewController {
 
     func setupInterfaceObjects() {
         self.backButton.onButtonTapped = {[weak self] _ in
-            self?.onDismissTapped?()
+            self?.previousController(animated: true)
         }
-        self.navItem.setLeftBarButton(self.backButton, animated: false)
+        self.navigationItem.setLeftBarButton(self.backButton, animated: false)
 
         self.bottomButton.setGrayFormat()
     }
     
     private func setupBindings() {
         self.viewModel.dismissSignal.observeValues{[weak self] in
-            self?.onDismissTapped?()
+            self?.previousController(animated: true)
         }
 
         // actions

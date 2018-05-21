@@ -1013,10 +1013,14 @@
         <!--Profile Page View Controller-->
         <scene sceneID="UqT-s6-CFk">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="OWp-Sl-Whd" customClass="GZEProfilePageViewController" customModule="Gooze" sceneMemberID="viewController"/>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="OWp-Sl-Whd" customClass="GZEProfilePageViewController" customModule="Gooze" sceneMemberID="viewController">
+                    <connections>
+                        <segue destination="PUS-7J-BoG" kind="show" identifier="segueToChat" id="XJg-fM-c9J"/>
+                    </connections>
+                </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pfq-OE-BfK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4003" y="302"/>
+            <point key="canvasLocation" x="2409" y="1299"/>
         </scene>
         <!--Activate Gooze View Controller-->
         <scene sceneID="rkF-B7-Gwu">
@@ -1208,6 +1212,9 @@
                         <outlet property="userBalloon4" destination="US3-n8-PGT" id="lvO-Yc-41r"/>
                         <outlet property="userBalloon5" destination="gRo-ng-x7o" id="bdl-vO-DSM"/>
                         <segue destination="OWp-Sl-Whd" kind="show" identifier="segueToProfile" id="be1-y5-0kc"/>
+                        <segue destination="lqZ-x0-7AD" kind="show" identifier="segueToChats" id="tq7-RG-4fX"/>
+                        <segue destination="uqh-KR-Brq" kind="show" identifier="segueToTips" id="1t2-ls-MIf"/>
+                        <segue destination="Dcf-Vz-JEP" kind="show" identifier="segueToRatings" id="aoX-cG-RKK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5c-ka-Vea" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1404,19 +1411,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xcj-iX-hX9" userLabel="user-bg-image">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="KYB-LL-jXh">
-                                <rect key="frame" x="0.0" y="20" width="320" height="484"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="440"/>
                                 <subviews>
-                                    <navigationBar contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="lix-bB-hed">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <items>
-                                            <navigationItem id="GIY-eJ-joF"/>
-                                        </items>
-                                    </navigationBar>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sym-4P-Jx8" userLabel="TopButtonContainer">
-                                        <rect key="frame" x="0.0" y="44" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
                                         <subviews>
                                             <view verifyAmbiguity="ignoreSizes" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uu3-SP-25Y" customClass="GZEChatActionView" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="147.5" y="10" width="25" height="35"/>
@@ -1444,7 +1445,7 @@
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cJq-Cg-ZAs" customClass="GZEMessagesTableView" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="99" width="320" height="385"/>
+                                        <rect key="frame" x="0.0" y="55" width="320" height="385"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="10" id="A9E-UN-mlb">
                                             <size key="itemSize" width="50" height="50"/>
@@ -1530,15 +1531,16 @@
                         <outlet property="messageInputHeightConstraint" destination="NW5-jH-Mpj" id="cRm-BC-dVX"/>
                         <outlet property="messageTextView" destination="bKa-QG-jUT" id="myh-VT-c0G"/>
                         <outlet property="messagesTableView" destination="cJq-Cg-ZAs" id="WxM-yG-sdn"/>
-                        <outlet property="myVavigationItem" destination="GIY-eJ-joF" id="CKM-h2-wHQ"/>
                         <outlet property="sendButton" destination="e1P-j5-Our" id="V5u-Kq-aXT"/>
                         <outlet property="topActionView" destination="uu3-SP-25Y" id="bQW-im-X1r"/>
                         <outlet property="topTextInput" destination="6hE-Od-5hh" id="U0J-zJ-r1W"/>
+                        <segue destination="kUb-St-bmY" kind="show" identifier="segueToMap" id="NX9-RF-Mkp"/>
+                        <segue destination="zNS-O1-KzW" kind="show" identifier="segueToPayment" id="yOp-XH-Mhn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VLa-fn-mmo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1119.375" y="1966.9014084507041"/>
+            <point key="canvasLocation" x="2408" y="2078"/>
         </scene>
         <!--Payment View Controller-->
         <scene sceneID="J2y-Zf-cbw">
@@ -1573,36 +1575,26 @@
                                     <constraint firstAttribute="bottom" secondItem="SVu-mg-edX" secondAttribute="bottom" constant="20" id="yN7-cJ-1WQ"/>
                                 </constraints>
                             </view>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zZi-UY-2Di">
-                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                                <items>
-                                    <navigationItem id="glL-3K-7LR"/>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="bN3-Ui-Uce" firstAttribute="leading" secondItem="sc5-Hi-qxo" secondAttribute="leadingMargin" id="4hU-pJ-7FB"/>
                             <constraint firstItem="sg8-Yt-0iz" firstAttribute="top" secondItem="bN3-Ui-Uce" secondAttribute="bottom" id="74N-Pi-qAA"/>
-                            <constraint firstItem="zZi-UY-2Di" firstAttribute="top" secondItem="8Ng-sh-YXJ" secondAttribute="bottom" id="Hx5-TW-FmQ"/>
-                            <constraint firstItem="bN3-Ui-Uce" firstAttribute="top" secondItem="zZi-UY-2Di" secondAttribute="bottom" id="J5l-Lj-zfa"/>
                             <constraint firstAttribute="trailing" secondItem="Qhs-bq-daz" secondAttribute="trailing" id="Q9P-l8-pcL"/>
-                            <constraint firstItem="zZi-UY-2Di" firstAttribute="leading" secondItem="sc5-Hi-qxo" secondAttribute="leading" id="V4o-bu-wAe"/>
-                            <constraint firstAttribute="trailing" secondItem="zZi-UY-2Di" secondAttribute="trailing" id="Z4n-uT-4vz"/>
                             <constraint firstAttribute="bottom" secondItem="Qhs-bq-daz" secondAttribute="bottom" id="clt-g3-Xlj"/>
                             <constraint firstItem="Qhs-bq-daz" firstAttribute="top" secondItem="sc5-Hi-qxo" secondAttribute="top" id="eBS-tk-hF7"/>
+                            <constraint firstItem="bN3-Ui-Uce" firstAttribute="top" secondItem="8Ng-sh-YXJ" secondAttribute="bottom" id="eyl-a4-5ZG"/>
                             <constraint firstAttribute="trailingMargin" secondItem="bN3-Ui-Uce" secondAttribute="trailing" id="qUA-Ny-Y8c"/>
                             <constraint firstItem="Qhs-bq-daz" firstAttribute="leading" secondItem="sc5-Hi-qxo" secondAttribute="leading" id="uxw-cV-E8K"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="bottomButton" destination="SVu-mg-edX" id="muL-Ug-Mv0"/>
-                        <outlet property="navItem" destination="glL-3K-7LR" id="XiS-wz-I79"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JWL-Ve-M0t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1938.75" y="1966.9014084507041"/>
+            <point key="canvasLocation" x="3261" y="2078"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="iTl-YK-QYX">
@@ -1617,13 +1609,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WKe-nt-VYt">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="gnQ-48-oJQ">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKx-Uv-zYQ">
-                                <rect key="frame" x="0.0" y="20" width="320" height="486"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="442"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JoS-fD-ljp">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="526.5"/>
@@ -1848,7 +1840,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l0d-qF-Jxk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3206" y="1085"/>
+            <point key="canvasLocation" x="1620" y="1298"/>
         </scene>
         <!--Gallery View Controller-->
         <scene sceneID="6DK-Bw-ckL">
@@ -2124,7 +2116,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MgU-v5-bKz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4762.5" y="1084.8591549295775"/>
+            <point key="canvasLocation" x="66" y="1297"/>
         </scene>
         <!--Ratings View Controller-->
         <scene sceneID="gk4-LB-zf5">
@@ -2139,10 +2131,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gyw-hI-naM">
-                                <rect key="frame" x="0.0" y="20" width="320" height="486"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="442"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iOw-AL-afn">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="491"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="521"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pa5-kf-aHF">
                                                 <rect key="frame" x="114.5" y="24" width="91" height="21.5"/>
@@ -2189,20 +2181,23 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1cK-Ew-ZQd">
-                                                <rect key="frame" x="8" y="204.5" width="304" height="1"/>
+                                                <rect key="frame" x="8" y="234.5" width="304" height="1"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="HEc-dH-Cmf"/>
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f5Z-Ek-J1U" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="196" width="280" height="0.0"/>
+                                                <rect key="frame" x="20" y="196" width="280" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="CdF-08-cAC"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="94z-DS-8yP" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="227" width="145" height="30"/>
+                                                <rect key="frame" x="20" y="257" width="145" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="mQY-id-kdM"/>
                                                 </constraints>
@@ -2211,7 +2206,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLH-ro-2j2" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="263" width="145" height="30"/>
+                                                <rect key="frame" x="20" y="293" width="145" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="v2a-fg-Wxg"/>
                                                 </constraints>
@@ -2220,7 +2215,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q73-ud-sCn" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="299" width="145" height="30"/>
+                                                <rect key="frame" x="20" y="329" width="145" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="yoW-6q-Lw9"/>
                                                 </constraints>
@@ -2229,7 +2224,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DFb-6H-6D0" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="335" width="145" height="30"/>
+                                                <rect key="frame" x="20" y="365" width="145" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="LMt-KK-cPf"/>
                                                 </constraints>
@@ -2238,7 +2233,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="11f-rU-goW" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="371" width="145" height="30"/>
+                                                <rect key="frame" x="20" y="401" width="145" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="hhz-BX-kia"/>
                                                 </constraints>
@@ -2247,7 +2242,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nlA-W8-FD2" customClass="GZERatingView" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="180" y="226" width="120" height="26"/>
+                                                <rect key="frame" x="180" y="256" width="120" height="26"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="26" id="E4i-1Q-IyU"/>
@@ -2255,7 +2250,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CWY-Ti-abH" customClass="GZERatingView" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="180" y="262" width="120" height="26"/>
+                                                <rect key="frame" x="180" y="292" width="120" height="26"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="120" id="7sI-q4-OEG"/>
@@ -2263,7 +2258,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CGR-Lc-SfC" customClass="GZERatingView" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="180" y="298" width="120" height="26"/>
+                                                <rect key="frame" x="180" y="328" width="120" height="26"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="26" id="KrT-Jv-0KC"/>
@@ -2271,7 +2266,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pHK-8P-PaA" customClass="GZERatingView" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="180" y="334" width="120" height="26"/>
+                                                <rect key="frame" x="180" y="364" width="120" height="26"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="120" id="aiG-B6-AVc"/>
@@ -2279,7 +2274,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CTT-w6-51t" customClass="GZERatingView" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="180" y="370" width="120" height="26"/>
+                                                <rect key="frame" x="180" y="400" width="120" height="26"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="26" id="3mD-Ag-05N"/>
@@ -2287,7 +2282,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhn-67-sU3" customClass="GZERatingView" customModule="Gooze" customModuleProvider="target">
-                                                <rect key="frame" x="60" y="426" width="200" height="45"/>
+                                                <rect key="frame" x="60" y="456" width="200" height="45"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="45" id="XlC-GP-jje"/>
                                                     <constraint firstAttribute="width" constant="200" id="lpn-8f-B37"/>
@@ -2383,11 +2378,75 @@
                         <outlet property="phraseLabel" destination="f5Z-Ek-J1U" id="wf7-bB-1WS"/>
                         <outlet property="profileImageView" destination="xwx-eX-pbt" id="O55-j6-DSM"/>
                         <outlet property="usernameLabel" destination="jz9-bP-JTc" id="JO2-So-Fma"/>
+                        <segue destination="NGX-KL-M5V" kind="show" identifier="segueToProfile" id="bGw-RB-oqb"/>
+                        <segue destination="t7T-l6-5zL" kind="unwind" identifier="unwindToActivateGooze" unwindAction="unwindToActivateGoozeWithSegue:" id="xvo-tg-Pc7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZLj-df-8Jh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="t7T-l6-5zL" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3999.375" y="1084.8591549295775"/>
+            <point key="canvasLocation" x="821" y="1299"/>
+        </scene>
+        <!--Chats-->
+        <scene sceneID="Kc2-CD-5Rl">
+            <objects>
+                <viewController id="lqZ-x0-7AD" userLabel="Chats" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2iG-pI-vnu"/>
+                        <viewControllerLayoutGuide type="bottom" id="FHb-2u-hPp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1ms-Mi-Nj4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="kKE-Yq-JL6">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="kKE-Yq-JL6" firstAttribute="top" secondItem="1ms-Mi-Nj4" secondAttribute="top" id="L78-rr-Fxx"/>
+                            <constraint firstAttribute="trailing" secondItem="kKE-Yq-JL6" secondAttribute="trailing" id="e7g-Tr-Ed5"/>
+                            <constraint firstItem="kKE-Yq-JL6" firstAttribute="leading" secondItem="1ms-Mi-Nj4" secondAttribute="leading" id="sbM-DA-a8m"/>
+                            <constraint firstItem="FHb-2u-hPp" firstAttribute="top" secondItem="kKE-Yq-JL6" secondAttribute="bottom" id="zcf-vB-f3I"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <segue destination="PUS-7J-BoG" kind="show" identifier="segueToChat" id="YiG-yX-aa5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QU5-jG-UJd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3416" y="1298"/>
+        </scene>
+        <!--Tips-->
+        <scene sceneID="pRu-py-JHA">
+            <objects>
+                <viewController id="uqh-KR-Brq" userLabel="Tips" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QA3-fX-l7B"/>
+                        <viewControllerLayoutGuide type="bottom" id="k4P-JC-Hty"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="AqJ-C2-ul9">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="kze-db-WzV">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="kze-db-WzV" firstAttribute="top" secondItem="AqJ-C2-ul9" secondAttribute="top" id="2H4-vQ-y6b"/>
+                            <constraint firstAttribute="trailing" secondItem="kze-db-WzV" secondAttribute="trailing" id="Dxh-Zz-NOf"/>
+                            <constraint firstItem="kze-db-WzV" firstAttribute="leading" secondItem="AqJ-C2-ul9" secondAttribute="leading" id="Zbg-1i-Vt2"/>
+                            <constraint firstAttribute="bottom" secondItem="kze-db-WzV" secondAttribute="bottom" id="odR-Cb-Gda"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Noa-WJ-MYQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4644" y="302"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="qbe-dy-Oyy">
@@ -2558,33 +2617,23 @@
                                     <constraint firstItem="T0P-0T-sTB" firstAttribute="top" secondItem="W8p-L4-gHi" secondAttribute="top" id="yjI-9U-I4o"/>
                                 </constraints>
                             </view>
-                            <navigationBar clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kUv-HT-YI3">
-                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                                <items>
-                                    <navigationItem id="yVQ-Y2-M2f"/>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" red="0.2156862745" green="0.21960784310000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="kUv-HT-YI3" firstAttribute="top" secondItem="4rY-1f-iTx" secondAttribute="bottom" id="1pL-Zg-1T1"/>
                             <constraint firstItem="JtS-kw-urX" firstAttribute="leading" secondItem="oGm-gW-cBQ" secondAttribute="leading" id="3rP-zl-6iH"/>
-                            <constraint firstItem="W8p-L4-gHi" firstAttribute="top" secondItem="kUv-HT-YI3" secondAttribute="bottom" id="7Z3-DO-SqH"/>
-                            <constraint firstItem="kUv-HT-YI3" firstAttribute="leading" secondItem="oGm-gW-cBQ" secondAttribute="leading" id="CsB-MF-fyg"/>
                             <constraint firstItem="WGa-YB-gFf" firstAttribute="top" secondItem="W8p-L4-gHi" secondAttribute="bottom" id="Dgd-Wc-ENf"/>
+                            <constraint firstItem="W8p-L4-gHi" firstAttribute="top" secondItem="4rY-1f-iTx" secondAttribute="bottom" id="PI2-qd-Dqj"/>
                             <constraint firstAttribute="trailing" secondItem="JtS-kw-urX" secondAttribute="trailing" id="ZkG-Cp-GGf"/>
                             <constraint firstItem="W8p-L4-gHi" firstAttribute="leading" secondItem="oGm-gW-cBQ" secondAttribute="leading" id="gCI-yL-FoT"/>
                             <constraint firstAttribute="bottom" secondItem="JtS-kw-urX" secondAttribute="bottom" id="hcb-G4-5It"/>
                             <constraint firstAttribute="trailing" secondItem="W8p-L4-gHi" secondAttribute="trailing" id="oFp-i9-5xd"/>
                             <constraint firstItem="JtS-kw-urX" firstAttribute="top" secondItem="oGm-gW-cBQ" secondAttribute="top" id="oKW-46-od4"/>
-                            <constraint firstAttribute="trailing" secondItem="kUv-HT-YI3" secondAttribute="trailing" id="uDR-XB-Tkn"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="bottomActionView" destination="CSW-q7-vLL" id="1kV-h0-GFV"/>
                         <outlet property="mapViewContainer" destination="otv-F8-wF9" id="ACU-bc-dR9"/>
-                        <outlet property="navItem" destination="yVQ-Y2-M2f" id="25S-iE-Bx2"/>
                         <outlet property="topLabel" destination="T4v-kW-80l" id="mMb-4E-tCn"/>
                         <outlet property="topSliderContainer" destination="4oW-hK-aCu" id="6dC-Ve-4Hx"/>
                         <outlet property="userBalloon1" destination="1Kx-Ow-IJh" id="tKA-cZ-b0Q"/>
@@ -2592,11 +2641,14 @@
                         <outlet property="userBalloon3" destination="112-oD-ppJ" id="CST-Oy-yuh"/>
                         <outlet property="userBalloon4" destination="e89-nM-dk2" id="gTJ-Gf-24t"/>
                         <outlet property="userBalloon5" destination="UVq-3e-Nhg" id="MfJ-GK-qQt"/>
+                        <segue destination="Dcf-Vz-JEP" kind="show" identifier="segueToRatings" id="ado-a7-Lxa"/>
+                        <segue destination="o48-wT-lZe" kind="unwind" identifier="unwindToActivateGooze" unwindAction="unwindToActivateGoozeWithSegue:" id="J3W-ph-6cA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m2o-Wf-tkR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="o48-wT-lZe" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2754.375" y="1966.9014084507041"/>
+            <point key="canvasLocation" x="2408" y="2868"/>
         </scene>
     </scenes>
     <resources>
@@ -2611,5 +2663,9 @@
         <image name="pin-w-shadow" width="95" height="86"/>
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="aoX-cG-RKK"/>
+        <segue reference="XJg-fM-c9J"/>
+    </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

@@ -16,7 +16,7 @@ class GZEChooseModeViewController: UIViewController {
     let activateGoozeSegueId = "activateGoozeSegueId"
 
     let closeHelpButton = UIBarButtonItem()
-    let logoutButton = GZELogoutButton()
+    let exitAppButton = GZEExitAppButton()
 
     let beButton = UIButton()
     let searchButton = UIButton()
@@ -35,11 +35,6 @@ class GZEChooseModeViewController: UIViewController {
         super.viewDidLoad()
 
         log.debug("\(self) init")
-
-        logoutButton.onButtonTapped = { [weak self] _ in
-            guard let this = self else {return}
-            GZEAuthService.shared.logout(presenter: this)
-        }
 
         closeHelpButton.title = "X"
         closeHelpButton.target = self
@@ -114,7 +109,7 @@ class GZEChooseModeViewController: UIViewController {
                 self.clientHelpLabel.alpha = 0
                 self.closeHelpButton.customView?.alpha = 0
                 self.showHelpButton.alpha = 1
-                self.navigationItem.leftBarButtonItem = self.logoutButton
+                self.navigationItem.leftBarButtonItem = self.exitAppButton
             }
             self.view.layoutIfNeeded()
         }

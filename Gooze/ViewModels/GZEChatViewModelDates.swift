@@ -127,6 +127,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 guard let this = self else {return}
 
                 if dateRequest?.date != nil {
+                    this.topAccessoryButtonIsHidden.value = true
                     this.topButtonTitle.value = this.dateButtonTitle
 
                 } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {

@@ -249,36 +249,21 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             }
         }
     }
-    
+
     private func openChat() {
         log.debug("open chat called")
-        SwiftOverlays.showBlockingWaitOverlay()
 
-        guard let navcontroller = self.controller?.navigationController else {
-            log.debug("Unable to open chat view navcontroller is not set")
-            SwiftOverlays.removeAllBlockingOverlays()
+        guard
+            let controller = self.controller as? GZEProfilePageViewController,
+            let chatViewModel = self.chatViewModel
+        else {
+            log.debug("Unable to open chat view GZEProfilePageViewController is not set")
             return
         }
 
-        navcontroller.popViewController(animated: true)
-
-        guard let controller = navcontroller.topViewController else {
-            log.debug("Unable to open chat view controller is not set")
-            SwiftOverlays.removeAllBlockingOverlays()
-            return
-        }
-        
-        guard let chatViewModel = self.chatViewModel else {
-            log.error("Unable to open chat chat, failed to instantiate chat view model")
-            SwiftOverlays.removeAllBlockingOverlays()
-            return
-        }
-
-        GZEChatService.shared.openChat(presenter: controller, viewModel: chatViewModel) {
-            SwiftOverlays.removeAllBlockingOverlays()
-        }
+        controller.performSegue(withIdentifier: controller.segueToChat, sender: chatViewModel)
     }
-    
+
     private func observeRequests() {
         self.stopObservingRequests()
         self.requestsObserver = (

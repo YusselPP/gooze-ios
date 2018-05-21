@@ -33,6 +33,7 @@ protocol GZEMapViewModel {
 
     var ratingViewModel: GZERatingsViewModel { get }
     var ratingViewSignal: Signal<Void, NoError> { get }
+    var exitSignal: Signal<Void, NoError> { get }
 
     func viewWillAppear(mapViewContainer: UIView)
     func viewDidDisappear()

@@ -35,7 +35,6 @@ class GZEGalleryViewController: UIViewController {
         super.viewDidLoad()
         log.debug("\(self) init")
 
-        viewModel.controller = self
         // Do any additional setup after loading the view.
         thumbnailImages.append(thumbnail1)
         thumbnailImages.append(thumbnail2)

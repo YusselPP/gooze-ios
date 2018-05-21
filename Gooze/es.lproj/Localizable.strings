@@ -120,9 +120,11 @@
 "vm.map.date.chat"="Ir a chat";
 "vm.map.date.distance"="%@ se encuentra a %.2f %@";
 "vm.map.date.arrived"="%@ ha llegado a la cita";
+"vm.map.date.exit"="Salir";
 "vm.map.date.start"="Empezar cita";
 "vm.map.date.end"="Finalizar cita";
 "vm.map.date.process"="Cita en proceso";
+"vm.map.date.canceled"="Cita cancelada";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
@@ -140,6 +142,21 @@
 "vm.profile.endedRequestButtonTitle"="Cita finalizada";
 
 "vm.profile.rate.date.rate"="Calificar";
+
+// Views/components/Menu/GZEMenu
+"menu.item.title.profile"="Perfil";
+"menu.item.title.beGooze"="Ser Gooze";
+"menu.item.title.searchGooze"="Buscar Gooze";
+"menu.item.title.chats"="Chats";
+"menu.item.title.history"="Historial";
+"menu.item.title.payment"="Datos bancarios";
+"menu.item.title.coupons"="Créditos y cupones";
+"menu.item.title.transactions"="Resumen de operaciones";
+"menu.item.title.invite"="Invitar amigos";
+"menu.item.title.tips"="Consejos";
+"menu.item.title.help"="Obten ayuda";
+"menu.item.title.configuration"="Configuración";
+"menu.item.title.logout"="Cerrar sesión";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Sin calificación";

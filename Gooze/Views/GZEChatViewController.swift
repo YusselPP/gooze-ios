@@ -12,8 +12,10 @@ import ReactiveCocoa
 
 class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
+    let segueToPayment = "segueToPayment"
+    let segueToMap = "segueToMap"
+
     var viewModel: GZEChatViewModel!
-    var onDismissTapped: (() -> ())?
     var scrollTableOnShow = false
     let backButton = GZEBackUIBarButtonItem()
     var collectionViewTopScrollDisposable: Disposable?
@@ -48,7 +50,6 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageInputContainerBottomSpacing: NSLayoutConstraint!
     @IBOutlet weak var messageInputHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var myVavigationItem: UINavigationItem!
     
     
     override func viewDidLoad() {
@@ -56,10 +57,10 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         super.viewDidLoad()
         
         backButton.onButtonTapped = {[weak self] _ in
-            self?.onDismissTapped?()
+            self?.previousController(animated: true)
         }
-        self.myVavigationItem.setLeftBarButton(backButton, animated: false)
-        self.myVavigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
+        self.navigationItem.setLeftBarButton(backButton, animated: false)
+        self.navigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
 
         setupBindings()
     }
@@ -129,11 +130,13 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.sendButton.reactive.pressed = self.viewModel.sendButtonAction
         
         self.viewModel.showPaymentViewSignal.observeValues {[weak self] _ in
-            self?.showPaymentView()
+            guard let this = self else {return}
+            this.performSegue(withIdentifier: this.segueToPayment, sender: nil)
         }
 
         self.viewModel.showMapViewSignal.observeValues {[weak self] _ in
-            self?.showDatesMapView()
+            guard let this = self else {return}
+            this.performSegue(withIdentifier: this.segueToMap, sender: nil)
         }
     }
 
@@ -212,12 +215,30 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view)
     }
+
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == segueToPayment {
+
+            showPaymentView(segue.destination)
+
+        } else if segue.identifier == segueToMap {
+
+            showDatesMapView(segue.destination)
+
+        } else {
+            log.error("Invalid segue identifier")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
     
-    func showPaymentView() {
+    func showPaymentView(_ vc: UIViewController) {
         log.debug("Trying to show payment view...")
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        if let view = mainStoryboard.instantiateViewController(withIdentifier: "GZEPaymentViewController") as? GZEPaymentViewController {
+        if let view = vc as? GZEPaymentViewController {
             
             log.debug("payment view instantiated. Setting up its view model")
             guard let vm = self.viewModel.paymentViewModel else {
@@ -226,23 +247,17 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                 return
             }
 
-
             view.viewModel = vm
-            view.onDismissTapped = {
-                self.dismiss(animated: true)
-            }
-            self.present(view, animated: true)
+
         } else {
             log.error("Unable to instantiate GZEPaymentViewController")
             GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
         }
     }
 
-    func showDatesMapView() {
-        log.debug("Trying to dates map view...")
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-
-        if let view = mainStoryboard.instantiateViewController(withIdentifier: "GZEMapViewController") as? GZEMapViewController {
+    func showDatesMapView(_ vc: UIViewController) {
+        log.debug("Trying to show dates map view...")
+        if let view = vc as? GZEMapViewController {
 
             log.debug("dates map view instantiated. Setting up its view model")
 
@@ -254,10 +269,6 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
             view.viewModel = vm
 
-            view.onDismissTapped = {
-                self.dismiss(animated: true)
-            }
-            self.present(view, animated: true)
         } else {
             log.error("Unable to instantiate GZEMapViewController")
             GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)

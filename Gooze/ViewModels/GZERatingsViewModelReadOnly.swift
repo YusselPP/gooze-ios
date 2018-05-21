@@ -8,8 +8,10 @@
 
 import Foundation
 import ReactiveSwift
+import enum Result.NoError
 
 class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewModel {
+
     // MARK - GZERatingsViewModel protocol
     
     let username = MutableProperty<String?>(nil)
@@ -38,6 +40,7 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
     let dateRatingIsEditable = MutableProperty<Bool>(false)
     let goozeRatingIsEditable = MutableProperty<Bool>(false)
 
+    let (disposeToActivateGooze, _) = Signal<Void, NoError>.pipe()
 
     // MARK - init
     override init(user: GZEUser, dateRequestId: String?) {

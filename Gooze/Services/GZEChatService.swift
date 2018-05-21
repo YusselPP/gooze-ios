@@ -305,39 +305,44 @@ class GZEChatService: NSObject {
     }
     
     func showNotification(chat: GZEChat, dateRequestId: String, mode: GZEChatViewMode, username: String) {
-        if let topVC = UIApplication.topViewController() {
-            let messageReceived = String(format: "service.chat.messageReceived".localized(), username)
-            
-            GZEAlertService.shared.showTopAlert(text: messageReceived) {
-                //TODO: manage chat mode with client mode property instead of sending to vm
-                GZEChatService.shared.openChat(
-                    presenter: topVC,
-                    viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: mode, username: username)
-                )
-            }
-        } else {
-            log.error("Unnable to get top view controller")
+        let messageReceived = String(format: "service.chat.messageReceived".localized(), username)
+
+        GZEAlertService.shared.showTopAlert(text: messageReceived) {
+            //TODO: manage chat mode with client mode property instead of sending to vm
+            GZEChatService.shared.openChat(
+                viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: mode, username: username)
+            )
         }
     }
 
-    func openChat(presenter: UIViewController, viewModel: GZEChatViewModel, completion: (() -> Void)? = nil) {
+    func openChat(viewModel: GZEChatViewModel, completion: (() -> Void)? = nil) {
         // Open chat
         log.debug("Trying to show chat controller...")
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
-        if let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController {
+        if
+            let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController,
+            let navController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController
+        {
 
             log.debug("chat controller instantiated. Setting up its view model")
             // Set up initial view model
             chatController.viewModel = viewModel
-            chatController.onDismissTapped = {
-                presenter.dismiss(animated: true)
-            }
-            presenter.present(chatController, animated: true, completion: completion)
+            navController.pushViewController(chatController, animated: true, completion: completion)
         } else {
             log.error("Unable to instantiate GZEChatViewController")
             GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
             completion?()
         }
+    }
+
+    func cleanup() {
+        self.activeChatId = nil
+        self.messages.value = [:]
+    }
+
+    // MARK: deinit
+    deinit {
+        log.debug("\(self) disposed")
     }
 }

@@ -100,7 +100,7 @@
 "vm.search.zeroResultsMessage"="No matches found";
 "vm.search.searchingButtonTitle"="Searching...";
 "vm.search.otherResultsButtonTitle"="Other results";
-"vm.search.othersResultsWarning"="Warning: This users doesn't have the minimum of ratins or had negative ratings";
+"vm.search.othersResultsWarning"="Warning: This users doesn't have the minimum of ratings or had negative ratings";
 "vm.search.backButtonTitle"="Back";
 
 "vm.activate.activateButtonTitle"="Activate gooze";
@@ -120,9 +120,11 @@
 "vm.map.date.chat"="Chat";
 "vm.map.date.distance"="%@ is %.2f %@ away";
 "vm.map.date.arrived"="%@ has arrived to date place";
+"vm.map.date.exit"="Exit";
 "vm.map.date.start"="Start date";
 "vm.map.date.end"="End date";
 "vm.map.date.process"="Date in process";
+"vm.map.date.canceled"="Date has been canceled";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
@@ -140,6 +142,21 @@
 "vm.profile.endedRequestButtonTitle"="Date ended";
 
 "vm.profile.rate.date.rate"="Rate";
+
+// Views/components/Menu/GZEMenu
+"menu.item.title.profile"="Profile";
+"menu.item.title.beGooze"="Be Gooze";
+"menu.item.title.searchGooze"="Search Gooze";
+"menu.item.title.chats"="Chats";
+"menu.item.title.history"="History";
+"menu.item.title.payment"="Credit cards";
+"menu.item.title.coupons"="Coupons";
+"menu.item.title.transactions"="Transactions";
+"menu.item.title.invite"="Invite a friend";
+"menu.item.title.tips"="Tips";
+"menu.item.title.help"="Help";
+"menu.item.title.configuration"="Configuration";
+"menu.item.title.logout"="Logout";
 
 // Views/components/GZERatingView
 "vm.ratingView.unrated"="Unrated";

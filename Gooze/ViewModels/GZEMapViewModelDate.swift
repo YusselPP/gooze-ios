@@ -38,6 +38,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
         return GZERatingsViewModelRateDate(user: self.annotationUser.value, dateRequestId: self.dateRequest.value.id)
     }
     let (ratingViewSignal, ratingViewObserver) = Signal<Void, NoError>.pipe()
+    let (exitSignal, exitObserver) = Signal<Void, NoError>.pipe()
 
     func viewWillAppear(mapViewContainer: UIView) {
         self.startObservers()
@@ -54,9 +55,11 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let bottomButtonTitleChat = "vm.map.date.chat".localized().uppercased()
     let bottomButtonTitleStart = "vm.map.date.start".localized().uppercased()
     let bottomButtonTitleEnd = "vm.map.date.end".localized().uppercased()
+    let bottomButtonTitleExit = "vm.map.date.exit".localized().uppercased()
     let topLabelDistance = "vm.map.date.distance".localized()
     let topLabelArrived = "vm.map.date.arrived".localized()
     let topLabelProcess = "vm.map.date.process".localized()
+    let topLabelCanceled = "vm.map.date.canceled".localized()
 
     let DateService = GZEDatesService.shared
 
@@ -70,7 +73,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     var chatAction: CocoaAction<GZEButton>?
     var startDateAction: CocoaAction<GZEButton>?
     var endDateAction: CocoaAction<GZEButton>?
-
+    var exitAction: CocoaAction<GZEButton>?
 
     // MARK - init
     init(dateRequest: GZEDateRequest, mode: GZEChatViewMode) {
@@ -104,6 +107,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             guard let this = self else {return}
             this.loading.value = true
         }
+        self.exitAction = CocoaAction(self.createExitAction())
 
 
         startDate.events.observeValues {[weak self] event in
@@ -131,7 +135,6 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             switch event {
             case .value(let dateRequest):
                 this.dateRequest.value = dateRequest
-                this.ratingViewObserver.send(value: ())
             case .failed(let error):
                 this.onError(error)
             default: break
@@ -206,9 +209,11 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                     this.bottomButtonAction.value = this.endDateAction
                     this.topLabelText.value = this.topLabelProcess
                 case .ended:
-                // TODO: send to rate user view
-                    break
-                default: this.dismissObserver.send(value: ())
+                    this.ratingViewObserver.send(value: ())
+                default:
+                    this.bottomButtonTitle.value = this.bottomButtonTitleExit
+                    this.bottomButtonAction.value = this.exitAction
+                    this.topLabelText.value = this.topLabelCanceled
                 }
             }
     }
@@ -236,6 +241,16 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
 
             return this.DateService.endDate(this.dateRequest.value)
+        }
+    }
+
+    func createExitAction() -> Action<Void, Bool, GZEError> {
+        return Action(enabledIf: self.bottomButtonActionEnabled) {[weak self] in
+            guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
+
+            this.exitObserver.send(value: ())
+
+            return SignalProducer.empty
         }
     }
 

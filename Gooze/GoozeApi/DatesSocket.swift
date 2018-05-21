@@ -81,17 +81,15 @@ class DatesSocket: GZESocket {
             GZEDatesService.shared.lastSentRequest.value = dateRequest
 
             let recipient = dateRequest.recipient
-            if let topVC = self?.topViewController {
-                let message = String(format: "service.dates.requestAccepted".localized(), recipient.username)
-                GZEAlertService.shared.showTopAlert(text: message) {
-                    guard let chat = dateRequest.chat else {
-                        log.error("Unable to open the chat, found nil chat on date request")
-                        GZEDatesService.shared.errorMessage.value = "service.chat.invalidChatId".localized()
-                        return
-                    }
-                    
-                    GZEChatService.shared.openChat(presenter: topVC, viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequest.id, mode: .client, username: recipient.username))
+            let message = String(format: "service.dates.requestAccepted".localized(), recipient.username)
+            GZEAlertService.shared.showTopAlert(text: message) {
+                guard let chat = dateRequest.chat else {
+                    log.error("Unable to open the chat, found nil chat on date request")
+                    GZEDatesService.shared.errorMessage.value = "service.chat.invalidChatId".localized()
+                    return
                 }
+
+                GZEChatService.shared.openChat(viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequest.id, mode: .client, username: recipient.username))
             }
             
             ack.with()

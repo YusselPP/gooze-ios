@@ -14,6 +14,9 @@ import ReactiveCocoa
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     let segueToProfile = "segueToProfile"
+    let segueToChats = "segueToChats"
+    let segueToTips = "segueToTips"
+    let segueToRatings = "segueToRatings"
 
     enum Scene {
         case activate
@@ -33,7 +36,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 handleSceneChanged()
             }
         }
+        willSet {
+            if isViewLoaded {
+                self.previousScene = self.scene
+            }
+        }
     }
+    var previousScene: Scene?
 
     let MAX_RESULTS_ON_MAP = 5
     let MAX_RESULTS = 50
@@ -152,8 +161,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     func setupInterfaceObjects() {
         navIcon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(centerMapToUserLocation)))
 
-        backButton.onButtonTapped = ptr(self, GZEActivateGoozeViewController.backButtonTapped)
-        navigationItem.setLeftBarButton(backButton, animated: false)
+        backButton.onButtonTapped = {[weak self] in
+            self?.backButtonTapped($0)
+        }
+
+        setupMenu()
 
         activateGoozeButton.setGrayFormat()
 
@@ -172,8 +184,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         usersList.onUserTap = {[weak self] tapRecognizer, userBalloon in
             self?.userBalloonTapped(tapRecognizer, userBalloon)
         }
-
-        setupSlider()
 
         self.containerView.addSubview(self.usersList)
         self.view.leadingAnchor.constraint(equalTo: self.usersList.leadingAnchor, constant: -20).isActive = true
@@ -224,6 +234,18 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
+    func setBackButton() {
+        navigationItem.setLeftBarButton(backButton, animated: false)
+    }
+
+    func setMenuButton() {
+        navigationItem.setLeftBarButton(GZEMenuMain.shared.navButton, animated: false)
+    }
+
+    func setupMenu() {
+        GZEMenuMain.shared.controller = self
+        GZEMenuMain.shared.containerView = containerView
+    }
 
 
     func updateBalloons() {
@@ -312,6 +334,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func setupSlider() {
+        guard
+            (self.previousScene == nil || self.previousScene == .search) && self.scene == .activate ||
+            (self.previousScene == nil || self.previousScene == .activate) && self.scene == .search
+        else {
+                return
+        }
+
         if self.scene == .activate {
             sliderPostfix = "hrs"
             sliderStep = 0.5
@@ -530,6 +559,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         }
      }
 
+    @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {}
+
     // MARK: - Scenes
     func handleSceneChanged() {
         hideAll()
@@ -568,11 +599,16 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         topControls.isHidden = false
         topControlsBackground.isHidden = false
         activateGoozeButton.isHidden = false
-        
+
+        setupSlider()
+        setMenuButton()
         hideBalloons()
+
+        GZEMenuMain.shared.switchModeGoozeButton?.setTitle(GZEMenuMain.shared.menuItemTitleSearchGooze, for: .normal)
 
         isUserInteractionEnabled.value = true
         isSearchingAnimationEnabled = false
+        activateGoozeButton.isEnabled = true
 
         activateGoozeButton.setTitle(viewModel.activateButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = activateGoozeAction
@@ -584,7 +620,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         isUserInteractionEnabled.value = false
         isSearchingAnimationEnabled = true
         activateGoozeButton.isHidden = false
-        activateGoozeButton.isEnabled = true
+
+        setBackButton()
+
         activateGoozeButton.setTitle(viewModel.allResultsButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = showRequestResultsListAction
 
@@ -623,6 +661,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         topControlsBackground.isHidden = false
         activateGoozeButton.isHidden = false
 
+        setupSlider()
+        setMenuButton()
+        GZEMenuMain.shared.switchModeGoozeButton?.setTitle(GZEMenuMain.shared.menuItemTitleBeGooze, for: .normal)
+
         isUserInteractionEnabled.value = true
         isSearchingAnimationEnabled = false
 
@@ -638,6 +680,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     func showSearchingScene() {
         isUserInteractionEnabled.value = false
         activateGoozeButton.isHidden = false
+
+        setBackButton()
 
         isSearchingAnimationEnabled = true
         activateGoozeButton.setTitle(viewModel.searchingButtonTitle.uppercased(), for: .normal)

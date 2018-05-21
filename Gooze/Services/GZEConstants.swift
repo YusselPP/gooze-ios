@@ -68,5 +68,15 @@ class GZEConstants {
                 return UIFont(name: "HelveticaNeue", size: 22)!
             }
         }
+
+        static var mainSuperBig: UIFont {
+            if GZEConstants.horizontalSize == .compact {
+                log.debug("using compact font")
+                return UIFont(name: "HelveticaNeue", size: 30)!
+            } else {
+                log.debug("using regular font")
+                return UIFont(name: "HelveticaNeue", size: 36)!
+            }
+        }
     }
 }

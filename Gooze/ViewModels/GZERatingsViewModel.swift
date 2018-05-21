@@ -8,6 +8,7 @@
 
 import Foundation
 import ReactiveSwift
+import enum Result.NoError
 
 protocol GZERatingsViewModel: GZEProfileViewModel {
 
@@ -36,5 +37,7 @@ protocol GZERatingsViewModel: GZEProfileViewModel {
     var goozeRatingIsEditable: MutableProperty<Bool> { get }
 
     var overallRating: MutableProperty<Float?> { get }
+
+    var disposeToActivateGooze: Signal<Void, NoError> { get }
     
 }

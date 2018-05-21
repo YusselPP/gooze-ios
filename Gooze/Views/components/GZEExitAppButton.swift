@@ -1,5 +1,5 @@
 //
-//  GZELogoutButton.swift
+//  GZEExitAppButton
 //  Gooze
 //
 //  Created by Yussel on 11/29/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GZELogoutButton: GZENavButton {
+class GZEExitAppButton: GZENavButton {
 
     override init() {
         super.init()
@@ -23,5 +23,8 @@ class GZELogoutButton: GZENavButton {
     private func initialize() {
         button.frame = CGRect(x: 0.0, y: 0.0, width: 40, height: 40)
         button.setImage(#imageLiteral(resourceName: "exit-icon"), for: .normal)
+        self.onButtonTapped = {_ in
+            exit(0)
+        }
     }
 }

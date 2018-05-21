@@ -242,8 +242,13 @@ class GZEUser: NSObject, Glossy {
 
         self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
         self.gender = "gender" <~~ json
-        self.weight = "weight" <~~ json
-        self.height = "height" <~~ json
+
+        if let weight: Double = "weight" <~~ json {
+            self.weight = Float(weight)
+        }
+        if let height: Double = "height" <~~ json {
+            self.height = Float(height)
+        }
         self.origin = "origin" <~~ json
         self.phrase = "phrase" <~~ json
 

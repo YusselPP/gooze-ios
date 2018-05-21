@@ -10,11 +10,21 @@ import UIKit
 
 class GZEProfilePageViewController: UIPageViewController {
 
+    let segueToChat = "segueToChat"
+
     var profileVm: GZEProfileUserInfoViewModel!
     var galleryVm: GZEGalleryViewModel!
     var ratingsVm: GZERatingsViewModel!
 
     var backButton = GZEBackUIBarButtonItem()
+
+    private(set) lazy var orderedVms: [GZEProfileViewModel] = {
+        return [
+            self.profileVm,
+            self.galleryVm,
+            self.ratingsVm
+        ]
+    }()
 
     private(set) lazy var orderedViewControllers: [UIViewController] = {
         return [self.newViewController("profileControllerId"),
@@ -51,15 +61,18 @@ class GZEProfilePageViewController: UIPageViewController {
 
         if let profileVc = vc as? GZEProfileViewController {
             log.debug("setting profile view controller view model")
+            profileVm.controller = self
             profileVc.viewModel = profileVm
             return profileVc
         }
         else if let galleryVc = vc as? GZEGalleryViewController {
             log.debug("setting gallery view controller view model")
+            galleryVm.controller = self
             galleryVc.viewModel = galleryVm
             return galleryVc
         } else if let ratingsVc = vc as? GZERatingsViewController {
             log.debug("setting ratings view controller view model")
+            ratingsVm.controller = self
             ratingsVc.viewModel = ratingsVm
             return ratingsVc
         }
@@ -68,15 +81,22 @@ class GZEProfilePageViewController: UIPageViewController {
     }
     
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if
+            segue.identifier == segueToChat,
+            let vc = segue.destination as? GZEChatViewController,
+            let chatVm = sender as? GZEChatViewModel
+        {
+            vc.viewModel = chatVm
+        } else {
+            log.error("Unable to open GZEChatViewController, missing requiered parameters")
+        }
     }
-    */
 
     // MARK: - Deinitializers
     deinit {
@@ -129,5 +149,4 @@ extension GZEProfilePageViewController: UIPageViewControllerDataSource {
 
         return orderedViewControllers[nextIndex]
     }
-    
 }

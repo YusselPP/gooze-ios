@@ -82,14 +82,14 @@ extension GZERatings {
         // MARK: - Glossy protocol
         init?(json: JSON) {
             guard
-                let value: Float = "value" <~~ json,
+                let value: Double = "value" <~~ json,
                 let count: Int = "count" <~~ json
                 else {
                     log.error("unable to instantiate. invalid json")
                     return nil
             }
 
-            self.value = value
+            self.value = Float(value)
             self.count = count
         }
 
