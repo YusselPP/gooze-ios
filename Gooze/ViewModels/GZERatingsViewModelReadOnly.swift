@@ -6,8 +6,9 @@
 //  Copyright © 2018 Gooze. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import ReactiveSwift
+import ReactiveCocoa
 import enum Result.NoError
 
 class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewModel {
@@ -19,6 +20,7 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
     let profilePic = MutableProperty<URLRequest?>(nil)
 
     let phrase = MutableProperty<String?>(nil)
+    var phraseButtonAction: CocoaAction<UIButton>? = nil
 
     let imagesRatingDesc = MutableProperty<String?>(nil)
     let complianceRatingDesc = MutableProperty<String?>(nil)
@@ -41,10 +43,17 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
     let goozeRatingIsEditable = MutableProperty<Bool>(false)
 
     let (disposeToActivateGooze, _) = Signal<Void, NoError>.pipe()
+    let (segueToProfile, _) = Signal<Void, NoError>.pipe()
+
+    lazy var profileViewModel: GZEProfileUserInfoViewModel = {
+        return GZEProfileUserInfoViewModelReadOnly(user: self.user, dateRequest: self.dateRequest)
+    }()
+
+    // END - GZERatingsViewModel protocol
 
     // MARK - init
-    override init(user: GZEUser, dateRequestId: String?) {
-        super.init(user: user, dateRequestId: dateRequestId)
+    override init(user: GZEUser, dateRequest: MutableProperty<GZEDateRequest?>) {
+        super.init(user: user, dateRequest: dateRequest)
         log.debug("\(self) init")
 
         populate(user)

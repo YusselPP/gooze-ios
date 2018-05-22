@@ -6,8 +6,9 @@
 //  Copyright © 2018 Gooze. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import ReactiveSwift
+import ReactiveCocoa
 import enum Result.NoError
 
 protocol GZERatingsViewModel: GZEProfileViewModel {
@@ -17,6 +18,7 @@ protocol GZERatingsViewModel: GZEProfileViewModel {
     var profilePic: MutableProperty<URLRequest?> { get }
 
     var phrase: MutableProperty<String?> { get }
+    var phraseButtonAction: CocoaAction<UIButton>? { get set }
 
     var imagesRatingDesc: MutableProperty<String?> { get }
     var complianceRatingDesc: MutableProperty<String?> { get }
@@ -39,5 +41,7 @@ protocol GZERatingsViewModel: GZEProfileViewModel {
     var overallRating: MutableProperty<Float?> { get }
 
     var disposeToActivateGooze: Signal<Void, NoError> { get }
-    
+    var segueToProfile: Signal<Void, NoError> { get }
+
+    var profileViewModel: GZEProfileUserInfoViewModel { get }
 }

@@ -35,7 +35,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let annotationUser: MutableProperty<GZEChatUser>
 
     var ratingViewModel: GZERatingsViewModel {
-        return GZERatingsViewModelRateDate(user: self.annotationUser.value, dateRequestId: self.dateRequest.value.id)
+        return GZERatingsViewModelRateDate(user: self.annotationUser.value)
     }
     let (ratingViewSignal, ratingViewObserver) = Signal<Void, NoError>.pipe()
     let (exitSignal, exitObserver) = Signal<Void, NoError>.pipe()
@@ -55,11 +55,13 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let bottomButtonTitleChat = "vm.map.date.chat".localized().uppercased()
     let bottomButtonTitleStart = "vm.map.date.start".localized().uppercased()
     let bottomButtonTitleEnd = "vm.map.date.end".localized().uppercased()
+    let bottomButtonTitleRate = "vm.map.date.rate".localized().uppercased()
     let bottomButtonTitleExit = "vm.map.date.exit".localized().uppercased()
     let topLabelDistance = "vm.map.date.distance".localized()
     let topLabelArrived = "vm.map.date.arrived".localized()
     let topLabelProcess = "vm.map.date.process".localized()
     let topLabelCanceled = "vm.map.date.canceled".localized()
+    let topLabelEnded = "vm.map.date.ended".localized()
 
     let DateService = GZEDatesService.shared
 
@@ -74,6 +76,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     var startDateAction: CocoaAction<GZEButton>?
     var endDateAction: CocoaAction<GZEButton>?
     var exitAction: CocoaAction<GZEButton>?
+    var rateAction: CocoaAction<GZEButton>?
 
     // MARK - init
     init(dateRequest: GZEDateRequest, mode: GZEChatViewMode) {
@@ -99,6 +102,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
 
         self.topLabelHidden.value = false
         self.chatAction = CocoaAction(self.createChatAction())
+        self.rateAction = CocoaAction(self.createRateAction())
         self.startDateAction = CocoaAction(startDate) {[weak self] _ in
             guard let this = self else {return}
             this.loading.value = true
@@ -209,6 +213,9 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                     this.bottomButtonAction.value = this.endDateAction
                     this.topLabelText.value = this.topLabelProcess
                 case .ended:
+                    this.bottomButtonTitle.value = this.bottomButtonTitleRate
+                    this.bottomButtonAction.value = this.rateAction
+                    this.topLabelText.value = this.topLabelEnded
                     this.ratingViewObserver.send(value: ())
                 default:
                     this.bottomButtonTitle.value = this.bottomButtonTitleExit
@@ -223,6 +230,16 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
 
             this.dismissObserver.send(value: ())
+
+            return SignalProducer.empty
+        }
+    }
+
+    func createRateAction() -> Action<Void, Bool, GZEError> {
+        return Action(enabledIf: self.bottomButtonActionEnabled) {[weak self] in
+            guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
+
+            this.ratingViewObserver.send(value: ())
 
             return SignalProducer.empty
         }

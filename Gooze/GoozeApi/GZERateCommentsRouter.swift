@@ -1,41 +1,32 @@
 //
-//  GZEDateRequestRouter.swift
+//  GZERateCommentsRouter.swift
 //  Gooze
 //
-//  Created by Yussel on 3/29/18.
+//  Created by Yussel Paredes Perez on 5/21/18.
 //  Copyright © 2018 Gooze. All rights reserved.
 //
 
 import Foundation
 import Alamofire
 
-enum GZEDateRequestRouter: URLRequestConvertible {
+enum GZERateCommentsRouter: URLRequestConvertible {
 
     case find(parameters: Parameters)
-    case startDate(json: Parameters)
-    case endDate(json: Parameters)
 
     static let baseURLString = GZEAppConfig.goozeApiUrl
-    static let route = "DateRequests"
+    static let route = "GZERateComments"
 
     var method: HTTPMethod {
         switch self {
         case .find:
             return .get
-        case .startDate,
-             .endDate:
-            return .post
         }
     }
 
     var path: String {
         switch self {
         case .find:
-            return "\(GZEDateRequestRouter.route)/"
-        case .startDate:
-            return "\(GZEDateRequestRouter.route)/startDate"
-        case .endDate:
-            return "\(GZEDateRequestRouter.route)/endDate"
+            return "\(GZERateCommentsRouter.route)/"
         }
     }
 
@@ -50,24 +41,17 @@ enum GZEDateRequestRouter: URLRequestConvertible {
         switch self {
         case .find:
             urlRequest.cachePolicy = .reloadIgnoringCacheData
-        default: break
         }
 
         // Auth
         switch self {
-        case .find,
-             .startDate,
-             .endDate:
+        case .find:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         }
-
 
         switch self {
         case .find(let parameters):
             urlRequest = try LBURLEncoding.queryString.encode(urlRequest, with: parameters)
-        case .startDate(let json),
-             .endDate(let json):
-            urlRequest = try JSONEncoding.default.encode(urlRequest, withJSONObject: json)
         }
 
         return urlRequest

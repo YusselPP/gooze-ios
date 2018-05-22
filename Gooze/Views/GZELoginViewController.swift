@@ -205,12 +205,14 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if
-            segue.identifier == registerCodeSegueId,
-            let viewController = segue.destination as? GZERegisterCodeViewController
-        {
-            viewController.viewModel = viewModel.getSignUpViewModel()
-            viewController.viewModel.dismiss = viewModel.dismiss
+        if segue.identifier == registerCodeSegueId {
+            if let viewController = segue.destination as? GZERegisterCodeViewController
+            {
+                viewController.viewModel = viewModel.getSignUpViewModel()
+                viewController.viewModel.dismiss = viewModel.dismiss
+            } else {
+                log.error("Unable to parse segue.destination as? GZERegisterCodeViewController")
+            }
         }
     }
 

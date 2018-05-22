@@ -14,7 +14,7 @@ class GZEProfileViewModelRateDate: GZEProfileViewModel {
 
     // MARK: - GZEProfileViewModel protocol
     var mode = GZEProfileMode.contact
-    var dateRequest: GZEDateRequest?
+    var dateRequest = MutableProperty<GZEDateRequest?>(nil)
 
     var bottomButtonAction: CocoaAction<GZEButton>?
 

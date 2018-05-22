@@ -230,9 +230,6 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
             showDatesMapView(segue.destination)
 
-        } else {
-            log.error("Invalid segue identifier")
-            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
         }
     }
     

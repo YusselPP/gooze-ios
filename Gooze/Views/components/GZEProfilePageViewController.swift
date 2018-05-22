@@ -87,14 +87,15 @@ class GZEProfilePageViewController: UIPageViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if
-            segue.identifier == segueToChat,
-            let vc = segue.destination as? GZEChatViewController,
-            let chatVm = sender as? GZEChatViewModel
-        {
-            vc.viewModel = chatVm
-        } else {
-            log.error("Unable to open GZEChatViewController, missing requiered parameters")
+        if segue.identifier == segueToChat {
+            if
+                let vc = segue.destination as? GZEChatViewController,
+                let chatVm = sender as? GZEChatViewModel
+            {
+                vc.viewModel = chatVm
+            } else {
+                log.error("Unable to open GZEChatViewController, missing requiered parameters")
+            }
         }
     }
 

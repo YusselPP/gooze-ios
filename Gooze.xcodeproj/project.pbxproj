@@ -48,6 +48,11 @@
 		8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */; };
 		8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2447301F9E9700004330AF /* GZERepositoryError.swift */; };
 		8D24E86320B0E233003F814E /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D24E86220B0E233003F814E /* UINavigationController+Extension.swift */; };
+		8D250C7F20B2D93100D3E06B /* GZERateComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D250C7E20B2D93100D3E06B /* GZERateComment.swift */; };
+		8D250C8120B2E8DA00D3E06B /* GZERateCommentsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D250C8020B2E8DA00D3E06B /* GZERateCommentsRouter.swift */; };
+		8D250C8320B2E96700D3E06B /* GZERateCommentApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D250C8220B2E96700D3E06B /* GZERateCommentApiRepository.swift */; };
+		8D250C8520B2E99A00D3E06B /* GZERateCommentRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D250C8420B2E99A00D3E06B /* GZERateCommentRepositoryProtocol.swift */; };
+		8D250C8720B30E6100D3E06B /* GZEProfileUserInfoViewModelRateDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D250C8620B30E6100D3E06B /* GZEProfileUserInfoViewModelRateDate.swift */; };
 		8D2559D720A05A380084CAC5 /* GZEPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2559D620A05A380084CAC5 /* GZEPinAnnotationView.swift */; };
 		8D2559D920A05A4B0084CAC5 /* GZEPinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2559D820A05A4B0084CAC5 /* GZEPinAnnotation.swift */; };
 		8D261CD8208CC2E900DB5DF0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D261CD7208CC2E900DB5DF0 /* MapKit.framework */; };
@@ -219,6 +224,11 @@
 		8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserApiRepository.swift; sourceTree = "<group>"; };
 		8D2447301F9E9700004330AF /* GZERepositoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERepositoryError.swift; sourceTree = "<group>"; };
 		8D24E86220B0E233003F814E /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
+		8D250C7E20B2D93100D3E06B /* GZERateComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERateComment.swift; sourceTree = "<group>"; };
+		8D250C8020B2E8DA00D3E06B /* GZERateCommentsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERateCommentsRouter.swift; sourceTree = "<group>"; };
+		8D250C8220B2E96700D3E06B /* GZERateCommentApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERateCommentApiRepository.swift; sourceTree = "<group>"; };
+		8D250C8420B2E99A00D3E06B /* GZERateCommentRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERateCommentRepositoryProtocol.swift; sourceTree = "<group>"; };
+		8D250C8620B30E6100D3E06B /* GZEProfileUserInfoViewModelRateDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEProfileUserInfoViewModelRateDate.swift; sourceTree = "<group>"; };
 		8D2559D620A05A380084CAC5 /* GZEPinAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPinAnnotationView.swift; sourceTree = "<group>"; };
 		8D2559D820A05A4B0084CAC5 /* GZEPinAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPinAnnotation.swift; sourceTree = "<group>"; };
 		8D261CD7208CC2E900DB5DF0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -398,6 +408,7 @@
 			children = (
 				8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */,
 				8D5253BB206CC2E6003D95A4 /* GZEDateRequestRepositoryProtocol.swift */,
+				8D250C8420B2E99A00D3E06B /* GZERateCommentRepositoryProtocol.swift */,
 				8D2447301F9E9700004330AF /* GZERepositoryError.swift */,
 				F00355171FB61244004C778C /* GZEValidationError.swift */,
 				8D216AAE207144AE008EF7A2 /* DatesSocketError.swift */,
@@ -607,6 +618,7 @@
 				8DD5D6942074E4F5001192ED /* GZEChatUser.swift */,
 				8D2BC39F20914C0D00945D33 /* GZEDate.swift */,
 				8D2AF3DE20AC3EE600346E61 /* GZERatings.swift */,
+				8D250C7E20B2D93100D3E06B /* GZERateComment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -626,6 +638,7 @@
 				8D23048120AAF17D009A1E48 /* GZEProfileViewModelRateDate.swift */,
 				8D216AB220714E72008EF7A2 /* GZEProfileUserInfoViewModel.swift */,
 				8D216AB420715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift */,
+				8D250C8620B30E6100D3E06B /* GZEProfileUserInfoViewModelRateDate.swift */,
 				8D192385204EB8FA005F6F5F /* GZEGalleryViewModel.swift */,
 				8D192387204EBEA8005F6F5F /* GZEGalleryViewModelReadOnly.swift */,
 				8D169AEB204FFC850025C803 /* GZERatingsViewModel.swift */,
@@ -650,6 +663,7 @@
 				8D572DBC1F9D468C00B824FA /* GZEApi.swift */,
 				8D24472E1F9E8AEE004330AF /* GZEUserApiRepository.swift */,
 				8D5253BD206CC3A7003D95A4 /* GZEDateRequestApiRepository.swift */,
+				8D250C8220B2E96700D3E06B /* GZERateCommentApiRepository.swift */,
 				8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */,
 				8D6C8D501FB418D200EDBC69 /* GZEImageHelper.swift */,
 				8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */,
@@ -682,6 +696,7 @@
 			children = (
 				F0B8368E1FA3EC74007068F9 /* GZEUserRouter.swift */,
 				8D5253B9206CC174003D95A4 /* GZEDateRequestRouter.swift */,
+				8D250C8020B2E8DA00D3E06B /* GZERateCommentsRouter.swift */,
 				F0EE89121FA7A48B001D194C /* GZEApiError.swift */,
 				8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */,
 				8D07BC5820607A6000ACE09A /* GZESocketManager.swift */,
@@ -1052,6 +1067,7 @@
 				8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */,
 				8D216AB120714513008EF7A2 /* ChatSocketError.swift in Sources */,
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
+				8D250C8320B2E96700D3E06B /* GZERateCommentApiRepository.swift in Sources */,
 				8DF5CEF4206274B1006C2702 /* GZELoadingViewController.swift in Sources */,
 				8D17C1CA2076F7D400F56D6E /* GZELocationService.swift in Sources */,
 				8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */,
@@ -1060,6 +1076,7 @@
 				8D2C951520837E0D004DAE3E /* GZEChatActionView.swift in Sources */,
 				8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */,
 				8D07BC5920607A6000ACE09A /* GZESocketManager.swift in Sources */,
+				8D250C8520B2E99A00D3E06B /* GZERateCommentRepositoryProtocol.swift in Sources */,
 				8DD5D6952074E4F5001192ED /* GZEChatUser.swift in Sources */,
 				8D61FB631FEED49A009B1E45 /* GZESignUpProfileViewController.swift in Sources */,
 				8D413CB220412D0700CB4B93 /* GZEBackUIBarButtonItem.swift in Sources */,
@@ -1100,9 +1117,11 @@
 				8D0E51A4205E2FC70075EA16 /* GZESocket.swift in Sources */,
 				8D192386204EB8FA005F6F5F /* GZEGalleryViewModel.swift in Sources */,
 				8DBAB6E8206F4CA8009586A5 /* GZEChatMessage.swift in Sources */,
+				8D250C7F20B2D93100D3E06B /* GZERateComment.swift in Sources */,
 				8D358AC41FBBF75F00F261DC /* ValidatorAliases.swift in Sources */,
 				8D216AAF207144AE008EF7A2 /* DatesSocketError.swift in Sources */,
 				8DC321F81FD51FC90068630D /* GZEUserBalloon.swift in Sources */,
+				8D250C8720B30E6100D3E06B /* GZEProfileUserInfoViewModelRateDate.swift in Sources */,
 				8DF32FE22052A99500FC8D14 /* GZEPickerDelegate.swift in Sources */,
 				8D5253BA206CC174003D95A4 /* GZEDateRequestRouter.swift in Sources */,
 				F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */,
@@ -1112,6 +1131,7 @@
 				8DBAB6E3206F42ED009586A5 /* GZEMessagesTableView.swift in Sources */,
 				8D1B9ABF2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift in Sources */,
 				8D9FF9F32042292B003BE951 /* GZENextUIBarButtonItem.swift in Sources */,
+				8D250C8120B2E8DA00D3E06B /* GZERateCommentsRouter.swift in Sources */,
 				8D219F0620895ED700BAEEE5 /* GZENumberHelper.swift in Sources */,
 				F0B4DF2D1FD76883002E4F18 /* Dictionary+Extension.swift in Sources */,
 				8D9711B31FC307D200E98F95 /* GZEConstants.swift in Sources */,

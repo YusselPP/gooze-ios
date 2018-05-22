@@ -21,13 +21,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             setMode()
         }
     }
-    var dateRequest: GZEDateRequest? {
-        didSet {
-            log.debug("dateRequest didSet: \(String(describing: dateRequest))")
-            setActionButtonTitle()
-            setActionButtonState()
-        }
-    }
+    let dateRequest: MutableProperty<GZEDateRequest?>
 
     var acceptRequestAction: Action<Void, GZEDateRequest, GZEError>!
 
@@ -70,13 +64,13 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     var chatViewModel: GZEChatViewModel? {
         log.debug("chatViewModel called")
-        guard let dateRequestId = self.dateRequest?.id else {
+        guard let dateRequestId = self.dateRequest.value?.id else {
             log.error("Unable to open the chat, found nil date request")
             error.value = "service.chat.invalidChatId".localized()
             return nil
         }
 
-        guard let chat = self.dateRequest?.chat else {
+        guard let chat = self.dateRequest.value?.chat else {
             log.error("Unable to open the chat, found nil chat on date request")
             error.value = "service.chat.invalidChatId".localized()
             return nil
@@ -93,12 +87,19 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     }
 
     // MARK - init
-    init(user: GZEUser, dateRequestId: String? = nil) {
+    init(user: GZEUser, dateRequest: MutableProperty<GZEDateRequest?>) {
         self.user = user
+        self.dateRequest = dateRequest
         super.init()
         log.debug("\(self) init")
 
-        self.getUpdatedRequest(dateRequestId)
+        self.dateRequest.producer.startWithValues{[weak self] _ in
+            log.debug("dateRequest didSet: \(String(describing: dateRequest))")
+            guard let this = self else {return}
+            this.setActionButtonTitle()
+            this.setActionButtonState()
+        }
+        self.getUpdatedRequest(dateRequest.value?.id)
 
         self.setMode()
 
@@ -120,11 +121,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             }
             
             if this.mode == .request {
-                if let dateRequest = this.dateRequest {
+                if let dateRequest = this.dateRequest.value {
                     switch dateRequest.status {
                     case .sent,
                          .received:
-                        return GZEDatesService.shared.acceptDateRequest(withId: this.dateRequest?.id)
+                        return GZEDatesService.shared.acceptDateRequest(withId: this.dateRequest.value?.id)
                     case .accepted, .onDate:
                         this.openChat()
                         return SignalProducer.empty
@@ -136,7 +137,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 }
                 
             } else {
-                if let dateRequest = this.dateRequest {
+                if let dateRequest = this.dateRequest.value {
                     switch dateRequest.status {
                     case .sent,
                          .received,
@@ -160,7 +161,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
         switch event {
         case .value(let dateRequest):
-            self.dateRequest = dateRequest
+            self.dateRequest.value = dateRequest
             switch self.mode {
             case .request: self.openChat()
             default: break
@@ -183,7 +184,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     private func setActionButtonTitle() {
         log.debug("set action button title called")
         if mode == .request {
-            if let dateRequest = self.dateRequest {
+            if let dateRequest = self.dateRequest.value {
                 switch dateRequest.status {
                 case .sent,
                      .received:
@@ -199,7 +200,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 self.actionButtonTitle.value = ""
             }
         } else {
-            if let dateRequest = self.dateRequest {
+            if let dateRequest = dateRequest.value {
                 switch dateRequest.status {
                 case .sent,
                      .received:
@@ -220,7 +221,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     private func setActionButtonState() {
         log.debug("set action button state called")
         if mode == .request {
-            if let dateRequest = self.dateRequest {
+            if let dateRequest = self.dateRequest.value {
                 switch dateRequest.status {
                 case .sent,
                      .received,
@@ -234,7 +235,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 isContactButtonEnabled.value = false
             }
         } else {
-            if let dateRequest = self.dateRequest {
+            if let dateRequest = self.dateRequest.value {
                 switch dateRequest.status {
                 case .sent,
                      .received,
@@ -274,21 +275,13 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 .map{$0.first{[weak self] in
                     guard let this = self else { return false }
                     log.debug("filter called: \(String(describing: $0)) \(String(describing: this.dateRequest))")
-                    if this.mode == .request {
-                        return $0 == this.dateRequest
-                    } else {
-                        if let dateReq = this.dateRequest {
-                            return $0 == dateReq
-                        } else {
-                            return $0.recipient.id == this.user.id
-                        }
-                    }
-                    }}
+                    return $0 == this.dateRequest.value
+                }}
                 .skipNil()
                 .skipRepeats()
                 .startWithValues {[weak self] updatedDateRequest in
                     log.debug("updatedDateRequest: \(String(describing: updatedDateRequest))")
-                    self?.dateRequest = updatedDateRequest
+                    self?.dateRequest.value = updatedDateRequest
             }
         )
     }
@@ -330,7 +323,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     log.error("self was disposed")
                     return
                 }
-                this.getUpdatedRequest(this.dateRequest?.id)
+                this.getUpdatedRequest(this.dateRequest.value?.id)
         }
     }
     
@@ -353,7 +346,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     guard let this = self else {return}
                     switch event {
                     case .value(let dateRequest):
-                        this.dateRequest = dateRequest
+                        this.dateRequest.value = dateRequest
                     case .failed(let error):
                         log.error(error.localizedDescription)
                     default: break

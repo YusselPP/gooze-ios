@@ -12,11 +12,10 @@ import ReactiveCocoa
 
 class GZERatingsViewController: UIViewController {
 
+    var segueToProfile = "segueToProfile"
     var unwindToActivateGooze = "unwindToActivateGooze"
 
     var viewModel: GZERatingsViewModel!
-
-    var contactButtonTitle = "vm.profile.contactTitle".localized().uppercased()
 
     @IBOutlet weak var usernameLabel: GZELabel!
     @IBOutlet weak var phraseLabel: GZELabel!
@@ -37,7 +36,8 @@ class GZERatingsViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
 
     @IBOutlet weak var contactButton: GZEButton!
-    
+    @IBOutlet weak var phraseButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
@@ -62,15 +62,19 @@ class GZERatingsViewController: UIViewController {
     }
     
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == segueToProfile {
+
+            showProfileView(segue.destination)
+
+        }
     }
-    */
+
 
     private func setupInterfaceObjects() {
         navigationItem.hidesBackButton = true
@@ -117,6 +121,12 @@ class GZERatingsViewController: UIViewController {
                 guard let this = self else {return}
                 this.performSegue(withIdentifier: this.unwindToActivateGooze, sender: nil)
             }
+
+        viewModel.segueToProfile
+            .observeValues {[weak self] in
+                guard let this = self else {return}
+                this.performSegue(withIdentifier: this.segueToProfile, sender: nil)
+        }
         
         usernameLabel.reactive.text <~ viewModel.username
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
@@ -153,6 +163,19 @@ class GZERatingsViewController: UIViewController {
 
         contactButton.reactive.title <~ viewModel.actionButtonTitle
         contactButton.reactive.pressed = viewModel.bottomButtonAction
+
+        phraseButton.reactive.pressed = viewModel.phraseButtonAction
+    }
+
+    func showProfileView(_ vc: UIViewController) {
+        log.debug("Trying to show profile view...")
+        if let view = vc as? GZEProfileViewController {
+
+            view.viewModel = self.viewModel.profileViewModel
+        } else {
+            log.error("Unable to instantiate GZEProfileViewController")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
     }
     
     // MARK: - Deinitializers

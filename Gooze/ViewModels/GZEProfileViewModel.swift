@@ -13,7 +13,7 @@ import ReactiveCocoa
 protocol GZEProfileViewModel {
 
     var mode: GZEProfileMode { get set }
-    var dateRequest: GZEDateRequest? { get set }
+    var dateRequest: MutableProperty<GZEDateRequest?> { get }
 
     var bottomButtonAction: CocoaAction<GZEButton>? { get }
 

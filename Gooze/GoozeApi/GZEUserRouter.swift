@@ -96,6 +96,14 @@ enum GZEUserRouter: URLRequestConvertible {
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
         urlRequest.httpMethod = method.rawValue
 
+        switch self {
+        case .readUser,
+            .count,
+            .findByLocation,
+            .publicProfile:
+            urlRequest.cachePolicy = .reloadIgnoringCacheData
+        default: break
+        }
 
         // Auth
         switch self {

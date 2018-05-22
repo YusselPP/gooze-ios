@@ -8,11 +8,14 @@
 
 import Foundation
 import ReactiveSwift
+import ReactiveCocoa
+import enum Result.NoError
 
 protocol GZEProfileUserInfoViewModel: GZEProfileViewModel {
 
     // basic data
     var username: MutableProperty<String?> { get }
+    var profilePic: MutableProperty<URLRequest?> { get }
 
     // additional data
     var phrase: MutableProperty<String?> { get }
@@ -26,6 +29,13 @@ protocol GZEProfileUserInfoViewModel: GZEProfileViewModel {
     // TODO: Implement ocupation in user model
     var ocupation: MutableProperty<String?> { get }
 
-    var profilePic: MutableProperty<URLRequest?> { get }
+    var ageAction: MutableProperty<CocoaAction<UIButton>?> { get }
+    var genderAction: MutableProperty<CocoaAction<UIButton>?> { get }
+    var heightAction: MutableProperty<CocoaAction<UIButton>?> { get }
+    var weightAction: MutableProperty<CocoaAction<UIButton>?> { get }
+    var originAction: MutableProperty<CocoaAction<UIButton>?> { get }
+    var languagesAction: MutableProperty<CocoaAction<UIButton>?> { get }
+    var interestedInAction: MutableProperty<CocoaAction<UIButton>?> { get }
 
+    var dismissSignal: Signal<Void, NoError> { get }
 }

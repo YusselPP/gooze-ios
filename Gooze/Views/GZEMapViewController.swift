@@ -137,9 +137,6 @@ class GZEMapViewController: UIViewController {
 
             prepareRatingView(segue.destination)
 
-        } else {
-            log.error("Invalid segue identifier: \(String(describing: segue.identifier))")
-            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
         }
     }
 

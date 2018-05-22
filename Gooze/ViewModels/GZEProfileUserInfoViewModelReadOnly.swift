@@ -8,6 +8,8 @@
 
 import Foundation
 import ReactiveSwift
+import ReactiveCocoa
+import enum Result.NoError
 
 class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfileUserInfoViewModel {
     
@@ -15,6 +17,7 @@ class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfi
     
     // basic data
     let username = MutableProperty<String?>(nil)
+    let profilePic = MutableProperty<URLRequest?>(nil)
     
     // additional data
     let phrase = MutableProperty<String?>(nil)
@@ -27,14 +30,21 @@ class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfi
     let interestedIn = MutableProperty<String?>(nil)
     // TODO: Implement ocupation in user model
     let ocupation = MutableProperty<String?>(nil)
-    
-    let profilePic = MutableProperty<URLRequest?>(nil)
-    
+
+    let ageAction = MutableProperty<CocoaAction<UIButton>?>(nil)
+    let genderAction = MutableProperty<CocoaAction<UIButton>?>(nil)
+    let heightAction = MutableProperty<CocoaAction<UIButton>?>(nil)
+    let weightAction = MutableProperty<CocoaAction<UIButton>?>(nil)
+    let originAction = MutableProperty<CocoaAction<UIButton>?>(nil)
+    let languagesAction = MutableProperty<CocoaAction<UIButton>?>(nil)
+    let interestedInAction = MutableProperty<CocoaAction<UIButton>?>(nil)
+
+    let (dismissSignal, _) = Signal<Void, NoError>.pipe()
     
     
     // MARK - init
-    override init(user: GZEUser, dateRequestId: String?) {
-        super.init(user: user, dateRequestId: dateRequestId)
+    override init(user: GZEUser, dateRequest: MutableProperty<GZEDateRequest?>) {
+        super.init(user: user, dateRequest: dateRequest)
         log.debug("\(self) init")
         
         populate(user)

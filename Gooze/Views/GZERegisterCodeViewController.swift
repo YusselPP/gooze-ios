@@ -320,19 +320,17 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        if
-            segue.identifier == self.signUpToProfileSegue,
-            let viewController = segue.destination as? GZESignUpProfileViewController
+        if segue.identifier == self.signUpToProfileSegue
         {
-            if let vm = self.viewModel.updateProfileViewModel {
+            if
+                let viewController = segue.destination as? GZESignUpProfileViewController,
+                let vm = self.viewModel.updateProfileViewModel
+            {
                 viewController.viewModel = vm
             } else {
                 log.error("Unable to initialize GZESignUpProfileViewController. Invalid GZEUpdateProfileViewModel")
                 self.onError(.repository(error: .UnexpectedError))
             }
-        } else {
-            log.error("Unable to instantiate GZESignUpProfileViewController")
-            self.onError(.repository(error: .UnexpectedError))
         }
     }
 

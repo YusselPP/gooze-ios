@@ -25,6 +25,14 @@ class GZEProfileViewController: UIViewController {
     @IBOutlet weak var languagesLabel: GZELabel!
     @IBOutlet weak var interestsLabel: GZELabel!
 
+    @IBOutlet weak var genderButton: UIButton!
+    @IBOutlet weak var ageButton: UIButton!
+    @IBOutlet weak var heightButton: UIButton!
+    @IBOutlet weak var weightButton: UIButton!
+    @IBOutlet weak var originButton: UIButton!
+    @IBOutlet weak var languagesButton: UIButton!
+    @IBOutlet weak var interestsButton: UIButton!
+
     @IBOutlet weak var profileImageView: UIImageView!
 
     @IBOutlet weak var contactButton: GZEButton!
@@ -64,6 +72,8 @@ class GZEProfileViewController: UIViewController {
     */
 
     private func setupInterfaceObjects() {
+        navigationItem.hidesBackButton = true
+
         usernameLabel.setWhiteFontFormat()
         phraseLabel.setWhiteFontFormat()
         genderLabel.setWhiteFontFormat()
@@ -99,6 +109,12 @@ class GZEProfileViewController: UIViewController {
                 }
         }
 
+        viewModel.dismissSignal
+            .observeValues {[weak self] in
+                guard let this = self else {return}
+                this.previousController(animated: true)
+        }
+
         usernameLabel.reactive.text <~ viewModel.username
         phraseLabel.reactive.text <~ viewModel.phrase
         genderLabel.reactive.text <~ viewModel.gender
@@ -114,6 +130,14 @@ class GZEProfileViewController: UIViewController {
         
         contactButton.reactive.title <~ viewModel.actionButtonTitle
         contactButton.reactive.pressed = viewModel.bottomButtonAction
+
+        genderButton.reactive.pressed = viewModel.genderAction.value
+        ageButton.reactive.pressed = viewModel.ageAction.value
+        heightButton.reactive.pressed = viewModel.heightAction.value
+        weightButton.reactive.pressed = viewModel.weightAction.value
+        originButton.reactive.pressed = viewModel.originAction.value
+        languagesButton.reactive.pressed = viewModel.languagesAction.value
+        interestsButton.reactive.pressed = viewModel.interestedInAction.value
     }
     
     // MARK: - Deinitializers

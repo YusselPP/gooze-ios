@@ -19,6 +19,7 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
     let profilePic = MutableProperty<URLRequest?>(nil)
 
     let phrase = MutableProperty<String?>(nil)
+    var phraseButtonAction: CocoaAction<UIButton>? = nil
 
     let imagesRatingDesc = MutableProperty<String?>(nil)
     let complianceRatingDesc = MutableProperty<String?>(nil)
@@ -41,6 +42,11 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
     let goozeRatingIsEditable = MutableProperty<Bool>(true)
 
     let (disposeToActivateGooze, disposeToActivateGoozeObs) = Signal<Void, NoError>.pipe()
+    let (segueToProfile, segueToProfileObs) = Signal<Void, NoError>.pipe()
+
+    var profileViewModel: GZEProfileUserInfoViewModel {
+        return GZEProfileUserInfoViewModelRateDate(user: self.user.value, ratings: self.ratings)
+    }
 
     // END GZERatingsViewModel protocol
 
@@ -52,9 +58,10 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
     let rateActionEnalbed = MutableProperty<Bool>(true)
 
     let user: MutableProperty<GZEChatUser>
+    var ratings = MutableProperty<GZERatings>(GZERatings())
 
     // MARK - init
-    init(user: GZEChatUser, dateRequestId: String?) {
+    init(user: GZEChatUser) {
         self.user = MutableProperty(user)
         super.init()
         log.debug("\(self) init")
@@ -70,7 +77,14 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
     }
 
     private func initProperties(){
-        phrase.value = phraseLabelComments
+        phrase <~ ratings.producer.map{[weak self] ratings -> String? in
+            guard let this = self else {return nil}
+            if let comment = ratings.comment {
+                return comment.localizedText()
+            } else {
+                return this.phraseLabelComments
+            }
+        }
 
         imagesRatingDesc.value = GZEUser.Validation.imagesRating.fieldName
         complianceRatingDesc.value = GZEUser.Validation.complianceRating.fieldName
@@ -102,6 +116,7 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
         self.bottomButtonAction = CocoaAction(rateAction) {[weak self] _ in
             self?.loading.value = true
         }
+        self.phraseButtonAction = CocoaAction(self.createCommentAction())
     }
 
     private func createRateAction() -> Action<Void, Bool, GZEError> {
@@ -119,15 +134,23 @@ class GZERatingsViewModelRateDate: GZEProfileViewModelRateDate, GZERatingsViewMo
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
-            let ratings = GZERatings(
-                imagesRating: imagesRating,
-                complianceRating: complianceRating,
-                dateQualityRating: dateQualityRating,
-                dateRating: dateRating,
-                goozeRating: goozeRating
-            )
+            let ratings = this.ratings.value
+
+            ratings.imagesRating = imagesRating
+            ratings.complianceRating = complianceRating
+            ratings.dateQualityRating = dateQualityRating
+            ratings.dateRating = dateRating
+            ratings.goozeRating = goozeRating
 
             return this.userRepository.add(ratings: ratings, userId: this.user.value.id)
+        }
+    }
+
+    private func createCommentAction() -> Action<Void, Void, NoError> {
+        return Action(enabledIf: self.rateActionEnalbed) {[weak self] in
+            guard let this = self else {return SignalProducer.empty}
+            this.segueToProfileObs.send(value: ())
+            return SignalProducer.empty
         }
     }
 

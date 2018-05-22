@@ -9,21 +9,26 @@
 import Foundation
 import Gloss
 
-struct GZERatings: Glossy {
+class GZERatings: Glossy {
 
-    var imagesRating: Float
-    var complianceRating: Float
-    var dateQualityRating: Float
-    var dateRating: Float
-    var goozeRating: Float
+    var comment: GZERateComment?
+    var imagesRating: Float = 0
+    var complianceRating: Float = 0
+    var dateQualityRating: Float = 0
+    var dateRating: Float = 0
+    var goozeRating: Float = 0
+
+    init() {}
 
     init(
+        comment: GZERateComment?,
         imagesRating: Float,
         complianceRating: Float,
         dateQualityRating: Float,
         dateRating: Float,
         goozeRating: Float
     ) {
+        self.comment = comment
         self.imagesRating = imagesRating
         self.complianceRating = complianceRating
         self.dateQualityRating = dateQualityRating
@@ -31,7 +36,7 @@ struct GZERatings: Glossy {
         self.goozeRating = goozeRating
     }
 
-    init?(json: JSON) {
+    required init?(json: JSON) {
         guard
             let imagesRating: Float = "imagesRating" <~~ json,
             let complianceRating: Float = "complianceRating" <~~ json,
@@ -43,6 +48,7 @@ struct GZERatings: Glossy {
             return nil
         }
 
+        self.comment = "comment" <~~ json
         self.imagesRating = imagesRating
         self.complianceRating = complianceRating
         self.dateQualityRating = dateQualityRating
@@ -52,6 +58,7 @@ struct GZERatings: Glossy {
 
     func toJSON() -> JSON? {
         return jsonify([
+            "comment" ~~> self.comment,
             "imagesRating" ~~> self.imagesRating,
             "complianceRating" ~~> self.complianceRating,
             "dateQualityRating" ~~> self.dateQualityRating,

@@ -23,8 +23,8 @@ class GZEGalleryViewModelReadOnly: GZEProfileViewModelReadOnly, GZEGalleryViewMo
 
     
     // MARK - init
-    override init(user: GZEUser, dateRequestId: String?) {
-        super.init(user: user, dateRequestId: dateRequestId)
+    override init(user: GZEUser, dateRequest: MutableProperty<GZEDateRequest?>) {
+        super.init(user: user, dateRequest: dateRequest)
         log.debug("\(self) init")
 
         populate(user)

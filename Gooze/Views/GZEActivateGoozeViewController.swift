@@ -250,6 +250,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func updateBalloons() {
         let users = viewModel.userResults.value
+        log.debug(users)
         if users.count == 0 {
             if scene == .searching {
                 scene = .search
@@ -529,37 +530,37 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
 
-        if
-            segue.identifier == segueToProfile,
-            let pageViewController = segue.destination as? GZEProfilePageViewController {
+        if segue.identifier == segueToProfile {
 
-            if let user = sender as? GZEUser {
-                let dateRequest = tappedUserConvertible as? GZEDateRequest
+            if let pageViewController = segue.destination as? GZEProfilePageViewController {
+                if let user = sender as? GZEUser {
+                    let dateRequest = MutableProperty<GZEDateRequest?>(tappedUserConvertible as? GZEDateRequest)
 
-                pageViewController.profileVm = GZEProfileUserInfoViewModelReadOnly(user: user, dateRequestId: dateRequest?.id)
-                pageViewController.galleryVm = GZEGalleryViewModelReadOnly(user: user, dateRequestId: dateRequest?.id)
-                pageViewController.ratingsVm = GZERatingsViewModelReadOnly(user: user, dateRequestId: dateRequest?.id)
-                
-                if
-                    scene == .requestResults ||
-                    scene == .requestResultsList ||
-                    scene == .requestOtherResultsList
-                {
-                    pageViewController.profileVm.mode = .request
-                    pageViewController.galleryVm.mode = .request
-                    pageViewController.ratingsVm.mode = .request
+                    pageViewController.profileVm = GZEProfileUserInfoViewModelReadOnly(user: user, dateRequest: dateRequest)
+                    pageViewController.galleryVm = GZEGalleryViewModelReadOnly(user: user, dateRequest: dateRequest)
+                    pageViewController.ratingsVm = GZERatingsViewModelReadOnly(user: user, dateRequest: dateRequest)
+
+                    if
+                        scene == .requestResults ||
+                        scene == .requestResultsList ||
+                        scene == .requestOtherResultsList
+                    {
+                        pageViewController.profileVm.mode = .request
+                        pageViewController.galleryVm.mode = .request
+                        pageViewController.ratingsVm.mode = .request
+                    }
+                } else {
+                    log.error("Unable to obatain the user from segue sender")
                 }
-
-                pageViewController.profileVm.dateRequest = dateRequest
-                pageViewController.galleryVm.dateRequest = dateRequest
-                pageViewController.ratingsVm.dateRequest = dateRequest
             } else {
-                log.error("Unable to obatain the user from segue sender")
+                log.error("Unable to cast segue.destination as? GZEProfilePageViewController")
             }
         }
      }
 
-    @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {
+
+    }
 
     // MARK: - Scenes
     func handleSceneChanged() {
