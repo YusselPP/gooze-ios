@@ -24,7 +24,7 @@ class GZEChatMessage: NSObject, Glossy {
 
     let id: String?
     let chatId: String
-    let text: String
+    private let text: String // use self.localizedText() to get this
     //let sender: GZEChatUser
     let senderId: String
     //let recipientId: String

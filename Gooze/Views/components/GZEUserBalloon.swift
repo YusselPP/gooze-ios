@@ -11,6 +11,7 @@ import AlamofireImage
 
 class GZEUserBalloon: UIView {
 
+    static var userPlaceholder = UIImage(imageLiteralResourceName: "user-placeholder")
     var userConvertible: GZEUserConvertible?
     var user: GZEChatUser?
     var rating: Float? {
@@ -106,13 +107,13 @@ class GZEUserBalloon: UIView {
 
     func setImage(urlRequest: URLRequest?, completion: ( () -> ())? = nil){
         if let urlRequest = urlRequest {
-            imageView.af_setImage(withURLRequest: urlRequest, completion: { _ in
+            imageView.af_setImage(withURLRequest: urlRequest, placeholderImage: GZEUserBalloon.userPlaceholder, completion: { _ in
                 //self?.setVisible(true)
                 completion?()
             })
         } else {
             log.error("Failed to set image url for user id=[\(String(describing: self.user?.id))]")
-            imageView.image = nil
+            imageView.image = GZEUserBalloon.userPlaceholder
             //setVisible(true)
             completion?()
         }

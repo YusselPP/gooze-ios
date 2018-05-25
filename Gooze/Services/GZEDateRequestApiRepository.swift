@@ -37,7 +37,8 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                         "where": [
                             "senderClosed": closed,
                             "senderId": userId
-                        ]
+                        ],
+                        "order": "createdAt DESC"
                     ]
                 ] as [String : Any]
             Alamofire.request(GZEDateRequestRouter.find(parameters: params))
@@ -64,7 +65,8 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                         "where": [
                             "recipientClosed": closed,
                             "recipientId": userId
-                        ]
+                        ],
+                         "order": "createdAt DESC"
                     ]
                 ] as [String : Any]
             Alamofire.request(GZEDateRequestRouter.find(parameters: params))
@@ -95,6 +97,7 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                                 ["status": GZEDateRequest.Status.accepted.rawValue],
                                 ["status": GZEDateRequest.Status.onDate.rawValue]
                             ],
+                            "recipientClosed": false,
                             "recipientId": userId
                         ],
                         "include": ["sender", "recipient", "chat", "date"]

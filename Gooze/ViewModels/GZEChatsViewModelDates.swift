@@ -68,7 +68,7 @@ class GZEChatsViewModelDates: GZEChatsViewModel {
                     id: dateRequest.id,
                     user: chatUser,
                     title: chatUser.username,
-                    preview: dateRequest.chat?.messages.last?.text,
+                    preview: dateRequest.chat?.messages.last?.localizedText(),
                     onClose: {[weak self] _ in
                         self?.closeDateRequest(dateRequest)
                     },
@@ -125,7 +125,7 @@ class GZEChatsViewModelDates: GZEChatsViewModel {
         // TODO: Which requests can be closed and what happens?
         // Only dates with status: rejected, ended, canceled ?
         //guard dateRequest.hasFinishedState() else {
-        guard dateRequest.status == .onDate else {
+        guard dateRequest.status != .onDate else {
             self.error.value = self.closeDateError
             log.debug("Only rejected, ended or canceled requests can be closed")
             return

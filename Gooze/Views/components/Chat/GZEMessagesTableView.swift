@@ -220,7 +220,7 @@ class GZEMessagesTableView: UICollectionView, UICollectionViewDelegate, UICollec
         let message = self.messages[indexPath.row]
         
         let minBubbleSize: CGFloat = GZEChatBubbleView.minSize
-        let textHeight = ceil(message.text.size(font: GZEChatBubbleView.font).height)
+        let textHeight = ceil(message.localizedText().size(font: GZEChatBubbleView.font).height)
         let cellPadding = GZEChatBubbleView.labelPadding * 2 + GZEChatBubbleView.bubblePadding * 2
         
         return max(minBubbleSize, cellPadding + textHeight)
@@ -252,7 +252,7 @@ class GZEMessageTableCell: UICollectionViewCell {
                 } else {
                     self.messageType = .received
                 }
-                self.bubble.text = message.text
+                self.bubble.text = message.localizedText()
             } else {
                 log.debug("Invalid message: \(String(describing: message.toJSON()))")
                 self.messageType = .invalid
