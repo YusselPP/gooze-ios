@@ -19,13 +19,15 @@ class GZEChat: NSObject, Glossy {
     let user1Id: String
     let user2Id: String
     let status: GZEChat.Status
+    var messages: [GZEChatMessage]
 
     // let isDeleted: Bool
-    init(id: String, user1Id: String, user2Id: String, status: GZEChat.Status) {
+    init(id: String, user1Id: String, user2Id: String, status: GZEChat.Status, messages: [GZEChatMessage]) {
         self.id = id
         self.user1Id = user1Id
         self.user2Id = user2Id
         self.status = status
+        self.messages = messages
     }
 
     required init?(json: JSON) {
@@ -43,6 +45,7 @@ class GZEChat: NSObject, Glossy {
         self.user1Id = user1Id
         self.user2Id = user2Id
         self.status = status
+        self.messages = ("messages" <~~ json) ?? []
     }
 
     func toJSON() -> JSON? {
@@ -51,6 +54,7 @@ class GZEChat: NSObject, Glossy {
             "user1Id" ~~> self.user1Id,
             "user2Id" ~~> self.user2Id,
             "status" ~~> self.status,
+            "messages" ~~> self.messages,
             ])
     }
 }

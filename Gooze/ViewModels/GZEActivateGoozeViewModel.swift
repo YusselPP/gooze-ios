@@ -33,7 +33,6 @@ class GZEActivateGoozeViewModel {
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()
     let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
 
-
     var activateGoozeAction: Action<Void, GZEUser, GZEError> {
         if let activateGoozeAction = _activateGoozeAction {
             return activateGoozeAction
@@ -85,6 +84,10 @@ class GZEActivateGoozeViewModel {
             .observeValues {user in
                 GZEAuthService.shared.authUser = user
         }
+    }
+
+    func getChatsViewModel(_ mode: GZEChatViewMode) -> GZEChatsViewModelDates {
+        return GZEChatsViewModelDates(mode: mode)
     }
 
     private func createActivateGoozeAction() -> Action<Void, GZEUser, GZEError> {

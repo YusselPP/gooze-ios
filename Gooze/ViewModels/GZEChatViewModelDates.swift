@@ -82,7 +82,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
     var requestsObserver: Disposable?
     var messagesObserver: Disposable?
     var socketEventsObserver: Disposable?
-    var messagesEventsObserver: Disposable?
     
     var retrieveHistoryProducer: SignalProducer<Void, GZEError>?
     
@@ -344,8 +343,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
             GZEChatService.shared.clear(chatId: self.chat.id)
             self.messagesObserver?.dispose()
             self.messagesObserver = nil
-            self.messagesEventsObserver?.dispose()
-            self.messagesEventsObserver = nil
         }
     }
     

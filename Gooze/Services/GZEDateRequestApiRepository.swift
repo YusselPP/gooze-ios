@@ -18,6 +18,59 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         log.debug("\(self) init")
     }
 
+    func findSentRequests(closed: Bool) -> SignalProducer<[GZEDateRequest], GZEError> {
+        guard let userId = GZEApi.instance.accessToken?.userId else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("findSentRequests SignalProducer disposed")
+            }
+
+            log.debug("trying to findSentRequests")
+
+            let params =
+                [
+                    "filter": [
+                        "where": [
+                            "senderClosed": closed,
+                            "senderId": userId
+                        ]
+                    ]
+                ] as [String : Any]
+            Alamofire.request(GZEDateRequestRouter.find(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: [GZEDateRequest].from))
+        }
+    }
+
+    func findReceivedRequests(closed: Bool) -> SignalProducer<[GZEDateRequest], GZEError> {
+        guard let userId = GZEApi.instance.accessToken?.userId else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("findReceivedRequests SignalProducer disposed")
+            }
+
+            log.debug("trying to findReceivedRequests")
+
+            let params =
+                [
+                    "filter": [
+                        "where": [
+                            "recipientClosed": closed,
+                            "recipientId": userId
+                        ]
+                    ]
+                ] as [String : Any]
+            Alamofire.request(GZEDateRequestRouter.find(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: [GZEDateRequest].from))
+        }
+    }
 
     func findUnresponded() -> SignalProducer<[GZEDateRequest], GZEError> {
         guard let userId = GZEApi.instance.accessToken?.userId else {
@@ -127,6 +180,31 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             log.debug("ending date...")
 
             Alamofire.request(GZEDateRequestRouter.endDate(json: dateRequestJson))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
+        }
+    }
+
+    func close(_ dateRequest: GZEDateRequest, mode: GZEChatViewMode) -> SignalProducer<GZEDateRequest, GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        var closeProperty: String
+        if mode == .client {
+            closeProperty = "senderClosed"
+        } else {
+            closeProperty = "recipientClosed"
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("close SignalProducer disposed")
+            }
+
+            log.debug("closing date...")
+
+            Alamofire.request(GZEDateRequestRouter.update(id: dateRequest.id, parameters: [closeProperty: true]))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
         }
     }

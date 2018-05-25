@@ -107,7 +107,7 @@ class GZEMenuMain {
         }
     }
 
-    func createMenuAction(producer: SignalProducer<Void, NoError> = SignalProducer.empty, onCloseMenu: GZEMenu.CompletionBlock? = nil) -> (Action<(), Void, NoError>, CocoaAction<GZEButton>) {
+    func createMenuAction(producer: SignalProducer<Void, NoError> = SignalProducer.empty, onCloseMenu: CompletionBlock? = nil) -> (Action<(), Void, NoError>, CocoaAction<GZEButton>) {
         let action = Action{ () -> SignalProducer<Void, NoError> in
             log.debug("Menu action pressed")
             return producer

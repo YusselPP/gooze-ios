@@ -18,6 +18,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         case onDate = "onDate"
         case rejected = "rejected"
         case ended = "ended"
+        //case canceled = "canceled"
     }
 
     let id: String
@@ -28,8 +29,10 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     let chat: GZEChat?
     let amount: Double?
     let date: GZEDate?
+    let senderClosed: Bool
+    let recipientClosed: Bool
 
-    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Double? = nil, date: GZEDate? = nil) {
+    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Double? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool) {
         self.id = id
         self.status = status
         self.sender = sender
@@ -38,6 +41,8 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.chat = chat
         self.amount = amount
         self.date = date
+        self.senderClosed = senderClosed
+        self.recipientClosed = recipientClosed
         super.init()
     }
 
@@ -47,7 +52,9 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             let status: Status = "status" <~~ json,
             let sender: GZEChatUser = "sender" <~~ json,
             let recipient: GZEChatUser = "recipient" <~~ json,
-            let location: GZEUser.GeoPoint = "location" <~~ json
+            let location: GZEUser.GeoPoint = "location" <~~ json,
+            let senderClosed: Bool = "senderClosed" <~~ json,
+            let recipientClosed: Bool = "recipientClosed" <~~ json
         else {
             log.error("Unable to instantiate. JSON doesn't include a required property")
             return nil
@@ -60,6 +67,8 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.chat = "chat" <~~ json
         self.amount = "amount" <~~ json
         self.date = "date" <~~ json
+        self.senderClosed = senderClosed
+        self.recipientClosed = recipientClosed
         super.init()
     }
 
@@ -73,7 +82,23 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             "chat" ~~> self.chat,
             "amount" ~~> self.amount,
             "date" ~~> self.date,
+            "senderClosed" ~~> self.senderClosed,
+            "recipientClosed" ~~> self.recipientClosed,
         ]);
+    }
+
+    func hasFinishedState() -> Bool {
+        switch self.status {
+        case .ended,
+             //.canceled,
+             .rejected:
+            return true
+        case .sent,
+             .received,
+             .accepted,
+             .onDate:
+            return false
+        }
     }
     
     // MARK: - GZEUserConvertible

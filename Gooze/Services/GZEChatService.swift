@@ -16,6 +16,7 @@ class GZEChatService: NSObject {
     
     let messagesChunkSize = 20
     let messages = MutableProperty<[String: [GZEChatMessage]]>([:])
+    let lastMessage = MutableProperty<GZEChatMessage?>(nil)
 
     let errorMessage = MutableProperty<String?>(nil)
 
@@ -295,6 +296,7 @@ class GZEChatService: NSObject {
 
         messages[chatId] = currentChatMessages
         self.messages.value = messages
+        self.lastMessage.value = message
     }
     
     func clear(chatId: String) {

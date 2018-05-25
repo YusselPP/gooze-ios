@@ -541,6 +541,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                     pageViewController.ratingsVm = GZERatingsViewModelReadOnly(user: user, dateRequest: dateRequest)
 
                     if
+                        scene == .activate ||
                         scene == .requestResults ||
                         scene == .requestResultsList ||
                         scene == .requestOtherResultsList
@@ -555,11 +556,33 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             } else {
                 log.error("Unable to cast segue.destination as? GZEProfilePageViewController")
             }
+        } else if segue.identifier == segueToChats {
+            prepareChatSegue(segue.destination)
         }
      }
 
     @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {
 
+    }
+
+    func prepareChatSegue(_ vc: UIViewController) {
+        if let vc = vc as? GZEChatsViewController {
+            let mode: GZEChatViewMode
+            if
+                scene == .activate ||
+                scene == .requestResults ||
+                scene == .requestResultsList ||
+                scene == .requestOtherResultsList
+            {
+                mode = .gooze
+            } else {
+                mode = .client
+            }
+            vc.viewModel = self.viewModel.getChatsViewModel(mode)
+
+        } else {
+            log.error("Unable to cast segue.destination as? GZEChatsViewController")
+        }
     }
 
     // MARK: - Scenes

@@ -87,6 +87,8 @@ class GZEUserBalloon: UIView {
 
     func setUser(_ user: GZEUserConvertible?, completion: ( () -> ())? = nil) {
 
+        log.debug("setting user: \(String(describing: user))")
+        log.debug("user json: \(String(describing: user?.getUser().toJSON()))")
         self.user = user?.getUser()
         self.userConvertible = user
 

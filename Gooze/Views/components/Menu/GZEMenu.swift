@@ -10,8 +10,6 @@ import UIKit
 
 class GZEMenu: NSObject {
 
-    typealias CompletionBlock = (() -> ())
-
     var animationsDuration: TimeInterval = 0.3
     var isScrollTopOnCloseEnabled = true
 

@@ -12,6 +12,8 @@ import Alamofire
 enum GZEDateRequestRouter: URLRequestConvertible {
 
     case find(parameters: Parameters)
+    case update(id: String, parameters: Parameters)
+
     case startDate(json: Parameters)
     case endDate(json: Parameters)
 
@@ -25,6 +27,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
         case .startDate,
              .endDate:
             return .post
+        case .update:
+            return .patch
         }
     }
 
@@ -32,6 +36,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
         switch self {
         case .find:
             return "\(GZEDateRequestRouter.route)/"
+        case .update(let id, _):
+            return "\(GZEDateRequestRouter.route)/\(id)"
         case .startDate:
             return "\(GZEDateRequestRouter.route)/startDate"
         case .endDate:
@@ -56,6 +62,7 @@ enum GZEDateRequestRouter: URLRequestConvertible {
         // Auth
         switch self {
         case .find,
+             .update,
              .startDate,
              .endDate:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
@@ -68,6 +75,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
         case .startDate(let json),
              .endDate(let json):
             urlRequest = try JSONEncoding.default.encode(urlRequest, withJSONObject: json)
+        case .update(_, let parameters):
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         }
 
         return urlRequest

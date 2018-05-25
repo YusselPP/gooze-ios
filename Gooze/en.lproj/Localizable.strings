@@ -138,6 +138,9 @@
 "vm.map.date.canceled"="Date has been canceled";
 "vm.map.date.ended"="Date has ended";
 
+// ViewModel/GZEChatsViewModelDates
+"vm.chats.list.error.closeDate"="Finish the on going date, before closing the chat";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.doneButton.title"="Next";
@@ -176,6 +179,9 @@
 // Views/components/Map/GZEPinAnnotation
 "vm.pinAnnotation.loading"="Loading...";
 "vm.pinAnnotation.pinTitle"="Date place";
+
+// Views/components/Chat/List/GZEChatsCloseView
+"chat.list.close"="Close";
 
 // AuthService
 "vm.authService.sessionExpired"="Your session has expired. Please log in";
