@@ -26,7 +26,8 @@ func deregisterFromKeyboardNotifications(observer: Any) {
     notifications.removeObserver(observer, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 }
 
-func resizeViewWithKeyboard(keyboardShow: Bool, constraint: NSLayoutConstraint, notification: Notification, view: UIView) {
+func resizeViewWithKeyboard(keyboardShow: Bool, constraint: NSLayoutConstraint, notification: Notification, view: UIView, safeInsets: Bool = true) {
+
     if
         keyboardShow,
         let info = notification.userInfo,
@@ -37,13 +38,21 @@ func resizeViewWithKeyboard(keyboardShow: Bool, constraint: NSLayoutConstraint, 
             rawValue: info[UIKeyboardAnimationCurveUserInfoKey] as? Int ?? UIViewAnimationCurve.linear.rawValue
         )
         let options = curve?.toOptions() ?? UIViewAnimationOptions.curveLinear
-        
-        constraint.constant = kbSize.height
+
+        if #available(iOS 11.0, *), safeInsets {
+            constraint.constant = kbSize.height - view.safeAreaInsets.bottom
+        } else {
+            constraint.constant = kbSize.height
+        }
         
         UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
             view.layoutIfNeeded()
         }, completion: nil)
     } else {
-        constraint.constant = 0
+        if #available(iOS 11.0, *), safeInsets {
+            constraint.constant = view.safeAreaInsets.bottom
+        } else {
+            constraint.constant = 0
+        }
     }
 }

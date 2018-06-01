@@ -213,7 +213,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view, safeInsets: false)
     }
 
     // MARK: - Navigation

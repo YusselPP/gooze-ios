@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setUpInitialController()
         
 
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: GZEConstants.Font.main, NSForegroundColorAttributeName: UIColor.white]
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
 

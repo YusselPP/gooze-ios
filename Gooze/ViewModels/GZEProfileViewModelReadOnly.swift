@@ -93,15 +93,12 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         super.init()
         log.debug("\(self) init")
 
-        self.dateRequest.producer.startWithValues{[weak self] _ in
+        self.dateRequest.producer.take(during: self.reactive.lifetime).startWithValues{[weak self] dateRequest in
             log.debug("dateRequest didSet: \(String(describing: dateRequest))")
             guard let this = self else {return}
-            this.setActionButtonTitle()
-            this.setActionButtonState()
+            this.setMode()
         }
         self.getUpdatedRequest(dateRequest.value?.id)
-
-        self.setMode()
 
         let acceptRequestAction = self.createAcceptRequestAction()
         acceptRequestAction.events.observeValues {[weak self] in
@@ -161,8 +158,10 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
         switch event {
         case .value(let dateRequest):
+            GZEDatesService.shared.upsert(dateRequest: dateRequest)
             self.dateRequest.value = dateRequest
             switch self.mode {
+                
             case .request: self.openChat()
             default: break
             }

@@ -16,5 +16,7 @@
 	<string>vskgnz6i2hmIdQ04Q0mjmelZz7bf7txR</string>
 	<key>SocketPath</key>
 	<string>/staging/socket.io</string>
+    <key>ConektaPublicKey</key>
+    <string>key_Nq2RPcj7tWasHq2iJz7ysqQ</string>
 </dict>
 </plist>

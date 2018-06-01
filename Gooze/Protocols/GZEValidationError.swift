@@ -20,6 +20,8 @@ enum GZEValidationError: Error {
     case exists(fieldName: String)
 
     case underAge
+
+    case invalidCardNumber
 }
 
 extension GZEValidationError: LocalizedError {
@@ -52,6 +54,9 @@ extension GZEValidationError: LocalizedError {
 
         case .underAge:
             message = "validation.underAge".localized()
+
+        case .invalidCardNumber:
+            message = "validation.invalidCardNumber".localized()
         }
         return message
     }

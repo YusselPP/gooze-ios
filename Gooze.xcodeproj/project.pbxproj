@@ -71,15 +71,30 @@
 		8D28ADB720B57A73003D3F9A /* GZEChatsPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D28ADB620B57A73003D3F9A /* GZEChatsPhotoView.swift */; };
 		8D28ADB920B57AFE003D3F9A /* GZEChatsPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D28ADB820B57AFE003D3F9A /* GZEChatsPreviewView.swift */; };
 		8D28ADBB20B57B29003D3F9A /* GZEChatsOpenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D28ADBA20B57B29003D3F9A /* GZEChatsOpenView.swift */; };
+		8D28B97620BAE96600DEED83 /* GZECardNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D28B97520BAE96600DEED83 /* GZECardNumber.swift */; };
 		8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D290704207827D400C2F865 /* GZEMapSlider.swift */; };
 		8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29A6F82068778C00830E6D /* GZEAlertService.swift */; };
+		8D29C0AC20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0AB20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift */; };
+		8D29C0AE20BD5D7C0084A1F3 /* GZEPaymentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0AD20BD5D7C0084A1F3 /* GZEPaymentRepository.swift */; };
+		8D29C0B720BD67F40084A1F3 /* GZEPaymentError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0B620BD67F40084A1F3 /* GZEPaymentError.swift */; };
+		8D29C0B920BD74E80084A1F3 /* GZEConektaError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0B820BD74E80084A1F3 /* GZEConektaError.swift */; };
+		8D29C0BB20BD76EE0084A1F3 /* GZEConektaTokenError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0BA20BD76EE0084A1F3 /* GZEConektaTokenError.swift */; };
+		8D29C0BD20BD77490084A1F3 /* GZEConektaErrorDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0BC20BD77490084A1F3 /* GZEConektaErrorDetail.swift */; };
 		8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A4696204C626400581838 /* UIImage+Extension.swift */; };
+		8D2A9C5020BE440F00D4D9EB /* GZEOrientationNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2A9C4F20BE440F00D4D9EB /* GZEOrientationNotifications.swift */; };
 		8D2AF3DF20AC3EE600346E61 /* GZERatings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2AF3DE20AC3EE600346E61 /* GZERatings.swift */; };
 		8D2BC3A020914C0D00945D33 /* GZEDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2BC39F20914C0D00945D33 /* GZEDate.swift */; };
 		8D2C951520837E0D004DAE3E /* GZEChatActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2C951420837E0D004DAE3E /* GZEChatActionView.swift */; };
+		8D2CA84220BC167C001AA4EB /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CA84120BC167C001AA4EB /* UITextField+Extension.swift */; };
+		8D2CA84420BC227A001AA4EB /* GZEAddCreditCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CA84320BC227A001AA4EB /* GZEAddCreditCardViewModel.swift */; };
+		8D2CA84620BC2385001AA4EB /* GZEAddCreditCardViewModelPay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CA84520BC2385001AA4EB /* GZEAddCreditCardViewModelPay.swift */; };
+		8D2CA84820BC3919001AA4EB /* GZEMonthNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CA84720BC3919001AA4EB /* GZEMonthNumber.swift */; };
+		8D2CA84A20BC3929001AA4EB /* GZEYearNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CA84920BC3929001AA4EB /* GZEYearNumber.swift */; };
 		8D357BAF1FD18C8000D6FB87 /* GZEApiStorageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */; };
 		8D358AC41FBBF75F00F261DC /* ValidatorAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D358AC31FBBF75F00F261DC /* ValidatorAliases.swift */; };
 		8D358AC61FBBFA4200F261DC /* GZEError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D358AC51FBBFA4200F261DC /* GZEError.swift */; };
+		8D3AE83120BCCEFD00CD4AEC /* GZECVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3AE83020BCCEFD00CD4AEC /* GZECVC.swift */; };
+		8D3AE83420BCDE5D00CD4AEC /* GZECardNumberValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3AE83320BCDE5D00CD4AEC /* GZECardNumberValidation.swift */; };
 		8D413CB020410EDE00CB4B93 /* GZEPickerUIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D413CAF20410EDE00CB4B93 /* GZEPickerUIToolbar.swift */; };
 		8D413CB220412D0700CB4B93 /* GZEBackUIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D413CB120412D0600CB4B93 /* GZEBackUIBarButtonItem.swift */; };
 		8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */; };
@@ -91,6 +106,16 @@
 		8D572DBB1F9D352F00B824FA /* GZEUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBA1F9D352F00B824FA /* GZEUser.swift */; };
 		8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBC1F9D468C00B824FA /* GZEApi.swift */; };
 		8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */; };
+		8D576E7820B97D75004509CE /* GZETipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D576E7720B97D75004509CE /* GZETipsViewController.swift */; };
+		8D576EA920B9CC13004509CE /* Conekta.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D576E9F20B9CC12004509CE /* Conekta.m */; };
+		8D576EAA20B9CC13004509CE /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D576EA020B9CC12004509CE /* Token.m */; };
+		8D576EAB20B9CC13004509CE /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D576EA120B9CC12004509CE /* Connection.m */; };
+		8D576EAC20B9CC13004509CE /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D576EA220B9CC12004509CE /* Card.m */; };
+		8D576EAD20B9CC13004509CE /* ConektaSwift.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D576EA720B9CC12004509CE /* ConektaSwift.m */; };
+		8D576EB420BA5C15004509CE /* GZEAddCreditCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D576EB320BA5C15004509CE /* GZEAddCreditCardViewController.swift */; };
+		8D576EB620BA5E72004509CE /* GZEFloatingLabelTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D576EB520BA5E72004509CE /* GZEFloatingLabelTextField.swift */; };
+		8D576EBB20BA6CA9004509CE /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D576EBA20BA6CA6004509CE /* fontawesome-webfont.ttf */; };
+		8D57AD6720BB08040006CB10 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D57AD6620BB08040006CB10 /* UIFont+Extension.swift */; };
 		8D59DB00208A52380059CC46 /* GZEPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D59DAFF208A52380059CC46 /* GZEPaymentViewController.swift */; };
 		8D59DB02208A52880059CC46 /* GZEMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D59DB01208A52880059CC46 /* GZEMapViewController.swift */; };
 		8D59DB04208A57670059CC46 /* GZEPaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D59DB03208A57670059CC46 /* GZEPaymentViewModel.swift */; };
@@ -259,16 +284,31 @@
 		8D28ADB620B57A73003D3F9A /* GZEChatsPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatsPhotoView.swift; sourceTree = "<group>"; };
 		8D28ADB820B57AFE003D3F9A /* GZEChatsPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatsPreviewView.swift; sourceTree = "<group>"; };
 		8D28ADBA20B57B29003D3F9A /* GZEChatsOpenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatsOpenView.swift; sourceTree = "<group>"; };
+		8D28B97520BAE96600DEED83 /* GZECardNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZECardNumber.swift; sourceTree = "<group>"; };
 		8D290704207827D400C2F865 /* GZEMapSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapSlider.swift; sourceTree = "<group>"; };
 		8D29A6F82068778C00830E6D /* GZEAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAlertService.swift; sourceTree = "<group>"; };
+		8D29C0AB20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConektaApiRepository.swift; sourceTree = "<group>"; };
+		8D29C0AD20BD5D7C0084A1F3 /* GZEPaymentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPaymentRepository.swift; sourceTree = "<group>"; };
+		8D29C0B620BD67F40084A1F3 /* GZEPaymentError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPaymentError.swift; sourceTree = "<group>"; };
+		8D29C0B820BD74E80084A1F3 /* GZEConektaError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConektaError.swift; sourceTree = "<group>"; };
+		8D29C0BA20BD76EE0084A1F3 /* GZEConektaTokenError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConektaTokenError.swift; sourceTree = "<group>"; };
+		8D29C0BC20BD77490084A1F3 /* GZEConektaErrorDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConektaErrorDetail.swift; sourceTree = "<group>"; };
 		8D2A4696204C626400581838 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		8D2A9C4F20BE440F00D4D9EB /* GZEOrientationNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEOrientationNotifications.swift; sourceTree = "<group>"; };
 		8D2AF3DE20AC3EE600346E61 /* GZERatings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERatings.swift; sourceTree = "<group>"; };
 		8D2BC39F20914C0D00945D33 /* GZEDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDate.swift; sourceTree = "<group>"; };
 		8D2C951420837E0D004DAE3E /* GZEChatActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatActionView.swift; sourceTree = "<group>"; };
+		8D2CA84120BC167C001AA4EB /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
+		8D2CA84320BC227A001AA4EB /* GZEAddCreditCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAddCreditCardViewModel.swift; sourceTree = "<group>"; };
+		8D2CA84520BC2385001AA4EB /* GZEAddCreditCardViewModelPay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAddCreditCardViewModelPay.swift; sourceTree = "<group>"; };
+		8D2CA84720BC3919001AA4EB /* GZEMonthNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMonthNumber.swift; sourceTree = "<group>"; };
+		8D2CA84920BC3929001AA4EB /* GZEYearNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEYearNumber.swift; sourceTree = "<group>"; };
 		8D357BAE1FD18C8000D6FB87 /* GZEApiStorageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApiStorageResponse.swift; sourceTree = "<group>"; };
 		8D358AC01FBBDD9300F261DC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D358AC31FBBF75F00F261DC /* ValidatorAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorAliases.swift; sourceTree = "<group>"; };
 		8D358AC51FBBFA4200F261DC /* GZEError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEError.swift; sourceTree = "<group>"; };
+		8D3AE83020BCCEFD00CD4AEC /* GZECVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZECVC.swift; sourceTree = "<group>"; };
+		8D3AE83320BCDE5D00CD4AEC /* GZECardNumberValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZECardNumberValidation.swift; sourceTree = "<group>"; };
 		8D413CAF20410EDE00CB4B93 /* GZEPickerUIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPickerUIToolbar.swift; sourceTree = "<group>"; };
 		8D413CB120412D0600CB4B93 /* GZEBackUIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBackUIBarButtonItem.swift; sourceTree = "<group>"; };
 		8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAppConfig.swift; sourceTree = "<group>"; };
@@ -280,6 +320,23 @@
 		8D572DBA1F9D352F00B824FA /* GZEUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUser.swift; sourceTree = "<group>"; };
 		8D572DBC1F9D468C00B824FA /* GZEApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEApi.swift; sourceTree = "<group>"; };
 		8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserRepositoryProtocol.swift; sourceTree = "<group>"; };
+		8D576E7720B97D75004509CE /* GZETipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZETipsViewController.swift; sourceTree = "<group>"; };
+		8D576E9A20B9CC12004509CE /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
+		8D576E9B20B9CC12004509CE /* Conekta.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Conekta.xcodeproj; sourceTree = "<group>"; };
+		8D576E9E20B9CC12004509CE /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		8D576E9F20B9CC12004509CE /* Conekta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conekta.m; sourceTree = "<group>"; };
+		8D576EA020B9CC12004509CE /* Token.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Token.m; sourceTree = "<group>"; };
+		8D576EA120B9CC12004509CE /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
+		8D576EA220B9CC12004509CE /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		8D576EA320B9CC12004509CE /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
+		8D576EA420B9CC12004509CE /* Conekta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conekta.h; sourceTree = "<group>"; };
+		8D576EA720B9CC12004509CE /* ConektaSwift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConektaSwift.m; sourceTree = "<group>"; };
+		8D576EA820B9CC12004509CE /* ConektaSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConektaSwift.h; sourceTree = "<group>"; };
+		8D576EB120B9CE41004509CE /* Gooze-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Gooze-Bridging-Header.h"; sourceTree = "<group>"; };
+		8D576EB320BA5C15004509CE /* GZEAddCreditCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAddCreditCardViewController.swift; sourceTree = "<group>"; };
+		8D576EB520BA5E72004509CE /* GZEFloatingLabelTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEFloatingLabelTextField.swift; sourceTree = "<group>"; };
+		8D576EBA20BA6CA6004509CE /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
+		8D57AD6620BB08040006CB10 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		8D59DAFF208A52380059CC46 /* GZEPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPaymentViewController.swift; sourceTree = "<group>"; };
 		8D59DB01208A52880059CC46 /* GZEMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapViewController.swift; sourceTree = "<group>"; };
 		8D59DB03208A57670059CC46 /* GZEPaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPaymentViewModel.swift; sourceTree = "<group>"; };
@@ -442,21 +499,102 @@
 			path = List;
 			sourceTree = "<group>";
 		};
+		8D28B97420BAE94A00DEED83 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				8D3AE83220BCDE3100CD4AEC /* ValidationRules */,
+				8D28B97520BAE96600DEED83 /* GZECardNumber.swift */,
+				8D2CA84720BC3919001AA4EB /* GZEMonthNumber.swift */,
+				8D2CA84920BC3929001AA4EB /* GZEYearNumber.swift */,
+				8D3AE83020BCCEFD00CD4AEC /* GZECVC.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		8D29C0AF20BD5E9D0084A1F3 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		8D3AE83220BCDE3100CD4AEC /* ValidationRules */ = {
+			isa = PBXGroup;
+			children = (
+				8D3AE83320BCDE5D00CD4AEC /* GZECardNumberValidation.swift */,
+			);
+			path = ValidationRules;
+			sourceTree = "<group>";
+		};
 		8D572DBE1F9D471B00B824FA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
 				8D572DBF1F9D474000B824FA /* GZEUserRepositoryProtocol.swift */,
 				8D5253BB206CC2E6003D95A4 /* GZEDateRequestRepositoryProtocol.swift */,
 				8D250C8420B2E99A00D3E06B /* GZERateCommentRepositoryProtocol.swift */,
+				8D29C0AD20BD5D7C0084A1F3 /* GZEPaymentRepository.swift */,
 				8D2447301F9E9700004330AF /* GZERepositoryError.swift */,
 				F00355171FB61244004C778C /* GZEValidationError.swift */,
 				8D216AAE207144AE008EF7A2 /* DatesSocketError.swift */,
 				8D216AB020714513008EF7A2 /* ChatSocketError.swift */,
+				8D29C0B620BD67F40084A1F3 /* GZEPaymentError.swift */,
 				8D358AC51FBBFA4200F261DC /* GZEError.swift */,
 				8D0938042075CCE2008AEA00 /* GZEUserConvertible.swift */,
 				8D10766020B5C8DE00E9F22E /* CompletionBlock.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		8D576E9920B9CC12004509CE /* Conekta */ = {
+			isa = PBXGroup;
+			children = (
+				8D576E9A20B9CC12004509CE /* Connection.h */,
+				8D576E9B20B9CC12004509CE /* Conekta.xcodeproj */,
+				8D576E9E20B9CC12004509CE /* Card.h */,
+				8D576E9F20B9CC12004509CE /* Conekta.m */,
+				8D576EA020B9CC12004509CE /* Token.m */,
+				8D576EA120B9CC12004509CE /* Connection.m */,
+				8D576EA220B9CC12004509CE /* Card.m */,
+				8D576EA320B9CC12004509CE /* Token.h */,
+				8D576EA420B9CC12004509CE /* Conekta.h */,
+				8D576EA520B9CC12004509CE /* ConektaSwift */,
+				8D29C0BA20BD76EE0084A1F3 /* GZEConektaTokenError.swift */,
+				8D29C0B820BD74E80084A1F3 /* GZEConektaError.swift */,
+				8D29C0BC20BD77490084A1F3 /* GZEConektaErrorDetail.swift */,
+			);
+			path = Conekta;
+			sourceTree = SOURCE_ROOT;
+		};
+		8D576E9C20B9CC12004509CE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8D576EA520B9CC12004509CE /* ConektaSwift */ = {
+			isa = PBXGroup;
+			children = (
+				8D576EA620B9CC12004509CE /* ConektaSwift */,
+			);
+			path = ConektaSwift;
+			sourceTree = "<group>";
+		};
+		8D576EA620B9CC12004509CE /* ConektaSwift */ = {
+			isa = PBXGroup;
+			children = (
+				8D576EA720B9CC12004509CE /* ConektaSwift.m */,
+				8D576EA820B9CC12004509CE /* ConektaSwift.h */,
+			);
+			path = ConektaSwift;
+			sourceTree = "<group>";
+		};
+		8D576EB920BA6C8C004509CE /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8D576EBA20BA6CA6004509CE /* fontawesome-webfont.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		8DA28BEA1FA1895400EE1362 /* Extensions */ = {
@@ -472,11 +610,14 @@
 				8DCDBDFF1FF2BFAF00F7B5C2 /* UIView+Extensions.swift */,
 				8D2171912018A20400337F6B /* String+Extension.swift */,
 				8DE23E9820260912000B7422 /* UIScrollView+Extension.swift */,
-				8D1B9ABE2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift */,
 				8D2A4696204C626400581838 /* UIImage+Extension.swift */,
 				8DF5CEF7206289F4006C2702 /* UIApplication+Extension.swift */,
 				8D23F9732071D7EC00F0809D /* Array+Extension.swift */,
 				8D24E86220B0E233003F814E /* UINavigationController+Extension.swift */,
+				8D57AD6620BB08040006CB10 /* UIFont+Extension.swift */,
+				8D2CA84120BC167C001AA4EB /* UITextField+Extension.swift */,
+				8D1B9ABE2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift */,
+				8D2A9C4F20BE440F00D4D9EB /* GZEOrientationNotifications.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -484,6 +625,7 @@
 		8DA575AB1FC3D5DF0001CE2A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				8D28B97420BAE94A00DEED83 /* Payment */,
 				8DBAB6E4206F42FE009586A5 /* Chat */,
 				8D21833F2098F4E800D21C26 /* Map */,
 				8DE1707620AEDEEC00A07E92 /* Menu */,
@@ -506,6 +648,7 @@
 				8D6F2F202066DEB500414405 /* GZEValidationErrorView.swift */,
 				8DABD903206BDEC600DF9C56 /* GZEActionAlertView.swift */,
 				8DCD97F2206913EE00117030 /* DismissView.swift */,
+				8D576EB520BA5E72004509CE /* GZEFloatingLabelTextField.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -582,6 +725,8 @@
 		8DF720901F9B9B6700485566 /* Gooze */ = {
 			isa = PBXGroup;
 			children = (
+				8D576EB920BA6C8C004509CE /* Fonts */,
+				8D576E9920B9CC12004509CE /* Conekta */,
 				F0B8368D1FA3EC43007068F9 /* GoozeApi */,
 				8DA28BEA1FA1895400EE1362 /* Extensions */,
 				8D572DBE1F9D471B00B824FA /* Protocols */,
@@ -599,6 +744,7 @@
 				8DF720CA1F9BA4C500485566 /* Debug.plist */,
 				8DF720CC1F9BA4F400485566 /* Release.plist */,
 				8D572DB61F9D17D700B824FA /* Staging.plist */,
+				8D576EB120B9CE41004509CE /* Gooze-Bridging-Header.h */,
 			);
 			path = Gooze;
 			sourceTree = "<group>";
@@ -644,6 +790,8 @@
 				8D59DAFF208A52380059CC46 /* GZEPaymentViewController.swift */,
 				8D59DB01208A52880059CC46 /* GZEMapViewController.swift */,
 				8D250C8A20B3D01B00D3E06B /* GZEChatsViewController.swift */,
+				8D576E7720B97D75004509CE /* GZETipsViewController.swift */,
+				8D576EB320BA5C15004509CE /* GZEAddCreditCardViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -651,6 +799,7 @@
 		8DF720C51F9BA43300485566 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8D29C0AF20BD5E9D0084A1F3 /* Payment */,
 				8D572DBA1F9D352F00B824FA /* GZEUser.swift */,
 				8DF1BE451FA824B800FFE02F /* GZEAccesToken.swift */,
 				8D14B3631FB2BB41005CE9A9 /* GZEFile.swift */,
@@ -694,6 +843,8 @@
 				8D59DB09208A660C0059CC46 /* GZEMapViewModelDate.swift */,
 				8D25905120B6537C00546774 /* GZEChatsViewModel.swift */,
 				8D25905320B6539C00546774 /* GZEChatsViewModelDates.swift */,
+				8D2CA84320BC227A001AA4EB /* GZEAddCreditCardViewModel.swift */,
+				8D2CA84520BC2385001AA4EB /* GZEAddCreditCardViewModelPay.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -709,6 +860,7 @@
 				8D5253BD206CC3A7003D95A4 /* GZEDateRequestApiRepository.swift */,
 				8D250C8220B2E96700D3E06B /* GZERateCommentApiRepository.swift */,
 				8D14B3611FB2B919005CE9A9 /* GZEStorageApiRepository.swift */,
+				8D29C0AB20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift */,
 				8D6C8D501FB418D200EDBC69 /* GZEImageHelper.swift */,
 				8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */,
 				8D22DD9D2039AF3C0088D5F5 /* GZEBlur.swift */,
@@ -764,7 +916,6 @@
 				8DF7208B1F9B9B6700485566 /* Frameworks */,
 				8DF7208C1F9B9B6700485566 /* Resources */,
 				B97BE90AC098B123BF2E65B6 /* [CP] Embed Pods Frameworks */,
-				24CDE2CDB08E25E30A586587 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -783,8 +934,6 @@
 				8DF720A11F9B9B6700485566 /* Sources */,
 				8DF720A21F9B9B6700485566 /* Frameworks */,
 				8DF720A31F9B9B6700485566 /* Resources */,
-				40DBD718D50416B0539E73B9 /* [CP] Embed Pods Frameworks */,
-				6BC3FC0874996AD9F970A1DE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -804,8 +953,6 @@
 				8DF720AC1F9B9B6700485566 /* Sources */,
 				8DF720AD1F9B9B6700485566 /* Frameworks */,
 				8DF720AE1F9B9B6700485566 /* Resources */,
-				DCFF88A5E3A77C936A9102BF /* [CP] Embed Pods Frameworks */,
-				6E771F80FFB36C333ED9A445 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -864,6 +1011,12 @@
 			mainGroup = 8DF720851F9B9B6600485566;
 			productRefGroup = 8DF7208F1F9B9B6700485566 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8D576E9C20B9CC12004509CE /* Products */;
+					ProjectRef = 8D576E9B20B9CC12004509CE /* Conekta.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8DF7208D1F9B9B6700485566 /* Gooze */,
@@ -881,6 +1034,7 @@
 				8DF7209F1F9B9B6700485566 /* LaunchScreen.storyboard in Resources */,
 				8DF720CB1F9BA4C500485566 /* Debug.plist in Resources */,
 				8DF720D01F9BA5B000485566 /* Localizable.strings in Resources */,
+				8D576EBB20BA6CA9004509CE /* fontawesome-webfont.ttf in Resources */,
 				8DF7209C1F9B9B6700485566 /* Assets.xcassets in Resources */,
 				8DD035311FB5143C008EBEAD /* GZEBlurViewController.xib in Resources */,
 				8D572DB71F9D1B8300B824FA /* Staging.plist in Resources */,
@@ -925,36 +1079,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		24CDE2CDB08E25E30A586587 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Gooze/Pods-Gooze-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		40DBD718D50416B0539E73B9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5175ECF0A84467F7E45DD058 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -971,36 +1095,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6BC3FC0874996AD9F970A1DE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeTests/Pods-GoozeTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6E771F80FFB36C333ED9A445 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AF3DED966CF4059C70DF1F99 /* [CP] Check Pods Manifest.lock */ = {
@@ -1038,6 +1132,7 @@
 				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveSwift/ReactiveSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/StarscreamSocketIO/StarscreamSocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftOverlays/SwiftOverlays.framework",
@@ -1056,6 +1151,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarscreamSocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftOverlays.framework",
@@ -1065,21 +1161,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Gooze/Pods-Gooze-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DCFF88A5E3A77C936A9102BF /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GoozeUITests/Pods-GoozeUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1095,7 +1176,9 @@
 				8DA575AD1FC3D6470001CE2A /* GZEChooseModeViewController.swift in Sources */,
 				8DCDBE001FF2BFAF00F7B5C2 /* UIView+Extensions.swift in Sources */,
 				8DFAC996206FECC90040DFFB /* GZEChatService.swift in Sources */,
+				8D576EB420BA5C15004509CE /* GZEAddCreditCardViewController.swift in Sources */,
 				8D9322B620497C1D00A039B1 /* GZEValidationPattern.swift in Sources */,
+				8D576E7820B97D75004509CE /* GZETipsViewController.swift in Sources */,
 				8D14B3621FB2B919005CE9A9 /* GZEStorageApiRepository.swift in Sources */,
 				8D10766320B5CF8F00E9F22E /* GZEChatCellModel.swift in Sources */,
 				8DEB60A81FF162300099B3C5 /* UILabel+Extension.swift in Sources */,
@@ -1104,25 +1187,32 @@
 				8D01C4661FCE97CD00B53ED8 /* GZEExitAppButton.swift in Sources */,
 				8DB367811FCB46DB0079181F /* TextDisplayProtocol.swift in Sources */,
 				F0339AA720408F5E00C675AA /* GZEProfilePageViewController.swift in Sources */,
+				8D2CA84420BC227A001AA4EB /* GZEAddCreditCardViewModel.swift in Sources */,
 				8D572DC01F9D474000B824FA /* GZEUserRepositoryProtocol.swift in Sources */,
+				8D2CA84620BC2385001AA4EB /* GZEAddCreditCardViewModelPay.swift in Sources */,
 				8D216AB520715013008EF7A2 /* GZEProfileUserInfoViewModelReadOnly.swift in Sources */,
 				8D2BC3A020914C0D00945D33 /* GZEDate.swift in Sources */,
 				8D0938032075B1B9008AEA00 /* GZEUpdateProfileViewModel.swift in Sources */,
 				8D28835F209BC50D00F5C394 /* GZEUserAnnotation.swift in Sources */,
 				8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */,
+				8D29C0AC20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift in Sources */,
+				8D576EAB20B9CC13004509CE /* Connection.m in Sources */,
 				8D216AB120714513008EF7A2 /* ChatSocketError.swift in Sources */,
 				8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */,
+				8D29C0B920BD74E80084A1F3 /* GZEConektaError.swift in Sources */,
 				8D250C8320B2E96700D3E06B /* GZERateCommentApiRepository.swift in Sources */,
 				8DF5CEF4206274B1006C2702 /* GZELoadingViewController.swift in Sources */,
 				8D17C1CA2076F7D400F56D6E /* GZELocationService.swift in Sources */,
 				8DA28BEC1FA1897300EE1362 /* UIViewController+Extension.swift in Sources */,
 				F00355181FB61244004C778C /* GZEValidationError.swift in Sources */,
 				8D07BC55206075E700ACE09A /* ChatSocket.swift in Sources */,
+				8D576EB620BA5E72004509CE /* GZEFloatingLabelTextField.swift in Sources */,
 				8D2C951520837E0D004DAE3E /* GZEChatActionView.swift in Sources */,
 				8DC3FED61FA2C8AD00483A0D /* GZESignUpViewModel.swift in Sources */,
 				8D07BC5920607A6000ACE09A /* GZESocketManager.swift in Sources */,
 				8D250C8520B2E99A00D3E06B /* GZERateCommentRepositoryProtocol.swift in Sources */,
 				8DD5D6952074E4F5001192ED /* GZEChatUser.swift in Sources */,
+				8D3AE83420BCDE5D00CD4AEC /* GZECardNumberValidation.swift in Sources */,
 				8D61FB631FEED49A009B1E45 /* GZESignUpProfileViewController.swift in Sources */,
 				8D25905220B6537C00546774 /* GZEChatsViewModel.swift in Sources */,
 				8D413CB220412D0700CB4B93 /* GZEBackUIBarButtonItem.swift in Sources */,
@@ -1139,6 +1229,7 @@
 				8D572DBD1F9D468C00B824FA /* GZEApi.swift in Sources */,
 				8D250C8920B3CD6500D3E06B /* GZEChatsCollectionView.swift in Sources */,
 				8DF1BE461FA824B800FFE02F /* GZEAccesToken.swift in Sources */,
+				8D576EAA20B9CC13004509CE /* Token.m in Sources */,
 				8DC81BEE204E4CC60099B417 /* GZEButton.swift in Sources */,
 				8D0551F81FC0164900BC3915 /* GZERegisterCodeViewController.swift in Sources */,
 				8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */,
@@ -1150,6 +1241,7 @@
 				8D59DB04208A57670059CC46 /* GZEPaymentViewModel.swift in Sources */,
 				F0E067F61FA274B500AE59BE /* GZESignUpPhotoViewController.swift in Sources */,
 				8D2447311F9E9700004330AF /* GZERepositoryError.swift in Sources */,
+				8D57AD6720BB08040006CB10 /* UIFont+Extension.swift in Sources */,
 				8D28ADBB20B57B29003D3F9A /* GZEChatsOpenView.swift in Sources */,
 				8DF7209A1F9B9B6700485566 /* Gooze.xcdatamodeld in Sources */,
 				8D24E86320B0E233003F814E /* UINavigationController+Extension.swift in Sources */,
@@ -1168,6 +1260,7 @@
 				8D192386204EB8FA005F6F5F /* GZEGalleryViewModel.swift in Sources */,
 				8DBAB6E8206F4CA8009586A5 /* GZEChatMessage.swift in Sources */,
 				8D250C7F20B2D93100D3E06B /* GZERateComment.swift in Sources */,
+				8D29C0B720BD67F40084A1F3 /* GZEPaymentError.swift in Sources */,
 				8D358AC41FBBF75F00F261DC /* ValidatorAliases.swift in Sources */,
 				8D216AAF207144AE008EF7A2 /* DatesSocketError.swift in Sources */,
 				8DC321F81FD51FC90068630D /* GZEUserBalloon.swift in Sources */,
@@ -1176,13 +1269,18 @@
 				8D5253BA206CC174003D95A4 /* GZEDateRequestRouter.swift in Sources */,
 				8D28ADB920B57AFE003D3F9A /* GZEChatsPreviewView.swift in Sources */,
 				F0B8368F1FA3EC74007068F9 /* GZEUserRouter.swift in Sources */,
+				8D29C0AE20BD5D7C0084A1F3 /* GZEPaymentRepository.swift in Sources */,
 				F0EE89131FA7A48B001D194C /* GZEApiError.swift in Sources */,
+				8D2CA84A20BC3929001AA4EB /* GZEYearNumber.swift in Sources */,
+				8D576EAC20B9CC13004509CE /* Card.m in Sources */,
+				8D3AE83120BCCEFD00CD4AEC /* GZECVC.swift in Sources */,
 				8D25905420B6539C00546774 /* GZEChatsViewModelDates.swift in Sources */,
 				8DA95238206B59F9000A0BAA /* GZEDateRequest.swift in Sources */,
 				8DF5CEF8206289F4006C2702 /* UIApplication+Extension.swift in Sources */,
 				8DBAB6E3206F42ED009586A5 /* GZEMessagesTableView.swift in Sources */,
 				8D1B9ABF2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift in Sources */,
 				8D9FF9F32042292B003BE951 /* GZENextUIBarButtonItem.swift in Sources */,
+				8D576EA920B9CC13004509CE /* Conekta.m in Sources */,
 				8D250C8120B2E8DA00D3E06B /* GZERateCommentsRouter.swift in Sources */,
 				8D219F0620895ED700BAEEE5 /* GZENumberHelper.swift in Sources */,
 				F0B4DF2D1FD76883002E4F18 /* Dictionary+Extension.swift in Sources */,
@@ -1196,9 +1294,11 @@
 				8D2AF3DF20AC3EE600346E61 /* GZERatings.swift in Sources */,
 				8D23048020AAE8AF009A1E48 /* GZERatingsViewModelRateDate.swift in Sources */,
 				F0DDECE21FA1290C00450B2D /* GZESearchGoozeViewController.swift in Sources */,
+				8D2CA84220BC167C001AA4EB /* UITextField+Extension.swift in Sources */,
 				8D358AC61FBBFA4200F261DC /* GZEError.swift in Sources */,
 				8D033C5E206EC9A500AF47E6 /* GZEChatBubbleView.swift in Sources */,
 				8DD035331FB55105008EBEAD /* UIImageView+Extension.swift in Sources */,
+				8D2A9C5020BE440F00D4D9EB /* GZEOrientationNotifications.swift in Sources */,
 				8DF5CEF6206275A5006C2702 /* GZELoadingViewModel.swift in Sources */,
 				8D10766520B5D04500E9F22E /* GZEChatCellModelDates.swift in Sources */,
 				8D216AB320714E72008EF7A2 /* GZEProfileUserInfoViewModel.swift in Sources */,
@@ -1213,6 +1313,7 @@
 				8D220735206A740900BC0895 /* GZEDatesService.swift in Sources */,
 				8DCD97F12069133900117030 /* GZEUsersList.swift in Sources */,
 				8DF720921F9B9B6700485566 /* AppDelegate.swift in Sources */,
+				8D576EAD20B9CC13004509CE /* ConektaSwift.m in Sources */,
 				8DAC9A1A203FE17E00E87814 /* GZEProfileViewModel.swift in Sources */,
 				8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */,
 				8D261CDA208CCE1A00DB5DF0 /* GZEMapService.swift in Sources */,
@@ -1236,6 +1337,10 @@
 				8DA1B1A9207451E600F616A4 /* GZEChat.swift in Sources */,
 				8D59DB06208A577C0059CC46 /* GZEMapViewModel.swift in Sources */,
 				8DAC9A18203FE0F000E87814 /* GZEProfileViewController.swift in Sources */,
+				8D28B97620BAE96600DEED83 /* GZECardNumber.swift in Sources */,
+				8D29C0BB20BD76EE0084A1F3 /* GZEConektaTokenError.swift in Sources */,
+				8D29C0BD20BD77490084A1F3 /* GZEConektaErrorDetail.swift in Sources */,
+				8D2CA84820BC3919001AA4EB /* GZEMonthNumber.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1355,16 +1460,20 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 16C27C9562DE92D6236779F5 /* Pods-Gooze.staging.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q559F2ZMLC;
 				INFOPLIST_FILE = Gooze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = net.gooze.Gooze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Gooze/Gooze-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Staging;
 		};
@@ -1516,16 +1625,20 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F06601825C56AA9D2A670CC1 /* Pods-Gooze.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q559F2ZMLC;
 				INFOPLIST_FILE = Gooze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = net.gooze.Gooze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Gooze/Gooze-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -1533,16 +1646,20 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8EDE9DEC944C30648F4A150C /* Pods-Gooze.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q559F2ZMLC;
 				INFOPLIST_FILE = Gooze/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = net.gooze.Gooze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Gooze/Gooze-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

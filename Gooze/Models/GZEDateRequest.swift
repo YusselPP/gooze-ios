@@ -109,6 +109,14 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     var userMode = UserMode.sender
     
     override func getUser() -> GZEChatUser {
+        if let authUserId = GZEAuthService.shared.authUser?.id {
+            if authUserId == self.sender.id {
+                return self.recipient
+            } else {
+                return self.sender
+            }
+        }
+
         switch self.userMode {
         case .recipient:
             return self.recipient

@@ -17,6 +17,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     let segueToChats = "segueToChats"
     let segueToTips = "segueToTips"
     let segueToRatings = "segueToRatings"
+    let segueToPayment = "segueToPayment"
 
     enum Scene {
         case activate
@@ -68,7 +69,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     var sliderStep: Float = 1
 
     var userBalloons = [GZEUserBalloon]()
-    var tappedUserConvertible: GZEUserConvertible?
+    var tappedUserBaloon: GZEUserBalloon?
+    let dateRequest = MutableProperty<GZEDateRequest?>(nil)
 
     var isSearchingAnimationEnabled = false {
         didSet {
@@ -194,6 +196,25 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func setupBindings() {
         viewModel.sliderValue <~ topSlider.reactive.values
+
+        // TODO: TEST
+        dateRequest.signal.skipNil().skipRepeats().observeValues{[weak self] dateRequest in
+            guard let this = self, let tappedBalloon = this.tappedUserBaloon else {return}
+
+            log.debug("tappedBalloon.userConvertible: \(tappedBalloon.userConvertible)")
+            log.debug("userResults: \(this.viewModel.userResults.value)")
+            log.debug("dateRequest: \(dateRequest)")
+            log.debug("this.usersList.users: \(this.usersList.users)")
+            let (_, index) = this.viewModel.userResults.value.upsert(dateRequest){$0===tappedBalloon.userConvertible}
+            if index < this.userBalloons.count {
+                this.userBalloons[index].userConvertible = dateRequest
+            }
+            if this.scene == .resultsList || this.scene == .requestResultsList {
+                this.usersList.users.upsert(dateRequest){$0===tappedBalloon.userConvertible}
+                tappedBalloon.userConvertible = dateRequest
+            }
+            log.debug("this.usersList.users: \(this.usersList.users)")
+        }
 
         sliderLabel.reactive.text <~ viewModel.sliderValue.map { [unowned self] in "\($0) \(self.sliderPostfix)" }
 
@@ -370,7 +391,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         showLoading()
 
         if let userId = userBalloon.user?.id {
-            tappedUserConvertible = userBalloon.userConvertible
+            tappedUserBaloon = userBalloon
+            dateRequest.value = tappedUserBaloon?.userConvertible as? GZEDateRequest
             viewModel.findGoozeAction.apply(userId).start()
         } else {
             hideLoading()
@@ -534,7 +556,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
             if let pageViewController = segue.destination as? GZEProfilePageViewController {
                 if let user = sender as? GZEUser {
-                    let dateRequest = MutableProperty<GZEDateRequest?>(tappedUserConvertible as? GZEDateRequest)
 
                     pageViewController.profileVm = GZEProfileUserInfoViewModelReadOnly(user: user, dateRequest: dateRequest)
                     pageViewController.galleryVm = GZEGalleryViewModelReadOnly(user: user, dateRequest: dateRequest)
@@ -558,6 +579,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             }
         } else if segue.identifier == segueToChats {
             prepareChatSegue(segue.destination)
+        } else if segue.identifier == segueToPayment {
+            preparePaymentSegue(segue.destination)
         }
      }
 
@@ -579,6 +602,16 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 mode = .client
             }
             vc.viewModel = self.viewModel.getChatsViewModel(mode)
+
+        } else {
+            log.error("Unable to cast segue.destination as? GZEChatsViewController")
+        }
+    }
+
+    func preparePaymentSegue(_ vc: UIViewController) {
+        if let vc = vc as? GZEAddCreditCardViewController {
+
+            vc.viewModel = self.viewModel.paymentViewModel
 
         } else {
             log.error("Unable to cast segue.destination as? GZEChatsViewController")
@@ -748,7 +781,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     func observeRequests() {
         if (disposeRequestsObserver == nil) {
             disposeRequestsObserver = GZEDatesService.shared
-                .receivedRequests.signal.observeValues
+                .receivedRequests.producer.startWithValues
                 {[weak self] receivedRequests in
                     guard let this = self else {return}
 

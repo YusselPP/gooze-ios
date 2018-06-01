@@ -1215,6 +1215,7 @@
                         <segue destination="lqZ-x0-7AD" kind="show" identifier="segueToChats" id="tq7-RG-4fX"/>
                         <segue destination="uqh-KR-Brq" kind="show" identifier="segueToTips" id="1t2-ls-MIf"/>
                         <segue destination="Dcf-Vz-JEP" kind="show" identifier="segueToRatings" id="aoX-cG-RKK"/>
+                        <segue destination="7Gh-uh-gqy" kind="show" identifier="segueToPayment" id="VtY-qo-hTI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5c-ka-Vea" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1595,6 +1596,144 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JWL-Ve-M0t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3261" y="2078"/>
+        </scene>
+        <!--Add Credit Card View Controller-->
+        <scene sceneID="MQK-Ru-bj2">
+            <objects>
+                <viewController storyboardIdentifier="GZEAddCreditCardViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7Gh-uh-gqy" customClass="GZEAddCreditCardViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="U0c-5U-IWd"/>
+                        <viewControllerLayoutGuide type="bottom" id="ebz-MS-KyZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="WBb-zH-Ry7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="ZPf-T6-9v7">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="euK-bx-KDx" userLabel="content-view">
+                                <rect key="frame" x="16" y="64" width="288" height="504"/>
+                                <subviews>
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y4D-QJ-OG3">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="504"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8zv-uX-rFN" userLabel="scroll-content">
+                                                <rect key="frame" x="0.0" y="0.0" width="288" height="245"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="w7G-gm-9V2" customClass="GZECardNumber" customModule="Gooze" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="95" width="256" height="45"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="Il5-MY-ylC"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e4m-fE-sKX" customClass="GZEMonthNumber" customModule="Gooze" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="165" width="74.5" height="45"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="duq-B0-usd"/>
+                                                        </constraints>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="biW-dy-O8o" customClass="GZEYearNumber" customModule="Gooze" customModuleProvider="target">
+                                                        <rect key="frame" x="106.5" y="165" width="75" height="45"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="IEp-ss-pew"/>
+                                                        </constraints>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HYU-um-45Z" customClass="GZECVC" customModule="Gooze" customModuleProvider="target">
+                                                        <rect key="frame" x="197.5" y="165" width="74.5" height="45"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="KkY-am-ZMH"/>
+                                                        </constraints>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XhQ-hS-R6k" customClass="GZEFloatingLabelTextField" customModule="Gooze" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="25" width="256" height="45"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="WNd-bo-pQx"/>
+                                                        </constraints>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="XhQ-hS-R6k" firstAttribute="leading" secondItem="8zv-uX-rFN" secondAttribute="leading" constant="16" id="2Ea-SK-OXv"/>
+                                                    <constraint firstItem="HYU-um-45Z" firstAttribute="width" secondItem="biW-dy-O8o" secondAttribute="width" id="4Q6-IT-HMT"/>
+                                                    <constraint firstAttribute="trailing" secondItem="HYU-um-45Z" secondAttribute="trailing" constant="16" id="7Pv-SM-J8o"/>
+                                                    <constraint firstItem="HYU-um-45Z" firstAttribute="top" secondItem="w7G-gm-9V2" secondAttribute="bottom" constant="25" id="EFw-xU-d6h"/>
+                                                    <constraint firstAttribute="trailing" secondItem="w7G-gm-9V2" secondAttribute="trailing" constant="16" id="KYD-ka-9fc"/>
+                                                    <constraint firstAttribute="trailing" secondItem="XhQ-hS-R6k" secondAttribute="trailing" constant="16" id="Yau-Hh-rXG"/>
+                                                    <constraint firstItem="w7G-gm-9V2" firstAttribute="leading" secondItem="8zv-uX-rFN" secondAttribute="leading" constant="16" id="bax-4R-B8w"/>
+                                                    <constraint firstItem="XhQ-hS-R6k" firstAttribute="top" secondItem="8zv-uX-rFN" secondAttribute="top" constant="25" id="cdD-ET-v1U"/>
+                                                    <constraint firstItem="e4m-fE-sKX" firstAttribute="top" secondItem="w7G-gm-9V2" secondAttribute="bottom" constant="25" id="d5J-CL-Nbc"/>
+                                                    <constraint firstItem="biW-dy-O8o" firstAttribute="width" secondItem="e4m-fE-sKX" secondAttribute="width" id="g1e-3O-uEn"/>
+                                                    <constraint firstItem="biW-dy-O8o" firstAttribute="leading" secondItem="e4m-fE-sKX" secondAttribute="trailing" constant="16" id="g98-b1-UVh"/>
+                                                    <constraint firstItem="w7G-gm-9V2" firstAttribute="top" secondItem="XhQ-hS-R6k" secondAttribute="bottom" constant="25" id="i8g-0J-vgt"/>
+                                                    <constraint firstAttribute="bottom" secondItem="e4m-fE-sKX" secondAttribute="bottom" constant="35" id="rh9-0w-J31"/>
+                                                    <constraint firstItem="HYU-um-45Z" firstAttribute="leading" secondItem="biW-dy-O8o" secondAttribute="trailing" constant="16" id="rzO-8y-zF2"/>
+                                                    <constraint firstItem="e4m-fE-sKX" firstAttribute="leading" secondItem="8zv-uX-rFN" secondAttribute="leading" constant="16" id="sqc-kZ-1Bl"/>
+                                                    <constraint firstItem="biW-dy-O8o" firstAttribute="top" secondItem="w7G-gm-9V2" secondAttribute="bottom" constant="25" id="tbY-zM-O8g"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="8zv-uX-rFN" secondAttribute="bottom" id="2Ff-P6-0Ry"/>
+                                            <constraint firstItem="8zv-uX-rFN" firstAttribute="top" secondItem="Y4D-QJ-OG3" secondAttribute="top" id="Dvb-mA-U9s"/>
+                                            <constraint firstAttribute="trailing" secondItem="8zv-uX-rFN" secondAttribute="trailing" id="HbJ-Sk-9aI"/>
+                                            <constraint firstItem="8zv-uX-rFN" firstAttribute="leading" secondItem="Y4D-QJ-OG3" secondAttribute="leading" id="TKN-e8-fCo"/>
+                                        </constraints>
+                                    </scrollView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GMz-Ur-Dvi" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="129" y="439" width="30" height="30"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="GMz-Ur-Dvi" firstAttribute="centerX" secondItem="euK-bx-KDx" secondAttribute="centerX" id="cIH-wg-gVV"/>
+                                    <constraint firstAttribute="bottom" secondItem="Y4D-QJ-OG3" secondAttribute="bottom" id="fIu-eS-uVx"/>
+                                    <constraint firstItem="Y4D-QJ-OG3" firstAttribute="leading" secondItem="euK-bx-KDx" secondAttribute="leading" id="fd2-c9-aZV"/>
+                                    <constraint firstItem="8zv-uX-rFN" firstAttribute="width" secondItem="euK-bx-KDx" secondAttribute="width" id="nT5-Oh-SW4"/>
+                                    <constraint firstAttribute="trailing" secondItem="Y4D-QJ-OG3" secondAttribute="trailing" id="nem-SI-MPe"/>
+                                    <constraint firstAttribute="bottom" secondItem="GMz-Ur-Dvi" secondAttribute="bottom" constant="35" id="s74-Na-CFM"/>
+                                    <constraint firstItem="Y4D-QJ-OG3" firstAttribute="top" secondItem="euK-bx-KDx" secondAttribute="top" id="tVf-4f-hgY"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="euK-bx-KDx" firstAttribute="leading" secondItem="WBb-zH-Ry7" secondAttribute="leadingMargin" id="2VG-oD-EkZ"/>
+                            <constraint firstItem="ZPf-T6-9v7" firstAttribute="top" secondItem="WBb-zH-Ry7" secondAttribute="top" id="KBt-y8-31H"/>
+                            <constraint firstItem="euK-bx-KDx" firstAttribute="top" secondItem="U0c-5U-IWd" secondAttribute="bottom" id="bEM-wZ-UvX"/>
+                            <constraint firstItem="ZPf-T6-9v7" firstAttribute="leading" secondItem="WBb-zH-Ry7" secondAttribute="leading" id="gBw-mG-bpV"/>
+                            <constraint firstAttribute="trailing" secondItem="ZPf-T6-9v7" secondAttribute="trailing" id="h1S-Iq-lp4"/>
+                            <constraint firstAttribute="bottom" secondItem="ZPf-T6-9v7" secondAttribute="bottom" id="i6a-Ll-lTA"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="euK-bx-KDx" secondAttribute="trailing" id="jx1-Gq-PGr"/>
+                            <constraint firstItem="ebz-MS-KyZ" firstAttribute="top" secondItem="euK-bx-KDx" secondAttribute="bottom" id="uFd-9F-Aa6"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="actionButton" destination="GMz-Ur-Dvi" id="izv-Hz-M0w"/>
+                        <outlet property="cardNumberField" destination="w7G-gm-9V2" id="dW1-7N-G16"/>
+                        <outlet property="ccvField" destination="HYU-um-45Z" id="HOF-8v-nZX"/>
+                        <outlet property="contentBottomConstrint" destination="uFd-9F-Aa6" id="R2X-20-Mxv"/>
+                        <outlet property="expMonthField" destination="e4m-fE-sKX" id="tfL-Cf-oaW"/>
+                        <outlet property="expYearField" destination="biW-dy-O8o" id="JHb-Wu-GTc"/>
+                        <outlet property="nameField" destination="XhQ-hS-R6k" id="JYv-k5-zqz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mxp-dA-tBZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4763" y="1245"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="iTl-YK-QYX">
@@ -2533,7 +2672,7 @@
         <!--Tips-->
         <scene sceneID="pRu-py-JHA">
             <objects>
-                <viewController id="uqh-KR-Brq" userLabel="Tips" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GZETipsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="uqh-KR-Brq" userLabel="Tips" customClass="GZETipsViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QA3-fX-l7B"/>
                         <viewControllerLayoutGuide type="bottom" id="k4P-JC-Hty"/>
@@ -2545,19 +2684,42 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="kze-db-WzV">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N6r-70-0Ep" userLabel="content-view">
+                                <rect key="frame" x="16" y="64" width="288" height="504"/>
+                                <subviews>
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AT0-iN-FTJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="504"/>
+                                    </scrollView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="AT0-iN-FTJ" firstAttribute="leading" secondItem="N6r-70-0Ep" secondAttribute="leading" id="Bdz-dH-inq"/>
+                                    <constraint firstItem="AT0-iN-FTJ" firstAttribute="width" secondItem="N6r-70-0Ep" secondAttribute="width" id="XD2-W8-TnV"/>
+                                    <constraint firstAttribute="bottom" secondItem="AT0-iN-FTJ" secondAttribute="bottom" id="a0F-My-40v"/>
+                                    <constraint firstItem="AT0-iN-FTJ" firstAttribute="top" secondItem="N6r-70-0Ep" secondAttribute="top" id="w2V-OO-ItC"/>
+                                    <constraint firstAttribute="trailing" secondItem="AT0-iN-FTJ" secondAttribute="trailing" id="wI3-6s-mc1"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="kze-db-WzV" firstAttribute="top" secondItem="AqJ-C2-ul9" secondAttribute="top" id="2H4-vQ-y6b"/>
                             <constraint firstAttribute="trailing" secondItem="kze-db-WzV" secondAttribute="trailing" id="Dxh-Zz-NOf"/>
+                            <constraint firstItem="N6r-70-0Ep" firstAttribute="leading" secondItem="AqJ-C2-ul9" secondAttribute="leadingMargin" id="IGS-MM-k3f"/>
+                            <constraint firstItem="k4P-JC-Hty" firstAttribute="top" secondItem="N6r-70-0Ep" secondAttribute="bottom" id="OAt-CQ-B4D"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="N6r-70-0Ep" secondAttribute="trailing" id="UUA-oo-jHw"/>
+                            <constraint firstItem="N6r-70-0Ep" firstAttribute="top" secondItem="QA3-fX-l7B" secondAttribute="bottom" id="Xo0-NK-E31"/>
                             <constraint firstItem="kze-db-WzV" firstAttribute="leading" secondItem="AqJ-C2-ul9" secondAttribute="leading" id="Zbg-1i-Vt2"/>
                             <constraint firstAttribute="bottom" secondItem="kze-db-WzV" secondAttribute="bottom" id="odR-Cb-Gda"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="contentView" destination="N6r-70-0Ep" id="ide-Xg-RsV"/>
+                        <outlet property="scrollView" destination="AT0-iN-FTJ" id="e29-4e-Wgf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Noa-WJ-MYQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4644" y="302"/>
+            <point key="canvasLocation" x="4642.5" y="301.05633802816902"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="qbe-dy-Oyy">
@@ -2776,7 +2938,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aoX-cG-RKK"/>
-        <segue reference="XJg-fM-c9J"/>
+        <segue reference="YiG-yX-aa5"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

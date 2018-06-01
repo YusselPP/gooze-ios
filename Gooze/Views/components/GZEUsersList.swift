@@ -74,6 +74,10 @@ class GZEUsersList: UIView {
         self.onDismiss?()
     }
 
+    func updateItems(at index: [Int]) {
+        self.usersListCollectionView.reloadItems(at: index.map{IndexPath(item: $0, section: 0)})
+    }
+
 
     // MARK: - Private methods
     private func initialize() {

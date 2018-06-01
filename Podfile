@@ -20,6 +20,7 @@ target 'Gooze' do
   pod 'FloatRatingView', '~> 2.0.0'
   pod 'Socket.IO-Client-Swift', '11.1.3'
   pod 'DeepDiff'
+  pod 'SkyFloatingLabelTextField', '~> 3.0'
 
 
   target 'GoozeTests' do

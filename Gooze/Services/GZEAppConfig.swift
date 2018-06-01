@@ -77,6 +77,10 @@ class GZEAppConfig {
         return getValue("SocketPath", defaultValue: nil)
     }
 
+    static var conektaPublicKey: String {
+        return getValue("ConektaPublicKey", defaultValue: "")
+    }
+
 
     // Mark: Load config file
     static func load() -> Void {

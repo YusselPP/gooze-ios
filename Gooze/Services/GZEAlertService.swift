@@ -10,7 +10,7 @@ import UIKit
 import SwiftOverlays
 
 class GZEAlertService {
-    static let shared = GZEAlertService()
+    static var shared = GZEAlertService()
 
     private var window: UIWindow? {
         return UIApplication.shared.keyWindow
@@ -48,13 +48,16 @@ class GZEAlertService {
         superview.addSubview(self.topAlert)
         self.topAlert.heightAnchor.constraint(equalToConstant: 60).isActive = true
         superview.widthAnchor.constraint(equalTo: self.topAlert.widthAnchor).isActive = true
-        superview.topAnchor.constraint(equalTo: self.topAlert.topAnchor).isActive = true
+        superview.topAnchor.constraint(equalTo: self.topAlert.topAnchor, constant: -statusBarHeight()).isActive = true
         superview.centerXAnchor.constraint(equalTo: self.topAlert.centerXAnchor).isActive = true
         
         superview.addSubview(self.bottomAlert)
         self.bottomAlert.heightAnchor.constraint(equalToConstant: 60).isActive = true
         superview.widthAnchor.constraint(equalTo: self.bottomAlert.widthAnchor).isActive = true
         self.bottomConstraint = superview.bottomAnchor.constraint(equalTo: self.bottomAlert.bottomAnchor)
+        if #available(iOS 11.0, *) {
+            self.bottomConstraint.constant = superview.safeAreaInsets.bottom
+        }
         self.bottomConstraint.isActive = true
         superview.centerXAnchor.constraint(equalTo: self.bottomAlert.centerXAnchor).isActive = true
         
@@ -72,9 +75,7 @@ class GZEAlertService {
             self.topTimer = nil
         }
         self.topTimer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(self.dismissTopAlert), userInfo: nil, repeats: false)
-        
-        
-        
+
         self.topAlert.onTapped = onTapped
         self.topAlert.text = text
         self.topAlert.show()
@@ -116,6 +117,19 @@ class GZEAlertService {
     func dismissActionAlert() {
         self.actionAlert.dismiss()
     }
+
+    func clear() {
+        self.topTimer?.invalidate()
+        self.topTimer = nil
+        self.botTimer?.invalidate()
+        self.botTimer = nil
+
+        self.topAlert.removeFromSuperview()
+        self.bottomAlert.removeFromSuperview()
+        self.actionAlert.removeFromSuperview()
+
+        deregisterFromKeyboardNotifications(observer: self)
+    }
     
     // MARK: - KeyboardNotifications
     @objc func keyboardWillShow(notification: Notification) {
@@ -124,7 +138,7 @@ class GZEAlertService {
             log.error("key window not found")
             return
         }
-        resizeViewWithKeyboard(keyboardShow: true, constraint: self.bottomConstraint, notification: notification, view: window)
+        resizeViewWithKeyboard(keyboardShow: true, constraint: self.bottomConstraint, notification: notification, view: window, safeInsets: false)
     }
     
     @objc func keyboardWillHide(notification: Notification) {

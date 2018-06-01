@@ -66,6 +66,11 @@ class GZEMenuMain {
             controller.performSegue(withIdentifier: controller.segueToChats, sender: nil)
         })
 
+        let (_, paymentCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
+            guard let controller = self?.controller else {return}
+            controller.performSegue(withIdentifier: controller.segueToPayment, sender: nil)
+        })
+
         let (_, tipsCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
             guard let controller = self?.controller else {return}
             controller.performSegue(withIdentifier: controller.segueToTips, sender: nil)
@@ -85,8 +90,8 @@ class GZEMenuMain {
             createMenuSeparator(),
             //createMenuItemButton(title: menuItemTitleHistory, action: profileCocoaAction),
             //createMenuSeparator(),
-            //createMenuItemButton(title: menuItemTitlePayment, action: profileCocoaAction),
-            //createMenuSeparator(),
+            createMenuItemButton(title: menuItemTitlePayment, action: paymentCocoaAction),
+            createMenuSeparator(),
             //createMenuItemButton(title: menuItemTitleCoupons, action: profileCocoaAction),
             //createMenuSeparator(),
             //createMenuItemButton(title: menuItemTitleTransactions, action: profileCocoaAction),

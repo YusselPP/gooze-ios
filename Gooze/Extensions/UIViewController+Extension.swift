@@ -24,7 +24,10 @@ extension UIViewController {
                 let oldRootVC = window.rootViewController
                 window.rootViewController = controller
                 oldRootVC?.dismiss(animated: false)
-            }, completion: nil)
+            }, completion: { _ in
+                GZEAlertService.shared.clear()
+                GZEAlertService.shared = GZEAlertService()
+            })
         }
     }
 

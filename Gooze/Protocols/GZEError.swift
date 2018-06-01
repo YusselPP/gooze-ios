@@ -13,6 +13,8 @@ enum GZEError: Error {
     case repository(error: GZERepositoryError)
     case datesSocket(error: DatesSocketError)
     case chatSocket(error: ChatSocketError)
+    case payment(error: GZEPaymentError)
+    case conektaToken(error: GZEConektaTokenError)
 }
 
 extension GZEError: LocalizedError {
@@ -30,6 +32,10 @@ extension GZEError: LocalizedError {
             message = error.localizedDescription
         case .chatSocket(let error):
             message = error.localizedDescription
+        case .payment(let error):
+            message = error.localizedDescription
+        case .conektaToken(let error):
+            message = error.messageToPurchaser ?? "Unexpected Error".localized()
         }
         
         return message

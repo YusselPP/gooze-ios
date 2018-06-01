@@ -43,6 +43,9 @@ class GZEConstants {
         static let chatBubbleTextColor = UIColor.black
 
         static let pinColor = UIColor(red: 46/255, green: 185/255, blue: 154/255, alpha: 1.0)
+
+        // Text field Validation
+        static let errorMessage = UIColor(red: 255/255, green: 102/255, blue: 102/255, alpha: 1.0)
     }
 
     // Fonts
@@ -76,6 +79,16 @@ class GZEConstants {
             } else {
                 log.debug("using regular font")
                 return UIFont(name: "HelveticaNeue", size: 36)!
+            }
+        }
+
+        static var mainAwesome: UIFont {
+            if GZEConstants.horizontalSize == .compact {
+                log.debug("using compact font")
+                return UIFont(name: "FontAwesome", size: 13)!
+            } else {
+                log.debug("using regular font")
+                return UIFont(name: "FontAwesome", size: 17)!
             }
         }
     }

@@ -20,6 +20,7 @@
 "validation.lengthMax"="The field %@ must be a maximum of %d characters";
 "validation.exists"="%@ already exists";
 "validation.underAge"="You must be of legal age";
+"validation.invalidCardNumber"="Enter a valid card number";
 
 // Protocols/DatesSocketError
 "error.socket.dates.requestAlreadySent"="Your request has been sent";
@@ -27,6 +28,9 @@
 "error.socket.dates.noAck"="Unable to establish communication with server";
 
 "error.socket.dates.unexpected"="Unexpected Error. Please contact support";
+
+// Protocols/GZEPaymentError
+"error.payment.missingRequiredParams"="Fill required fields";
 
 // Models/GZEUser
 "user.username.fieldName"="Username";
@@ -141,6 +145,9 @@
 // ViewModel/GZEChatsViewModelDates
 "vm.chats.list.error.closeDate"="Finish the on going date, before closing the chat";
 
+// ViewModel/GZEAddCreditCardModelPay
+"vm.add.credit.card.text"="Add";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.doneButton.title"="Next";
@@ -182,6 +189,14 @@
 
 // Views/components/Chat/List/GZEChatsCloseView
 "chat.list.close"="Close";
+
+// Views/components/Payment/GZECardNumber
+"text.field.card.number"="Card number";
+"text.field.exp.month"="Exp. month";
+"text.field.exp.year"="Exp. year";
+
+// Views/components/Payment/GZEAddCreditCardViewController
+"view.credit.card.name.title"="Name on card";
 
 // AuthService
 "vm.authService.sessionExpired"="Your session has expired. Please log in";

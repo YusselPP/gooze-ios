@@ -439,7 +439,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
-        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view, safeInsets: false)
     }
     
     // MARK: - Validation

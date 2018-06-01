@@ -11,20 +11,21 @@ import Foundation
 extension Array {
     
     @discardableResult
-    mutating func upsert(_ newElement: Element, prepend: Bool = false, comparator: ((Element) -> Bool)) -> Bool {
+    mutating func upsert(_ newElement: Element, prepend: Bool = false, comparator: ((Element) -> Bool)) -> (Bool, Int) {
 
         if let index = self.index(where: comparator) {
             log.debug("Object already in array, replacing it")
             self[index] = newElement
-            return false
+            return (false, index)
         } else {
             log.debug("Element not found, it will be inserted")
             if prepend {
                 self.insert(newElement, at: 0)
+                return (true, 0)
             } else {
                 self.append(newElement)
+                return (true, self.count - 1)
             }
-            return true
         }
     }
     
