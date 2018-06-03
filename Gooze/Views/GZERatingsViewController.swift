@@ -161,6 +161,7 @@ class GZERatingsViewController: UIViewController {
 
         // Actions
 
+        contactButton.reactive.isHidden <~ viewModel.actionButtonIsHidden
         contactButton.reactive.title <~ viewModel.actionButtonTitle
         contactButton.reactive.pressed = viewModel.bottomButtonAction
 

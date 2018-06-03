@@ -30,6 +30,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     let loading = MutableProperty<Bool>(false)
     let error = MutableProperty<String?>(nil)
 
+    let actionButtonIsHidden = MutableProperty<Bool>(false)
     let actionButtonTitle = MutableProperty<String>("")
 
     weak var controller: UIViewController?

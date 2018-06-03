@@ -20,6 +20,7 @@ protocol GZEProfileViewModel {
     var loading: MutableProperty<Bool> { get }
     var error: MutableProperty<String?> { get }
 
+    var actionButtonIsHidden: MutableProperty<Bool> { get }
     var actionButtonTitle: MutableProperty<String> { get }
 
     var controller: UIViewController? { get set }

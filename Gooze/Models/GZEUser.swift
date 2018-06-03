@@ -142,6 +142,30 @@ class GZEUser: NSObject, Glossy {
         }
     }
 
+    struct Comment: Glossy {
+        let count: Int
+        let comment: GZERateComment
+
+        init?(json: JSON) {
+            guard
+                let count: Int = "count" <~~ json,
+                let comment: GZERateComment = "comment" <~~ json else {
+                    log.debug("unable to instantiate. invalid json")
+                    return nil
+            }
+
+            self.count = count
+            self.comment = comment
+        }
+
+        func toJSON() -> JSON? {
+            return jsonify([
+                "count" ~~> self.count,
+                "comment" ~~> self.comment
+                ])
+        }
+    }
+
     static let heightUnit = "m"
     static let weightUnit = "kg"
     static let ageLabel = "vm.user.ageLabel".localized()
@@ -204,6 +228,16 @@ class GZEUser: NSObject, Glossy {
         let avg = rates.reduce(0, +) / Float(rates.count)
 
         return  avg
+    }
+
+    var comments: [Comment]?
+
+    var topComment: String? {
+        guard let comments = self.comments else {
+            return nil
+        }
+
+        return comments.max{$0.0.count < $0.1.count}?.comment.localizedText()
     }
 
     var isActivated: Bool {
@@ -278,6 +312,8 @@ class GZEUser: NSObject, Glossy {
         self.dateRating = "dateRating" <~~ json
         self.goozeRating = "goozeRating" <~~ json
 
+        self.comments = "comments" <~~ json
+
         super.init()
         
         log.debug("\(self) init")
@@ -325,6 +361,8 @@ class GZEUser: NSObject, Glossy {
             "dateQualityRating" ~~> self.dateQualityRating,
             "dateRating" ~~> self.dateRating,
             "goozeRating" ~~> self.goozeRating,
+
+            "comments" ~~> self.comments,
         ])
     }
 

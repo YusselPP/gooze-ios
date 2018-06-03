@@ -14,6 +14,7 @@ import ReactiveCocoa
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     let segueToProfile = "segueToProfile"
+    let segueToMyProfile = "segueToMyProfile"
     let segueToChats = "segueToChats"
     let segueToTips = "segueToTips"
     let segueToRatings = "segueToRatings"
@@ -161,6 +162,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func setupInterfaceObjects() {
+        navigationItem.rightBarButtonItem = GZEExitAppButton()
         navIcon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(centerMapToUserLocation)))
 
         backButton.onButtonTapped = {[weak self] in
@@ -197,14 +199,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     func setupBindings() {
         viewModel.sliderValue <~ topSlider.reactive.values
 
-        // TODO: TEST
         dateRequest.signal.skipNil().skipRepeats().observeValues{[weak self] dateRequest in
             guard let this = self, let tappedBalloon = this.tappedUserBaloon else {return}
 
-            log.debug("tappedBalloon.userConvertible: \(tappedBalloon.userConvertible)")
-            log.debug("userResults: \(this.viewModel.userResults.value)")
-            log.debug("dateRequest: \(dateRequest)")
-            log.debug("this.usersList.users: \(this.usersList.users)")
             let (_, index) = this.viewModel.userResults.value.upsert(dateRequest){$0===tappedBalloon.userConvertible}
             if index < this.userBalloons.count {
                 this.userBalloons[index].userConvertible = dateRequest
@@ -213,7 +210,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
                 this.usersList.users.upsert(dateRequest){$0===tappedBalloon.userConvertible}
                 tappedBalloon.userConvertible = dateRequest
             }
-            log.debug("this.usersList.users: \(this.usersList.users)")
         }
 
         sliderLabel.reactive.text <~ viewModel.sliderValue.map { [unowned self] in "\($0) \(self.sliderPostfix)" }
@@ -577,6 +573,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
             } else {
                 log.error("Unable to cast segue.destination as? GZEProfilePageViewController")
             }
+        } else if segue.identifier == segueToMyProfile {
+            prepareMyProfileSegue(segue.destination)
         } else if segue.identifier == segueToChats {
             prepareChatSegue(segue.destination)
         } else if segue.identifier == segueToPayment {
@@ -586,6 +584,22 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {
 
+    }
+
+    func prepareMyProfileSegue(_ vc: UIViewController) {
+        guard let vc = vc as? GZEProfilePageViewController else {
+            log.error("Unable to cast segue.destination as? GZEProfilePageViewController")
+            return
+        }
+
+        guard let user = GZEAuthService.shared.authUser else {
+            log.error("Auth user not found")
+            return
+        }
+
+        vc.profileVm = GZEProfileUserInfoViewModelMe(user)
+        vc.ratingsVm = GZERatingsViewModelMe(user)
+        vc.galleryVm = GZEGalleryViewModelMe(user)
     }
 
     func prepareChatSegue(_ vc: UIViewController) {

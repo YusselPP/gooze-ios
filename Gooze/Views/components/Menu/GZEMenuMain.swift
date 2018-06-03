@@ -49,7 +49,13 @@ class GZEMenuMain {
     weak var controller: GZEActivateGoozeViewController?
 
     init() {
-        let profileCocoaAction = CocoaAction<GZEButton>(Action<Void, Void, NoError>{SignalProducer.empty})
+        //let profileCocoaAction = CocoaAction<GZEButton>(Action<Void, Void, NoError>{SignalProducer.empty})
+
+        let (_, profileCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
+            guard let controller = self?.controller else {return}
+            controller.performSegue(withIdentifier: controller.segueToMyProfile, sender: nil)
+        })
+
         let (_, switchModeCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
             guard let controller = self?.controller else {return}
 

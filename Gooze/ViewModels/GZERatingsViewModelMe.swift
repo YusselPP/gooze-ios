@@ -1,8 +1,8 @@
 //
-//  GZERatingsViewModelReadOnly.swift
+//  GZERatingsViewModelMe.swift
 //  Gooze
 //
-//  Created by Yussel on 3/7/18.
+//  Created by Yussel Paredes Perez on 6/1/18.
 //  Copyright © 2018 Gooze. All rights reserved.
 //
 
@@ -11,10 +11,10 @@ import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
 
-class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewModel {
+class GZERatingsViewModelMe: GZEProfileViewModelMe, GZERatingsViewModel {
 
     // MARK - GZERatingsViewModel protocol
-    
+
     let username = MutableProperty<String?>(nil)
 
     let profilePic = MutableProperty<URLRequest?>(nil)
@@ -46,14 +46,14 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
     let (segueToProfile, _) = Signal<Void, NoError>.pipe()
 
     lazy var profileViewModel: GZEProfileUserInfoViewModel = {
-        return GZEProfileUserInfoViewModelReadOnly(user: self.user, dateRequest: self.dateRequest)
+        return GZEProfileUserInfoViewModelMe(self.user)
     }()
 
     // END - GZERatingsViewModel protocol
 
     // MARK - init
-    override init(user: GZEUser, dateRequest: MutableProperty<GZEDateRequest?>) {
-        super.init(user: user, dateRequest: dateRequest)
+    override init(_ user: GZEUser) {
+        super.init(user)
         log.debug("\(self) init")
 
         populate(user)

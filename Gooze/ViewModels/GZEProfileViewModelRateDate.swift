@@ -21,6 +21,7 @@ class GZEProfileViewModelRateDate: GZEProfileViewModel {
     let loading = MutableProperty<Bool>(false)
     let error = MutableProperty<String?>(nil)
 
+    let actionButtonIsHidden = MutableProperty<Bool>(false)
     let actionButtonTitle = MutableProperty<String>("vm.profile.rate.date.rate".localized())
 
     weak var controller: UIViewController?

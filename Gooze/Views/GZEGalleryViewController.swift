@@ -121,7 +121,8 @@ class GZEGalleryViewController: UIViewController {
             }
             thumbnailImage.reactive.imageUrlRequest <~ viewModel.thumbnails[i]
         }
-        
+
+        contactButton.reactive.isHidden <~ viewModel.actionButtonIsHidden
         contactButton.reactive.title <~ viewModel.actionButtonTitle
         contactButton.reactive.pressed = viewModel.bottomButtonAction
 

@@ -127,7 +127,8 @@ class GZEProfileViewController: UIViewController {
         interestsLabel.reactive.text <~ viewModel.interestedIn
 
         profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
-        
+
+        contactButton.reactive.isHidden <~ viewModel.actionButtonIsHidden
         contactButton.reactive.title <~ viewModel.actionButtonTitle
         contactButton.reactive.pressed = viewModel.bottomButtonAction
 
