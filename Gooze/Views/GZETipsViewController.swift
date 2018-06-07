@@ -35,6 +35,8 @@ class GZETipsViewController: UIViewController {
     }
 
     func setupInterfaceObjects() {
+        self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
+
         self.stackView.axis = .vertical
         self.stackView.alignment = .center
         self.stackView.distribution = .fill

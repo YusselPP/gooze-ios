@@ -15,23 +15,7 @@ class GZEUpdateProfileViewModel: NSObject {
     let userRepository: GZEUserRepositoryProtocol
     var user: GZEUser {
         didSet {
-            username.value = self.user.username
-            email.value = self.user.email
-            //password.value = self.user.password
-            registerCode.value = self.user.registerCode
-            
-            phrase.value = self.user.phrase
-            gender.value = self.user.gender
-            birthday.value = self.user.birthday
-            if let newHeight = self.user.height {
-                height.value = "\(newHeight)"
-            }
-            if let newWeight = self.user.weight {
-                weight.value = "\(newWeight)"
-            }
-            origin.value = self.user.origin
-            languages.value = self.user.languages?.first
-            interestedIn.value = self.user.interestedIn?.first
+            populate()
         }
     }
     
@@ -157,6 +141,8 @@ class GZEUpdateProfileViewModel: NSObject {
         super.init()
         
         log.debug("\(self) init")
+
+        self.populate()
         
         self.gender <~ self.genderPickerDelegate.selectedElements.map { gA -> (GZEUser.Gender?) in
             let gender = (gA.first.flatMap{$0.flatMap{$0}})
@@ -231,11 +217,11 @@ class GZEUpdateProfileViewModel: NSObject {
             return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.username.fieldName)))
         }
         
-        guard let aEmail = username.value else {
+        guard let aEmail = email.value else {
             return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.email.fieldName)))
         }
         
-        guard let aPassword = username.value else {
+        guard let aPassword = password.value else {
             return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.password.fieldName)))
         }
         
@@ -273,7 +259,28 @@ class GZEUpdateProfileViewModel: NSObject {
         
         return self.userRepository.saveSearchPic(self.user)
     }
-    
+
+    private func populate() {
+        log.debug("user did set: \(self.user.toJSON())")
+        username.value = self.user.username
+        email.value = self.user.email
+        //password.value = self.user.password
+        registerCode.value = self.user.registerCode
+
+        phrase.value = self.user.phrase
+        gender.value = self.user.gender
+        birthday.value = self.user.birthday
+        if let newHeight = self.user.height {
+            height.value = "\(newHeight)"
+        }
+        if let newWeight = self.user.weight {
+            weight.value = "\(newWeight)"
+        }
+        origin.value = self.user.origin
+        languages.value = self.user.languages?.first
+        interestedIn.value = self.user.interestedIn?.first
+    }
+
     private func fillUser() {
         if let birthday = birthday.value {
             self.user.birthday = birthday

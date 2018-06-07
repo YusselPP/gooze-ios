@@ -155,7 +155,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         switch mode {
         case .editGalleryPic:
             scene = .gallery
-            editButton1.sendActions(for: .touchUpInside)
+            //editButton1.sendActions(for: .touchUpInside)
+            selectTumbnail(tag: 0)
         case .editProfilePic:
             scene = .cameraOrReel
         }
@@ -409,7 +410,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     @IBAction func editPhotoButtonTapped(_ sender: Any) {
-        scene = .cameraOrReel
+        //scene = .cameraOrReel
+        showCamera()
     }
 
     @IBAction func addPhoto(_ sender: UIButton) {
@@ -423,7 +425,15 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     @IBAction func thumbnailTapped(_ sender: UIView) {
-        selectedThumbnail = viewModel.thumbnails[sender.tag]
+        selectTumbnail(tag: sender.tag)
+
+        if selectedThumbnail?.value == nil {
+            showCamera()
+        }
+    }
+
+    func selectTumbnail(tag: Int) {
+        selectedThumbnail = viewModel.thumbnails[tag]
         viewModel.mainImage.value = selectedThumbnail?.value
     }
 

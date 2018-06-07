@@ -49,6 +49,7 @@ class GZEChatsViewController: UIViewController {
             self?.previousController(animated: true)
         }
         self.navigationItem.leftBarButtonItem = backButton
+        self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
 
         // ChatsCollectionView
         self.chatsCollectionView.backgroundColor = .clear

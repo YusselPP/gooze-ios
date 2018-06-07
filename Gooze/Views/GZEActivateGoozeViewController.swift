@@ -162,7 +162,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func setupInterfaceObjects() {
-        navigationItem.rightBarButtonItem = GZEExitAppButton()
+        navigationItem.rightBarButtonItem = GZEExitAppButton.shared
         navIcon.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(centerMapToUserLocation)))
 
         backButton.onButtonTapped = {[weak self] in
@@ -583,7 +583,22 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
      }
 
     @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {
-
+        log.debug("segue.identifier: \(unwindToActivateGooze)")
+        if segue.identifier == "unwindToActivateGooze" {
+            switch scene {
+            case .activate,
+                 .requestResults,
+                 .requestResultsList,
+                 .requestOtherResultsList:
+                scene = .activate
+            case .search,
+                 .searching,
+                 .searchResults,
+                 .resultsList,
+                 .otherResultsList:
+                scene = .search
+            }
+        }
     }
 
     func prepareMyProfileSegue(_ vc: UIViewController) {
@@ -679,6 +694,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         isUserInteractionEnabled.value = true
         isSearchingAnimationEnabled = false
+        shouldRestartSearchingAnmiation = false
         activateGoozeButton.isEnabled = true
 
         activateGoozeButton.setTitle(viewModel.activateButtonTitle.uppercased(), for: .normal)
@@ -738,6 +754,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
         isUserInteractionEnabled.value = true
         isSearchingAnimationEnabled = false
+        shouldRestartSearchingAnmiation = false
 
         viewModel.searchLimit.value = MAX_RESULTS
 
@@ -761,6 +778,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     func showSearchResultsScene() {
         isSearchingAnimationEnabled = false
+        shouldRestartSearchingAnmiation = false
         activateGoozeButton.isHidden = false
 
         activateGoozeButton.isEnabled = true

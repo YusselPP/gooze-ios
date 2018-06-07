@@ -70,6 +70,7 @@ class GZEMapViewController: UIViewController {
             self?.previousController(animated: true)
         }
         self.navigationItem.setLeftBarButton(self.backButton, animated: false)
+        self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
 
         self.topLabel.font = GZEConstants.Font.main
         self.topLabel.textColor = .black

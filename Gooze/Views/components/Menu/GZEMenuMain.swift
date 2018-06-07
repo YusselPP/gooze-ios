@@ -48,6 +48,19 @@ class GZEMenuMain {
 
     weak var controller: GZEActivateGoozeViewController?
 
+    lazy var logoutCocoaAction = {
+        return self.createMenuAction(producer: SignalProducer{[weak self] in
+            guard let controller = self?.controller else {return}
+            //controller.navigationController?.popToRootViewController(animated: false)
+            //GZEAuthService.shared.logout(presenter: controller)
+            GZEExitAppButton.shared.button.sendActions(for: .touchUpInside)
+        }).1
+    }()
+
+    lazy var logoutButton = {
+        return self.createMenuItemButton(title: self.menuItemTitleLogout, action: self.logoutCocoaAction)
+    }()
+
     init() {
         //let profileCocoaAction = CocoaAction<GZEButton>(Action<Void, Void, NoError>{SignalProducer.empty})
 
@@ -82,10 +95,7 @@ class GZEMenuMain {
             controller.performSegue(withIdentifier: controller.segueToTips, sender: nil)
         })
 
-        let (_, logoutCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
-            guard let controller = self?.controller else {return}
-            GZEAuthService.shared.logout(presenter: controller)
-        })
+
 
         let menuItems = [
             createMenuItemButton(title: menuItemTitleProfile, action: profileCocoaAction),
@@ -110,7 +120,7 @@ class GZEMenuMain {
             //createMenuSeparator(),
             //createMenuItemButton(title: menuItemTitleConfiguration, action: profileCocoaAction),
             //createMenuSeparator(),
-            createMenuItemButton(title: menuItemTitleLogout, action: logoutCocoaAction)
+            logoutButton
         ]
 
         menuItems.forEach{

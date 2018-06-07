@@ -61,6 +61,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         self.navigationItem.setLeftBarButton(backButton, animated: false)
         self.navigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
+        self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
 
         setupBindings()
     }

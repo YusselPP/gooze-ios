@@ -44,7 +44,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var scrollContentView: UIView!
     @IBOutlet weak var bottomReferenceView: UIView!
 
-    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var usernameContainer: UIView!
+    @IBOutlet weak var usernameLabel: GZELabel!
 
     @IBOutlet weak var phraseTextField: GZETextField!
     @IBOutlet weak var genderTextField: GZETextField!
@@ -129,6 +130,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         skipButton.setTitle(viewModel.skipProfileText.uppercased(), for: .normal)
         saveButton.setTitle(viewModel.saveButtonTitle.uppercased(), for: .normal)
 
+        usernameLabel.setWhiteFontFormat()
+
         setTextFieldFormat(phraseTextField, placeholder:  viewModel.phraseLabelText.addQuotes() )
         setTextFieldFormat(genderTextField, placeholder: viewModel.genderLabelText)
         setTextFieldFormat(birthdayTextField, placeholder: viewModel.birthdayLabelText)
@@ -171,7 +174,10 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     func setupBindings() {
         // Out bindings
-        usernameLabel.reactive.text <~ viewModel.username.map { $0?.uppercased() }
+        usernameLabel.reactive.text <~ viewModel.username.map { username -> String? in
+            log.debug(username)
+            return username?.uppercased()
+        }
         profileImageView.reactive.image <~ viewModel.profilePic
         phraseTextField.reactive.text <~ viewModel.phrase
         genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }

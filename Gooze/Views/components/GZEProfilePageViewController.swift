@@ -40,6 +40,7 @@ class GZEProfilePageViewController: UIPageViewController {
             self?.previousController(animated: true)
         }
         navigationItem.setLeftBarButton(backButton, animated: false)
+        self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
 
         dataSource = self
 
