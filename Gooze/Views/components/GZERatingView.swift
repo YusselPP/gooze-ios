@@ -12,6 +12,15 @@ import enum Result.NoError
 
 class GZERatingView: UIView {
 
+    var floatRatings: Bool {
+        get {
+            return self.ratingView.floatRatings
+        }
+        set {
+            self.ratingView.floatRatings = newValue
+        }
+    }
+
     var showInfoLabel = true {
         didSet {
             self.infoLabel.isHidden = !self.showInfoLabel

@@ -98,6 +98,12 @@ class GZERatingsViewController: UIViewController {
         dateQualityRatingView.showInfoLabel = false
         dateRatingView.showInfoLabel = false
         goozeRatingView.showInfoLabel = false
+
+        imagesRatingView.floatRatings = false
+        complianceRatingView.floatRatings = false
+        dateQualityRatingView.floatRatings = false
+        dateRatingView.floatRatings = false
+        goozeRatingView.floatRatings = false
     }
 
     private func setUpBindings() {
