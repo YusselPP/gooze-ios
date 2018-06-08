@@ -60,6 +60,8 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let topLabelDistance = "vm.map.date.distance".localized()
     let topLabelArrived = "vm.map.date.arrived".localized()
     let topLabelProcess = "vm.map.date.process".localized()
+    let topLabelWaitingEnd = "vm.map.date.waitingEnd".localized()
+    let topLabelWaitingForYouToEnd = "vm.map.date.waitingForYouToEnd".localized()
     let topLabelCanceled = "vm.map.date.canceled".localized()
     let topLabelEnded = "vm.map.date.ended".localized()
 
@@ -75,6 +77,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     var chatAction: CocoaAction<GZEButton>?
     var startDateAction: CocoaAction<GZEButton>?
     var endDateAction: CocoaAction<GZEButton>?
+    var cancelDateAction: CocoaAction<GZEButton>?
     var exitAction: CocoaAction<GZEButton>?
     var rateAction: CocoaAction<GZEButton>?
 
@@ -99,6 +102,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
 
         let startDate = self.createStartDateAction()
         let endDate = self.createEndDateAction()
+        let cancelDate = self.createCancelDateAction()
 
         self.topLabelHidden.value = false
         self.chatAction = CocoaAction(self.createChatAction())
@@ -108,6 +112,10 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             this.loading.value = true
         }
         self.endDateAction = CocoaAction(endDate) {[weak self] _ in
+            guard let this = self else {return}
+            this.loading.value = true
+        }
+        self.cancelDateAction = CocoaAction(cancelDate) {[weak self] _ in
             guard let this = self else {return}
             this.loading.value = true
         }
@@ -145,6 +153,22 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             }
         }
 
+        cancelDate.events.observeValues {[weak self] event in
+            log.debug("cancelDate event received: \(event)")
+            guard let this = self else {return}
+
+            this.loading.value = false
+
+            switch event {
+            case .value(let dateRequest):
+                this.dateRequest.value = dateRequest
+                this.DateService.stopSendingLocationUpdates()
+            case .failed(let error):
+                this.onError(error)
+            default: break
+            }
+        }
+
         GZEUserApiRepository().publicProfile(byId: userId).start{[weak self] event in
             switch event {
             case .value(let user):
@@ -155,38 +179,49 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             }
         }
 
-        let producers: [SignalProducer<CLLocation, NoError>] = [
-            GZELocationService.shared.lastLocation.producer.skipNil().throttle(3, on: QueueScheduler.main),
-            self.userAnnotationLocation.producer.map{CLLocation(latitude: $0.latitude, longitude: $0.longitude)}
-        ]
-
-        SignalProducer.combineLatest(producers)
+        GZELocationService.shared.lastLocation.producer.skipNil().throttle(3, on: QueueScheduler.main)
+            .combineLatest(with: self.dateRequest.producer)
             .take(during: self.reactive.lifetime)
-            .take{[weak self] _ in
-                guard let this = self else {return false}
-                return this.dateRequest.value.date?.status == .route
+            .take{(_, dateRequest) in
+                log.debug("daterequest: \(dateRequest)")
+                guard let date = dateRequest.date else {return false}
+                return (
+                    date.status == .route ||
+                    date.status == .starting
+                )
             }
-            .startWithValues {[weak self] locations in
-                guard let this = self else {return}
-
-                let myLocation = locations[0]
-                let partnerLocation = locations[1]
+            .startWithValues {[weak self] (myLocation, dateRequest) in
+                guard let this = self, let date = dateRequest.date else {return}
 
                 let myDistance = myLocation.distance(from: this.dateRequest.value.location.toCLLocation())
-                var partnerDistance = partnerLocation.distance(from: this.dateRequest.value.location.toCLLocation())
 
-
-                if myDistance < 50 && partnerDistance < 50 {
-                    this.topLabelText.value = String(format: this.topLabelArrived, username)
+                if myDistance < 50 && (mode == .gooze && !date.recipientStarted || mode == .client && !date.senderStarted) {
+                    this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleStart
                     this.bottomButtonAction.value = this.startDateAction
-                    return
+                } else {
+                    this.bottomButtonActionEnabled.value = true
+                    this.bottomButtonTitle.value = this.bottomButtonTitleChat
+                    this.bottomButtonAction.value = this.chatAction
                 }
+        }
 
-                this.bottomButtonTitle.value = this.bottomButtonTitleChat
-                this.bottomButtonAction.value = this.chatAction
+        self.userAnnotationLocation.producer.map{CLLocation(latitude: $0.latitude, longitude: $0.longitude)}
+            .combineLatest(with: self.dateRequest.producer)
+            .take(during: self.reactive.lifetime)
+            .take{(_, dateRequest) in
+                guard let date = dateRequest.date else {return false}
+                return (
+                    date.status == .route ||
+                    date.status == .starting
+                )
+            }
+            .startWithValues {[weak self] (partnerLocation, dateRequest) in
+                guard let this = self, let date = self?.dateRequest.value.date else {return}
 
-                if partnerDistance < 50 {
+                var partnerDistance = partnerLocation.distance(from: this.dateRequest.value.location.toCLLocation())
+
+                if mode == .gooze && date.senderStarted || mode == .client && date.recipientStarted {
                     this.topLabelText.value = String(format: this.topLabelArrived, username)
                     return
                 }
@@ -198,29 +233,50 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                 }
 
                 this.topLabelText.value = String(format: this.topLabelDistance, username, partnerDistance, unit)
-            }
+        }
 
         self.dateRequest.producer
-            .map{$0.date?.status}
+            .map{$0.date}
             .skipNil()
-            .startWithValues {[weak self] status in
+            .startWithValues {[weak self] date in
                 guard let this = self else {return}
 
-                switch status {
-                case .route: break
+                switch date.status {
+                case .route, .starting: break
                 case .progress:
+                    this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleEnd
                     this.bottomButtonAction.value = this.endDateAction
                     this.topLabelText.value = this.topLabelProcess
                 case .ended:
+                    this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleRate
                     this.bottomButtonAction.value = this.rateAction
                     this.topLabelText.value = this.topLabelEnded
                     this.ratingViewObserver.send(value: ())
-                default:
+                case .canceled:
+                    this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleExit
                     this.bottomButtonAction.value = this.exitAction
                     this.topLabelText.value = this.topLabelCanceled
+
+                case .ending: // TODO: determinar que pasa aqui
+                    if mode == .gooze && date.recipientEnded || mode == .client && date.senderEnded {
+                        // if I ended top label must say waiting for other user to end
+                        // disable end action
+                        this.bottomButtonActionEnabled.value = false
+                        this.bottomButtonTitle.value = this.bottomButtonTitleEnd
+                        this.bottomButtonAction.value = this.endDateAction
+                        this.topLabelText.value = String(format: this.topLabelWaitingEnd, username)
+                    } else if mode == .gooze && date.senderEnded || mode == .client && date.recipientEnded {
+                        // if the other user ended top label must say, other user ended and is waiting for you to end
+                        // end button still enabled
+                        this.bottomButtonActionEnabled.value = true
+                        this.bottomButtonTitle.value = this.bottomButtonTitleEnd
+                        this.bottomButtonAction.value = this.endDateAction
+                        this.topLabelText.value = String(format: this.topLabelWaitingForYouToEnd, username)
+                    }
+                    break
                 }
             }
     }
@@ -258,6 +314,14 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
 
             return this.DateService.endDate(this.dateRequest.value)
+        }
+    }
+
+    func createCancelDateAction() -> Action<Void, GZEDateRequest, GZEError> {
+        return Action(enabledIf: self.bottomButtonActionEnabled) {[weak self] in
+            guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
+
+            return this.DateService.cancelDate(this.dateRequest.value)
         }
     }
 

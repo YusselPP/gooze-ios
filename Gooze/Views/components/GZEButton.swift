@@ -43,6 +43,7 @@ class GZEButton: UIButton {
         titleEdgeInsets.right = 10
         
         setTitleColor(.gray, for: .highlighted)
+        setTitleColor(.gray, for: .disabled)
     }
 
     func setGrayFormat() {

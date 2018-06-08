@@ -187,6 +187,29 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
+    func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+        guard GZEApi.instance.accessToken != nil else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        guard let dateRequestJson = dateRequest.toJSON() else {
+            log.error("Unnable to parse dateRequest to JSON")
+            return SignalProducer(error: .repository(error: .UnexpectedError))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("cancelDate SignalProducer disposed")
+            }
+
+            log.debug("canceling date...")
+
+            Alamofire.request(GZEDateRequestRouter.cancelDate(json: dateRequestJson))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
+        }
+    }
+
     func close(_ dateRequest: GZEDateRequest, mode: GZEChatViewMode) -> SignalProducer<GZEDateRequest, GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))

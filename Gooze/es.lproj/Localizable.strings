@@ -134,6 +134,8 @@
 "vm.map.date.chat"="Ir a chat";
 "vm.map.date.distance"="%@ se encuentra a %.2f %@";
 "vm.map.date.arrived"="%@ ha llegado a la cita";
+"vm.map.date.waitingEnd"="Esperando que %@ finalice la cita";
+"vm.map.date.waitingForYouToEnd"="%@ esta esperando que finalices la cita";
 "vm.map.date.exit"="Salir";
 "vm.map.date.start"="Empezar cita";
 "vm.map.date.end"="Finalizar cita";

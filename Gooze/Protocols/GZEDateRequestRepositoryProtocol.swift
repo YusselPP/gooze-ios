@@ -18,5 +18,6 @@ protocol GZEDateRequestRepositoryProtocol {
     func findActiveDate(by: String) -> SignalProducer<[GZEDateRequest], GZEError>
     func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError>
     func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError>
+    func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError>
     func close(_ dateRequest: GZEDateRequest, mode: GZEChatViewMode) -> SignalProducer<GZEDateRequest, GZEError>
 }

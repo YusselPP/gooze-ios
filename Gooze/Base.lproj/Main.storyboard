@@ -2942,8 +2942,8 @@
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ado-a7-Lxa"/>
-        <segue reference="YiG-yX-aa5"/>
+        <segue reference="aoX-cG-RKK"/>
+        <segue reference="XJg-fM-c9J"/>
         <segue reference="be1-y5-0kc"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

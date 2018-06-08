@@ -283,6 +283,10 @@ class GZEDatesService: NSObject {
         return self.dateRequestRepository.endDate(dateRequest)
     }
 
+    func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+        return self.dateRequestRepository.cancelDate(dateRequest)
+    }
+
     func sendLocationUpdate(to recipientId: String) {
         guard let authUser = GZEAuthService.shared.authUser else {return}
 
@@ -450,7 +454,13 @@ class GZEDatesService: NSObject {
                 }
             }
             .observeValues { (mode, dateRequest) in
-                guard let dateRequest = dateRequest, dateRequest.date?.status == .route else {
+                guard
+                    let dateRequest = dateRequest,
+                    let date = dateRequest.date,
+                    date.status == .route ||
+                    date.status == .starting && (mode == .gooze && !date.recipientStarted || mode == .client && !date.senderStarted)
+
+                else {
                     GZEDatesService.shared.stopSendingLocationUpdates()
                     return
                 }
