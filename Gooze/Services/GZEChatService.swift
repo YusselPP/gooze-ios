@@ -160,7 +160,7 @@ class GZEChatService: NSObject {
         }
     }
 
-    func send(message: GZEChatMessage, username: String, chat: GZEChat, dateRequestId: String, mode: String) {
+    func send(message: GZEChatMessage, username: String, chat: GZEChat, dateRequest: GZEDateRequest, mode: String) {
         log.debug("Sending message..\(String(describing: message.toJSON()))")
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
@@ -177,8 +177,13 @@ class GZEChatService: NSObject {
             return
         }
 
+        guard let dateRequestJson = dateRequest.toJSON() else {
+            log.error("Failed to parse GZEDateRequest to JSON")
+            return
+        }
+
         self.upsert(message: message)
-        chatSocket.emitWithAck(.sendMessage, messageJson, username, chatJson, dateRequestId, mode).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
+        chatSocket.emitWithAck(.sendMessage, messageJson, username, chatJson, dateRequestJson, mode).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
             log.debug("Message sent. Ack data: \(data)")
             
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
@@ -201,12 +206,12 @@ class GZEChatService: NSObject {
         }
     }
     
-    func receive(message: GZEChatMessage, username: String, chat: GZEChat, dateRequestId: String, mode: GZEChatViewMode) {
+    func receive(message: GZEChatMessage, username: String, chat: GZEChat, dateRequest: GZEDateRequest, mode: GZEChatViewMode) {
         log.debug("adding received message")
         
         if self.activeChatId == nil || self.activeChatId! != message.chatId {
             clear(chatId: message.chatId)
-            showNotification(chat: chat, dateRequestId: dateRequestId, mode: mode, username: username)
+            showNotification(chat: chat, dateRequest: dateRequest, mode: mode, username: username)
         } else {
             log.debug("Received message on active chat, notification won't be shown")
         }
@@ -214,7 +219,7 @@ class GZEChatService: NSObject {
         self.upsert(message: message)
     }
     
-    func request(amount: Double, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode, senderUsername: String) -> SignalProducer<Bool, GZEError> {
+    func request(amount: Double, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode, senderUsername: String) -> SignalProducer<GZEDateRequest, GZEError> {
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
@@ -255,10 +260,12 @@ class GZEChatService: NSObject {
                     log.error("\(String(describing: error.toJSON()))")
                     sink.send(error: .repository(error: .UnexpectedError))
                     
-                } else if let messageJson = data[1] as? JSON, let message = GZEChatMessage(json: messageJson) {
+                } else if let messageJson = data[1] as? JSON, let message = GZEChatMessage(json: messageJson),
+                    let dateRequestJson = data[2] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson)
+                {
                     
                     self?.upsert(message: message)
-                    sink.send(value: true)
+                    sink.send(value: dateRequest)
                     sink.sendCompleted()
                     log.debug("Message successfully sent")
                     
@@ -306,13 +313,19 @@ class GZEChatService: NSObject {
         log.debug("chat cleared, current messages count: \(self.messages.value[chatId]?.count ?? 0)")
     }
     
-    func showNotification(chat: GZEChat, dateRequestId: String, mode: GZEChatViewMode, username: String) {
+    func showNotification(chat: GZEChat, dateRequest: GZEDateRequest, mode: GZEChatViewMode, username: String) {
         let messageReceived = String(format: "service.chat.messageReceived".localized(), username)
 
         GZEAlertService.shared.showTopAlert(text: messageReceived) {
+            var requestProperty: MutableProperty<GZEDateRequest>
+            if let activeRequest = GZEDatesService.shared.activeRequest {
+                requestProperty = activeRequest
+            } else {
+                requestProperty = MutableProperty(dateRequest)
+            }
             //TODO: manage chat mode with client mode property instead of sending to vm
             GZEChatService.shared.openChat(
-                viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: mode, username: username)
+                viewModel: GZEChatViewModelDates(chat: chat, dateRequest: requestProperty, mode: mode, username: username)
             )
         }
     }
@@ -322,20 +335,29 @@ class GZEChatService: NSObject {
         log.debug("Trying to show chat controller...")
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
 
-        if
-            let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController,
-            let navController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController
-        {
+        guard let navController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController else {
+            log.error("Unable to instantiate UINavigationController")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+            completion?()
+            return
+        }
 
-            log.debug("chat controller instantiated. Setting up its view model")
-            // Set up initial view model
-            chatController.viewModel = viewModel
-            navController.pushViewController(chatController, animated: true, completion: completion)
-        } else {
+        if let topViewController = navController.topViewController, topViewController.isKind(of: GZEMapViewController.self) {
+            log.debug("Top view controller is GZEMapViewController, disposing it to show chat view controller")
+            navController.popViewController(animated: true, completion: completion)
+            return
+        }
+
+        guard let chatController = mainStoryboard.instantiateViewController(withIdentifier: "GZEChatViewController") as? GZEChatViewController else {
             log.error("Unable to instantiate GZEChatViewController")
             GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
             completion?()
+            return
         }
+
+        log.debug("chat controller instantiated. Setting up its view model")
+        chatController.viewModel = viewModel
+        navController.pushViewController(chatController, animated: true, completion: completion)
     }
 
     func cleanup() {

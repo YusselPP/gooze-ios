@@ -46,8 +46,8 @@ class ChatSocket: GZESocket {
                 return
             }
             
-            guard let dateRequestId = data[3] as? String else {
-                log.error("Unable to parse data[3], expected data[3] to be a String, found: \(data[3])")
+            guard let dateRequestJson = data[3] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
+                log.error("Unable to parse data[3], expected data[3] to be a dateRequestJson, found: \(data[3])")
                 return
             }
             
@@ -59,7 +59,7 @@ class ChatSocket: GZESocket {
             log.debug("Message from username[\(username)] received")
             log.debug("Message: \(String(describing: message.toJSON()))")
 
-            GZEChatService.shared.receive(message: message, username: username, chat: chat, dateRequestId: dateRequestId, mode: mode)
+            GZEChatService.shared.receive(message: message, username: username, chat: chat, dateRequest: dateRequest, mode: mode)
             
             ack.with()
         }
@@ -85,7 +85,8 @@ class ChatSocket: GZESocket {
 
             log.debug("Amount request received")
             
-            GZEDatesService.shared.sentRequests.value.upsert(dateRequest){$0 == dateRequest}
+            //GZEDatesService.shared.sentRequests.value.upsert(dateRequest){$0 == dateRequest}
+            GZEDatesService.shared.upsert(dateRequest: dateRequest)
             
             ack.with()
         }

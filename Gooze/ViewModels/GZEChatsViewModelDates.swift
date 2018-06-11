@@ -114,7 +114,7 @@ class GZEChatsViewModelDates: GZEChatsViewModel {
         log.debug("dateRequest.id: \(dateRequest.id) tapped")
         if let chat = dateRequest.chat {
             self.segueToChatObs.send(value: GZEChatViewModelDates(
-                chat: chat, dateRequestId: dateRequest.id, mode: self.mode, username: chatUser.username
+                chat: chat, dateRequest: MutableProperty(dateRequest), mode: self.mode, username: chatUser.username
             ))
         } else {
             log.debug("chat nil")

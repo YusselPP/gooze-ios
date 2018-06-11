@@ -23,24 +23,6 @@ class GZEPaymentViewController: UIViewController {
         log.debug("\(self) init")
         self.setupInterfaceObjects()
         self.setupBindings()
-
-        let conekta = Conekta()
-        conekta.delegate = self
-        conekta.publicKey = "key_Nq2RPcj7tWasHq2iJz7ysqQ"
-        conekta.collectDevice()
-
-        let card: Card = conekta.card()
-        card.setNumber("4242424242424242", name: "Julian Ceballos", cvc: "123", expMonth: "10", expYear: "2018")
-
-        let token: Token = conekta.token()
-
-        token.card = card
-
-        token.create(success: { (data) -> Void in
-            log.debug(data?.debugDescription)
-        }, andError: { (error) -> Void in
-            log.debug(error?.localizedDescription)
-        })
     }
 
     override func didReceiveMemoryWarning() {

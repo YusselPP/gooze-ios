@@ -259,13 +259,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
             log.debug("dates map view instantiated. Setting up its view model")
 
-            guard let vm = self.viewModel.mapViewModel else {
-                log.error("Unable to instantiate map view model")
-                GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
-                return
-            }
-
-            view.viewModel = vm
+            view.viewModel = self.viewModel.mapViewModel
 
         } else {
             log.error("Unable to instantiate GZEMapViewController")

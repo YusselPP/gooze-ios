@@ -3,6 +3,28 @@ PODS:
   - AlamofireImage (3.3.0):
     - Alamofire (~> 4.5)
   - ALCameraViewController (2.0.3)
+  - Braintree (4.15.0):
+    - Braintree/Card (= 4.15.0)
+    - Braintree/Core (= 4.15.0)
+    - Braintree/PayPal (= 4.15.0)
+    - Braintree/UI (= 4.15.0)
+  - Braintree/Card (4.15.0):
+    - Braintree/Core
+  - Braintree/Core (4.15.0)
+  - Braintree/PayPal (4.15.0):
+    - Braintree/Core
+    - Braintree/PayPalOneTouch
+  - Braintree/PayPalDataCollector (4.15.0):
+    - Braintree/Core
+    - Braintree/PayPalUtils
+  - Braintree/PayPalOneTouch (4.15.0):
+    - Braintree/Core
+    - Braintree/PayPalDataCollector
+    - Braintree/PayPalUtils
+  - Braintree/PayPalUtils (4.15.0)
+  - Braintree/UI (4.15.0):
+    - Braintree/Card
+    - Braintree/Core
   - DeepDiff (1.1.2)
   - FloatRatingView (2.0)
   - Gloss (1.2.4)
@@ -24,6 +46,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.5)
   - AlamofireImage (~> 3.3)
   - ALCameraViewController (~> 2.0.3)
+  - Braintree
   - DeepDiff
   - FloatRatingView (~> 2.0.0)
   - Gloss (~> 1.2.0)
@@ -40,6 +63,7 @@ SPEC REPOS:
     - Alamofire
     - AlamofireImage
     - ALCameraViewController
+    - Braintree
     - DeepDiff
     - FloatRatingView
     - Gloss
@@ -58,6 +82,7 @@ SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
   ALCameraViewController: 7b86c2888df0e63f53a801e9d96fe194f51157ec
+  Braintree: 5f10816f455ffd79c411e6d22a177846971f3677
   DeepDiff: 35c661301baeb2db083ea1b9af183daab6af1c05
   FloatRatingView: 857ab8f10040d06a42fc979f486c8f9fecd2f2e5
   Gloss: 4e036074610fdb993abcb958ebcd7332588e2333
@@ -72,6 +97,6 @@ SPEC CHECKSUMS:
   SwiftyBeaver: 91057725648ee4980308f1650af077d04b3654a0
   Validator: bf211c1d71b3f910d230c09c70e62429d0fef63a
 
-PODFILE CHECKSUM: 16a8a257f1361576c3fa400bd900984f1c0d60a3
+PODFILE CHECKSUM: d7d5fbef0d1a3c278628ba4061cec7c094bc8eac
 
 COCOAPODS: 1.5.3

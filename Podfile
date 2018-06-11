@@ -22,6 +22,9 @@ target 'Gooze' do
   pod 'DeepDiff'
   pod 'SkyFloatingLabelTextField', '~> 3.0'
 
+  # Includes Cards and PayPal
+  pod 'Braintree'
+
 
   target 'GoozeTests' do
     inherit! :search_paths

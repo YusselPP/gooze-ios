@@ -36,15 +36,45 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     weak var controller: UIViewController?
 
     func startObservers() {
+        self.appearObs.send(value: ())
+
         self.observeMessages()
         self.observeRequests()
         self.observeSocketEvents()
+
+        self.dateRequest.producer
+            .take(until: self.disappearSignal)
+            .on(disposed: {log.debug("dateRequest observer disposed")})
+            .startWithValues{[weak self] dateRequest in
+                log.debug("dateRequest didSet: \(String(describing: dateRequest))")
+                guard let this = self else {return}
+
+                if let dateRequest = dateRequest {
+                    GZEDatesService.shared.activeRequest = MutableProperty(dateRequest)
+                } else {
+                    GZEDatesService.shared.activeRequest = nil
+                }
+
+                this.setMode()
+            }
     }
     
     func stopObservers() {
+        self.disappearObs.send(value: ())
+
         self.stopObservingSocketEvents()
         self.stopObservingRequests()
         self.stopObservingMessages()
+
+        if let activeRequest = GZEDatesService.shared.activeRequest {
+            activeRequest.signal
+                .take(until: self.appearSignal)
+                .observeValues {[weak self] dateRequest in
+                    log.debug("dateRequest didSet: \(String(describing: dateRequest))")
+                    guard let this = self else {return}
+                    this.dateRequest.value = dateRequest
+                }
+        }
     }
     // End GZEProfileViewModel protocol
     
@@ -62,11 +92,13 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     var messagesObserver: Disposable?
     var requestsObserver: Disposable?
     var socketEventsObserver: Disposable?
+    var (disappearSignal, disappearObs) = Signal<Void, NoError>.pipe()
+    var (appearSignal, appearObs) = Signal<Void, NoError>.pipe()
 
     var chatViewModel: GZEChatViewModel? {
         log.debug("chatViewModel called")
-        guard let dateRequestId = self.dateRequest.value?.id else {
-            log.error("Unable to open the chat, found nil date request")
+        guard let daRequestProperty = GZEDatesService.shared.activeRequest else {
+            log.error("Unable to open the chat, found nil active date request")
             error.value = "service.chat.invalidChatId".localized()
             return nil
         }
@@ -84,7 +116,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             chatMode = .client
         }
 
-        return GZEChatViewModelDates(chat: chat, dateRequestId: dateRequestId, mode: chatMode, username: self.user.username)
+        return GZEChatViewModelDates(chat: chat, dateRequest: daRequestProperty, mode: chatMode, username: self.user.username)
     }
 
     // MARK - init
@@ -94,11 +126,6 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         super.init()
         log.debug("\(self) init")
 
-        self.dateRequest.producer.take(during: self.reactive.lifetime).startWithValues{[weak self] dateRequest in
-            log.debug("dateRequest didSet: \(String(describing: dateRequest))")
-            guard let this = self else {return}
-            this.setMode()
-        }
         self.getUpdatedRequest(dateRequest.value?.id)
 
         let acceptRequestAction = self.createAcceptRequestAction()
@@ -268,18 +295,17 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     private func observeRequests() {
         self.stopObservingRequests()
         self.requestsObserver = (
-            SignalProducer.merge([
-                GZEDatesService.shared.sentRequests.producer,
-                GZEDatesService.shared.receivedRequests.producer
+            Signal.merge([
+                GZEDatesService.shared.lastReceivedRequest.signal,
+                GZEDatesService.shared.lastSentRequest.signal
                 ])
-                .map{$0.first{[weak self] in
+                .skipNil()
+                .filter{[weak self] in
                     guard let this = self else { return false }
                     log.debug("filter called: \(String(describing: $0)) \(String(describing: this.dateRequest))")
                     return $0 == this.dateRequest.value
-                }}
-                .skipNil()
-                .skipRepeats()
-                .startWithValues {[weak self] updatedDateRequest in
+                }
+                .observeValues {[weak self] updatedDateRequest in
                     log.debug("updatedDateRequest: \(String(describing: updatedDateRequest))")
                     self?.dateRequest.value = updatedDateRequest
             }
@@ -357,6 +383,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     // MARK: - Deinitializers
     deinit {
+        GZEDatesService.shared.activeRequest = nil
         log.debug("\(self) disposed")
     }
 }

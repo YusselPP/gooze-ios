@@ -28,6 +28,8 @@ class GZEDatesService: NSObject {
     let lastSentRequest = MutableProperty<GZEDateRequest?>(nil)
     let sentRequests = MutableProperty<[GZEDateRequest]>([])
 
+    var activeRequest: MutableProperty<GZEDateRequest>?
+
     let userLastLocation = MutableProperty<GZEUser?>(nil)
     var sendLocationDisposable: Disposable?
     var socketEventsDisposable: Disposable?
@@ -218,7 +220,7 @@ class GZEDatesService: NSObject {
         }
     }
 
-    func createCharge(requestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<Void, GZEError> {
+    func createCharge(requestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<GZEDateRequest, GZEError> {
         guard let dateSocket = self.dateSocket else {
             log.error("Date socket not found")
             self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
@@ -264,6 +266,7 @@ class GZEDatesService: NSObject {
                     log.debug("Date successfully created")
                     GZEDatesService.shared.upsert(dateRequest: dateRequest)
                     GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id)
+                    sink.send(value: dateRequest)
                     sink.sendCompleted()
 
                 } else {

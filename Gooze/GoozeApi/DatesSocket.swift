@@ -9,6 +9,7 @@
 import Foundation
 import SocketIO
 import Gloss
+import ReactiveSwift
 
 class DatesSocket: GZESocket {
     enum DateEvent: String {
@@ -70,7 +71,7 @@ class DatesSocket: GZESocket {
             ack.with()
         }
         
-        self.on(.requestAccepted) {[weak self] data, ack in
+        self.on(.requestAccepted) { data, ack in
             guard let dateRequestJson = data[0] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) else {
                 log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")
                 return
@@ -89,8 +90,14 @@ class DatesSocket: GZESocket {
                     GZEDatesService.shared.errorMessage.value = "service.chat.invalidChatId".localized()
                     return
                 }
+                var dateRequestProperty: MutableProperty<GZEDateRequest>
+                if let activeRequest = GZEDatesService.shared.activeRequest {
+                    dateRequestProperty = activeRequest
+                } else {
+                    dateRequestProperty = MutableProperty(dateRequest)
+                }
 
-                GZEChatService.shared.openChat(viewModel: GZEChatViewModelDates(chat: chat, dateRequestId: dateRequest.id, mode: .client, username: recipient.username))
+                GZEChatService.shared.openChat(viewModel: GZEChatViewModelDates(chat: chat, dateRequest: dateRequestProperty, mode: .client, username: recipient.username))
             }
             
             ack.with()

@@ -82,19 +82,23 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     var rateAction: CocoaAction<GZEButton>?
 
     // MARK - init
-    init(dateRequest: GZEDateRequest, mode: GZEChatViewMode) {
-        self.dateRequest = MutableProperty(dateRequest)
+    init(dateRequest: MutableProperty<GZEDateRequest>, mode: GZEChatViewMode) {
+        self.dateRequest = dateRequest
+
+        log.debug("active request: \(dateRequest)")
 
         var userId: String
         var username: String
         if mode == .gooze {
-            userId = dateRequest.sender.id
-            username = dateRequest.sender.username
-            self.annotationUser = MutableProperty(dateRequest.sender)
+            let sender = dateRequest.value.sender
+            userId = sender.id
+            username = sender.username
+            self.annotationUser = MutableProperty(sender)
         } else {
-            userId = dateRequest.recipient.id
-            username = dateRequest.recipient.username
-            self.annotationUser = MutableProperty(dateRequest.recipient)
+            let recipient = dateRequest.value.recipient
+            userId = recipient.id
+            username = recipient.username
+            self.annotationUser = MutableProperty(recipient)
         }
 
         super.init()

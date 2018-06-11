@@ -22,16 +22,15 @@ class GZEPaymentViewModelDate: NSObject, GZEPaymentViewModel {
 
     // End GZEPaymentViewModel protocol
 
-    let dateRequestId: String
-    var bottomButtonAction: Action<Void, Void, GZEError>!
-
+    let dateRequest: MutableProperty<GZEDateRequest>
+    var bottomButtonAction: Action<Void, GZEDateRequest, GZEError>!
 
 
     let senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode
     
     // MARK - init
-    init(dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) {
-        self.dateRequestId = dateRequestId
+    init(dateRequest: MutableProperty<GZEDateRequest>, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) {
+        self.dateRequest = dateRequest
         self.senderId = senderId
         self.username = username
         self.chat = chat
@@ -46,7 +45,10 @@ class GZEPaymentViewModelDate: NSObject, GZEPaymentViewModel {
             log.debug("Bottom action button event received: \(event)")
             guard let this = self else { log.error("self was disposed"); return }
 
+
             switch event {
+            case .value(let dateRequest):
+                this.dateRequest.value = dateRequest
             case .completed:
                 this.dismissObserver.send(value: ())
             case .failed(let error):
@@ -55,13 +57,13 @@ class GZEPaymentViewModelDate: NSObject, GZEPaymentViewModel {
             }
         }
     }
-    
-    func createBottomButtonAction() -> Action<Void, Void, GZEError> {
+
+    func createBottomButtonAction() -> Action<Void, GZEDateRequest, GZEError> {
         return Action.init(enabledIf: self.bottomButtonActionEnabled) {[weak self] in
             guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
             
             return GZEDatesService.shared.createCharge(
-                requestId: this.dateRequestId,
+                requestId: this.dateRequest.value.id,
                 senderId: this.senderId,
                 username: this.username,
                 chat: this.chat,
