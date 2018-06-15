@@ -72,11 +72,11 @@ class GZERatingsViewModelReadOnly: GZEProfileViewModelReadOnly, GZERatingsViewMo
         dateRatingDesc.value = GZEUser.Validation.dateRating.fieldName
         goozeRatingDesc.value = GZEUser.Validation.goozeRating.fieldName
 
-        imagesRating.value = user.imagesRating?.rate
-        complianceRating.value = user.complianceRating?.rate
-        dateQualityRating.value = user.dateQualityRating?.rate
-        dateRating.value = user.dateRating?.rate
-        goozeRating.value = user.goozeRating?.rate
+        imagesRating.value = user.imagesRating?.rate ?? 0
+        complianceRating.value = user.complianceRating?.rate ?? 0
+        dateQualityRating.value = user.dateQualityRating?.rate ?? 0
+        dateRating.value = user.dateRating?.rate ?? 0
+        goozeRating.value = user.goozeRating?.rate ?? 0
         overallRating.value = user.overallRating
     }
 

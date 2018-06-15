@@ -133,6 +133,16 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.topActionView.mainButton.reactive.pressed = self.viewModel.topButtonAction
         
         self.topActionView.accessoryButton.reactive.isHidden <~ self.viewModel.topAccessoryButtonIsHidden
+
+        self.viewModel.topAccessoryButtonIsHidden.producer.startWithValues{[weak self] hidden in
+            guard let this = self else {return}
+            if hidden {
+                this.topActionView.accessoryButtonWidth = 0
+            } else {
+                this.topActionView.accessoryButtonWidth = 35
+            }
+        }
+
         self.topActionView.accessoryButton.reactive.pressed = self.viewModel.topAccessoryButtonAction
         
         self.viewModel.topTextInput <~ self.topTextInput.reactive.continuousTextValues

@@ -72,6 +72,11 @@
 
 "vm.signUp.textField.validation.failed"="La información ingresada es inválida";
 
+"vm.signUp.interests.friendlyDates" = "Citas amistosas";
+"vm.signUp.interests.searchPartner" = "Buscar pareja";
+"vm.signUp.interests.sporadicDates" = "Encuentros esporádicos";
+"vm.signUp.interests.littleBitOfEvth" = "De todo un poco";
+
 // ViewModel/GZESignUpViewModel - GZESignUpPhotoViewController
 "vm.signUp.profilePictureLabel"="Foto de perfil";
 "vm.signUp.searchPictureLabel"="Foto buscador";

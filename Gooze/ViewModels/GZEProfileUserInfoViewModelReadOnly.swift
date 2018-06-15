@@ -89,7 +89,7 @@ class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfi
             self.languages.value = GZEUser.Validation.language.fieldName
         }
         if let interestedIn = user.interestedIn?.first {
-            self.interestedIn.value = interestedIn
+            self.interestedIn.value = interestedIn.localized()
         } else {
             self.interestedIn.value = GZEUser.Validation.interestedIn.fieldName
         }

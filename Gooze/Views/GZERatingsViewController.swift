@@ -38,6 +38,7 @@ class GZERatingsViewController: UIViewController {
     @IBOutlet weak var contactButton: GZEButton!
     @IBOutlet weak var phraseButton: UIButton!
 
+    @IBOutlet weak var scrollBotConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
@@ -178,6 +179,14 @@ class GZERatingsViewController: UIViewController {
         contactButton.reactive.isHidden <~ viewModel.actionButtonIsHidden
         contactButton.reactive.title <~ viewModel.actionButtonTitle
         contactButton.reactive.pressed = viewModel.bottomButtonAction
+        viewModel.actionButtonIsHidden.producer.startWithValues {[weak self] isHidden in
+            guard let this = self else {return}
+            if isHidden {
+                this.scrollBotConstraint.constant = -40
+            } else {
+                this.scrollBotConstraint.constant = 10
+            }
+        }
 
         phraseButton.reactive.pressed = viewModel.phraseButtonAction
     }

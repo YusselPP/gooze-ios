@@ -837,6 +837,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
 
     // MARK: - Deinitializers
     deinit {
+        GZEMenuMain.shared.menu.close(animated: false)
         log.debug("\(self) disposed")
     }
 }

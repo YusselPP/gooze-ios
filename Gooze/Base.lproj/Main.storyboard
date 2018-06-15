@@ -185,7 +185,6 @@
                                             </view>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Frase" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fxf-KV-xlD" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="196.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="67k-WS-mZN"/>
                                                     <constraint firstAttribute="height" constant="30" id="M3E-CG-p3C"/>
@@ -203,7 +202,6 @@
                                             </view>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Género" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lPV-Fn-VPs" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="260.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="Ylj-Rf-qx0"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="hsT-Al-zwa"/>
@@ -214,7 +212,6 @@
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Fecha de nacimiento" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0me-qO-LLu" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="298.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="ExH-gb-OIM"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="afF-ag-Z3O"/>
@@ -225,7 +222,6 @@
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Estatura" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7dG-jg-Se2" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="336.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="N2T-Gs-nU3"/>
                                                     <constraint firstAttribute="height" constant="30" id="bnV-nl-DFT"/>
@@ -236,7 +232,6 @@
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Peso" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ncm-nO-qGJ" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="374.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="mfH-vT-9rR"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="zW4-LX-S8o"/>
@@ -247,18 +242,16 @@
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Lugar de origen" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f84-C9-1rK" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="412.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="GU6-Dg-Wy2"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="i53-G1-Iue"/>
                                                 </constraints>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="lenguas" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s75-Qo-WNT" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="450.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="BGR-8s-P0W"/>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="spR-cg-VKm"/>
@@ -269,7 +262,6 @@
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Interasado en" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Dl-mu-l4g" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="488.5" width="300" height="30"/>
-                                                <color key="tintColor" red="0.17254901959999999" green="0.77647058820000003" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="TaK-Ht-Yqr"/>
                                                     <constraint firstAttribute="height" constant="30" id="WOx-ZD-cAD"/>
@@ -365,7 +357,7 @@
                                 <state key="normal" title="Save"/>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="jgt-hf-4Co" firstAttribute="leading" secondItem="rMA-N0-uod" secondAttribute="leading" id="1la-Mf-DbG"/>
                             <constraint firstAttribute="trailing" secondItem="cCx-TY-NnN" secondAttribute="trailing" id="2Ok-ak-mF1"/>
@@ -490,6 +482,7 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="bottom" secondItem="azr-0D-h6D" secondAttribute="bottom" id="FA7-dh-FBf"/>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="width" secondItem="azr-0D-h6D" secondAttribute="width" id="GhO-8G-BCO"/>
@@ -1182,7 +1175,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.21568627450980393" green="0.2196078431372549" blue="0.23921568627450979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.21415966749191284" green="0.22026053071022034" blue="0.23918354511260986" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="MKt-Lz-RCI" secondAttribute="trailing" id="9fm-af-xoi"/>
@@ -1342,7 +1335,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="oIX-yH-eTt" secondAttribute="bottom" id="OiL-dk-GbP"/>
                             <constraint firstItem="D36-Fy-qwN" firstAttribute="centerX" secondItem="jor-V3-7TK" secondAttribute="centerX" id="Vkl-s6-rYe"/>
@@ -1413,10 +1406,10 @@
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="KYB-LL-jXh">
-                                <rect key="frame" x="0.0" y="64" width="320" height="474"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="469"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sym-4P-Jx8" userLabel="TopButtonContainer">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                         <subviews>
                                             <view verifyAmbiguity="ignoreSizes" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uu3-SP-25Y" customClass="GZEChatActionView" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="147.5" y="10" width="25" height="30"/>
@@ -1439,12 +1432,12 @@
                                             <constraint firstItem="6hE-Od-5hh" firstAttribute="top" secondItem="uu3-SP-25Y" secondAttribute="top" id="dGi-6W-5fE"/>
                                             <constraint firstItem="6hE-Od-5hh" firstAttribute="leading" secondItem="uu3-SP-25Y" secondAttribute="leading" id="iIg-JD-1Wj"/>
                                             <constraint firstAttribute="bottom" secondItem="uu3-SP-25Y" secondAttribute="bottom" constant="10" id="pl0-es-7Ic"/>
-                                            <constraint firstAttribute="height" constant="55" id="tw5-Ei-G3U"/>
+                                            <constraint firstAttribute="height" constant="50" id="tw5-Ei-G3U"/>
                                             <constraint firstItem="uu3-SP-25Y" firstAttribute="top" secondItem="Sym-4P-Jx8" secondAttribute="top" constant="10" id="xDn-xc-lhk"/>
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cJq-Cg-ZAs" customClass="GZEMessagesTableView" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55" width="320" height="419"/>
+                                        <rect key="frame" x="0.0" y="50" width="320" height="419"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="10" id="A9E-UN-mlb">
                                             <size key="itemSize" width="50" height="50"/>
@@ -1466,14 +1459,14 @@
                                 </subviews>
                             </stackView>
                             <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ATA-Lh-gmd" userLabel="message-input-bg">
-                                <rect key="frame" x="0.0" y="538" width="320" height="30"/>
+                                <rect key="frame" x="0.0" y="533" width="320" height="35"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="cnS-1k-LUP" userLabel="message-input-container">
-                                <rect key="frame" x="0.0" y="538" width="320" height="30"/>
+                                <rect key="frame" x="0.0" y="533" width="320" height="35"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bKa-QG-jUT">
-                                        <rect key="frame" x="15" y="15" width="240" height="0.0"/>
+                                        <rect key="frame" x="15" y="15" width="240" height="5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="80" id="NW5-jH-Mpj"/>
@@ -1482,7 +1475,7 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e1P-j5-Our">
-                                        <rect key="frame" x="270" y="-20" width="35" height="35"/>
+                                        <rect key="frame" x="270" y="-15" width="35" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="35" id="DrT-aG-bet"/>
                                             <constraint firstAttribute="height" constant="35" id="c0k-Lh-UI9"/>
@@ -1500,7 +1493,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="KYB-LL-jXh" firstAttribute="top" secondItem="p7d-ob-vnO" secondAttribute="bottom" id="0Br-jU-b20"/>
                             <constraint firstItem="Alr-vg-DKr" firstAttribute="leading" secondItem="4Eg-af-7Vm" secondAttribute="leading" id="2xL-qN-mKl"/>
@@ -1575,7 +1568,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="bN3-Ui-Uce" firstAttribute="leading" secondItem="sc5-Hi-qxo" secondAttribute="leadingMargin" id="4hU-pJ-7FB"/>
                             <constraint firstItem="sg8-Yt-0iz" firstAttribute="top" secondItem="bN3-Ui-Uce" secondAttribute="bottom" id="74N-Pi-qAA"/>
@@ -1647,7 +1640,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="tzK-6J-qwR" firstAttribute="top" secondItem="DWy-on-EeZ" secondAttribute="top" id="0Xr-Xr-O54"/>
                             <constraint firstItem="tzK-6J-qwR" firstAttribute="leading" secondItem="DWy-on-EeZ" secondAttribute="leading" id="4ye-un-1ZV"/>
@@ -1780,7 +1773,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="euK-bx-KDx" firstAttribute="leading" secondItem="WBb-zH-Ry7" secondAttribute="leadingMargin" id="2VG-oD-EkZ"/>
                             <constraint firstItem="ZPf-T6-9v7" firstAttribute="top" secondItem="WBb-zH-Ry7" secondAttribute="top" id="KBt-y8-31H"/>
@@ -2062,7 +2055,7 @@
                                 <state key="normal" title="CONTACTAR"/>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="WKe-nt-VYt" firstAttribute="leading" secondItem="any-jm-akY" secondAttribute="leading" id="2kk-K7-zVf"/>
                             <constraint firstItem="Yrh-cI-kqX" firstAttribute="top" secondItem="NKx-Uv-zYQ" secondAttribute="bottom" constant="10" id="5Db-I5-XMy"/>
@@ -2658,6 +2651,7 @@
                         <outlet property="phraseButton" destination="aoS-Vo-Xrz" id="a4f-7y-6hT"/>
                         <outlet property="phraseLabel" destination="f5Z-Ek-J1U" id="wf7-bB-1WS"/>
                         <outlet property="profileImageView" destination="xwx-eX-pbt" id="O55-j6-DSM"/>
+                        <outlet property="scrollBotConstraint" destination="igd-SO-VbM" id="jOr-0R-XYK"/>
                         <outlet property="usernameLabel" destination="jz9-bP-JTc" id="JO2-So-Fma"/>
                         <segue destination="NGX-KL-M5V" kind="show" identifier="segueToProfile" id="bGw-RB-oqb"/>
                         <segue destination="t7T-l6-5zL" kind="unwind" identifier="unwindToActivateGooze" unwindAction="unwindToActivateGoozeWithSegue:" id="xvo-tg-Pc7"/>
@@ -2725,7 +2719,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FHb-2u-hPp" firstAttribute="top" secondItem="Iqd-SC-bX8" secondAttribute="bottom" id="3hB-dm-Zw0"/>
                             <constraint firstItem="kKE-Yq-JL6" firstAttribute="top" secondItem="1ms-Mi-Nj4" secondAttribute="top" id="L78-rr-Fxx"/>
@@ -2778,7 +2772,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="kze-db-WzV" firstAttribute="top" secondItem="AqJ-C2-ul9" secondAttribute="top" id="2H4-vQ-y6b"/>
                             <constraint firstAttribute="trailing" secondItem="kze-db-WzV" secondAttribute="trailing" id="Dxh-Zz-NOf"/>
@@ -2969,7 +2963,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.2156862745" green="0.21960784310000001" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="JtS-kw-urX" firstAttribute="leading" secondItem="oGm-gW-cBQ" secondAttribute="leading" id="3rP-zl-6iH"/>
@@ -3017,7 +3011,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="aoX-cG-RKK"/>
         <segue reference="ZKk-02-86h"/>
-        <segue reference="XJg-fM-c9J"/>
+        <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

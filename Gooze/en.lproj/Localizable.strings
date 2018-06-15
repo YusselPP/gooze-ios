@@ -72,6 +72,11 @@
 
 "vm.signUp.textField.validation.failed"="Enter valid information";
 
+"vm.signUp.interests.friendlyDates" = "Friendly dates";
+"vm.signUp.interests.searchPartner" = "Searching partner";
+"vm.signUp.interests.sporadicDates" = "Sporadic dates";
+"vm.signUp.interests.littleBitOfEvth" = "Little bit of everything";
+
 // ViewModel/GZESignUpViewModel - GZESignUpPhotoViewController
 "vm.signUp.profilePictureLabel"="Profile picture";
 "vm.signUp.searchPictureLabel"="Search picture";

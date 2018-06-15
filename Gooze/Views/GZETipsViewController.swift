@@ -11,6 +11,7 @@ import UIKit
 class GZETipsViewController: UIViewController {
 
     let stackView = UIStackView()
+    let backButton = GZEBackUIBarButtonItem()
 
     let tips = [
         "Lorem ipsum dolor sit amet, coctetuer adipiscing elit, sed diam nonum",
@@ -36,6 +37,11 @@ class GZETipsViewController: UIViewController {
 
     func setupInterfaceObjects() {
         self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
+        self.navigationItem.leftBarButtonItem = self.backButton
+
+        self.backButton.onButtonTapped = {[weak self] _ in
+            self?.previousController(animated: true)
+        }
 
         self.stackView.axis = .vertical
         self.stackView.alignment = .center

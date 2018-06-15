@@ -84,6 +84,8 @@ class GZEUpdateProfileViewModel: NSObject {
     let heightPickerDelegate: GZEPickerDelegate<String>
     let weightPickerDatasource: GZEPickerDatasource<String>
     let weightPickerDelegate: GZEPickerDelegate<String>
+    let interestPickerDatasource: GZEPickerDatasource<String>
+    let interestPickerDelegate: GZEPickerDelegate<String>
     
     enum validationRule {
         case username
@@ -137,6 +139,17 @@ class GZEUpdateProfileViewModel: NSObject {
         self.weightPickerDelegate = GZEPickerDelegate(titles: weightTitles, elements: weightValues)
         self.weightPickerDatasource = GZEPickerDatasource(elements: weightValues)
         self.weightPickerDelegate.width = 50
+
+        let interestTitles = [[
+            "",
+            "vm.signUp.interests.friendlyDates",
+            "vm.signUp.interests.searchPartner",
+            "vm.signUp.interests.sporadicDates",
+            "vm.signUp.interests.littleBitOfEvth",
+            ]]
+        self.interestPickerDelegate = GZEPickerDelegate(titles: interestTitles.map{$0.map{$0.localized()}}, elements: interestTitles)
+        self.interestPickerDatasource = GZEPickerDatasource(elements: interestTitles)
+        //self.weightPickerDelegate.width = 50
         
         super.init()
         
@@ -152,6 +165,7 @@ class GZEUpdateProfileViewModel: NSObject {
         
         self.height <~ self.heightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + ($1 ?? "") }) }
         self.weight <~ self.weightPickerDelegate.selectedElements.map{ "\(($0.reduce("", { $0 + ($1 ?? "") }) as NSString).intValue)" }
+        self.interestedIn <~ self.interestPickerDelegate.selectedElements.map{ $0.first?.flatMap{$0} }
         
         usernameExistsAction = Action { [unowned self] in
             return self.onUsernameExistsAction()

@@ -13,7 +13,16 @@ class GZEChatActionView: UIView {
     let mainButton = GZEButton()
     let accessoryButton = UIButton()
     
-    let accessoryButtonWidth: CGFloat = 35
+    var accessoryButtonWidth: CGFloat = 35 {
+        didSet {
+            self.accessoryWidthConstraint.constant = self.accessoryButtonWidth
+            self.mainButton.titleEdgeInsets.left = self.accessoryButtonWidth
+        }
+    }
+
+    lazy var accessoryWidthConstraint: NSLayoutConstraint = {
+        return self.accessoryButton.widthAnchor.constraint(equalToConstant: self.accessoryButtonWidth)
+    }()
 
     // MARK - init
     required init?(coder aDecoder: NSCoder) {
@@ -53,7 +62,7 @@ class GZEChatActionView: UIView {
         
         mainButton.titleEdgeInsets.left = accessoryButtonWidth
         //mainButton.maxWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - accessoryButtonWidth * 2 - 20
-        mainButton.widthConstraint.constant = 160
+        mainButton.widthConstraint.constant = 170
         
         accessoryButton.setImage(#imageLiteral(resourceName: "chat-send-amount") ,for: .normal)
         accessoryButton.imageEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
@@ -77,6 +86,6 @@ class GZEChatActionView: UIView {
         
         mainButton.trailingAnchor.constraint(equalTo: accessoryButton.leadingAnchor).isActive = true
         
-        accessoryButton.widthAnchor.constraint(equalToConstant: accessoryButtonWidth).isActive = true
+        accessoryWidthConstraint.isActive = true
     }
 }

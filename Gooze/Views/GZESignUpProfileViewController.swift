@@ -71,6 +71,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     let genderPicker = UIPickerView()
     let heightPicker = UIPickerView()
     let weightPicker = UIPickerView()
+    let interestsPicker = UIPickerView()
 
     let backButton = GZEBackUIBarButtonItem()
     let nextButton = GZENextUIBarButtonItem()
@@ -176,12 +177,16 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         weightPicker.delegate = viewModel.weightPickerDelegate
         weightTextField.inputView = weightPicker
         weightTextField.inputAccessoryView = toolBar
+
+        interestsPicker.dataSource = viewModel.interestPickerDatasource
+        interestsPicker.delegate = viewModel.interestPickerDelegate
+        interestsTextField.inputView = interestsPicker
+        interestsTextField.inputAccessoryView = toolBar
     }
 
     func setupBindings() {
         // Out bindings
         usernameLabel.reactive.text <~ viewModel.username.map { username -> String? in
-            log.debug(username)
             return username?.uppercased()
         }
         //profileImageView.reactive.image <~ viewModel.profilePic
@@ -215,7 +220,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         }
         originTextField.reactive.text <~ viewModel.origin
         languageTextField.reactive.text <~ viewModel.languages
-        interestsTextField.reactive.text <~ viewModel.interestedIn
+        interestsTextField.reactive.text <~ viewModel.interestedIn.map{$0?.localized()}
 
         // In bindings
         viewModel.phrase <~ phraseTextField.reactive.continuousTextValues
@@ -246,7 +251,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         // viewModel.weight <~ weightTextField.reactive.continuousTextValues
         viewModel.origin <~ originTextField.reactive.continuousTextValues
         viewModel.languages <~ languageTextField.reactive.continuousTextValues
-        viewModel.interestedIn <~ interestsTextField.reactive.continuousTextValues
+        //viewModel.interestedIn <~ interestsTextField.reactive.continuousTextValues
     }
 
     func setupActions() {
