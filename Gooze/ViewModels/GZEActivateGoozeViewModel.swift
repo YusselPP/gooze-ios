@@ -33,8 +33,8 @@ class GZEActivateGoozeViewModel {
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()
     let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
 
-    var paymentViewModel: GZEAddCreditCardViewModelPay {
-        return GZEAddCreditCardViewModelPay()
+    var paymentViewModel: GZEPaymentMethodsViewModelAdded {
+        return GZEPaymentMethodsViewModelAdded()
     }
 
     var activateGoozeAction: Action<Void, GZEUser, GZEError> {

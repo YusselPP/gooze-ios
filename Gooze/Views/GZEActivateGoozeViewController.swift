@@ -638,7 +638,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     }
 
     func preparePaymentSegue(_ vc: UIViewController) {
-        if let vc = vc as? GZEAddCreditCardViewController {
+        if let vc = vc as? GZEPaymentMethodsViewController {
 
             vc.viewModel = self.viewModel.paymentViewModel
 

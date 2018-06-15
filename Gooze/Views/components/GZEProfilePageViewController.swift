@@ -42,6 +42,8 @@ class GZEProfilePageViewController: UIPageViewController {
         navigationItem.setLeftBarButton(backButton, animated: false)
         self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
 
+        self.view.backgroundColor = GZEConstants.Color.mainBackground
+
         dataSource = self
 
         if let firstViewController = orderedViewControllers.first {
@@ -150,5 +152,13 @@ extension GZEProfilePageViewController: UIPageViewControllerDataSource {
         }
 
         return orderedViewControllers[nextIndex]
+    }
+
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return orderedViewControllers.count
+    }
+
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return 0
     }
 }

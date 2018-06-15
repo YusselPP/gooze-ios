@@ -110,7 +110,7 @@
 "vm.activate.activateButtonTitle"="Activar gooze";
 "vm.activate.deactivateButtonTitle"="Desactivar gooze";
 "vm.activate.searchButtonTitle"="Buscar gooze";
-"vm.activate.allResultsButtonTitle"="Ver listado completo";
+"vm.activate.allResultsButtonTitle"="Listado completo";
 
 // ViewModel/GZEProfileUserInfoViewModelRateDate
 "profile.rate.date.accept"="Aceptar";
@@ -150,6 +150,12 @@
 // ViewModel/GZEAddCreditCardModelPay
 "vm.add.credit.card.text"="Agregar";
 
+// ViewModel/GZEPaymentMethodsViewModel
+"vm.paymentMethods.title"="Formas de pago";
+"vm.paymentMethods.add"="Agregar";
+"vm.paymentMethods.addMethod"="Agregar forma de pago";
+"vm.paymentMethods.title.selectMethod"="Seleccionar forma de pago";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.doneButton.title"="Siguiente";
@@ -173,7 +179,7 @@
 "menu.item.title.searchGooze"="Buscar Gooze";
 "menu.item.title.chats"="Chats";
 "menu.item.title.history"="Historial";
-"menu.item.title.payment"="Datos bancarios";
+"menu.item.title.payment"="Formas de pago";
 "menu.item.title.coupons"="Créditos y cupones";
 "menu.item.title.transactions"="Resumen de operaciones";
 "menu.item.title.invite"="Invitar amigos";

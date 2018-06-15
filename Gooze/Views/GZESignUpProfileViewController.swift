@@ -47,6 +47,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var usernameContainer: UIView!
     @IBOutlet weak var usernameLabel: GZELabel!
 
+    @IBOutlet weak var phraseTopLine: UIView!
+    @IBOutlet weak var phraseBotLine: UIView!
     @IBOutlet weak var phraseTextField: GZETextField!
     @IBOutlet weak var genderTextField: GZETextField!
     @IBOutlet weak var birthdayTextField: GZETextField!
@@ -132,6 +134,10 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
         usernameLabel.setWhiteFontFormat()
 
+        phraseTopLine.isHidden = true
+        phraseBotLine.isHidden = true
+        phraseTextField.autocapitalizationType = .sentences
+        languageTextField.autocapitalizationType = .words
         setTextFieldFormat(phraseTextField, placeholder:  viewModel.phraseLabelText.addQuotes() )
         setTextFieldFormat(genderTextField, placeholder: viewModel.genderLabelText)
         setTextFieldFormat(birthdayTextField, placeholder: viewModel.birthdayLabelText)
@@ -178,7 +184,16 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
             log.debug(username)
             return username?.uppercased()
         }
-        profileImageView.reactive.image <~ viewModel.profilePic
+        //profileImageView.reactive.image <~ viewModel.profilePic
+        //profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
+        viewModel.profilePic.producer.startWithValues{[weak self] in
+            guard let this = self else {return}
+            if let img = $0 {
+                this.profileImageView.image = img.af_imageFiltered(withCoreImageFilter: "CIPhotoEffectNoir")
+            } else {
+                this.profileImageView.image = nil
+            }
+        }
         phraseTextField.reactive.text <~ viewModel.phrase
         genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }
         birthdayTextField.reactive.text <~ viewModel.birthday.map {
@@ -537,12 +552,16 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     func showProfilePicSetScene() {
         phraseTextField.isHidden = false
+        phraseTopLine.isHidden = false
+        phraseBotLine.isHidden = false
         phraseTextField.resignFirstResponder()
         navigationItem.setLeftBarButton(nil, animated: true)
     }
 
     func showPhraseScene() {
         phraseTextField.isHidden = false
+        phraseTopLine.isHidden = false
+        phraseBotLine.isHidden = false
         phraseTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)

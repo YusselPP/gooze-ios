@@ -150,6 +150,12 @@
 // ViewModel/GZEAddCreditCardModelPay
 "vm.add.credit.card.text"="Add";
 
+// ViewModel/GZEPaymentMethodsViewModel
+"vm.paymentMethods.title"="Payment methods";
+"vm.paymentMethods.add"="Add";
+"vm.paymentMethods.addMethod"="Add payment method";
+"vm.paymentMethods.title.selectMethod"="Select payment method";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.doneButton.title"="Next";
@@ -173,7 +179,7 @@
 "menu.item.title.searchGooze"="Search Gooze";
 "menu.item.title.chats"="Chats";
 "menu.item.title.history"="History";
-"menu.item.title.payment"="Credit cards";
+"menu.item.title.payment"="Payment methods";
 "menu.item.title.coupons"="Coupons";
 "menu.item.title.transactions"="Transactions";
 "menu.item.title.invite"="Invite a friend";

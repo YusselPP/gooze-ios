@@ -244,6 +244,23 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: UITextFieldDelegate
 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+            if scene == .username {
+                if string == "" {
+                    // User presses backspace
+                    textField.deleteBackward()
+                } else {
+                    // User presses a key or pastes
+                    textField.insertText(string.uppercased())
+                }
+                // Do not let specified text range to be changed
+                return false
+            }
+
+            return true
+    }
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
         nextButtonTapped(textField)
@@ -351,6 +368,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         topTextField.returnKeyType = .next
         topTextField.keyboardType = .default
         topTextField.isSecureTextEntry = false
+        topTextField.autocapitalizationType = .none
         topTextField.text = viewModel.registerCode.value
         // TODO: Define registerCode validations
         // topTextField.validationRules = GZESignUpViewModel.validationRule.registerCode.stringRules
@@ -376,7 +394,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         topTextField.returnKeyType = .next
         topTextField.keyboardType = .default
         topTextField.isSecureTextEntry = false
-        topTextField.autocapitalizationType = .none
+        topTextField.autocapitalizationType = .allCharacters
         topTextField.text = viewModel.username.value
         topTextField.validationRules = GZESignUpViewModel.validationRule.username.stringRules
 

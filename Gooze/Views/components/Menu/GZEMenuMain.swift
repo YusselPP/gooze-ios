@@ -88,6 +88,8 @@ class GZEMenuMain {
         let (_, paymentCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
             guard let controller = self?.controller else {return}
             controller.performSegue(withIdentifier: controller.segueToPayment, sender: nil)
+            //PayPalService.shared.createCharge(presenter: controller, amount: 10)
+            //PayPalService.shared.savePaymentMethod(presenter: controller)
         })
 
         let (_, tipsCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in

@@ -15,7 +15,8 @@ class GZEChooseModeViewController: UIViewController {
     var goozeScene = GZEActivateGoozeViewController.Scene.search
     let activateGoozeSegueId = "activateGoozeSegueId"
 
-    let closeHelpButton = UIBarButtonItem()
+    let closeHelpButton = GZECloseUIBarButtonItem()
+    let backButton = GZEBackUIBarButtonItem()
     let beButton = UIButton()
     let searchButton = UIButton()
 
@@ -36,13 +37,15 @@ class GZEChooseModeViewController: UIViewController {
 
         let exitButton = GZEExitAppButton.shared
         exitButton.presenter = self
-        navigationItem.rightBarButtonItem = exitButton
 
-        closeHelpButton.title = "X"
-        closeHelpButton.setTitleTextAttributes([NSFontAttributeName: GZEConstants.Font.mainSuperBig], for: .normal)
-        closeHelpButton.setTitleTextAttributes([NSFontAttributeName: GZEConstants.Font.mainSuperBig], for: .highlighted)
-        closeHelpButton.target = self
-        closeHelpButton.action = #selector(closeHelpButtonTapped(_:))
+        navigationItem.leftBarButtonItem = backButton
+
+        backButton.onButtonTapped = {
+            exitButton.buttonTapped($0)
+        }
+        closeHelpButton.onButtonTapped = {[weak self] in
+            self?.closeHelpButtonTapped($0)
+        }
 
         goozeHelpLabel.text = viewModel.goozeHelpLabelText
         clientHelpLabel.text = viewModel.clientHelpLabelText
@@ -105,7 +108,7 @@ class GZEChooseModeViewController: UIViewController {
                 self.clientHelpLabel.alpha = 1
                 self.closeHelpButton.customView?.alpha = 1
                 self.showHelpButton.alpha = 0
-                self.navigationItem.leftBarButtonItem = self.closeHelpButton
+                self.navigationItem.rightBarButtonItem = self.closeHelpButton
             } else {
                 self.middleYConstraint.isActive = false
                 self.bottomYConstraint.isActive = true
@@ -113,7 +116,7 @@ class GZEChooseModeViewController: UIViewController {
                 self.clientHelpLabel.alpha = 0
                 self.closeHelpButton.customView?.alpha = 0
                 self.showHelpButton.alpha = 1
-                self.navigationItem.leftBarButtonItem = nil
+                self.navigationItem.rightBarButtonItem = nil
             }
             self.view.layoutIfNeeded()
         }

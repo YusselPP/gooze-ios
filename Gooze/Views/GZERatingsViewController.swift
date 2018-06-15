@@ -135,7 +135,15 @@ class GZERatingsViewController: UIViewController {
         }
         
         usernameLabel.reactive.text <~ viewModel.username
-        profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
+        //profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
+        viewModel.profilePic.producer.startWithValues{[weak self] in
+            guard let this = self else {return}
+            if let img = $0 {
+                this.profileImageView.af_setImage(withURLRequest: img, filter: NoirFilter())
+            } else {
+                this.profileImageView.image = nil
+            }
+        }
         phraseLabel.reactive.text <~ viewModel.phrase
 
         imagesRatingLabel.reactive.text <~ viewModel.imagesRatingDesc

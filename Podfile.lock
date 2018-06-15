@@ -11,6 +11,9 @@ PODS:
   - Braintree/Card (4.15.0):
     - Braintree/Core
   - Braintree/Core (4.15.0)
+  - Braintree/PaymentFlow (4.15.0):
+    - Braintree/Card
+    - Braintree/Core
   - Braintree/PayPal (4.15.0):
     - Braintree/Core
     - Braintree/PayPalOneTouch
@@ -25,6 +28,18 @@ PODS:
   - Braintree/UI (4.15.0):
     - Braintree/Card
     - Braintree/Core
+  - Braintree/UnionPay (4.15.0):
+    - Braintree/Card
+    - Braintree/Core
+  - BraintreeDropIn (6.1.0):
+    - BraintreeDropIn/DropIn (= 6.1.0)
+  - BraintreeDropIn/DropIn (6.1.0):
+    - Braintree/Card (~> 4.11)
+    - Braintree/Core (~> 4.11)
+    - Braintree/PaymentFlow (~> 4.11)
+    - Braintree/UnionPay (~> 4.11)
+    - BraintreeDropIn/UIKit
+  - BraintreeDropIn/UIKit (6.1.0)
   - DeepDiff (1.1.2)
   - FloatRatingView (2.0)
   - Gloss (1.2.4)
@@ -47,6 +62,7 @@ DEPENDENCIES:
   - AlamofireImage (~> 3.3)
   - ALCameraViewController (~> 2.0.3)
   - Braintree
+  - BraintreeDropIn
   - DeepDiff
   - FloatRatingView (~> 2.0.0)
   - Gloss (~> 1.2.0)
@@ -64,6 +80,7 @@ SPEC REPOS:
     - AlamofireImage
     - ALCameraViewController
     - Braintree
+    - BraintreeDropIn
     - DeepDiff
     - FloatRatingView
     - Gloss
@@ -83,6 +100,7 @@ SPEC CHECKSUMS:
   AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
   ALCameraViewController: 7b86c2888df0e63f53a801e9d96fe194f51157ec
   Braintree: 5f10816f455ffd79c411e6d22a177846971f3677
+  BraintreeDropIn: 2e8bba4facf6cc925176637030454d8308223b95
   DeepDiff: 35c661301baeb2db083ea1b9af183daab6af1c05
   FloatRatingView: 857ab8f10040d06a42fc979f486c8f9fecd2f2e5
   Gloss: 4e036074610fdb993abcb958ebcd7332588e2333
@@ -97,6 +115,6 @@ SPEC CHECKSUMS:
   SwiftyBeaver: 91057725648ee4980308f1650af077d04b3654a0
   Validator: bf211c1d71b3f910d230c09c70e62429d0fef63a
 
-PODFILE CHECKSUM: d7d5fbef0d1a3c278628ba4061cec7c094bc8eac
+PODFILE CHECKSUM: 07e56da76e8baebb1fca90a1c75283d59af236a8
 
 COCOAPODS: 1.5.3

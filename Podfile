@@ -24,6 +24,7 @@ target 'Gooze' do
 
   # Includes Cards and PayPal
   pod 'Braintree'
+  pod 'BraintreeDropIn'
 
 
   target 'GoozeTests' do

@@ -41,7 +41,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let sendButtonEnabled = MutableProperty<Bool>(true)
     var sendButtonAction: CocoaAction<UIButton>!
 
-    var paymentViewModel: GZEPaymentViewModel? {
+    var paymentViewModel: GZEPaymentMethodsViewModel? {
         return getPaymentViewModel()
     }
 
@@ -413,9 +413,14 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.showPaymentViewObserver.send(value: true)
     }
 
-    private func getPaymentViewModel() -> GZEPaymentViewModel? {
+    private func getPaymentViewModel() -> GZEPaymentMethodsViewModelPay? {
         guard let sender = GZEAuthService.shared.authUser else {
             log.error("authUser is nil")
+            return nil
+        }
+
+        guard let amount = self.amount.value else {
+            log.error("amount is nil")
             return nil
         }
 
@@ -425,7 +430,8 @@ class GZEChatViewModelDates: GZEChatViewModel {
         case .gooze: mode = .client
         }
 
-        return GZEPaymentViewModelDate(
+        return GZEPaymentMethodsViewModelPay(
+            amount: amount,
             dateRequest: self.dateRequest,
             senderId: sender.id,
             username: sender.username,

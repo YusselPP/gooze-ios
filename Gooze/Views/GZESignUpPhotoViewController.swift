@@ -56,8 +56,10 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         if scene == .profilePic {
             overlay = profileOverlay
-        } else {
+        } else if scene == .searchPic {
             overlay = searchOverlay
+        } else {
+            overlay = overlayView
         }
 
         let imageFrame = mainImageView.imageFrame()
@@ -323,7 +325,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         let reelButton = UIButton()
         reelButton.setImage(#imageLiteral(resourceName: "movie-icon"), for: .normal)
         reelButton.translatesAutoresizingMaskIntoConstraints = false
-        reelButton.addTarget(self, action: #selector(showCamera), for: .touchUpInside)
+        reelButton.addTarget(self, action: #selector(showLibrary), for: .touchUpInside)
         let botView = UIView()
         botView.translatesAutoresizingMaskIntoConstraints = false
         botView.addSubview(reelButton)
@@ -361,7 +363,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             case .editProfilePic:
                 scene = .profilePic
             case .editGalleryPic:
-                selectedThumbnail?.value = viewModel.mainImage.value
+                selectedThumbnail?.value = viewModel.mainImage.value?.crop(to: cropArea)
+                viewModel.mainImage.value = selectedThumbnail?.value
+                setZoomScale()
                 scene = .gallery
             }
         case .gallery:
@@ -564,7 +568,41 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func showCamera() {
-        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: false)) { [weak self] image, asset in
+        let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: false, allowResizing: false, allowMoving: false)) { [weak self] image, asset in
+
+            log.debug("camera controller handler")
+
+            guard let this = self else {
+                log.error("self was dispossed before calling handler")
+                return
+            }
+
+            guard let image = image else {
+                log.debug("Empty image received")
+                this.dismiss(animated: true, completion: nil)
+                return
+            }
+
+            guard let compressedImage = GZEImageHelper.compressImage(image) else {
+                log.error("Unable to compress the image")
+                this.dismiss(animated: true, completion: nil)
+                return
+            }
+
+            this.viewModel.mainImage.value = compressedImage
+            this.originalImage = compressedImage
+
+            this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.mainImageView, scrollView: this.backScrollView)
+
+            this.scene = .blur
+            this.dismiss(animated: true, completion: nil)
+        }
+
+        present(cameraViewController, animated: true, completion: nil)
+    }
+
+    func showLibrary() {
+        let cameraViewController = CameraViewController.imagePickerViewController(croppingParameters: CroppingParameters(isEnabled: false, allowResizing: false, allowMoving: false)) { [weak self] image, asset in
 
             log.debug("camera controller handler")
 

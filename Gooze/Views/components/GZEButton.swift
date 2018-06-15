@@ -10,7 +10,7 @@ import UIKit
 
 class GZEButton: UIButton {
     
-    var adjustsWidthToTitle: Bool = true {
+    var adjustsWidthToTitle: Bool = false {
         didSet {
             if adjustsWidthToTitle {
                 setWidthTofitTitle()
@@ -34,8 +34,8 @@ class GZEButton: UIButton {
 
     func initProperties() {
         translatesAutoresizingMaskIntoConstraints = false
-        widthConstraint = widthAnchor.constraint(equalToConstant: 120)
-        heightConstraint = heightAnchor.constraint(equalToConstant: 35)
+        widthConstraint = widthAnchor.constraint(equalToConstant: 200)
+        heightConstraint = heightAnchor.constraint(equalToConstant: 30)
         widthConstraint.isActive = true
         heightConstraint.isActive = true
 

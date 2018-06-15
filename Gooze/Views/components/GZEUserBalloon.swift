@@ -107,10 +107,14 @@ class GZEUserBalloon: UIView {
 
     func setImage(urlRequest: URLRequest?, completion: ( () -> ())? = nil){
         if let urlRequest = urlRequest {
-            imageView.af_setImage(withURLRequest: urlRequest, placeholderImage: GZEUserBalloon.userPlaceholder, completion: { _ in
+//            imageView.af_setImage(withURLRequest: urlRequest, placeholderImage: GZEUserBalloon.userPlaceholder, completion: { _ in
+//                //self?.setVisible(true)
+//                completion?()
+//            })
+            imageView.af_setImage(withURLRequest: urlRequest, placeholderImage: GZEUserBalloon.userPlaceholder, filter: NoirFilter()){ _ in
                 //self?.setVisible(true)
                 completion?()
-            })
+            }
         } else {
             log.error("Failed to set image url for user id=[\(String(describing: self.user?.id))]")
             imageView.image = GZEUserBalloon.userPlaceholder

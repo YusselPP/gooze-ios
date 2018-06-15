@@ -36,7 +36,7 @@ protocol GZEChatViewModel {
     var sendButtonImage: MutableProperty<UIImage?> { get }
     var sendButtonAction: CocoaAction<UIButton>! { get }
 
-    var paymentViewModel: GZEPaymentViewModel? { get }
+    var paymentViewModel: GZEPaymentMethodsViewModel? { get }
     var mapViewModel: GZEMapViewModel { get }
 
     var showPaymentViewSignal: Signal<Bool, NoError> { get }

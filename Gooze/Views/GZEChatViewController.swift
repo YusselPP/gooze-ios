@@ -59,8 +59,36 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         backButton.onButtonTapped = {[weak self] _ in
             self?.previousController(animated: true)
         }
+
+        let titleView = UIView()
+        let underline = UIView()
+        let usernameLabel = GZELabel()
+
+        titleView.translatesAutoresizingMaskIntoConstraints = false
+        underline.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        usernameLabel.setWhiteFontFormat()
+
+        titleView.addSubview(usernameLabel)
+        titleView.addSubview(underline)
+
+        underline.backgroundColor = .white
+        underline.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        titleView.topAnchor.constraint(equalTo: usernameLabel.topAnchor).isActive = true
+        titleView.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor).isActive = true
+        titleView.leadingAnchor.constraint(equalTo: underline.leadingAnchor).isActive = true
+        titleView.trailingAnchor.constraint(equalTo: usernameLabel.trailingAnchor).isActive = true
+        titleView.trailingAnchor.constraint(equalTo: underline.trailingAnchor).isActive = true
+        titleView.bottomAnchor.constraint(equalTo: underline.bottomAnchor).isActive = true
+        usernameLabel.bottomAnchor.constraint(equalTo: underline.topAnchor).isActive = true
+
+        self.navigationItem.titleView = titleView
+
+        usernameLabel.text = self.viewModel.username.map{$0?.uppercased()}.value
+
         self.navigationItem.setLeftBarButton(backButton, animated: false)
-        self.navigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
+        //self.navigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
         self.navigationItem.rightBarButtonItem = GZEExitAppButton.shared
 
         setupBindings()
@@ -236,15 +264,13 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     func showPaymentView(_ vc: UIViewController) {
         log.debug("Trying to show payment view...")
-        if let view = vc as? GZEPaymentViewController {
-            
-            log.debug("payment view instantiated. Setting up its view model")
+        if let view = vc as? GZEPaymentMethodsViewController {
+
             guard let vm = self.viewModel.paymentViewModel else {
-                log.error("Unable to instantiate payment view model")
+                log.error("Unable to instantiate paymentViewModel")
                 GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
                 return
             }
-
             view.viewModel = vm
 
         } else {

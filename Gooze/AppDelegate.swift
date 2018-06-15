@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SwiftyBeaver
+import Braintree
 
 let log = SwiftyBeaver.self
 
@@ -22,8 +23,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
 
         initialSetup()
+
+        // Same as: Project Navigator and navigate to App Target > Info > URL Types
+        BTAppSwitch.setReturnURLScheme("net.gooze.Gooze.payments")
         
         return true
+    }
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        if url.scheme?.localizedCaseInsensitiveCompare("net.gooze.Gooze.payments") == .orderedSame {
+            return BTAppSwitch.handleOpen(url, options: options)
+        }
+
+        return false
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -56,7 +68,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GZEAppConfig.load()
         setUpLogs()
         setUpInitialController()
-        
+
+        let pageControl = UIPageControl.appearance()
+        pageControl.backgroundColor = .clear
 
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: GZEConstants.Font.main, NSForegroundColorAttributeName: UIColor.white]
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)

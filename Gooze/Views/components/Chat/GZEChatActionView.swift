@@ -52,7 +52,8 @@ class GZEChatActionView: UIView {
         accessoryButton.backgroundColor = .clear
         
         mainButton.titleEdgeInsets.left = accessoryButtonWidth
-        mainButton.maxWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - accessoryButtonWidth * 2 - 20
+        //mainButton.maxWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - accessoryButtonWidth * 2 - 20
+        mainButton.widthConstraint.constant = 160
         
         accessoryButton.setImage(#imageLiteral(resourceName: "chat-send-amount") ,for: .normal)
         accessoryButton.imageEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)

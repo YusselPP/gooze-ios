@@ -178,6 +178,8 @@ class GZEUser: NSObject, Glossy {
 
     //var password: String?
 
+    var paypalCustomerId: String?
+
     var birthday: Date?
     var gender: Gender?
     var weight: Float?
@@ -274,6 +276,8 @@ class GZEUser: NSObject, Glossy {
         self.email = email
         // self.password = "password" <~~ json
 
+        self.paypalCustomerId = "payment.paypalCustomerId" <~~ json
+
         self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
         self.gender = "gender" <~~ json
 
@@ -328,6 +332,8 @@ class GZEUser: NSObject, Glossy {
             "username" ~~> self.username,
             "email" ~~> self.email,
             //"password" ~~> self.password,
+
+            "payment.paypalCustomerId" ~~> self.paypalCustomerId,
 
             "gender" ~~> self.gender,
             "weight" ~~> self.weight,
@@ -477,7 +483,7 @@ class GZEUser: NSObject, Glossy {
                 ruleSet.add(rule: ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: fieldName)))
                 ruleSet.add(rule: ValidationRulePattern(pattern: EmailValidationPattern.standard, error: GZEValidationError.invalidEmail))
             case .password:
-                ruleSet.add(rule: ValidationRuleLength(min: 8, error: GZEValidationError.lengthMin(fieldName: fieldName, min: 8)))
+                ruleSet.add(rule: ValidationRuleLength(min: 4, error: GZEValidationError.lengthMin(fieldName: fieldName, min: 4)))
 
             case .birthday:
                 //var date

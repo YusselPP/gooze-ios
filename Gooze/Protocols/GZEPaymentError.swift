@@ -10,6 +10,7 @@ import Foundation
 
 enum GZEPaymentError: Error {
     case missingRequiredParams
+    case paypal(_: Error)
 }
 
 extension GZEPaymentError: LocalizedError {
@@ -20,7 +21,8 @@ extension GZEPaymentError: LocalizedError {
         switch self {
         case .missingRequiredParams:
             message = "error.payment.missingRequiredParams".localized()
-
+        case .paypal(let error):
+            message = error.localizedDescription
         }
         return message
     }

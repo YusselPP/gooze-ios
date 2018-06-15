@@ -126,7 +126,15 @@ class GZEProfileViewController: UIViewController {
         //ocupationLabel.reactive.text <~ viewModel.ocupation
         interestsLabel.reactive.text <~ viewModel.interestedIn
 
-        profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
+        //profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
+        viewModel.profilePic.producer.startWithValues{[weak self] in
+            guard let this = self else {return}
+            if let img = $0 {
+                this.profileImageView.af_setImage(withURLRequest: img, filter: NoirFilter())
+            } else {
+                this.profileImageView.image = nil
+            }
+        }
 
         contactButton.reactive.isHidden <~ viewModel.actionButtonIsHidden
         contactButton.reactive.title <~ viewModel.actionButtonTitle
