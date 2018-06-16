@@ -46,6 +46,7 @@ class GZESignUpViewModel: NSObject {
     let email = MutableProperty<String?>(nil)
     let password = MutableProperty<String?>(nil)
     let registerCode = MutableProperty<String?>(nil)
+    let termsAccepted = MutableProperty<Bool>(false)
 
     enum validationRule {
         case username

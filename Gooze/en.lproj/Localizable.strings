@@ -63,6 +63,9 @@
 "female"="female";
 "other"="other";
 
+// ViewModel/GZEWebViewModelTerms
+"vm.web.terms"="Terms & conditions";
+
 // ViewModel/GZESignUpViewModel - GZESignUpBasicViewController
 "vm.signUp.viewTitle"="Sign up";
 "vm.signUp.facebookSignUpButtonTitle"="Sign up with Facebook";

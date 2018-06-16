@@ -87,7 +87,7 @@ class GZEUsersList: UIView {
         self.usersListBackground.layer.masksToBounds = true
         self.usersListBackground.backgroundColor = UIColor(white: 1/3, alpha: 0.7)
         self.actionButton.setGrayFormat()
-        self.dismissView.label.font = GZEConstants.Font.mainBig
+        self.dismissView.label.font = GZEConstants.Font.mainSuperBig
         self.dismissView.label.textColor = .white
         self.dismissView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismiss)))
 

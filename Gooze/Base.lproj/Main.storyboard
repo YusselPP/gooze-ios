@@ -12,6 +12,76 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Web View Controller-->
+        <scene sceneID="de9-vv-GZj">
+            <objects>
+                <viewController id="y2V-Bd-vrO" customClass="GZEWebViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pei-V9-cRP"/>
+                        <viewControllerLayoutGuide type="bottom" id="vyA-qC-hqE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="K95-lZ-lhy">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="GZS-HT-knk">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Yv-ed-4xN" userLabel="top-bar">
+                                <rect key="frame" x="0.0" y="20" width="320" height="57"/>
+                                <subviews>
+                                    <imageView contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav-close-button" translatesAutoresizingMaskIntoConstraints="NO" id="PEv-H4-1OX">
+                                        <rect key="frame" x="264" y="0.0" width="48" height="57"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="57" id="Ovr-kV-yCe"/>
+                                            <constraint firstAttribute="width" constant="48" id="jFp-4c-2Xd"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cwu-Vz-fVK" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="48" y="18" width="216" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="cwu-Vz-fVK" firstAttribute="leading" secondItem="4Yv-ed-4xN" secondAttribute="leading" constant="48" id="Cmt-Ds-D7u"/>
+                                    <constraint firstAttribute="height" constant="57" id="Lbe-Al-1NF"/>
+                                    <constraint firstItem="PEv-H4-1OX" firstAttribute="leading" secondItem="cwu-Vz-fVK" secondAttribute="trailing" id="UK4-96-60T"/>
+                                    <constraint firstItem="cwu-Vz-fVK" firstAttribute="centerY" secondItem="4Yv-ed-4xN" secondAttribute="centerY" id="pVj-WE-ewm"/>
+                                    <constraint firstItem="PEv-H4-1OX" firstAttribute="top" secondItem="4Yv-ed-4xN" secondAttribute="top" id="td0-xv-Bu8"/>
+                                    <constraint firstItem="PEv-H4-1OX" firstAttribute="trailing" secondItem="4Yv-ed-4xN" secondAttribute="trailingMargin" id="yHr-dK-7H7"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ic8-7f-bvK" userLabel="web-view-container">
+                                <rect key="frame" x="0.0" y="77" width="320" height="491"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Ic8-7f-bvK" secondAttribute="trailing" id="16J-4y-zff"/>
+                            <constraint firstItem="Ic8-7f-bvK" firstAttribute="top" secondItem="4Yv-ed-4xN" secondAttribute="bottom" id="6ti-11-ueF"/>
+                            <constraint firstItem="vyA-qC-hqE" firstAttribute="top" secondItem="Ic8-7f-bvK" secondAttribute="bottom" id="8cL-qC-TYC"/>
+                            <constraint firstItem="Ic8-7f-bvK" firstAttribute="leading" secondItem="K95-lZ-lhy" secondAttribute="leading" id="GLk-3Z-Van"/>
+                            <constraint firstAttribute="bottom" secondItem="GZS-HT-knk" secondAttribute="bottom" id="KBe-Ak-HrY"/>
+                            <constraint firstItem="4Yv-ed-4xN" firstAttribute="top" secondItem="pei-V9-cRP" secondAttribute="bottom" id="MpL-nu-pZ1"/>
+                            <constraint firstItem="4Yv-ed-4xN" firstAttribute="leading" secondItem="K95-lZ-lhy" secondAttribute="leading" id="PoH-vz-Tjm"/>
+                            <constraint firstItem="GZS-HT-knk" firstAttribute="top" secondItem="K95-lZ-lhy" secondAttribute="top" id="bJ4-dC-3ha"/>
+                            <constraint firstAttribute="trailing" secondItem="GZS-HT-knk" secondAttribute="trailing" id="i52-fp-Pn2"/>
+                            <constraint firstAttribute="trailing" secondItem="4Yv-ed-4xN" secondAttribute="trailing" id="q27-Xw-961"/>
+                            <constraint firstItem="GZS-HT-knk" firstAttribute="leading" secondItem="K95-lZ-lhy" secondAttribute="leading" id="saW-WN-v3A"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="closeButtonView" destination="PEv-H4-1OX" id="fAp-N7-Ktv"/>
+                        <outlet property="titleLabel" destination="cwu-Vz-fVK" id="MR8-VR-jXx"/>
+                        <outlet property="webViewContainer" destination="Ic8-7f-bvK" id="rD8-8n-Fae"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QOm-CP-umP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3189.375" y="-1460.9154929577464"/>
+        </scene>
         <!--Register Code View Controller-->
         <scene sceneID="eW9-W0-1FF">
             <objects>
@@ -92,6 +162,7 @@
                         <outlet property="scrollView" destination="hsk-Kh-A4v" id="P7I-iL-P6J"/>
                         <outlet property="viewBottomSpaceConstraint" destination="Wrf-wn-pqM" id="VJc-WV-Amz"/>
                         <segue destination="2xt-bn-0V0" kind="show" identifier="signUpToProfileSegue" id="Hhf-2f-EG4"/>
+                        <segue destination="y2V-Bd-vrO" kind="presentation" identifier="segueToTerms" id="wcH-GV-uaW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FgR-fh-4bU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -338,22 +409,22 @@
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="57Y-zh-rU7">
-                                <rect key="frame" x="26" y="523" width="34" height="35"/>
+                                <rect key="frame" x="26" y="523" width="33" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="0gc-az-YdN"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Skip"/>
                                 <connections>
                                     <action selector="skipButtonTapped:" destination="2xt-bn-0V0" eventType="touchUpInside" id="Wyh-Jh-gz8"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aAw-J3-Lhi">
-                                <rect key="frame" x="256" y="523" width="38" height="35"/>
+                                <rect key="frame" x="257" y="523" width="37" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="9qP-UX-tue"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Save"/>
                             </button>
                         </subviews>
@@ -462,6 +533,7 @@
                                             </view>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9e2-Dw-qta" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
                                                 <rect key="frame" x="16" y="252" width="288" height="252"/>
+                                                <color key="tintColor" red="0.069920279309640565" green="0.56393771701388884" blue="0.51631973187128699" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </view>
                                         </subviews>
                                         <constraints>
@@ -859,7 +931,7 @@
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7NL-6u-bwj">
                                         <rect key="frame" x="258" y="158" width="52" height="35"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Button"/>
                                         <connections>
                                             <action selector="nextButtonTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="FFh-k5-Cfb"/>
@@ -869,8 +941,8 @@
                                         <rect key="frame" x="10" y="10" width="300" height="35"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q1R-A3-Nh8">
-                                                <rect key="frame" x="0.0" y="0.0" width="72" height="35"/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="70" height="35"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
                                                 <state key="normal" title="Button"/>
                                                 <connections>
@@ -878,11 +950,11 @@
                                                 </connections>
                                             </button>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15" minValue="1" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="pU0-Sj-avk">
-                                                <rect key="frame" x="85" y="0.0" width="150" height="36"/>
+                                                <rect key="frame" x="83" y="0.0" width="154" height="36"/>
                                             </slider>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r0n-5a-yIm">
-                                                <rect key="frame" x="248" y="0.0" width="52" height="35"/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                <rect key="frame" x="250" y="0.0" width="50" height="35"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                 <state key="normal" title="Button"/>
                                                 <connections>
                                                     <action selector="applyButtonTapped:" destination="66d-od-zfu" eventType="touchUpInside" id="LIa-V3-Jkx"/>
@@ -904,8 +976,8 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Bh-nd-CJb">
-                                        <rect key="frame" x="263" y="10" width="42" height="20"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <rect key="frame" x="265" y="10" width="40" height="20"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -3004,13 +3076,14 @@
         <image name="gooze-text" width="120" height="37"/>
         <image name="main-background" width="750" height="1334"/>
         <image name="movie-icon" width="61" height="45"/>
+        <image name="nav-close-button" width="28" height="37"/>
         <image name="navigation-icon" width="40" height="39"/>
         <image name="pin-w-shadow" width="95" height="86"/>
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aoX-cG-RKK"/>
-        <segue reference="ZKk-02-86h"/>
+        <segue reference="uRz-tZ-uiL"/>
         <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>
     </inferredMetricsTieBreakers>

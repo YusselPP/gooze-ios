@@ -4,6 +4,8 @@
 <dict>
 	<key>AppTitle</key>
 	<string>Gooze</string>
+    <key>GoozeUrl</key>
+    <string>http://216.250.114.156/</string>
 	<key>GoozeApiUrl</key>
 	<string>http://216.250.114.156/api</string>
 	<key>LogLevel</key>

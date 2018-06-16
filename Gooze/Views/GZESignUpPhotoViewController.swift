@@ -237,8 +237,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         setupBlur()
         setupDblCtrlView()
 
-        undoButton.button.frame = CGRect(x: 0.0, y: 0.0, width: 45, height: 45)
-        undoButton.button.setImage(#imageLiteral(resourceName: "undo-icon"), for: .normal)
+        let image = #imageLiteral(resourceName: "undo-icon")
+        undoButton.button.frame = CGRect(x: 0.0, y: 0.0, width: image.size.width, height: image.size.height)
+        undoButton.button.setImage(image, for: .normal)
 
         backButton.onButtonTapped =  { [weak self] btn in  self?.backButtonTapped(btn) }
         nextButton.onButtonTapped =  { [weak self] btn in  self?.nextButtonTapped(btn) }

@@ -42,8 +42,8 @@ class GZEUserBalloon: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         log.debug("awakeFromNib")
-        imageViewHeightConstraint = heightAnchor.constraint(equalTo: superview!.heightAnchor, multiplier: 0.25)
-        imageViewWidthConstraint = widthAnchor.constraint(equalTo: superview!.widthAnchor, multiplier: 0.25)
+        imageViewHeightConstraint = heightAnchor.constraint(equalTo: superview!.heightAnchor, multiplier: 0.33)
+        imageViewWidthConstraint = widthAnchor.constraint(equalTo: superview!.widthAnchor, multiplier: 0.33)
     }
 
     override func layoutSubviews() {

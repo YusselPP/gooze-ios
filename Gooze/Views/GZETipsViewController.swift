@@ -11,7 +11,7 @@ import UIKit
 class GZETipsViewController: UIViewController {
 
     let stackView = UIStackView()
-    let backButton = GZEBackUIBarButtonItem()
+    let backButton = GZECloseUIBarButtonItem()
 
     let tips = [
         "Lorem ipsum dolor sit amet, coctetuer adipiscing elit, sed diam nonum",

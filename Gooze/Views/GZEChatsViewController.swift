@@ -16,7 +16,7 @@ class GZEChatsViewController: UIViewController {
 
     var viewModel: GZEChatsViewModel!
 
-    let backButton = GZEBackUIBarButtonItem()
+    let backButton = GZECloseUIBarButtonItem()
     let chatsCollectionView = GZEChatsCollectionView()
     // let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
 

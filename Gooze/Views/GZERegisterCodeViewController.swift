@@ -11,8 +11,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import Validator
 
-class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
-
+class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZEDismissVCDelegate {
     var viewModel: GZESignUpViewModel!
 
     var signupAction: CocoaAction<UIBarButtonItem>!
@@ -20,6 +19,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
     var emailExistsAction: CocoaAction<UIBarButtonItem>!
 
     let signUpToProfileSegue = "signUpToProfileSegue"
+    let segueToTerms = "segueToTerms"
 
     var scene: Scene = .registerCode {
         didSet {
@@ -31,6 +31,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         case username
         case email
         case password
+        case terms
         case registerCode
         case facebookOrEmail
         case createOrSkipProfile
@@ -163,7 +164,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
                 } else {
                     log.error("Unexpected value type[\(type(of: value))]. Expecting Bool")
                 }
-            case .password:
+            case .terms:
                 if let user = value as? GZEUser {
                     onSaveSuccess(user)
                 } else {
@@ -222,6 +223,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             showFacebookOrEmailScene()
         case .password:
             showEmailScene()
+        case .terms:
+            showPasswordScene()
         default:
             break
         }
@@ -237,6 +240,12 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             topTextField.validate()
         case .facebookOrEmail:
             showEmailScene()
+        case .terms:
+            if viewModel.termsAccepted.value {
+                signupAction.execute(nextBarButton)
+            } else {
+                GZEAlertService.shared.showBottomAlert(text: "Es necesario aceptar los terminos y condiciones")
+            }
         default:
             break
         }
@@ -304,7 +313,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             case .email:
                 emailExistsAction.execute(nextBarButton)
             case .password:
-                signupAction.execute(nextBarButton)
+                //signupAction.execute(nextBarButton)
+                showTermsScene()
             default:
                 break
             }
@@ -346,6 +356,16 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
                 viewController.viewModel = vm
             } else {
                 log.error("Unable to initialize GZESignUpProfileViewController. Invalid GZEUpdateProfileViewModel")
+                self.onError(.repository(error: .UnexpectedError))
+            }
+        } else if segue.identifier == self.segueToTerms {
+            if
+                let viewController = segue.destination as? GZEWebViewController
+            {
+                viewController.delegate = self
+                viewController.viewModel = GZEWebViewModelTerms()
+            } else {
+                log.error("Unable to instantiate GZEWebViewController.")
                 self.onError(.repository(error: .UnexpectedError))
             }
         }
@@ -488,6 +508,38 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
         topTextField.becomeFirstResponder()
     }
 
+    func showTermsScene() {
+        scene = .terms
+        showNavigationBar(true, animated: true)
+
+        topLabel.text = "Aceptar términos y condiciones"
+        let switchContainer = UIView()
+        let botSwitch = UISwitch()
+        botSwitch.onTintColor = GZEConstants.Color.mainGreen
+        switchContainer.translatesAutoresizingMaskIntoConstraints = false
+        botSwitch.translatesAutoresizingMaskIntoConstraints = false
+
+        switchContainer.addSubview(botSwitch)
+
+        switchContainer.topAnchor.constraint(equalTo: botSwitch.topAnchor, constant: -15).isActive = true
+        switchContainer.centerXAnchor.constraint(equalTo: botSwitch.centerXAnchor).isActive = true
+
+        viewModel.termsAccepted.producer.startWithValues {
+            botSwitch.setOn($0, animated: true)
+        }
+        viewModel.termsAccepted <~ botSwitch.reactive.isOnValues
+
+        dblCtrlView.topCtrlView = topLabel
+        dblCtrlView.bottomCtrlView = switchContainer
+
+        dblCtrlView.topViewTappedHandler = { [unowned self] _ in
+            self.performSegue(withIdentifier: self.segueToTerms, sender: nil)
+        }
+        dblCtrlView.bottomViewTappedHandler = { [unowned self] _ in
+            self.viewModel.termsAccepted.value = !self.viewModel.termsAccepted.value
+        }
+    }
+
     func showSignupSuccessScene() {
         scene = .signupSuccess
 
@@ -532,6 +584,11 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate {
             self.chooseModeController()
         }
         topTextField.resignFirstResponder()
+    }
+
+    // GZEDimissVCDelegate
+    func onDismissTapped() {
+        self.dismiss(animated: true)
     }
 
     // MARK: Deinitializers

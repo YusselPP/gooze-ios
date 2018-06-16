@@ -13,7 +13,11 @@ class GZEMenuView: UIView {
     let scrollView = UIScrollView()
     let menuList = UIStackView()
     let background = UIView()
-    let dismissView = DismissView()
+    // let dismissView = DismissView()
+    let closeBarButton = GZECloseUIBarButtonItem()
+    lazy var dismissView: UIButton = {
+        return self.closeBarButton.button
+    }()
 
     var onDismiss: (() -> ())?
 
@@ -40,9 +44,10 @@ class GZEMenuView: UIView {
         self.background.backgroundColor = .darkGray
         self.background.alpha = 0.95
 
-        self.dismissView.label.font = GZEConstants.Font.mainSuperBig
-        self.dismissView.label.textColor = .white
-        self.dismissView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissViewTapped)))
+        //self.dismissView.label.font = GZEConstants.Font.mainSuperBig
+        //self.dismissView.label.textColor = .white
+        //self.dismissView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissViewTapped)))
+        self.closeBarButton.onButtonTapped = self.dismissViewTapped
 
         self.scrollView.alwaysBounceHorizontal = false
         self.scrollView.addSubview(self.menuList)
@@ -87,7 +92,7 @@ class GZEMenuView: UIView {
 
     }
 
-    func dismissViewTapped() {
+    func dismissViewTapped(_ sender: UIButton) {
         self.onDismiss?()
     }
 }

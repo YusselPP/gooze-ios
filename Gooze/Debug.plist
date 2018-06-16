@@ -4,6 +4,8 @@
 <dict>
 	<key>AppTitle</key>
 	<string>Gooze</string>
+	<key>GoozeUrl</key>
+	<string>http://61e4aae2.ngrok.io/development/</string>
 	<key>GoozeApiUrl</key>
 	<string>http://23139309.ngrok.io/development/api</string>
 	<key>LogLevel</key>

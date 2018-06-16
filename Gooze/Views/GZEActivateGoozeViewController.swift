@@ -129,6 +129,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        if let authorizationMessage = locationService.requestAuthorization() {
+            GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
+        }
+
         self.initMapKit()
 
         if self.shouldRestartSearchingAnmiation {

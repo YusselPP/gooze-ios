@@ -16,7 +16,7 @@ class GZEProfilePageViewController: UIPageViewController {
     var galleryVm: GZEGalleryViewModel!
     var ratingsVm: GZERatingsViewModel!
 
-    var backButton = GZEBackUIBarButtonItem()
+    var backButton = GZECloseUIBarButtonItem()
 
     private(set) lazy var orderedVms: [GZEProfileViewModel] = {
         return [

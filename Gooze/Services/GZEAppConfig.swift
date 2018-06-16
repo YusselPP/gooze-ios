@@ -60,6 +60,10 @@ class GZEAppConfig {
         return getValue("LogAppKey", defaultValue: "")
     }
 
+    static var goozeUrl: String {
+        return getValue("GoozeUrl", defaultValue: "http://localhost:3000/")
+    }
+
     static var goozeApiUrl: String {
         return getValue("GoozeApiUrl", defaultValue: "http://localhost:3000/api")
     }

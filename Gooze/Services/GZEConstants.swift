@@ -26,7 +26,7 @@ class GZEConstants {
         static let timeSliderBackground = UIColor(red: 55/255, green: 56/255, blue: 61/255, alpha: 0.59)
 
         // Next button, button border
-        static let mainGreen = UIColor(red: 46/255, green: 206/255, blue: 175/255, alpha: 1.0)
+        static let mainGreen = UIColor(red: 46/255, green: 190/255, blue: 159/255, alpha: 1.0)
 
         static let buttonBackground = UIColor(white: 77/255, alpha: 1.0) // also photo placeholders background
         static let buttonToggledBackground = UIColor(white: 57/255, alpha: 1.0)
@@ -75,10 +75,11 @@ class GZEConstants {
         static var mainSuperBig: UIFont {
             if GZEConstants.horizontalSize == .compact {
                 log.debug("using compact font")
-                return UIFont(name: "HelveticaNeue-Light", size: 30)!
+                return UIFont.systemFont(ofSize: 36, weight: UIFontWeightUltraLight)
+
             } else {
                 log.debug("using regular font")
-                return UIFont(name: "HelveticaNeue-Light", size: 36)!
+                return UIFont.systemFont(ofSize: 40, weight: UIFontWeightUltraLight)
             }
         }
 
