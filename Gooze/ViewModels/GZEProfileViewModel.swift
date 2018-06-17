@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import enum Result.NoError
 
 protocol GZEProfileViewModel {
 
@@ -24,6 +25,8 @@ protocol GZEProfileViewModel {
     var actionButtonTitle: MutableProperty<String> { get }
 
     var controller: UIViewController? { get set }
+
+    var didLoadObs: Observer<Void, NoError> {get}
 
     func startObservers()
     func stopObservers()

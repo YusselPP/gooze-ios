@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import enum Result.NoError
 
 class GZEProfileViewModelRateDate: GZEProfileViewModel {
 
@@ -25,6 +26,8 @@ class GZEProfileViewModelRateDate: GZEProfileViewModel {
     let actionButtonTitle = MutableProperty<String>("vm.profile.rate.date.rate".localized())
 
     weak var controller: UIViewController?
+
+    let (didLoad, didLoadObs) = Signal<Void, NoError>.pipe()
 
     func startObservers() {
     }

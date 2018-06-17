@@ -8,6 +8,7 @@
 
 import UIKit
 import ReactiveSwift
+import SwiftOverlays
 
 extension UIImageView {
 
@@ -69,6 +70,28 @@ extension Reactive where Base: UIImageView {
         return makeBindingTarget {
             if let urlRequest = $1 {
                 $0.af_setImage(withURLRequest: urlRequest)
+            }
+        }
+    }
+
+    public var imageUrlRequestLoading: BindingTarget<URLRequest?> {
+        return makeBindingTarget { base, request in
+            if let urlRequest = request {
+                SwiftOverlays.showCenteredWaitOverlay(base).backgroundColor = .clear
+                base.af_setImage(withURLRequest: urlRequest) { _ in
+                    SwiftOverlays.removeAllOverlaysFromView(base)
+                }
+            }
+        }
+    }
+
+    public var noirImageUrlRequestLoading: BindingTarget<URLRequest?> {
+        return makeBindingTarget { base, request in
+            if let urlRequest = request {
+                SwiftOverlays.showCenteredWaitOverlay(base).backgroundColor = .clear
+                base.af_setImage(withURLRequest: urlRequest, filter: NoirFilter()) { _ in
+                    SwiftOverlays.removeAllOverlaysFromView(base)
+                }
             }
         }
     }

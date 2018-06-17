@@ -45,6 +45,7 @@ class GZERatingsViewController: UIViewController {
 
         setupInterfaceObjects()
         setUpBindings()
+        viewModel.didLoadObs.send(value: ())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -136,15 +137,7 @@ class GZERatingsViewController: UIViewController {
         }
         
         usernameLabel.reactive.text <~ viewModel.username
-        //profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
-        viewModel.profilePic.producer.startWithValues{[weak self] in
-            guard let this = self else {return}
-            if let img = $0 {
-                this.profileImageView.af_setImage(withURLRequest: img, filter: NoirFilter())
-            } else {
-                this.profileImageView.image = nil
-            }
-        }
+        profileImageView.reactive.noirImageUrlRequestLoading <~ viewModel.profilePic
         phraseLabel.reactive.text <~ viewModel.phrase
 
         imagesRatingLabel.reactive.text <~ viewModel.imagesRatingDesc

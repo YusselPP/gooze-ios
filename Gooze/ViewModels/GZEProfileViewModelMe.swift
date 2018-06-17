@@ -10,6 +10,7 @@ import UIKit
 import ReactiveCocoa
 import ReactiveSwift
 import enum Result.NoError
+import SwiftOverlays
 
 class GZEProfileViewModelMe: GZEProfileViewModel {
 
@@ -21,17 +22,54 @@ class GZEProfileViewModelMe: GZEProfileViewModel {
     let error = MutableProperty<String?>(nil)
     let actionButtonIsHidden = MutableProperty<Bool>(true)
     let actionButtonTitle = MutableProperty<String>("")
-    var controller: UIViewController?
+    weak var controller: UIViewController?
     func startObservers() {}
     func stopObservers() {}
+
+    let (didLoad, didLoadObs) = Signal<Void, NoError>.pipe()
     // END GZEProfileViewModel protocol
 
-    let user: GZEUser
+    var user: GZEUser
+    let userRepository: GZEUserRepositoryProtocol = GZEUserApiRepository()
 
     // MARK - init
     init(_ user: GZEUser) {
         self.user = user
         log.debug("\(self) init")
+
+        self.didLoad.signal.observeValues {[weak self] in
+            guard let this = self else {return}
+            this.getUpdatedProfile()
+        }
+    }
+
+    func getUpdatedProfile() {
+        guard let userId = GZEAuthService.shared.authUser?.id else {
+            log.error("nil authUser found")
+            return
+        }
+
+        var overlay: UIView?
+        if let view = self.controller?.view {
+            overlay = SwiftOverlays.showCenteredWaitOverlay(view)
+        }
+
+        userRepository.find(byId: userId).start() {[weak self] event in
+            log.debug("event received: \(event)")
+            guard let this = self else {return}
+
+            if let overlay = overlay {
+                overlay.removeFromSuperview()
+            }
+
+            switch event {
+            case .value(let user):
+                this.user = user
+            case .failed(let error):
+                log.error(error.localizedDescription)
+            default: break
+            }
+        }
     }
 
     deinit {

@@ -16,7 +16,7 @@ class GZEUserBalloon: UIView {
     var user: GZEChatUser?
     var rating: Float? {
         didSet {
-            starsView.setRating(rating)
+            starsView.setRating(rating ?? 0)
         }
     }
 

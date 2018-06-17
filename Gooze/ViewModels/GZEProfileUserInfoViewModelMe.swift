@@ -42,6 +42,11 @@ class GZEProfileUserInfoViewModelMe: GZEProfileViewModelMe, GZEProfileUserInfoVi
     let (dismissSignal, _) = Signal<Void, NoError>.pipe()
     // END GZEProfileUserInfoViewModel protocol
 
+    override var user: GZEUser {
+        didSet {
+            populate(self.user)
+        }
+    }
 
     // MARK - init
     override init(_ user: GZEUser) {

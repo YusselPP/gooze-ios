@@ -35,6 +35,8 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     weak var controller: UIViewController?
 
+    let (didLoad, didLoadObs) = Signal<Void, NoError>.pipe()
+
     func startObservers() {
         self.appearObs.send(value: ())
 
@@ -361,13 +363,13 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
     private func getUpdatedRequest(_ dateRequestId: String?) {
         if let dateRequestId = dateRequestId {
-            SwiftOverlays.showBlockingWaitOverlay()
+            let blocker = SwiftOverlays.showBlockingWaitOverlay()
 
             GZEDatesService.shared.find(byId: dateRequestId)
                 .start{[weak self] event in
                     log.debug("find request event received: \(event)")
 
-                    SwiftOverlays.removeAllBlockingOverlays()
+                    blocker.removeFromSuperview()
 
                     guard let this = self else {return}
                     switch event {

@@ -23,6 +23,11 @@ class GZEGalleryViewModelMe: GZEProfileViewModelMe, GZEGalleryViewModel {
         MutableProperty<URLRequest?>(nil)
     ]
 
+    override var user: GZEUser {
+        didSet {
+            populate(self.user)
+        }
+    }
 
     // MARK - init
     override init(_ user: GZEUser) {

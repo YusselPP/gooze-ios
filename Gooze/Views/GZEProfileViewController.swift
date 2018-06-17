@@ -43,6 +43,7 @@ class GZEProfileViewController: UIViewController {
 
         setupInterfaceObjects()
         setUpBindings()
+        viewModel.didLoadObs.send(value: ())
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -126,15 +127,7 @@ class GZEProfileViewController: UIViewController {
         //ocupationLabel.reactive.text <~ viewModel.ocupation
         interestsLabel.reactive.text <~ viewModel.interestedIn
 
-        //profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
-        viewModel.profilePic.producer.startWithValues{[weak self] in
-            guard let this = self else {return}
-            if let img = $0 {
-                this.profileImageView.af_setImage(withURLRequest: img, filter: NoirFilter())
-            } else {
-                this.profileImageView.image = nil
-            }
-        }
+        profileImageView.reactive.noirImageUrlRequestLoading <~ viewModel.profilePic
 
         contactButton.reactive.isHidden <~ viewModel.actionButtonIsHidden
         contactButton.reactive.title <~ viewModel.actionButtonTitle
