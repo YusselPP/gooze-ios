@@ -22,7 +22,7 @@ protocol GZEUserRepositoryProtocol {
     func publicProfile(byId id: String) -> SignalProducer<GZEUser, GZEError>
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
     func logout() -> SignalProducer<Void, GZEError>
-    func signUp(username: String, email: String, password: String) -> SignalProducer<GZEUser, GZEError>
+    func signUp(username: String, email: String, password: String, userJSON: JSON?) -> SignalProducer<GZEUser, GZEError>
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func saveSearchPic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func savePhotos(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>

@@ -10,6 +10,9 @@ import UIKit
 import CoreData
 import SwiftyBeaver
 import Braintree
+import DropDown
+import FBSDKCoreKit
+
 
 let log = SwiftyBeaver.self
 
@@ -24,8 +27,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         initialSetup()
 
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        FBSDKProfile.enableUpdates(onAccessTokenChange: true)
+
+        DropDown.startListeningToKeyboard()
+
         // Same as: Project Navigator and navigate to App Target > Info > URL Types
         BTAppSwitch.setReturnURLScheme("net.gooze.Gooze.payments")
+
+
+        // Check if launched from a notification
+        if let notification = launchOptions?[.remoteNotification] as? [String: AnyObject] {
+            //Handle launching from a notification
+            log.debug("app launched from a notification: \(notification)")
+        }
         
         return true
     }
@@ -50,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -61,6 +77,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         // self.saveContext()
     }
+
+    // MARK: - Handle remote notification registration.
+
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data){
+        // Forward the token to your provider, using a custom method.
+        // self.enableRemoteNotificationFeatures()
+        // self.forwardTokenToServer(token: deviceToken)
+        let tokenParts = deviceToken.map { data -> String in
+            return String(format: "%02.2hhx", data)
+        }
+
+        let token = tokenParts.joined()
+        log.debug("token: \(token)")
+        GZEDeviceTokenApiRepository()
+            .upsert(token: token)
+            .startWithFailed{log.error("failed to persist token: \($0)")}
+    }
+
+    func application(_ application: UIApplication,
+                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // The token is not currently available.
+        log.error("Remote notification support is unavailable due to error: \(error.localizedDescription)")
+        // self.disableRemoteNotificationFeatures()
+    }
+
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+
+        log.debug("remote notification received: \(userInfo)")
+
+    }
+
 
     // MARK: - Gooze Initial Setup
     

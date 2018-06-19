@@ -10,6 +10,8 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 import Validator
+import FBSDKLoginKit
+import Gloss
 
 class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZEDismissVCDelegate {
     var viewModel: GZESignUpViewModel!
@@ -73,7 +75,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         createMethodWeakReferences()
 
         setupNavBar()
-
         createActions()
 
         messageLabel.alpha = 0
@@ -442,7 +443,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         bottomButton.removeAllTargets()
 
         // TODO: Implement facebook login
-        // topButton.addTarget(self, action: #selector(), for: .touchUpInside)
+        topButton.addTarget(self, action: #selector(loginButtonClicked), for: .touchUpInside)
         bottomButton.addTarget(self, action: #selector(showEmailScene), for: .touchUpInside)
 
         topButton.isEnabled = true
@@ -584,6 +585,45 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
             self.chooseModeController()
         }
         topTextField.resignFirstResponder()
+    }
+
+    // Facebook login
+    func loginButtonClicked() {
+        let login = FBSDKLoginManager()
+        login.logIn(withReadPermissions: ["email"], from: self) {
+            result, error in
+
+            if let error = error {
+                log.error(error)
+                return
+            }
+
+            guard let result = result else {
+                log.error("nil result and error")
+                return
+            }
+
+            if result.isCancelled {
+                log.debug("Cancelled")
+            } else {
+                log.debug("Logged in")
+                FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"email"])
+                    .start() {[weak self] conn, result, error in
+                        if let error = error {
+                            log.error(error)
+                            return
+                        }
+
+                        if let result = result as? JSON, let email = result["email"] as? String, let id = result["id"] as? String {
+                            log.debug("\(email)")
+                            self?.viewModel.email.value = email
+                            self?.viewModel.facebookId.value = id
+                            self?.showEmailScene()
+                        }
+                    }
+
+            }
+        }
     }
 
     // GZEDimissVCDelegate

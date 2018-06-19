@@ -3,6 +3,12 @@ PODS:
   - AlamofireImage (3.3.0):
     - Alamofire (~> 4.5)
   - ALCameraViewController (2.0.3)
+  - Bolts (1.9.0):
+    - Bolts/AppLinks (= 1.9.0)
+    - Bolts/Tasks (= 1.9.0)
+  - Bolts/AppLinks (1.9.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.9.0)
   - Braintree (4.15.0):
     - Braintree/Card (= 4.15.0)
     - Braintree/Core (= 4.15.0)
@@ -41,6 +47,11 @@ PODS:
     - BraintreeDropIn/UIKit
   - BraintreeDropIn/UIKit (6.1.0)
   - DeepDiff (1.1.2)
+  - DropDown (2.3.2)
+  - FBSDKCoreKit (4.33.0):
+    - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.33.0):
+    - FBSDKCoreKit
   - FloatRatingView (2.0)
   - Gloss (1.2.4)
   - Localize-Swift (2.0.0)
@@ -64,6 +75,8 @@ DEPENDENCIES:
   - Braintree
   - BraintreeDropIn
   - DeepDiff
+  - DropDown
+  - FBSDKLoginKit
   - FloatRatingView (~> 2.0.0)
   - Gloss (~> 1.2.0)
   - Localize-Swift (~> 2.0)
@@ -79,9 +92,13 @@ SPEC REPOS:
     - Alamofire
     - AlamofireImage
     - ALCameraViewController
+    - Bolts
     - Braintree
     - BraintreeDropIn
     - DeepDiff
+    - DropDown
+    - FBSDKCoreKit
+    - FBSDKLoginKit
     - FloatRatingView
     - Gloss
     - Localize-Swift
@@ -99,9 +116,13 @@ SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
   ALCameraViewController: 7b86c2888df0e63f53a801e9d96fe194f51157ec
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Braintree: 5f10816f455ffd79c411e6d22a177846971f3677
   BraintreeDropIn: 2e8bba4facf6cc925176637030454d8308223b95
   DeepDiff: 35c661301baeb2db083ea1b9af183daab6af1c05
+  DropDown: 7f87abecc28f9b4edad810fe1211c5c018c257e5
+  FBSDKCoreKit: 572b047a7e029bc44542bcf8a59414e7ff2b543e
+  FBSDKLoginKit: 88cb456349cfb3b554427ce4f8b43729d85dfb40
   FloatRatingView: 857ab8f10040d06a42fc979f486c8f9fecd2f2e5
   Gloss: 4e036074610fdb993abcb958ebcd7332588e2333
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
@@ -115,6 +136,6 @@ SPEC CHECKSUMS:
   SwiftyBeaver: 91057725648ee4980308f1650af077d04b3654a0
   Validator: bf211c1d71b3f910d230c09c70e62429d0fef63a
 
-PODFILE CHECKSUM: 07e56da76e8baebb1fca90a1c75283d59af236a8
+PODFILE CHECKSUM: 29a406f2eebdcd4cf3525b6a5384de04c3323357
 
 COCOAPODS: 1.5.3

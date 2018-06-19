@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import Result
+import UserNotifications
 
 class GZEAuthService: NSObject {
     static let shared = GZEAuthService()
@@ -136,6 +137,7 @@ class GZEAuthService: NSObject {
         self.authUser = user
         GZESocketManager.createSockets()
         GZEDatesService.shared.listenSocketEvents()
+        registerForPushNotifications()
     }
 
     func logout(presenter: UIViewController, completion: ((Bool) -> ())? = nil) {
@@ -143,6 +145,8 @@ class GZEAuthService: NSObject {
         GZESocketManager.destroyAllSockets()
         GZEDatesService.shared.cleanup()
         GZEChatService.shared.cleanup()
+        // TODO: test unregister and register again in ios9 and 11
+        UIApplication.shared.unregisterForRemoteNotifications()
         self.userRepository.logout().start()
         self.token = nil
         self.authUser = nil
@@ -150,6 +154,40 @@ class GZEAuthService: NSObject {
     }
 
     // MARK: - private methods
+    // MARK: - register for remote notifications
+    func registerForPushNotifications() {
+        if #available(iOS 10, *) {
+
+            //Notifications get posted to the function (delegate):  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: () -> Void)"
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) {
+                (granted, error) in
+
+                guard error == nil else {
+                    //Display Error.. Handle Error.. etc..
+                    return
+                }
+
+                if granted {
+                    //Do stuff here..
+
+                    //Register for RemoteNotifications. Your Remote Notifications can display alerts now :)
+                    UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+                        print("Notification settings: \(settings)")
+                        guard settings.authorizationStatus == .authorized else { return }
+
+                    }
+                }
+                else {
+                    //Handle user denying permissions..
+                }
+            }
+        }
+        else {
+            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+        }
+        UIApplication.shared.registerForRemoteNotifications()
+    }
 
 
     // MARK: - Deinitializers

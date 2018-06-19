@@ -21,6 +21,8 @@ target 'Gooze' do
   pod 'Socket.IO-Client-Swift', '11.1.3'
   pod 'DeepDiff'
   pod 'SkyFloatingLabelTextField', '~> 3.0'
+  pod 'DropDown'
+  pod 'FBSDKLoginKit'
 
   # Includes Cards and PayPal
   pod 'Braintree'

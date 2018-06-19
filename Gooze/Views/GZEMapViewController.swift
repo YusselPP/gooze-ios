@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import DropDown
 
 class GZEMapViewController: UIViewController {
 
@@ -19,6 +20,7 @@ class GZEMapViewController: UIViewController {
     var userBalloons = [GZEUserBalloon]()
 
     let backButton = GZEBackUIBarButtonItem()
+    let dropDown = DropDown()
 
     @IBOutlet weak var topLabel: UILabel!
     @IBOutlet weak var topSliderContainer: UIView!
@@ -77,6 +79,18 @@ class GZEMapViewController: UIViewController {
 
         self.bottomActionView.accessoryButton.setImage(#imageLiteral(resourceName: "button-plus"), for: .normal)
         self.bottomActionView.accessoryButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 5, bottom: 6, right: 5)
+
+        self.dropDown.anchorView = self.bottomActionView.accessoryButton
+        self.dropDown.dataSource = ["Cancelar", "Ayuda"]
+        // Action triggered on selection
+        self.dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+            print("Selected item: \(item) at index: \(index)")
+        }
+
+        self.bottomActionView.accessoryButton.reactive.pressed = CocoaAction<UIButton>(Action<(), Any, GZEError>{SignalProducer.empty}) {[unowned self] _ in self.dropDown.show()}
+
+        // Will set a custom width instead of the anchor view width
+        // self.dropDownLeft.width = 200
     }
 
     private func setupBindings() {

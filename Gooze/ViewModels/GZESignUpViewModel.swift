@@ -9,6 +9,7 @@
 import Foundation
 import ReactiveSwift
 import Validator
+import Gloss
 
 class GZESignUpViewModel: NSObject {
 
@@ -47,6 +48,7 @@ class GZESignUpViewModel: NSObject {
     let password = MutableProperty<String?>(nil)
     let registerCode = MutableProperty<String?>(nil)
     let termsAccepted = MutableProperty<Bool>(false)
+    let facebookId = MutableProperty<String?>(nil)
 
     enum validationRule {
         case username
@@ -136,7 +138,12 @@ class GZESignUpViewModel: NSObject {
             return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.password.fieldName)))
         }
 
-        return self.userRepository.signUp(username: aUsername, email: aEmail, password: aPassword)
+        var userJSON: JSON? = nil
+        if let facebookId = facebookId.value {
+            userJSON = ["facebookId": facebookId]
+        }
+
+        return self.userRepository.signUp(username: aUsername, email: aEmail, password: aPassword, userJSON: userJSON)
     }
  
 

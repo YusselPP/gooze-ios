@@ -471,9 +471,9 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     }
 
-    func signUp(username: String, email: String, password: String) -> SignalProducer<GZEUser, GZEError> {
+    func signUp(username: String, email: String, password: String, userJSON: JSON? = nil) -> SignalProducer<GZEUser, GZEError> {
         return (
-            self.create(username: username, email: email, password: password)
+            self.create(username: username, email: email, password: password, userJSON: userJSON)
             .flatMap(FlattenStrategy.latest, transform: {[weak self] _ -> SignalProducer<GZEUser, GZEError> in
                 guard let this = self else {
                     log.error("Unable to complete the task. Self has been disposed.")

@@ -60,11 +60,11 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self?.previousController(animated: true)
         }
 
-        let titleView = UIView()
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
         let underline = UIView()
         let usernameLabel = GZELabel()
 
-        titleView.translatesAutoresizingMaskIntoConstraints = false
+        //titleView.translatesAutoresizingMaskIntoConstraints = false
         underline.translatesAutoresizingMaskIntoConstraints = false
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -75,12 +75,11 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
         underline.backgroundColor = .white
         underline.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        titleView.topAnchor.constraint(equalTo: usernameLabel.topAnchor).isActive = true
-        titleView.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor).isActive = true
-        titleView.leadingAnchor.constraint(equalTo: underline.leadingAnchor).isActive = true
-        titleView.trailingAnchor.constraint(equalTo: usernameLabel.trailingAnchor).isActive = true
-        titleView.trailingAnchor.constraint(equalTo: underline.trailingAnchor).isActive = true
-        titleView.bottomAnchor.constraint(equalTo: underline.bottomAnchor).isActive = true
+        titleView.centerXAnchor.constraint(equalTo: usernameLabel.centerXAnchor).isActive = true
+        titleView.centerYAnchor.constraint(equalTo: usernameLabel.centerYAnchor).isActive = true
+
+        usernameLabel.leadingAnchor.constraint(equalTo: underline.leadingAnchor).isActive = true
+        usernameLabel.trailingAnchor.constraint(equalTo: underline.trailingAnchor).isActive = true
         usernameLabel.bottomAnchor.constraint(equalTo: underline.topAnchor).isActive = true
 
         self.navigationItem.titleView = titleView

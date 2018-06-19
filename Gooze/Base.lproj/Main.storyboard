@@ -949,8 +949,28 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7NL-6u-bwj">
-                                        <rect key="frame" x="258" y="158" width="52" height="35"/>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Gnf-FI-Fuj" customClass="GZELibraryCollectionView" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="157"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="gsf-Xp-rG7">
+                                            <size key="itemSize" width="50" height="50"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="kVp-9W-nAv">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </view>
+                                            </collectionViewCell>
+                                        </cells>
+                                    </collectionView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7NL-6u-bwj">
+                                        <rect key="frame" x="260" y="157" width="50" height="33"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Button"/>
                                         <connections>
@@ -1007,6 +1027,10 @@
                                     <constraint firstAttribute="trailing" secondItem="6aJ-Ma-qho" secondAttribute="trailing" constant="10" id="A3R-Ka-X0K"/>
                                     <constraint firstAttribute="width" secondItem="hpx-ee-uC6" secondAttribute="height" multiplier="3:4.8" id="BVj-yz-Tia"/>
                                     <constraint firstAttribute="trailing" secondItem="7NL-6u-bwj" secondAttribute="trailing" constant="10" id="Fxx-g6-acu"/>
+                                    <constraint firstItem="Gnf-FI-Fuj" firstAttribute="leading" secondItem="hpx-ee-uC6" secondAttribute="leading" id="GxO-GS-DzM"/>
+                                    <constraint firstItem="Gnf-FI-Fuj" firstAttribute="top" secondItem="hpx-ee-uC6" secondAttribute="top" id="Hst-o4-GEx"/>
+                                    <constraint firstItem="7NL-6u-bwj" firstAttribute="top" secondItem="Gnf-FI-Fuj" secondAttribute="bottom" id="aMI-wE-jon"/>
+                                    <constraint firstAttribute="trailing" secondItem="Gnf-FI-Fuj" secondAttribute="trailing" id="gLC-CT-wXt"/>
                                     <constraint firstAttribute="width" secondItem="hpx-ee-uC6" secondAttribute="height" multiplier="4.8:3" id="iyn-R8-Jf3"/>
                                     <constraint firstAttribute="bottom" secondItem="7NL-6u-bwj" secondAttribute="bottom" constant="10" id="k1h-Dw-Nzu"/>
                                     <constraint firstItem="6aJ-Ma-qho" firstAttribute="leading" secondItem="hpx-ee-uC6" secondAttribute="leading" constant="10" id="k5E-AQ-tIY"/>
@@ -1068,6 +1092,7 @@
                         <outlet property="editButtonView" destination="MLo-Oz-9ew" id="olx-Na-5Jl"/>
                         <outlet property="imageContainerTrailingViewLeadingConstraint" destination="Nnd-ZM-pKM" id="Dz1-iP-rVO"/>
                         <outlet property="imageContainerView" destination="dO2-in-Qrd" id="UU9-Aj-It7"/>
+                        <outlet property="libraryCollectionView" destination="Gnf-FI-Fuj" id="Yrn-uu-716"/>
                         <outlet property="mainImageView" destination="4hT-lE-ril" id="XBH-aU-waS"/>
                         <outlet property="overlayView" destination="n3U-KK-ELb" id="ObK-jB-2nY"/>
                         <outlet property="photoImageView1" destination="cLL-wI-EnK" id="swu-yX-xFP"/>
@@ -3174,8 +3199,8 @@
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aoX-cG-RKK"/>
-        <segue reference="uRz-tZ-uiL"/>
+        <segue reference="ado-a7-Lxa"/>
+        <segue reference="ZKk-02-86h"/>
         <segue reference="XJg-fM-c9J"/>
         <segue reference="be1-y5-0kc"/>
     </inferredMetricsTieBreakers>

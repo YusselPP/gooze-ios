@@ -24,6 +24,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>net.gooze.Gooze.payments</string>
+                <string>fb263744227534966</string>
 			</array>
 		</dict>
 	</array>
@@ -49,7 +50,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Take a photo for your profile image</string>
+	<string>Tomar una foto para tu perfil</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Gooze quiere usar tu ubicación para ubicarte en el mapa</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -59,7 +60,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Gooze quiere usar tu ubicación para ubicarte en el mapa</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Pick a photo from your library as your profile image</string>
+	<string>Escoger una foto para tu perfil</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>fontawesome-webfont.ttf</string>
@@ -91,5 +92,16 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+    <key>FacebookAppID</key>
+    <string>263744227534966</string>
+    <key>FacebookDisplayName</key>
+    <string>Gooze</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>fbapi</string>
+        <string>fb-messenger-share-api</string>
+        <string>fbauth2</string>
+        <string>fbshareextension</string>
+    </array>
 </dict>
 </plist>

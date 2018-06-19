@@ -11,6 +11,8 @@ import ReactiveSwift
 import ReactiveCocoa
 import Result
 import ALCameraViewController
+import Photos
+import SwiftOverlays
 
 class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
@@ -45,8 +47,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
         case cameraOrReel
         case blur
-        case reel
         case camera
+        case library
 
         case gallery
     }
@@ -121,6 +123,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var photoLabel: UILabel!
 
     @IBOutlet weak var blurSlider: UISlider!
+
+    @IBOutlet weak var libraryCollectionView: GZELibraryCollectionView!
 
     // Landscape/Portrait layout constraints
     @IBOutlet weak var superviewTrailingImageContainerTrailingConstraint: NSLayoutConstraint!
@@ -237,6 +241,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         setupBlur()
         setupDblCtrlView()
 
+        self.libraryCollectionView.onSelectionComplete = fetchImage(asset:)
+
         let image = #imageLiteral(resourceName: "undo-icon")
         undoButton.button.frame = CGRect(x: 0.0, y: 0.0, width: image.size.width, height: image.size.height)
         undoButton.button.setImage(image, for: .normal)
@@ -342,7 +348,9 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         dblCtrlView.topViewTappedHandler = { _ in
             cameraButton.sendActions(for: .touchUpInside)
         }
-        dblCtrlView.bottomViewTappedHandler = dblCtrlView.topViewTappedHandler
+        dblCtrlView.bottomViewTappedHandler = { _ in
+            reelButton.sendActions(for: .touchUpInside)
+        }
     }
 
     // MARK: - Actions
@@ -371,6 +379,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             }
         case .gallery:
             saveGalleryAction.execute(sender)
+        case .library:
+            scene = .blur
         default:
             break
         }
@@ -394,6 +404,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             scene = .cameraOrReel
         case .gallery:
             previousController(animated: true)
+        case .library:
+            scene = .cameraOrReel
         default:
             break
         }
@@ -415,12 +427,13 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     @IBAction func editPhotoButtonTapped(_ sender: Any) {
-        //scene = .cameraOrReel
-        showCamera()
+        scene = .cameraOrReel
+        //showCamera()
     }
 
     @IBAction func addPhoto(_ sender: UIButton) {
-        showCamera()
+        //showCamera()
+        scene = .cameraOrReel
     }
 
     func thumbnailImageTapped(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -433,7 +446,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         selectTumbnail(tag: sender.tag)
 
         if selectedThumbnail?.value == nil {
-            showCamera()
+            //showCamera()
+            scene = .cameraOrReel
         }
     }
 
@@ -603,37 +617,44 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func showLibrary() {
-        let cameraViewController = CameraViewController.imagePickerViewController(croppingParameters: CroppingParameters(isEnabled: false, allowResizing: false, allowMoving: false)) { [weak self] image, asset in
+        scene = .library
+    }
 
-            log.debug("camera controller handler")
+    func fetchImage(asset: PHAsset?) {
+        if let asset = asset {
+            let overlay = SwiftOverlays.showCenteredWaitOverlay(imageContainerView)
+            overlay.backgroundColor = .clear
+            _ = SingleImageFetcher()
+                .setAsset(asset)
+                .onSuccess { [weak self] image in
+                    log.debug("success")
+                    overlay.removeFromSuperview()
 
-            guard let this = self else {
-                log.error("self was dispossed before calling handler")
-                return
-            }
+                    guard let this = self else {
+                        log.error("self was dispossed before calling handler")
+                        return
+                    }
 
-            guard let image = image else {
-                log.debug("Empty image received")
-                this.dismiss(animated: true, completion: nil)
-                return
-            }
+                    guard let compressedImage = GZEImageHelper.compressImage(image) else {
+                        log.error("Unable to compress the image")
+                        return
+                    }
 
-            guard let compressedImage = GZEImageHelper.compressImage(image) else {
-                log.error("Unable to compress the image")
-                this.dismiss(animated: true, completion: nil)
-                return
-            }
+                    this.viewModel.mainImage.value = compressedImage
+                    this.originalImage = compressedImage
 
-            this.viewModel.mainImage.value = compressedImage
-            this.originalImage = compressedImage
+                    this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.mainImageView, scrollView: this.backScrollView)
 
-            this.blur = GZEBlur(image: compressedImage, blurEffectView: this.blurEffectView, resultImageView: this.mainImageView, scrollView: this.backScrollView)
-
-            this.scene = .blur
-            this.dismiss(animated: true, completion: nil)
+                    // this.scene = .blur
+                }
+                .onFailure { [weak self] error in
+                    overlay.removeFromSuperview()
+                    log.error(error)
+                }
+                .fetch()
+        } else {
+            log.error("nil asset")
         }
-
-        present(cameraViewController, animated: true, completion: nil)
     }
 
     func setLayout(_ aOrientation: UIInterfaceOrientation? = nil) {
@@ -799,6 +820,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         switch scene! {
         case .cameraOrReel:
             showCameraOrReelScene()
+        case .library:
+            showLibraryScene()
         case .blur:
             showBlurScene()
         case .profilePic:
@@ -821,6 +844,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         photoLabel.isHidden = true
         blurEffectView.isHidden = true
         dblCtrlView.isHidden = true
+        libraryCollectionView.isHidden = true
 
         bottomRightButton.isHidden = true
         editButtonView.isHidden = true
@@ -833,6 +857,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         showBackButton(true)
         showNextButton(false)
 
+        viewModel.mainImage.value = selectedThumbnail?.value
+
         editButtonView.isHidden = false
         bottomRightButton.setTitle(viewModel.saveButtonTitle.uppercased(), for: .normal)
     }
@@ -842,6 +868,20 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         dblCtrlView.isHidden = false
         showBackButton(true)
         showNextButton(false)
+    }
+
+    func showLibraryScene() {
+        backScrollView.isHidden = false
+        libraryCollectionView.isHidden = false
+        bottomRightButton.isHidden = false
+        libraryCollectionView.fetchImages()
+
+        viewModel.mainImage.value = nil
+
+        showBackButton(true)
+        showNextButton(true)
+
+        bottomRightButton.setTitle(viewModel.nextButtonTitle.uppercased(), for: .normal)
     }
 
     func showBlurScene() {
