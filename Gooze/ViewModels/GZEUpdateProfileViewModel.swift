@@ -106,7 +106,6 @@ class GZEUpdateProfileViewModel: NSObject {
     
     var usernameExistsAction: Action<Void, Bool, GZEError>!
     var emailExistsAction: Action<Void, Bool, GZEError>!
-    var signupAction: Action<Void, GZEUser, GZEError>!
     var updateAction: Action<Void, GZEUser, GZEError>!
     var savePhotosAction: Action<Void, GZEUser, GZEError>!
     var saveProfilePicAction: Action<Void, GZEUser, GZEError>!
@@ -173,9 +172,6 @@ class GZEUpdateProfileViewModel: NSObject {
         emailExistsAction = Action { [unowned self] in
             return self.onEmailExistsAction()
         }
-        signupAction = Action { [unowned self] in
-            return self.onSignupAction()
-        }
         updateAction = Action { [unowned self] in
             return self.onUpdateAction()
         }
@@ -191,7 +187,6 @@ class GZEUpdateProfileViewModel: NSObject {
         
         
         Signal.merge(
-            signupAction.values,
             updateAction.values,
             savePhotosAction.values,
             saveProfilePicAction.values,
@@ -224,23 +219,7 @@ class GZEUpdateProfileViewModel: NSObject {
         
         return self.userRepository.emailExists(email)
     }
-    
-    private func onSignupAction() -> SignalProducer<GZEUser, GZEError> {
-        
-        guard let aUsername = username.value else {
-            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.username.fieldName)))
-        }
-        
-        guard let aEmail = email.value else {
-            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.email.fieldName)))
-        }
-        
-        guard let aPassword = password.value else {
-            return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.password.fieldName)))
-        }
-        
-        return self.userRepository.signUp(username: aUsername, email: aEmail, password: aPassword)
-    }
+
     
     private func onUpdateAction() -> SignalProducer<GZEUser, GZEError> {
         

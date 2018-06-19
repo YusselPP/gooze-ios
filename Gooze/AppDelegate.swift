@@ -50,6 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return BTAppSwitch.handleOpen(url, options: options)
         }
 
+        if url.scheme?.localizedCaseInsensitiveCompare("fb263744227534966") == .orderedSame {
+            return FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
+        }
+
         return false
     }
 

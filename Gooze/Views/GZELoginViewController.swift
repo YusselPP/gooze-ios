@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import ReactiveCocoa
+import SwiftOverlays
 
 class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
@@ -29,6 +30,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     var viewModel: GZELoginViewModel!
 
     var loginAction: CocoaAction<UIBarButtonItem>!
+    var facebookLoginAction: CocoaAction<UIBarButtonItem>!
 
     let usernameLabel = UILabel()
     let passwordLabel = UILabel()
@@ -46,6 +48,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var doubleCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var viewBottomSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomButton: GZEButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,6 +91,22 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         signUpButton.setTitle(viewModel.signUpButtonTitle.uppercased(), for: .normal)
         forgotPasswordButton.setTitle(viewModel.forgotPasswordButtonTitle, for: .normal)
 
+        bottomButton.setGrayFormat()
+        let title = "\u{f09a}  " + "vm.login.facebookLogin".localized()
+        let attributedTitle = NSMutableAttributedString(string: title)
+        attributedTitle.setAttributes(
+            [NSFontAttributeName: GZEConstants.Font.mainAwesome],
+            range: NSRange.init(location: 0, length: 1)
+        )
+        attributedTitle.setAttributes(
+            [NSFontAttributeName: GZEConstants.Font.main],
+            range: NSRange.init(location: 1, length: title.count - 2)
+        )
+
+        bottomButton.widthConstraint.constant = 220
+
+        bottomButton.setAttributedTitle(attributedTitle, for: .normal)
+        bottomButton.addTarget(self, action: #selector(facebookLogin), for: .touchUpInside)
 
         emailTextField.keyboardType = .emailAddress
         emailTextField.returnKeyType = .next
@@ -119,7 +138,17 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         { [weak self] _ in
             self?.showLoading()
         }
-        viewModel.loginAction.events.observeValues(ptr(self, GZELoginViewController.onEvent))
+        facebookLoginAction = CocoaAction(viewModel.facebookLoginAction)
+        { [weak self] _ in
+            self?.showLoading()
+        }
+
+        viewModel.loginAction.events.observeValues {[weak self] in
+            self?.onEvent(event: $0)
+        }
+        viewModel.facebookLoginAction.events.observeValues {[weak self] in
+            self?.onEvent(event: $0)
+        }
     }
 
     // MARK: CocoaAction
@@ -130,7 +159,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         switch event {
         case .value(let token):
             switch scene {
-            case .password:
+            case .password, .login:
                 onLogin(token)
             default:
                 break
@@ -234,6 +263,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         showNavigationBar(false, animated: true)
 
         logoView.alpha = 1
+        bottomButton.alpha = 0
 
         doubleCtrlView.topCtrlView = loginButton
         doubleCtrlView.bottomCtrlView = signUpButton
@@ -250,6 +280,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         showNavigationBar(true, animated: true)
 
         logoView.alpha = 0
+        bottomButton.alpha = 1
 
         doubleCtrlView.topCtrlView = emailTextField
         doubleCtrlView.bottomCtrlView = usernameLabel
@@ -259,13 +290,14 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         }
         doubleCtrlView.bottomViewTappedHandler = doubleCtrlView.topViewTappedHandler
 
-        emailTextField.becomeFirstResponder()
+        // emailTextField.becomeFirstResponder()
     }
 
     func showPasswordScene() {
         showNavigationBar(true, animated: true)
 
         logoView.alpha = 0
+        bottomButton.alpha = 0
 
         doubleCtrlView.topCtrlView = passwordTextField
         doubleCtrlView.bottomCtrlView = passwordLabel
@@ -276,6 +308,29 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         doubleCtrlView.bottomViewTappedHandler = doubleCtrlView.topViewTappedHandler
 
         passwordTextField.becomeFirstResponder()
+    }
+
+    // Facebook login
+    func facebookLogin() {
+        let fbService = GZEFacebookService.shared
+        let overlay = SwiftOverlays.showCenteredWaitOverlay(self.view)
+
+        fbService
+            .login(withReadPermissions: ["email"], from: self)
+            .start{[weak self] event in
+                log.debug("event received: \(event)")
+                overlay.removeFromSuperview()
+                guard let this = self else {return}
+
+                switch event {
+                case .value(let token):
+                    this.viewModel.facebookToken.value = token.tokenString
+                    this.facebookLoginAction.execute(this.nextButton)
+                case .failed(let error):
+                    this.onError(error)
+                default: break
+                }
+        }
     }
 
     // MARK: - KeyboardNotifications

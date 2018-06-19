@@ -75,10 +75,13 @@
 
 "vm.signUp.textField.validation.failed"="La información ingresada es inválida";
 
+"vm.singUp.validation.facebookExists"="Ya hay una cuenta asociada con este facebook";
+
 "vm.signUp.interests.friendlyDates" = "Citas amistosas";
 "vm.signUp.interests.searchPartner" = "Buscar pareja";
 "vm.signUp.interests.sporadicDates" = "Encuentros esporádicos";
 "vm.signUp.interests.littleBitOfEvth" = "De todo un poco";
+
 
 // ViewModel/GZESignUpViewModel - GZESignUpPhotoViewController
 "vm.signUp.profilePictureLabel"="Foto de perfil";
@@ -100,6 +103,8 @@
 "vm.login.passwordLabel"="Contraseña";
 
 "vm.login.alertOkButtonTitle"="Ok";
+
+"vm.login.facebookLogin"="Iniciar con facebook";
 
 // ViewModel/GZEChooseModeViewModel
 "vm.chooseMode.goozeHelpText"="Aparecerás como Gooze y podrás ser contactado para una cita";

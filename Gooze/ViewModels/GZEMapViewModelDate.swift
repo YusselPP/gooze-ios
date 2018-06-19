@@ -39,6 +39,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     }
     let (ratingViewSignal, ratingViewObserver) = Signal<Void, NoError>.pipe()
     let (exitSignal, exitObserver) = Signal<Void, NoError>.pipe()
+    let (dropdownActionSignal, dropdownAction) = Signal<Int, NoError>.pipe()
 
     func viewWillAppear(mapViewContainer: UIView) {
         self.startObservers()
@@ -283,6 +284,12 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                     break
                 }
             }
+
+        dropdownActionSignal.observeValues {index in
+            if index == 1 {
+                //cancelDate.apply().start()
+            }
+        }
     }
 
     func createChatAction() -> Action<Void, Bool, GZEError> {

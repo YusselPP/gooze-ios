@@ -526,7 +526,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                         <subviews>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aPd-bt-XyP">
-                                                <rect key="frame" x="120.5" y="50" width="80" height="137"/>
+                                                <rect key="frame" x="120.5" y="57.5" width="80" height="137"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="b7L-a7-Ca8">
                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="102"/>
@@ -555,14 +555,20 @@
                                                 <rect key="frame" x="16" y="252" width="288" height="252"/>
                                                 <color key="tintColor" red="0.069920279309640565" green="0.56393771701388884" blue="0.51631973187128699" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rN4-C7-erW" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
+                                                <rect key="frame" x="137" y="454" width="46" height="30"/>
+                                                <state key="normal" title="Button"/>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="9e2-Dw-qta" firstAttribute="leading" secondItem="aOZ-8b-XhZ" secondAttribute="leadingMargin" constant="8" id="10v-dH-mo5"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="9e2-Dw-qta" secondAttribute="trailing" constant="8" id="9Ef-zr-8R8"/>
                                             <constraint firstItem="aPd-bt-XyP" firstAttribute="centerX" secondItem="aOZ-8b-XhZ" secondAttribute="centerX" id="Dh3-Tn-3Q9"/>
-                                            <constraint firstItem="aPd-bt-XyP" firstAttribute="centerY" secondItem="aOZ-8b-XhZ" secondAttribute="centerY" multiplier="0.6" constant="-32.75" id="ZWN-OE-eqd"/>
+                                            <constraint firstItem="rN4-C7-erW" firstAttribute="centerX" secondItem="aOZ-8b-XhZ" secondAttribute="centerX" id="VYz-yJ-dip"/>
+                                            <constraint firstItem="aPd-bt-XyP" firstAttribute="centerY" secondItem="aOZ-8b-XhZ" secondAttribute="centerY" multiplier="0.5" id="ZWN-OE-eqd"/>
                                             <constraint firstItem="9e2-Dw-qta" firstAttribute="height" secondItem="aOZ-8b-XhZ" secondAttribute="height" multiplier="0.5" id="act-pZ-MSL"/>
                                             <constraint firstAttribute="bottom" secondItem="9e2-Dw-qta" secondAttribute="bottom" id="mFT-MC-ahl"/>
+                                            <constraint firstAttribute="bottom" secondItem="rN4-C7-erW" secondAttribute="bottom" constant="20" id="xMA-CG-5Wj"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -583,7 +589,7 @@
                             <constraint firstItem="azr-0D-h6D" firstAttribute="top" secondItem="PWB-GB-0lz" secondAttribute="bottom" id="PJd-ud-65Y"/>
                             <constraint firstItem="FD9-M8-vKk" firstAttribute="leading" secondItem="Xsm-cK-fLq" secondAttribute="leading" id="V4Y-Td-1OY"/>
                             <constraint firstAttribute="trailing" secondItem="azr-0D-h6D" secondAttribute="trailing" id="YbC-z0-zCd"/>
-                            <constraint firstAttribute="bottom" secondItem="azr-0D-h6D" secondAttribute="bottom" id="ez3-cO-3Qx"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="azr-0D-h6D" secondAttribute="bottom" id="ez3-cO-3Qx"/>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="leading" secondItem="azr-0D-h6D" secondAttribute="leading" id="gmo-yO-ujd"/>
                             <constraint firstItem="8A7-k9-CmG" firstAttribute="trailing" secondItem="azr-0D-h6D" secondAttribute="trailing" id="lvE-Y8-M4h"/>
                             <constraint firstAttribute="trailing" secondItem="FD9-M8-vKk" secondAttribute="trailing" id="mG6-FB-WsE"/>
@@ -599,6 +605,7 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="qqN-hv-q6M"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="bottomButton" destination="rN4-C7-erW" id="bSD-2k-Psi"/>
                         <outlet property="doubleCtrlView" destination="9e2-Dw-qta" id="ZAv-X2-LU8"/>
                         <outlet property="logoView" destination="aPd-bt-XyP" id="Fgb-96-UfE"/>
                         <outlet property="rootView" destination="Xsm-cK-fLq" id="FTg-rU-D8M"/>
@@ -3200,7 +3207,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ado-a7-Lxa"/>
-        <segue reference="ZKk-02-86h"/>
+        <segue reference="uRz-tZ-uiL"/>
         <segue reference="XJg-fM-c9J"/>
         <segue reference="be1-y5-0kc"/>
     </inferredMetricsTieBreakers>

@@ -157,6 +157,21 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         return self.count(params).map { $0 > 0 }
     }
 
+    func facebookExist(_ facebookId: String) -> SignalProducer<Bool, GZEError> {
+
+        log.debug("requesting facebookExist")
+
+        guard !facebookId.isEmpty else {
+            return SignalProducer(value: false)
+        }
+
+        let params = [
+            "where": ["facebookId": facebookId]
+            ] as [String : Any]
+
+        return self.count(params).map { $0 > 0 }
+    }
+
 
     func find(byId id: String) -> SignalProducer<GZEUser, GZEError> {
 
@@ -293,6 +308,27 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                 }
                 sink.sendCompleted()
             }
+        }
+    }
+
+    func facebookLogin(_ token: String) -> SignalProducer<GZEAccesToken, GZEError> {
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("login SignalProducer disposed")
+            }
+
+            let params: JSON = ["token": token]
+
+            Alamofire.request(GZEUserRouter.facebookLogin(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
+                    let accessToken = GZEAccesToken(json: json)
+                    if accessToken != nil && accessToken!.user != nil {
+                        GZEAuthService.shared.login(token: accessToken!, user: accessToken!.user!)
+                    }
+                    return accessToken
+                }))
         }
     }
 

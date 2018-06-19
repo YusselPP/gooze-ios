@@ -35,6 +35,8 @@ protocol GZEMapViewModel {
     var ratingViewSignal: Signal<Void, NoError> { get }
     var exitSignal: Signal<Void, NoError> { get }
 
+    var dropdownAction: Observer<Int, NoError> {get}
+
     func viewWillAppear(mapViewContainer: UIView)
     func viewDidDisappear()
 }

@@ -81,10 +81,12 @@ class GZEMapViewController: UIViewController {
         self.bottomActionView.accessoryButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 5, bottom: 6, right: 5)
 
         self.dropDown.anchorView = self.bottomActionView.accessoryButton
-        self.dropDown.dataSource = ["Cancelar", "Ayuda"]
+        self.dropDown.dataSource = ["Ayuda", "Cancelar cita"]
         // Action triggered on selection
         self.dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-            print("Selected item: \(item) at index: \(index)")
+            log.debug("Selected item: \(item) at index: \(index)")
+
+            self.viewModel.dropdownAction.send(value: index)
         }
 
         self.bottomActionView.accessoryButton.reactive.pressed = CocoaAction<UIButton>(Action<(), Any, GZEError>{SignalProducer.empty}) {[unowned self] _ in self.dropDown.show()}

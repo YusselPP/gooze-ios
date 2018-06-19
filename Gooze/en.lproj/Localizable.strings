@@ -75,6 +75,8 @@
 
 "vm.signUp.textField.validation.failed"="Enter valid information";
 
+"vm.singUp.validation.facebookExists"="There is already an account registered to this facebook";
+
 "vm.signUp.interests.friendlyDates" = "Friendly dates";
 "vm.signUp.interests.searchPartner" = "Searching partner";
 "vm.signUp.interests.sporadicDates" = "Sporadic dates";
@@ -100,6 +102,8 @@
 "vm.login.passwordLabel"="Password";
 
 "vm.login.alertOkButtonTitle"="Ok";
+
+"vm.login.facebookLogin"="Login with facebook";
 
 // ViewModel/GZEChooseModeViewModel
 "vm.chooseMode.goozeHelpText"="You will appear as a Gooze and you can be reached for a date";

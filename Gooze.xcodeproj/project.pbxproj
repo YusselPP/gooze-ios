@@ -179,6 +179,8 @@
 		8DC81BEC204E45810099B417 /* GZEProfileViewModelReadOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC81BEB204E45810099B417 /* GZEProfileViewModelReadOnly.swift */; };
 		8DC81BEE204E4CC60099B417 /* GZEButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC81BED204E4CC60099B417 /* GZEButton.swift */; };
 		8DC81BF0204E55960099B417 /* GZELabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC81BEF204E55960099B417 /* GZELabel.swift */; };
+		8DC8E71320D957C300603A26 /* GZEFacebookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8E71220D957C300603A26 /* GZEFacebookService.swift */; };
+		8DC8E71520D95C7B00603A26 /* GZEFacebookError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8E71420D95C7B00603A26 /* GZEFacebookError.swift */; };
 		8DC972B61FA59E02004E7511 /* CompleteUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DC972B51FA59E02004E7511 /* CompleteUser.json */; };
 		8DCD97F12069133900117030 /* GZEUsersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD97F02069133900117030 /* GZEUsersList.swift */; };
 		8DCD97F3206913EE00117030 /* DismissView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD97F2206913EE00117030 /* DismissView.swift */; };
@@ -428,6 +430,8 @@
 		8DC81BEB204E45810099B417 /* GZEProfileViewModelReadOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEProfileViewModelReadOnly.swift; sourceTree = "<group>"; };
 		8DC81BED204E4CC60099B417 /* GZEButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEButton.swift; sourceTree = "<group>"; };
 		8DC81BEF204E55960099B417 /* GZELabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELabel.swift; sourceTree = "<group>"; };
+		8DC8E71220D957C300603A26 /* GZEFacebookService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEFacebookService.swift; sourceTree = "<group>"; };
+		8DC8E71420D95C7B00603A26 /* GZEFacebookError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEFacebookError.swift; sourceTree = "<group>"; };
 		8DC972B51FA59E02004E7511 /* CompleteUser.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CompleteUser.json; sourceTree = "<group>"; };
 		8DCD97F02069133900117030 /* GZEUsersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUsersList.swift; sourceTree = "<group>"; };
 		8DCD97F2206913EE00117030 /* DismissView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissView.swift; sourceTree = "<group>"; };
@@ -603,6 +607,7 @@
 				8D0938042075CCE2008AEA00 /* GZEUserConvertible.swift */,
 				8D10766020B5C8DE00E9F22E /* CompletionBlock.swift */,
 				8D227CB620D552F000564DEE /* GZEDismissVCDelegate.swift */,
+				8DC8E71420D95C7B00603A26 /* GZEFacebookError.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -953,6 +958,7 @@
 				8DFAC995206FECC90040DFFB /* GZEChatService.swift */,
 				8D219F0520895ED700BAEEE5 /* GZENumberHelper.swift */,
 				8D261CD9208CCE1A00DB5DF0 /* GZEMapService.swift */,
+				8DC8E71220D957C300603A26 /* GZEFacebookService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1326,6 +1332,7 @@
 				8D0938052075CCE2008AEA00 /* GZEUserConvertible.swift in Sources */,
 				8DFAC994206FDA910040DFFB /* GZEChatViewModelDates.swift in Sources */,
 				8D5253BC206CC2E6003D95A4 /* GZEDateRequestRepositoryProtocol.swift in Sources */,
+				8DC8E71320D957C300603A26 /* GZEFacebookService.swift in Sources */,
 				8D192388204EBEA8005F6F5F /* GZEGalleryViewModelReadOnly.swift in Sources */,
 				8D227CB520D53F0900564DEE /* GZEWebViewController.swift in Sources */,
 				8D14B3641FB2BB41005CE9A9 /* GZEFile.swift in Sources */,
@@ -1366,6 +1373,7 @@
 				8D3D32C420D275BA005BE54B /* GZEPaymentMethodsViewController.swift in Sources */,
 				8D231A76206D331200512775 /* LBURLEncoding.swift in Sources */,
 				8D238DEF20B51DB700DE12BF /* GZEChatsCollectionViewCell.swift in Sources */,
+				8DC8E71520D95C7B00603A26 /* GZEFacebookError.swift in Sources */,
 				8DC81BF0204E55960099B417 /* GZELabel.swift in Sources */,
 				8D28ADB720B57A73003D3F9A /* GZEChatsPhotoView.swift in Sources */,
 				8DCD97F3206913EE00117030 /* DismissView.swift in Sources */,

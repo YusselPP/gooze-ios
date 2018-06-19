@@ -22,6 +22,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case addRate(id: String, parameters: Parameters)
 
     case login(parameters: Parameters, queryParams: Parameters)
+    case facebookLogin(parameters: Parameters)
     case logout
     case reset(parameters: Parameters)
     case resetPassword(parameters: Parameters)
@@ -35,6 +36,7 @@ enum GZEUserRouter: URLRequestConvertible {
         switch self {
         case .createUser,
              .login,
+             .facebookLogin,
              .logout,
              .reset,
              .resetPassword,
@@ -76,6 +78,8 @@ enum GZEUserRouter: URLRequestConvertible {
 
         case .login:
             return "\(GZEUserRouter.route)/login"
+        case .facebookLogin:
+            return "\(GZEUserRouter.route)/facebookLogin"
         case .logout:
             return "\(GZEUserRouter.route)/logout"
         case .reset:
@@ -133,6 +137,9 @@ enum GZEUserRouter: URLRequestConvertible {
         case .count(let parameters),
              .findByLocation(let parameters):
             urlRequest = try URLEncoding.queryString.encode(urlRequest, with: parameters)
+
+        case .facebookLogin(let parameters):
+            urlRequest = try LBURLEncoding.queryString.encode(urlRequest, with: parameters)
 
         case .login(let parameters, let queryParams):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)

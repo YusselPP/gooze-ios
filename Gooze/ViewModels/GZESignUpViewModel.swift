@@ -79,6 +79,7 @@ class GZESignUpViewModel: NSObject {
 
     var usernameExistsAction: Action<Void, Bool, GZEError>!
     var emailExistsAction: Action<Void, Bool, GZEError>!
+    var facebookExistsAction: Action<Void, Bool, GZEError>!
     var signupAction: Action<Void, GZEUser, GZEError>!
     
 
@@ -94,6 +95,9 @@ class GZESignUpViewModel: NSObject {
         }
         emailExistsAction = Action { [unowned self] in
             return self.onEmailExistsAction()
+        }
+        facebookExistsAction = Action { [unowned self] in
+            return self.onFacebookExistsAction()
         }
         signupAction = Action { [unowned self] in
             return self.onSignupAction()
@@ -122,6 +126,14 @@ class GZESignUpViewModel: NSObject {
         }
 
         return self.userRepository.emailExists(email)
+    }
+
+    private func onFacebookExistsAction() -> SignalProducer<Bool, GZEError> {
+        guard let facebookId = facebookId.value else {
+            return SignalProducer(error: .validation(error: .required(fieldName: "facebookId")))
+        }
+
+        return self.userRepository.facebookExist(facebookId)
     }
 
     private func onSignupAction() -> SignalProducer<GZEUser, GZEError> {

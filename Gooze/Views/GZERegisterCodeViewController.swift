@@ -12,6 +12,7 @@ import ReactiveCocoa
 import Validator
 import FBSDKLoginKit
 import Gloss
+import SwiftOverlays
 
 class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZEDismissVCDelegate {
     var viewModel: GZESignUpViewModel!
@@ -19,6 +20,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
     var signupAction: CocoaAction<UIBarButtonItem>!
     var usernameExistsAction: CocoaAction<UIBarButtonItem>!
     var emailExistsAction: CocoaAction<UIBarButtonItem>!
+    var facebookExistsAction: CocoaAction<UIBarButtonItem>!
 
     let signUpToProfileSegue = "signUpToProfileSegue"
     let segueToTerms = "segueToTerms"
@@ -127,10 +129,12 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         signupAction = CocoaAction(viewModel.signupAction, onActionExecute)
         usernameExistsAction = CocoaAction(viewModel.usernameExistsAction, onActionExecute)
         emailExistsAction = CocoaAction(viewModel.emailExistsAction, onActionExecute)
+        facebookExistsAction = CocoaAction(viewModel.facebookExistsAction, onActionExecute)
 
         viewModel.signupAction.events.observeValues(onUserEvent)
         viewModel.usernameExistsAction.events.observeValues(onBoolEvent)
         viewModel.emailExistsAction.events.observeValues(onBoolEvent)
+        viewModel.facebookExistsAction.events.observeValues(onBoolEvent)
     }
 
     func setupNavBar() {
@@ -162,6 +166,12 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
             case .email:
                 if let exists = value as? Bool {
                     onEmailExistsSuccess(exists)
+                } else {
+                    log.error("Unexpected value type[\(type(of: value))]. Expecting Bool")
+                }
+            case .facebookOrEmail:
+                if let exists = value as? Bool {
+                    onFacebookExistsSuccess(exists)
                 } else {
                     log.error("Unexpected value type[\(type(of: value))]. Expecting Bool")
                 }
@@ -199,6 +209,18 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
             onError(error)
         } else {
             showPasswordScene()
+        }
+    }
+
+    func onFacebookExistsSuccess(_ exists: Bool) {
+        if exists {
+            viewModel.facebookId.value = nil
+            viewModel.email.value = nil
+            GZEAlertService.shared.showBottomAlert(
+                text: "vm.singUp.validation.facebookExists".localized()
+            )
+        } else {
+            showEmailScene()
         }
     }
 
@@ -589,41 +611,41 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
 
     // Facebook login
     func loginButtonClicked() {
-        let login = FBSDKLoginManager()
-        login.logIn(withReadPermissions: ["email"], from: self) {
-            result, error in
+        let fbService = GZEFacebookService.shared
+        let overlay = SwiftOverlays.showCenteredWaitOverlay(self.view)
 
-            if let error = error {
-                log.error(error)
-                return
-            }
+        fbService
+            .login(withReadPermissions: ["email"], from: self)
+            .flatMap(.latest){ _ in
+                fbService.graphRequest(
+                    graphPath: GZEFacebookService.node.me.rawValue,
+                    parameters: ["fields":"email"])
+            }.start{[weak self] event in
+                log.debug("event received: \(event)")
+                overlay.removeFromSuperview()
+                guard let this = self else {return}
 
-            guard let result = result else {
-                log.error("nil result and error")
-                return
-            }
+                switch event {
+                case .value(let profile):
 
-            if result.isCancelled {
-                log.debug("Cancelled")
-            } else {
-                log.debug("Logged in")
-                FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"email"])
-                    .start() {[weak self] conn, result, error in
-                        if let error = error {
-                            log.error(error)
-                            return
-                        }
-
-                        if let result = result as? JSON, let email = result["email"] as? String, let id = result["id"] as? String {
-                            log.debug("\(email)")
-                            self?.viewModel.email.value = email
-                            self?.viewModel.facebookId.value = id
-                            self?.showEmailScene()
-                        }
+                    guard
+                        let id = profile["id"] as? String
+                    else {
+                        log.error("Result has not id key")
+                        this.onError(.repository(error: .UnexpectedError))
+                        return
                     }
 
+                    this.viewModel.facebookId.value = id
+                    this.viewModel.email.value = profile["email"] as? String
+
+                    this.facebookExistsAction.execute(this.nextBarButton)
+
+                case .failed(let error):
+                    this.onError(error)
+                default: break
+                }
             }
-        }
     }
 
     // GZEDimissVCDelegate

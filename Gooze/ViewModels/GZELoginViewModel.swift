@@ -26,6 +26,7 @@ class GZELoginViewModel {
 
     let email = MutableProperty<String?>("")
     let password = MutableProperty<String?>("")
+    let facebookToken = MutableProperty<String?>(nil)
 
     var dismiss: (() -> ())?
 
@@ -36,6 +37,11 @@ class GZELoginViewModel {
         _loginAction = createLoginAction()
         return _loginAction!
     }
+
+    lazy var facebookLoginAction: Action<Void, GZEAccesToken, GZEError> = {
+        return self.createFacebookLoginAction()
+    }()
+
 
     private var _loginAction: Action<Void, GZEAccesToken, GZEError>?
 
@@ -68,6 +74,24 @@ class GZELoginViewModel {
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
             return strongSelf.userRepository.login(strongSelf.email.value, strongSelf.password.value)
+        }
+    }
+
+    private func createFacebookLoginAction() -> Action<Void, GZEAccesToken, GZEError> {
+        log.debug("Creating login action")
+        return Action{[weak self] in
+
+            guard let this = self else {
+                log.error("self disposed")
+                return SignalProducer(error: .repository(error: .UnexpectedError))
+            }
+
+            guard let token = this.facebookToken.value else {
+                log.error("received nil facebook token")
+                return SignalProducer(error: .repository(error: .UnexpectedError))
+            }
+
+            return this.userRepository.facebookLogin(token)
         }
     }
 

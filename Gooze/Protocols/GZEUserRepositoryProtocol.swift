@@ -17,10 +17,12 @@ protocol GZEUserRepositoryProtocol {
     func delete(byId id: String) -> SignalProducer<Bool, GZEError>
     func usernameExists(_ username: String) -> SignalProducer<Bool, GZEError>
     func emailExists(_ email: String) -> SignalProducer<Bool, GZEError>
+    func facebookExist(_ facebookId: String) -> SignalProducer<Bool, GZEError>
     func find(byId id: String) -> SignalProducer<GZEUser, GZEError>
     func find(byLocation location: GZEUser.GeoPoint, maxDistance: Float, limit: Int) -> SignalProducer<[GZEUserConvertible], GZEError>
     func publicProfile(byId id: String) -> SignalProducer<GZEUser, GZEError>
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
+    func facebookLogin(_ token: String) -> SignalProducer<GZEAccesToken, GZEError>
     func logout() -> SignalProducer<Void, GZEError>
     func signUp(username: String, email: String, password: String, userJSON: JSON?) -> SignalProducer<GZEUser, GZEError>
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
