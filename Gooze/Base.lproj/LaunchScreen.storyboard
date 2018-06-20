@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,7 +14,7 @@
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
-                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="01J-lp-oVM" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="igx-tp-nRS"/>
                         <viewControllerLayoutGuide type="bottom" id="N72-un-Szp"/>
@@ -26,42 +26,64 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="hMo-lp-76O">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
-                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kSd-Mh-mRi">
-                                <rect key="frame" x="120" y="215" width="80" height="138"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="24u-Kw-Ryb" userLabel="container">
+                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="uuL-NN-R5N">
-                                        <rect key="frame" x="0.5" y="0.0" width="80" height="102.5"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Prl-RR-Dyr" userLabel="logo-container">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="274"/>
+                                        <subviews>
+                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9EJ-dW-Ed1" userLabel="logo">
+                                                <rect key="frame" x="118" y="187.5" width="84" height="145.5"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="p1C-Gm-Zgn">
+                                                        <rect key="frame" x="0.0" y="0.0" width="84" height="108"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="p1C-Gm-Zgn" secondAttribute="height" multiplier="60:77" id="kb1-zh-D3E"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="nFf-HM-tII">
+                                                        <rect key="frame" x="0.0" y="119" width="84" height="26.5"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="nFf-HM-tII" secondAttribute="height" multiplier="16:5" id="8md-1B-v62"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="nFf-HM-tII" secondAttribute="trailing" id="8Yz-3v-4ty"/>
+                                                    <constraint firstItem="nFf-HM-tII" firstAttribute="leading" secondItem="9EJ-dW-Ed1" secondAttribute="leading" id="JgV-XE-tjm"/>
+                                                    <constraint firstItem="p1C-Gm-Zgn" firstAttribute="leading" secondItem="9EJ-dW-Ed1" secondAttribute="leading" id="dEb-jE-phO"/>
+                                                    <constraint firstItem="p1C-Gm-Zgn" firstAttribute="top" secondItem="9EJ-dW-Ed1" secondAttribute="top" id="gZU-lC-prn"/>
+                                                    <constraint firstAttribute="bottom" secondItem="nFf-HM-tII" secondAttribute="bottom" id="kTW-FT-my1"/>
+                                                    <constraint firstAttribute="trailing" secondItem="p1C-Gm-Zgn" secondAttribute="trailing" id="w0a-O1-UeG"/>
+                                                    <constraint firstItem="nFf-HM-tII" firstAttribute="top" secondItem="p1C-Gm-Zgn" secondAttribute="bottom" multiplier="1.1" id="x0f-R4-9FA"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="uuL-NN-R5N" secondAttribute="height" multiplier="80:103" id="zNY-6E-Rr5"/>
+                                            <constraint firstItem="9EJ-dW-Ed1" firstAttribute="height" secondItem="Prl-RR-Dyr" secondAttribute="height" multiplier="0.53" id="1cD-TX-PlP"/>
+                                            <constraint firstItem="9EJ-dW-Ed1" firstAttribute="centerY" secondItem="Prl-RR-Dyr" secondAttribute="centerY" multiplier="1.9" id="B8W-zC-UxE"/>
+                                            <constraint firstItem="9EJ-dW-Ed1" firstAttribute="centerX" secondItem="Prl-RR-Dyr" secondAttribute="centerX" id="CTF-vE-Ngb"/>
                                         </constraints>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="gooze-text" translatesAutoresizingMaskIntoConstraints="NO" id="k90-VM-uBb">
-                                        <rect key="frame" x="0.5" y="113" width="80" height="25"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="k90-VM-uBb" secondAttribute="height" multiplier="16:5" id="sRi-vm-Ywi"/>
-                                        </constraints>
-                                    </imageView>
+                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="uuL-NN-R5N" firstAttribute="leading" secondItem="kSd-Mh-mRi" secondAttribute="leading" id="0Wv-Yb-wIY"/>
-                                    <constraint firstAttribute="trailing" secondItem="uuL-NN-R5N" secondAttribute="trailing" id="14N-M0-zQQ"/>
-                                    <constraint firstAttribute="trailing" secondItem="k90-VM-uBb" secondAttribute="trailing" id="8Zj-hw-xKl"/>
-                                    <constraint firstItem="k90-VM-uBb" firstAttribute="top" secondItem="uuL-NN-R5N" secondAttribute="bottom" multiplier="1.1" id="VhX-JJ-ajx"/>
-                                    <constraint firstItem="k90-VM-uBb" firstAttribute="leading" secondItem="kSd-Mh-mRi" secondAttribute="leading" id="c4K-OD-Yxv"/>
-                                    <constraint firstItem="uuL-NN-R5N" firstAttribute="top" secondItem="kSd-Mh-mRi" secondAttribute="top" id="uOX-mb-ja4"/>
-                                    <constraint firstAttribute="bottom" secondItem="k90-VM-uBb" secondAttribute="bottom" id="wAL-OK-AVE"/>
+                                    <constraint firstItem="Prl-RR-Dyr" firstAttribute="leading" secondItem="24u-Kw-Ryb" secondAttribute="leading" id="80c-T6-qNK"/>
+                                    <constraint firstAttribute="trailing" secondItem="Prl-RR-Dyr" secondAttribute="trailing" id="MCy-WT-1fu"/>
+                                    <constraint firstItem="Prl-RR-Dyr" firstAttribute="top" secondItem="24u-Kw-Ryb" secondAttribute="top" id="YAc-PD-6jV"/>
+                                    <constraint firstItem="Prl-RR-Dyr" firstAttribute="height" secondItem="24u-Kw-Ryb" secondAttribute="height" multiplier="0.5" id="hlT-1k-QbO"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.094117647058823528" green="0.098039215686274508" blue="0.10980392156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="uuL-NN-R5N" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.25" id="41f-pJ-e7U"/>
-                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ACh-YE-488"/>
-                            <constraint firstItem="kSd-Mh-mRi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Fkq-o2-595"/>
+                            <constraint firstItem="24u-Kw-Ryb" firstAttribute="top" secondItem="igx-tp-nRS" secondAttribute="bottom" id="0Xg-VV-haI"/>
+                            <constraint firstItem="N72-un-Szp" firstAttribute="top" secondItem="24u-Kw-Ryb" secondAttribute="bottom" id="D4b-3g-X7J"/>
                             <constraint firstAttribute="bottom" secondItem="hMo-lp-76O" secondAttribute="bottom" id="S7s-Y6-cMs"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="Z9J-1y-3rM"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="ZVf-31-QVr"/>
+                            <constraint firstAttribute="trailing" secondItem="24u-Kw-Ryb" secondAttribute="trailing" id="kts-y5-UZ8"/>
                             <constraint firstItem="hMo-lp-76O" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="n4X-MI-j98"/>
+                            <constraint firstItem="24u-Kw-Ryb" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="sIY-Y6-vkc"/>
                         </constraints>
                     </view>
                 </viewController>

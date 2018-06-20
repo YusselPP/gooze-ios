@@ -138,6 +138,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         phraseTopLine.isHidden = true
         phraseBotLine.isHidden = true
         phraseTextField.autocapitalizationType = .sentences
+        originTextField.autocapitalizationType = .words
         languageTextField.autocapitalizationType = .words
         setTextFieldFormat(phraseTextField, placeholder:  viewModel.phraseLabelText.addQuotes() )
         setTextFieldFormat(genderTextField, placeholder: viewModel.genderLabelText)
@@ -337,8 +338,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     func backButtonTapped(_ sender: Any) {
         switch scene {
-        case .profilePic: break
-        case .profilePicSet: break
+        case .profilePic,
+            .profilePicSet: previousController(animated: true)
         case .phrase: scene = .profilePicSet
         case .gender: scene = .phrase
         case .birthday: scene = .gender
@@ -552,7 +553,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func showProfilePicScene() {
-        navigationItem.setLeftBarButton(nil, animated: true)
+        navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showProfilePicSetScene() {
@@ -560,7 +561,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         phraseTopLine.isHidden = false
         phraseBotLine.isHidden = false
         phraseTextField.resignFirstResponder()
-        navigationItem.setLeftBarButton(nil, animated: true)
+        navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showPhraseScene() {

@@ -10,7 +10,7 @@ import UIKit
 
 class GZEButton: UIButton {
     
-    var adjustsWidthToTitle: Bool = false {
+    var adjustsWidthToTitle: Bool = true {
         didSet {
             if adjustsWidthToTitle {
                 setWidthTofitTitle()
@@ -20,7 +20,8 @@ class GZEButton: UIButton {
     var widthConstraint: NSLayoutConstraint!
     var heightConstraint: NSLayoutConstraint!
     
-    var maxWidth: CGFloat?
+    var maxWidth: CGFloat = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - 20
+    var minWidth: CGFloat = 200
 
     init() {
         super.init(frame: CGRect.zero)
@@ -34,7 +35,7 @@ class GZEButton: UIButton {
 
     func initProperties() {
         translatesAutoresizingMaskIntoConstraints = false
-        widthConstraint = widthAnchor.constraint(equalToConstant: 200)
+        widthConstraint = widthAnchor.constraint(equalToConstant: minWidth)
         heightConstraint = heightAnchor.constraint(equalToConstant: 30)
         widthConstraint.isActive = true
         heightConstraint.isActive = true
@@ -88,10 +89,8 @@ class GZEButton: UIButton {
             var width = titleSize.width + titleEdgeInsets.left + titleEdgeInsets.right + 20
             log.debug("titleSize: \(titleSize)")
             log.debug("width: \(width)")
-            if let maxWidth = self.maxWidth {
-                width = min(maxWidth, width)
-            }
-            widthConstraint.constant = width
+            width = min(maxWidth, width)
+            widthConstraint.constant = max(minWidth, width)
         }
     }
 }

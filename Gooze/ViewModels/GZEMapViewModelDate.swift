@@ -184,7 +184,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             }
         }
 
-        GZELocationService.shared.lastLocation.producer.skipNil().throttle(3, on: QueueScheduler.main)
+        GZELocationService.shared.lastLocation.producer.skipNil()
             .combineLatest(with: self.dateRequest.producer)
             .take(during: self.reactive.lifetime)
             .take{(_, dateRequest) in
@@ -200,7 +200,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
 
                 let myDistance = myLocation.distance(from: this.dateRequest.value.location.toCLLocation())
 
-                if myDistance < 50 && (mode == .gooze && !date.recipientStarted || mode == .client && !date.senderStarted) {
+                if myDistance < 10000 && (mode == .gooze && !date.recipientStarted || mode == .client && !date.senderStarted) {
                     this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleStart
                     this.bottomButtonAction.value = this.startDateAction
@@ -247,7 +247,17 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                 guard let this = self else {return}
 
                 switch date.status {
-                case .route, .starting: break
+                case .route,
+                     .starting:
+                    if (mode == .gooze && !date.recipientStarted || mode == .client && !date.senderStarted) {
+                        this.bottomButtonActionEnabled.value = true
+                        this.bottomButtonTitle.value = this.bottomButtonTitleStart
+                        this.bottomButtonAction.value = this.startDateAction
+                    } else {
+                        this.bottomButtonActionEnabled.value = true
+                        this.bottomButtonTitle.value = this.bottomButtonTitleChat
+                        this.bottomButtonAction.value = this.chatAction
+                    }
                 case .progress:
                     this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleEnd

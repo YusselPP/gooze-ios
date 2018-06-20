@@ -28,26 +28,32 @@ func deregisterFromKeyboardNotifications(observer: Any) {
 
 func resizeViewWithKeyboard(keyboardShow: Bool, constraint: NSLayoutConstraint, notification: Notification, view: UIView, safeInsets: Bool = true) {
 
-    if
-        keyboardShow,
-        let info = notification.userInfo,
-        let kbSize = info[UIKeyboardFrameEndUserInfoKey] as? CGRect
-    {
-        let duration = info[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.35
+    log.debug("keyboardShow: \(keyboardShow)")
+    log.debug("userInfo: \(String(describing: notification.userInfo))")
+
+    var options: UIViewAnimationOptions = .curveLinear
+    var duration: TimeInterval = 0.35
+    var kbSize: CGRect? = nil
+
+    if let info = notification.userInfo {
+        duration = info[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? duration
         let curve = UIViewAnimationCurve(
             rawValue: info[UIKeyboardAnimationCurveUserInfoKey] as? Int ?? UIViewAnimationCurve.linear.rawValue
         )
-        let options = curve?.toOptions() ?? UIViewAnimationOptions.curveLinear
+        options = curve?.toOptions() ?? options
+        kbSize = info[UIKeyboardFrameEndUserInfoKey] as? CGRect
+    }
 
+
+    if
+        keyboardShow,
+        let kbSize = kbSize
+    {
         if #available(iOS 11.0, *), safeInsets {
             constraint.constant = kbSize.height - view.safeAreaInsets.bottom
         } else {
             constraint.constant = kbSize.height
         }
-        
-        UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
-            view.layoutIfNeeded()
-        }, completion: nil)
     } else {
         if #available(iOS 11.0, *), safeInsets {
             constraint.constant = view.safeAreaInsets.bottom
@@ -55,4 +61,8 @@ func resizeViewWithKeyboard(keyboardShow: Bool, constraint: NSLayoutConstraint, 
             constraint.constant = 0
         }
     }
+
+    UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
+        view.layoutIfNeeded()
+    }, completion: nil)
 }

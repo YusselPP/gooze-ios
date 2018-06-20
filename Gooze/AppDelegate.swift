@@ -130,6 +130,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
 
+        UITextField.appearance().tintColor = GZEConstants.Color.buttonBackground
+
         UIApplication.shared.statusBarStyle = .lightContent
     }
     

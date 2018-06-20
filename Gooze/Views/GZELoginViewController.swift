@@ -11,17 +11,18 @@ import ReactiveSwift
 import ReactiveCocoa
 import SwiftOverlays
 
-class GZELoginViewController: UIViewController, UITextFieldDelegate {
+class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigationControllerDelegate {
 
     let registerCodeSegueId = "registerCodeSegue"
 
     enum Scene {
+        case loadingTransition
         case login
         case username
         case password
     }
 
-    var scene = Scene.login {
+    var scene = Scene.loadingTransition {
         didSet {
             handleSceneChanged()
         }
@@ -45,10 +46,14 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var rootView: UIView!
     @IBOutlet weak var logoView: UIView!
+    @IBOutlet weak var logoContainer: UIView!
     @IBOutlet weak var doubleCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var viewBottomSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomButton: GZEButton!
+
+    var topLogoConstraint: NSLayoutConstraint!
+    var centerLogoConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,16 +61,43 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
         setupInterfaceObjects()
         setupBindings()
+
+        handleSceneChanged()
+
+        navigationController?.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        super.viewWillAppear(animated)
         registerForKeyboarNotifications(
             observer: self,
             willShowSelector: #selector(keyboardWillShow(notification:)),
             willHideSelector: #selector(keyboardWillHide(notification:))
         )
-        scene = .login
+        if scene != .loadingTransition {
+            scene = .login
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        log.debug("view did appear")
+        if scene == .loadingTransition {
+            DispatchQueue.main.async {
+                log.debug("animating transistion")
+                UIView.animate(withDuration: 0.5, animations: {
+                    [weak self] in
+
+                    self?.centerLogoConstraint.isActive = false
+                    self?.topLogoConstraint.isActive = true
+                    self?.view.layoutIfNeeded()
+                }) {[weak self] _ in
+                    log.debug("animation end")
+                    self?.scene = .login
+                }
+            }
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -124,6 +156,13 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
         loginButton.addTarget(self, action: #selector(loginButtonTapped(_:)), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped(_:)), for: .touchUpInside)
+
+
+        topLogoConstraint = NSLayoutConstraint(item: logoView, attribute: .centerY, relatedBy: .equal, toItem: logoContainer, attribute: .centerY, multiplier: 1, constant: 0)
+
+        centerLogoConstraint = NSLayoutConstraint(item: logoView, attribute: .centerY, relatedBy: .equal, toItem: logoContainer, attribute: .centerY, multiplier: 1.9, constant: 0)
+
+        centerLogoConstraint.isActive = true
     }
 
     func setupBindings() {
@@ -250,6 +289,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         log.debug("scene changed to: \(scene)")
         GZEAlertService.shared.dismissBottomAlert()
         switch scene {
+        case .loadingTransition:
+            showLoadingTransitionScene()
         case .login:
             showLoginScene()
         case .username:
@@ -259,11 +300,26 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    func showLoadingTransitionScene() {
+        showNavigationBar(false, animated: true)
+
+        logoView.alpha = 1
+        bottomButton.alpha = 0
+        doubleCtrlView.alpha = 0
+
+        doubleCtrlView.topCtrlView = nil
+        doubleCtrlView.bottomCtrlView = nil
+
+        doubleCtrlView.topViewTappedHandler = nil
+        doubleCtrlView.bottomViewTappedHandler = nil
+    }
+
     func showLoginScene() {
         showNavigationBar(false, animated: true)
 
         logoView.alpha = 1
         bottomButton.alpha = 0
+        doubleCtrlView.alpha = 1
 
         doubleCtrlView.topCtrlView = loginButton
         doubleCtrlView.bottomCtrlView = signUpButton
@@ -281,6 +337,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
         logoView.alpha = 0
         bottomButton.alpha = 1
+        doubleCtrlView.alpha = 1
 
         doubleCtrlView.topCtrlView = emailTextField
         doubleCtrlView.bottomCtrlView = usernameLabel
@@ -298,6 +355,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
 
         logoView.alpha = 0
         bottomButton.alpha = 0
+        doubleCtrlView.alpha = 1
 
         doubleCtrlView.topCtrlView = passwordTextField
         doubleCtrlView.bottomCtrlView = passwordLabel
@@ -342,6 +400,11 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate {
     func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view, safeInsets: false)
+    }
+
+    // MARK: UINavigationControllerDelegate
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return DisolveInteractiveTransitioning()
     }
 
     // MARK: - Deinitializers

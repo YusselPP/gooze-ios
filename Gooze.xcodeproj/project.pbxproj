@@ -45,6 +45,7 @@
 		8D2171922018A20400337F6B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2171912018A20400337F6B /* String+Extension.swift */; };
 		8D2183412098FB0E00D21C26 /* GZEUserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2183402098FB0E00D21C26 /* GZEUserAnnotationView.swift */; };
 		8D219F0620895ED700BAEEE5 /* GZENumberHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D219F0520895ED700BAEEE5 /* GZENumberHelper.swift */; };
+		8D22051020DA6DBA00BC3C52 /* DisolveInteractiveTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D22050F20DA6DBA00BC3C52 /* DisolveInteractiveTransitioning.swift */; };
 		8D220735206A740900BC0895 /* GZEDatesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D220734206A740900BC0895 /* GZEDatesService.swift */; };
 		8D22399620D8230C000C17C2 /* GZELibraryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D22399520D8230C000C17C2 /* GZELibraryCollectionView.swift */; };
 		8D22399820D823B4000C17C2 /* GZELibraryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D22399720D823B4000C17C2 /* GZELibraryCollectionViewCell.swift */; };
@@ -288,6 +289,7 @@
 		8D2183402098FB0E00D21C26 /* GZEUserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserAnnotationView.swift; sourceTree = "<group>"; };
 		8D219F0520895ED700BAEEE5 /* GZENumberHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENumberHelper.swift; sourceTree = "<group>"; };
 		8D21B84020D603B4007E6CFB /* Gooze.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gooze.entitlements; sourceTree = "<group>"; };
+		8D22050F20DA6DBA00BC3C52 /* DisolveInteractiveTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisolveInteractiveTransitioning.swift; sourceTree = "<group>"; };
 		8D220734206A740900BC0895 /* GZEDatesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDatesService.swift; sourceTree = "<group>"; };
 		8D22399520D8230C000C17C2 /* GZELibraryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELibraryCollectionView.swift; sourceTree = "<group>"; };
 		8D22399720D823B4000C17C2 /* GZELibraryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELibraryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -720,6 +722,7 @@
 				8D576EB520BA5E72004509CE /* GZEFloatingLabelTextField.swift */,
 				8D22399520D8230C000C17C2 /* GZELibraryCollectionView.swift */,
 				8D22399720D823B4000C17C2 /* GZELibraryCollectionViewCell.swift */,
+				8D22050F20DA6DBA00BC3C52 /* DisolveInteractiveTransitioning.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -1433,6 +1436,7 @@
 				8D357BAF1FD18C8000D6FB87 /* GZEApiStorageResponse.swift in Sources */,
 				F0DDECE41FA1295600450B2D /* GZESearchGoozeViewModel.swift in Sources */,
 				8D59DB0A208A660C0059CC46 /* GZEMapViewModelDate.swift in Sources */,
+				8D22051020DA6DBA00BC3C52 /* DisolveInteractiveTransitioning.swift in Sources */,
 				8D2A4697204C626400581838 /* UIImage+Extension.swift in Sources */,
 				8DE1707A20AEEF2100A07E92 /* GZEMenuButton.swift in Sources */,
 				8DFFD68F20514F6600C7290B /* GZEUsersListCollectionView.swift in Sources */,

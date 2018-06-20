@@ -12,11 +12,12 @@ class GZEChatActionView: UIView {
 
     let mainButton = GZEButton()
     let accessoryButton = UIButton()
+    let titlePadding: CGFloat = 5
     
-    var accessoryButtonWidth: CGFloat = 35 {
+    var accessoryButtonWidth: CGFloat = 20 {
         didSet {
             self.accessoryWidthConstraint.constant = self.accessoryButtonWidth
-            self.mainButton.titleEdgeInsets.left = self.accessoryButtonWidth
+            self.mainButton.titleEdgeInsets.left = titlePadding + self.accessoryButtonWidth
         }
     }
 
@@ -46,9 +47,7 @@ class GZEChatActionView: UIView {
         layer.cornerRadius = 5
         layer.masksToBounds = true
         backgroundColor = GZEConstants.Color.buttonBackground
-        
-        mainButton.titleEdgeInsets.right = 0
-        
+
         log.debug("\(mainButton.contentEdgeInsets) \(mainButton.titleEdgeInsets)")
         
         mainButton.setTextFont(GZEConstants.Font.main)
@@ -59,13 +58,14 @@ class GZEChatActionView: UIView {
         
         mainButton.backgroundColor = .clear
         accessoryButton.backgroundColor = .clear
-        
-        mainButton.titleEdgeInsets.left = accessoryButtonWidth
-        //mainButton.maxWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - accessoryButtonWidth * 2 - 20
-        mainButton.widthConstraint.constant = 170
+
+        mainButton.titleEdgeInsets.right = titlePadding
+        mainButton.titleEdgeInsets.left = titlePadding + accessoryButtonWidth
+        mainButton.maxWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - accessoryButtonWidth * 2 - 20
+        mainButton.minWidth = 180 - accessoryButtonWidth * 2
         
         accessoryButton.setImage(#imageLiteral(resourceName: "chat-send-amount") ,for: .normal)
-        accessoryButton.imageEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        accessoryButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 5)
         
         addSubview(mainButton)
         addSubview(accessoryButton)

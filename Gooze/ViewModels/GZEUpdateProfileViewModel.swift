@@ -148,7 +148,7 @@ class GZEUpdateProfileViewModel: NSObject {
             ]]
         self.interestPickerDelegate = GZEPickerDelegate(titles: interestTitles.map{$0.map{$0.localized()}}, elements: interestTitles)
         self.interestPickerDatasource = GZEPickerDatasource(elements: interestTitles)
-        //self.weightPickerDelegate.width = 50
+        self.interestPickerDelegate.width = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
         
         super.init()
         
