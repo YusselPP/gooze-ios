@@ -11,9 +11,10 @@ import ReactiveSwift
 import ReactiveCocoa
 import Validator
 
-class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
+class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZEDismissVCDelegate {
 
     let profileToPhotoEditSegue = "profileToPhotoEditSegue"
+    let segueToSearchGenderPicker = "segueToSearchGenderPicker"
 
     var viewModel: GZEUpdateProfileViewModel!
 
@@ -32,6 +33,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         case origin
         case language
         case interests
+        case searchFor
     }
     var _scene: Scene = .profilePic
     var scene: Scene {
@@ -58,6 +60,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var languageTextField: GZETextField!
     @IBOutlet weak var interestsTextField: GZETextField!
 
+    @IBOutlet weak var searchForGenderLabel: GZELabel!
     @IBOutlet weak var profileImageView: UIImageView!
 
     @IBOutlet weak var editPhotoButton: UIButton!
@@ -75,6 +78,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
     let backButton = GZEBackUIBarButtonItem()
     let nextButton = GZENextUIBarButtonItem()
+
+    var serachForGenderGesture: UITapGestureRecognizer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,6 +156,10 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
 
         interestsTextField.returnKeyType = .done
 
+        searchForGenderLabel.isHidden = true
+        searchForGenderLabel.setWhiteFontFormat()
+        serachForGenderGesture = UITapGestureRecognizer(target: self, action: #selector(searchForGenderTapped))
+        searchForGenderLabel.addGestureRecognizer(serachForGenderGesture)
         // heightTextField.validationRules = GZEUser.Validation.height.stringRule()
         // weightTextField.validationRules = GZEUser.Validation.weight.stringRule()
 
@@ -202,6 +211,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         }
         phraseTextField.reactive.text <~ viewModel.phrase
         genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }
+        searchForGenderLabel.reactive.text <~ viewModel.searchForGenderLabel
         birthdayTextField.reactive.text <~ viewModel.birthday.map {
             $0.flatMap { GZEDateHelper.displayDateFormatter.string(from: $0) }
         }
@@ -324,6 +334,10 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         activeField?.resignFirstResponder()
     }
 
+    func searchForGenderTapped() {
+        performSegue(withIdentifier: segueToSearchGenderPicker, sender: nil)
+    }
+
     func updateProfile() {
         //let validationResult = heightTextField.validate()
         //    .merge(with: weightTextField.validate())
@@ -348,6 +362,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         case .origin: scene = .weight
         case .language: scene = .origin
         case .interests: scene = .language
+        case .searchFor: scene = .interests
         }
     }
 
@@ -507,6 +522,14 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
                 viewController.mode = .editProfilePic
             }
             viewController.viewModel = viewModel
+        } else if segue.identifier == segueToSearchGenderPicker {
+
+            if let vc = segue.destination as? GZECheckListViewController {
+                vc.dismissDelegate = self
+                vc.viewModel = viewModel.genderCheckListVM
+            } else {
+                log.error("Segue with invalid destination view controller")
+            }
         }
     }
 
@@ -533,6 +556,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         case .origin: showOriginScene()
         case .language: showLanguageScene()
         case .interests: showInterestsScene()
+        case .searchFor: showSearchForScene()
         }
         log.debug("scene changed to: \(scene)")
     }
@@ -548,7 +572,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         case .weight: scene = .origin
         case .origin: scene = .language
         case .language: scene = .interests
-        case .interests: updateProfile()
+        case .interests: scene = .searchFor
+        case .searchFor: updateProfile()
         }
     }
 
@@ -618,6 +643,23 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate {
         interestsTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+    }
+
+    func showSearchForScene() {
+        interestsTextField.resignFirstResponder()
+        searchForGenderLabel.isHidden = false
+        navigationItem.setLeftBarButton(backButton, animated: true)
+
+        searchForGenderTapped()
+    }
+
+    // GZEDimissVCDelegate
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZECheckListViewController.self) {
+            self.previousController(animated: true)
+        } else {
+            log.error("Invalid vc instance")
+        }
     }
 
 

@@ -34,7 +34,8 @@ class GZEUpdateProfileViewModel: NSObject {
     let originLabelText = GZEUser.Validation.origin.fieldName
     let languageLabelText = GZEUser.Validation.language.fieldName
     let interestsLabelText = GZEUser.Validation.interestedIn.fieldName
-    
+    let genderSearchForLabelText = "vm.signUp.genderSearchLabelText".localized()
+
     let viewTitle = "vm.signUp.viewTitle".localized()
     let facebookSignUp = "vm.signUp.facebookSignUpButtonTitle".localized()
     let createProfileText = "vm.signUp.createProfileText".localized()
@@ -70,6 +71,7 @@ class GZEUpdateProfileViewModel: NSObject {
     let searchPic = MutableProperty<UIImage?>(nil)
     
     let mainImage = MutableProperty<UIImage?>(nil)
+    let genderOptions = GZEUser.Gender.array
     
     var thumbnails = [MutableProperty<UIImage?>](arrayLiteral:
         MutableProperty<UIImage?>(nil),
@@ -102,6 +104,13 @@ class GZEUpdateProfileViewModel: NSObject {
                 return GZEUser.Validation.password.stringRule()
             }
         }
+    }
+
+    let searchForGenderLabel = MutableProperty<String?>(nil)
+    let searchForGender = MutableProperty<[Int]>([])
+
+    var genderCheckListVM: GZECheckListViewModel {
+        return GZECheckListViewModel(options: self.genderOptions.map{$0.displayValue}, selectedIndexes: self.searchForGender, title: genderSearchForLabelText)
     }
     
     var usernameExistsAction: Action<Void, Bool, GZEError>!
@@ -161,6 +170,17 @@ class GZEUpdateProfileViewModel: NSObject {
             log.debug("saved gender: \(String(describing: gender))")
             return gender
         }
+        self.searchForGenderLabel <~ (
+            self.searchForGender.map {[weak self] selectedIdx -> String? in
+                guard selectedIdx.count > 0 else {
+                    return self?.genderSearchForLabelText
+                }
+
+                return selectedIdx.sorted()
+                    .flatMap{[weak self] in self?.genderOptions[$0].displayValue}
+                    .joined(separator: ", ")
+            }
+        )
         
         self.height <~ self.heightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + ($1 ?? "") }) }
         self.weight <~ self.weightPickerDelegate.selectedElements.map{ "\(($0.reduce("", { $0 + ($1 ?? "") }) as NSString).intValue)" }
@@ -262,6 +282,10 @@ class GZEUpdateProfileViewModel: NSObject {
 
         phrase.value = self.user.phrase
         gender.value = self.user.gender
+        searchForGender.value = self.user.searchForGender.flatMap{
+            [weak self] searchGender in
+            self?.genderOptions.index(where: {$0 == searchGender})
+        }
         birthday.value = self.user.birthday
         if let newHeight = self.user.height {
             height.value = "\(newHeight)"
@@ -280,6 +304,11 @@ class GZEUpdateProfileViewModel: NSObject {
         }
         if let gender = gender.value {
             self.user.gender = gender
+        }
+        self.user.searchForGender = self.searchForGender.value.sorted().flatMap{
+            [weak self] in
+            guard let this = self else {return nil}
+            return this.genderOptions[$0]
         }
         self.user.weight = (weight.value as NSString?)?.floatValue
         self.user.height = (height.value as NSString?)?.floatValue

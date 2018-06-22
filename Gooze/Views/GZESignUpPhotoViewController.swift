@@ -241,7 +241,10 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         setupBlur()
         setupDblCtrlView()
 
-        self.libraryCollectionView.onSelectionComplete = fetchImage(asset:)
+        self.libraryCollectionView.onSelectionComplete = {
+            [weak self] asset in
+            self?.fetchImage(asset: asset)
+        }
 
         let image = #imageLiteral(resourceName: "undo-icon")
         undoButton.button.frame = CGRect(x: 0.0, y: 0.0, width: image.size.width, height: image.size.height)
@@ -647,7 +650,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
                     // this.scene = .blur
                 }
-                .onFailure { [weak self] error in
+                .onFailure {error in
                     overlay.removeFromSuperview()
                     log.error(error)
                 }

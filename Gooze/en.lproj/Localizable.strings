@@ -81,6 +81,7 @@
 "vm.signUp.interests.searchPartner" = "Searching partner";
 "vm.signUp.interests.sporadicDates" = "Sporadic dates";
 "vm.signUp.interests.littleBitOfEvth" = "Little bit of everything";
+"vm.signUp.genderSearchLabelText"="Searching for...";
 
 // ViewModel/GZESignUpViewModel - GZESignUpPhotoViewController
 "vm.signUp.profilePictureLabel"="Profile picture";

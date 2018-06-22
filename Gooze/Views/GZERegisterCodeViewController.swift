@@ -539,6 +539,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         let switchContainer = UIView()
         let botSwitch = UISwitch()
         botSwitch.onTintColor = GZEConstants.Color.mainGreen
+        botSwitch.tintColor = GZEConstants.Color.mainGreen
         switchContainer.translatesAutoresizingMaskIntoConstraints = false
         botSwitch.translatesAutoresizingMaskIntoConstraints = false
 
@@ -649,8 +650,12 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
     }
 
     // GZEDimissVCDelegate
-    func onDismissTapped() {
-        self.dismiss(animated: true)
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZEWebViewController.self) {
+            self.dismiss(animated: true)
+        } else {
+            log.error("Invalid vc instance")
+        }
     }
 
     // MARK: Deinitializers

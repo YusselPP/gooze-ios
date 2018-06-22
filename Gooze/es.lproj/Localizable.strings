@@ -81,7 +81,7 @@
 "vm.signUp.interests.searchPartner" = "Buscar pareja";
 "vm.signUp.interests.sporadicDates" = "Encuentros esporádicos";
 "vm.signUp.interests.littleBitOfEvth" = "De todo un poco";
-
+"vm.signUp.genderSearchLabelText"="Busco...";
 
 // ViewModel/GZESignUpViewModel - GZESignUpPhotoViewController
 "vm.signUp.profilePictureLabel"="Foto de perfil";

@@ -478,7 +478,7 @@ class GZEDatesService: NSObject {
 
     func cleanup() {
         self.socketEventsDisposable?.dispose()
-        self.sendLocationDisposable?.dispose()
+        self.stopSendingLocationUpdates()
         self.sentRequests.value = []
         self.receivedRequests.value = []
     }

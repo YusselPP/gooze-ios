@@ -12,8 +12,10 @@ class GZEChatBubbleView: UIView {
     
     static let minSize: CGFloat = 57
     static let font = GZEConstants.Font.main
-    static let labelPadding: CGFloat = 10
+    //static let labelPadding: CGFloat = 10
     static let bubblePadding: CGFloat = 5
+    static let labelInsets = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 25)
+    static let bubbleWidthProportion: CGFloat = 0.6
 
     let bubbleImageView = UIImageView()
     let textLabel = UILabel()
@@ -40,16 +42,16 @@ class GZEChatBubbleView: UIView {
             switch self.style {
             case .sent:
                 self.changeImage(#imageLiteral(resourceName: "chat-bubble-sent"))
-                self.bubbleImageView.tintColor = UIColor(white: 1, alpha: 0.9)
-                self.textLabelTrailingConstraint.constant = 25
-                self.textLabelLeadingConstraint.constant = -15
+                self.bubbleImageView.tintColor = UIColor(white: 1, alpha: 0.8)
+                self.textLabelTrailingConstraint.constant = GZEChatBubbleView.labelInsets.right
+                self.textLabelLeadingConstraint.constant = -GZEChatBubbleView.labelInsets.left
                 self.bubbleLeadingConstraint.isActive = false
                 self.bubbleTrailingConstraint.isActive = true
             case .received:
                 self.changeImage(#imageLiteral(resourceName: "chat-bubble-received"))
                 self.bubbleImageView.tintColor = UIColor(white: 1, alpha: 0.6)
-                self.textLabelTrailingConstraint.constant = 15
-                self.textLabelLeadingConstraint.constant = -25
+                self.textLabelTrailingConstraint.constant = GZEChatBubbleView.labelInsets.left
+                self.textLabelLeadingConstraint.constant = -GZEChatBubbleView.labelInsets.right
                 self.bubbleTrailingConstraint.isActive = false
                 self.bubbleLeadingConstraint.isActive = true
             }
@@ -93,8 +95,8 @@ class GZEChatBubbleView: UIView {
         self.bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
 
 
-        self.bubbleImageView.topAnchor.constraint(equalTo: self.fakeTextLabel.topAnchor, constant: -GZEChatBubbleView.labelPadding).isActive = true
-        self.bubbleImageView.bottomAnchor.constraint(equalTo: self.fakeTextLabel.bottomAnchor, constant: GZEChatBubbleView.labelPadding).isActive = true
+        self.bubbleImageView.topAnchor.constraint(equalTo: self.fakeTextLabel.topAnchor, constant: -GZEChatBubbleView.labelInsets.top).isActive = true
+        self.bubbleImageView.bottomAnchor.constraint(equalTo: self.fakeTextLabel.bottomAnchor, constant: GZEChatBubbleView.labelInsets.bottom).isActive = true
         
         
         self.textLabelLeadingConstraint = self.bubbleImageView.leadingAnchor.constraint(equalTo: self.fakeTextLabel.leadingAnchor)
@@ -110,7 +112,7 @@ class GZEChatBubbleView: UIView {
         self.topAnchor.constraint(equalTo: self.bubbleImageView.topAnchor, constant: -GZEChatBubbleView.bubblePadding).isActive = true
         self.bottomAnchor.constraint(equalTo: self.bubbleImageView.bottomAnchor, constant: GZEChatBubbleView.bubblePadding).isActive = true
 
-        self.bubbleImageView.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 0.6).isActive = true
+        self.bubbleImageView.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: GZEChatBubbleView.bubbleWidthProportion).isActive = true
 
         self.bubbleLeadingConstraint = self.leadingAnchor.constraint(equalTo: self.bubbleImageView.leadingAnchor)
         self.bubbleTrailingConstraint = self.trailingAnchor.constraint(equalTo: self.bubbleImageView.trailingAnchor)

@@ -67,7 +67,7 @@ class GZEWebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate
     }
 
     func onCloseTapped() {
-        self.delegate?.onDismissTapped()
+        self.delegate?.onDismissTapped(self)
     }
 
     /*

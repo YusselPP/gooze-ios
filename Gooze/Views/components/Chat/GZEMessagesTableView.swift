@@ -217,14 +217,24 @@ class GZEMessagesTableView: UICollectionView, UICollectionViewDelegate, UICollec
     private func calcCellHeight(indexPath: IndexPath) -> CGFloat {
         guard indexPath.row >= 0 && indexPath.row < self.messages.count else {return 0}
 
+        let verticalCellPadding = GZEChatBubbleView.labelInsets.top + GZEChatBubbleView.labelInsets.bottom + GZEChatBubbleView.bubblePadding * 2
+
+        let bubbleWidth = self.bounds.width * GZEChatBubbleView.bubbleWidthProportion
+        let bubbleHPadding = GZEChatBubbleView.labelInsets.left + GZEChatBubbleView.labelInsets.right
+        let availableHorizontalWidth = bubbleWidth - bubbleHPadding
+
         let message = self.messages[indexPath.row]
-        
+
+        let labelString = NSAttributedString(string: message.localizedText(), attributes: [NSFontAttributeName: GZEChatBubbleView.font])
+        let cellRect = labelString.boundingRect(with: CGSize(width: availableHorizontalWidth, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, context: nil)
+
+        let cellHeight = verticalCellPadding + ceil(cellRect.height)
+
         let minBubbleSize: CGFloat = GZEChatBubbleView.minSize
-        let textHeight = ceil(message.localizedText().size(font: GZEChatBubbleView.font).height)
-        let cellPadding = GZEChatBubbleView.labelPadding * 2 + GZEChatBubbleView.bubblePadding * 2
         
-        return max(minBubbleSize, cellPadding + textHeight)
+        return max(minBubbleSize, cellHeight)
     }
+
 
 
     // MARK: - Deinitializer

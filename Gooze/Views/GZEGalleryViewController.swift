@@ -116,6 +116,10 @@ class GZEGalleryViewController: UIViewController {
         contactButton.enableAnimationOnPressed()
         contactButton.setGrayFormat()
         usernameLabel.setWhiteFontFormat()
+
+        mainImageView.isUserInteractionEnabled = true
+        mainImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(nextImageTapped(_:))))
+
         view.layoutIfNeeded()
     }
 
