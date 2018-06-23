@@ -171,7 +171,8 @@
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
-"vm.pickerToolbar.doneButton.title"="Next";
+"vm.pickerToolbar.nextButton.title"="Next";
+"vm.pickerToolbar.doneButton.title"="Ok";
 
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Apply";

@@ -37,5 +37,8 @@ protocol GZEProfileUserInfoViewModel: GZEProfileViewModel {
     var languagesAction: MutableProperty<CocoaAction<UIButton>?> { get }
     var interestedInAction: MutableProperty<CocoaAction<UIButton>?> { get }
 
+    var editUserAction: MutableProperty<CocoaAction<GZEEditButton>?> { get }
+
     var dismissSignal: Signal<Void, NoError> { get }
+    var segueToUpdateProfile: Signal<GZEUpdateProfileViewModel?, NoError> { get }
 }

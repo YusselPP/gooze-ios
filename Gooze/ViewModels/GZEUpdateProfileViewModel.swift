@@ -68,6 +68,7 @@ class GZEUpdateProfileViewModel: NSObject {
     let interestedIn = MutableProperty<String?>(nil)
     
     let profilePic = MutableProperty<UIImage?>(nil)
+    let profilePicRequest = MutableProperty<URLRequest?>(nil)
     let searchPic = MutableProperty<UIImage?>(nil)
     
     let mainImage = MutableProperty<UIImage?>(nil)
@@ -88,6 +89,21 @@ class GZEUpdateProfileViewModel: NSObject {
     let weightPickerDelegate: GZEPickerDelegate<String>
     let interestPickerDatasource: GZEPickerDatasource<String>
     let interestPickerDelegate: GZEPickerDelegate<String>
+
+    let skipButtonIsHidden = MutableProperty<Bool>(false)
+    let phraseTextFieldIsHidden = MutableProperty<Bool>(true)
+    let phraseTopLineIsHidden = MutableProperty<Bool>(true)
+    let phraseBotLineIsHidden = MutableProperty<Bool>(true)
+    let genderTextFieldIsHidden = MutableProperty<Bool>(true)
+    let birthdayTextFieldIsHidden = MutableProperty<Bool>(true)
+    let heightTextFieldIsHidden = MutableProperty<Bool>(true)
+    let weightTextFieldIsHidden = MutableProperty<Bool>(true)
+    let originTextFieldIsHidden = MutableProperty<Bool>(true)
+    let languageTextFieldIsHidden = MutableProperty<Bool>(true)
+    let interestsTextFieldIsHidden = MutableProperty<Bool>(true)
+    let searchForGenderLabelIsHidden = MutableProperty<Bool>(true)
+
+    let navigationRightButton = MutableProperty<UIBarButtonItem?>(nil)
     
     enum validationRule {
         case username
@@ -121,7 +137,7 @@ class GZEUpdateProfileViewModel: NSObject {
     var saveSearchPicAction: Action<Void, GZEUser, GZEError>!
     
     
-    init(_ userRepository: GZEUserRepositoryProtocol, user: GZEUser) {
+    init(_ userRepository: GZEUserRepositoryProtocol, user: GZEUser, mutableUser: MutableProperty<GZEUser>? = nil) {
         self.userRepository = userRepository
         self.user = user
         
@@ -131,6 +147,8 @@ class GZEUpdateProfileViewModel: NSObject {
         
         self.genderPickerDelegate = GZEPickerDelegate(titles: [gendersTitles], elements: [genders])
         self.genderPickerDatasource = GZEPickerDatasource(elements: [genders])
+        // Autoselect first element of each component
+        self.genderPickerDelegate.selectedElements.value = [genders].map{ $0.first! }
         
         let heightInteger = ["0", "1", "2"]
         let heightDecimals = (0...9).map{ "\($0)" }
@@ -139,6 +157,8 @@ class GZEUpdateProfileViewModel: NSObject {
         self.heightPickerDelegate = GZEPickerDelegate(titles: heightTitles, elements: heightValues)
         self.heightPickerDatasource = GZEPickerDatasource(elements: heightValues)
         self.heightPickerDelegate.width = 50
+        // Autoselect first element of each component
+        self.heightPickerDelegate.selectedElements.value = heightValues.map{ $0.first! }
         
         let weightFirstDigit = ["0", "1"]
         let weightNumbers = (0...9).map{ "\($0)" }
@@ -147,6 +167,8 @@ class GZEUpdateProfileViewModel: NSObject {
         self.weightPickerDelegate = GZEPickerDelegate(titles: weightTitles, elements: weightValues)
         self.weightPickerDatasource = GZEPickerDatasource(elements: weightValues)
         self.weightPickerDelegate.width = 50
+        // Autoselect first element of each component
+        self.weightPickerDelegate.selectedElements.value = weightValues.map{ $0.first! }
 
         let interestTitles = [[
             "",
@@ -158,6 +180,8 @@ class GZEUpdateProfileViewModel: NSObject {
         self.interestPickerDelegate = GZEPickerDelegate(titles: interestTitles.map{$0.map{$0.localized()}}, elements: interestTitles)
         self.interestPickerDatasource = GZEPickerDatasource(elements: interestTitles)
         self.interestPickerDelegate.width = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+        self.interestPickerDelegate.selectedElements.value = interestTitles.map{ $0.first! }
+
         
         super.init()
         
@@ -182,9 +206,9 @@ class GZEUpdateProfileViewModel: NSObject {
             }
         )
         
-        self.height <~ self.heightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + ($1 ?? "") }) }
-        self.weight <~ self.weightPickerDelegate.selectedElements.map{ "\(($0.reduce("", { $0 + ($1 ?? "") }) as NSString).intValue)" }
-        self.interestedIn <~ self.interestPickerDelegate.selectedElements.map{ $0.first?.flatMap{$0} }
+        self.height <~ self.heightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + $1 }) }
+        self.weight <~ self.weightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + $1 }) }
+        self.interestedIn <~ self.interestPickerDelegate.selectedElements.map{ $0.first! }
         
         usernameExistsAction = Action { [unowned self] in
             return self.onUsernameExistsAction()
@@ -204,19 +228,19 @@ class GZEUpdateProfileViewModel: NSObject {
         saveSearchPicAction = Action { [unowned self] in
             return self.onSaveSearchPicAction()
         }
-        
-        
+
         Signal.merge(
             updateAction.values,
             savePhotosAction.values,
             saveProfilePicAction.values,
             saveSearchPicAction.values
-            )
+        )
             .observeValues {[weak self] user in
                 log.debug("user updated: \(user.toJSON() as  Any)")
                 GZEAuthService.shared.authUser = user
-                self?.user = user
-        }
+                // self?.user = user
+                mutableUser?.value = user
+            }
     }
     
     func getChooseModeViewModel() -> GZEChooseModeViewModel {
@@ -275,27 +299,46 @@ class GZEUpdateProfileViewModel: NSObject {
 
     private func populate() {
         log.debug("user did set: \(self.user.toJSON())")
+
+        profilePicRequest.value = self.user.profilePic?.urlRequest
+
         username.value = self.user.username
         email.value = self.user.email
         //password.value = self.user.password
         registerCode.value = self.user.registerCode
 
         phrase.value = self.user.phrase
-        gender.value = self.user.gender
-        searchForGender.value = self.user.searchForGender.flatMap{
-            [weak self] searchGender in
-            self?.genderOptions.index(where: {$0 == searchGender})
+
+        if let gender = self.user.gender {
+            genderPickerDelegate.selectedElements.value[0] = gender
+        }
+
+        if let userSearchForGender = self.user.searchForGender {
+            searchForGender.value = userSearchForGender.flatMap{
+                [weak self] searchGender in
+                self?.genderOptions.index(where: {$0 == searchGender})
+            }
         }
         birthday.value = self.user.birthday
+
         if let newHeight = self.user.height {
-            height.value = "\(newHeight)"
+            var arr = Array(newHeight.format(f: ".2")).map{String($0)}
+            arr.append("")
+            log.debug("\(arr)")
+            heightPickerDelegate.selectedElements.value = arr
         }
         if let newWeight = self.user.weight {
-            weight.value = "\(newWeight)"
+            var arr = Array(newWeight.format(f: "3.0")).map{String($0)}
+            arr.append("")
+            log.debug("\(arr)")
+            weightPickerDelegate.selectedElements.value = arr
         }
+
         origin.value = self.user.origin
         languages.value = self.user.languages?.first
-        interestedIn.value = self.user.interestedIn?.first
+        if let interest = self.user.interestedIn?.first {
+            interestPickerDelegate.selectedElements.value[0] = interest
+        }
     }
 
     private func fillUser() {

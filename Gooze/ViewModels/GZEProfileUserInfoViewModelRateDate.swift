@@ -41,6 +41,8 @@ class GZEProfileUserInfoViewModelRateDate: GZEProfileViewModelRateDate, GZEProfi
     let interestedInAction = MutableProperty<CocoaAction<UIButton>?>(nil)
 
     let (dismissSignal, dismissObserver) = Signal<Void, NoError>.pipe()
+    var editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    var (segueToUpdateProfile, _) = Signal<GZEUpdateProfileViewModel?, NoError>.pipe()
 
 
     // MARK: - Private properties

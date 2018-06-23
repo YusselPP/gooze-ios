@@ -182,7 +182,7 @@ class GZEUser: NSObject, Glossy {
 
     var birthday: Date?
     var gender: Gender?
-    var searchForGender: [Gender]
+    var searchForGender: [Gender]?
     var weight: Float?
     var height: Float?
     var origin: String?
@@ -255,7 +255,6 @@ class GZEUser: NSObject, Glossy {
         self.id = id
         self.username = username
         self.email = email
-        self.searchForGender = []
         super.init()
         log.debug("\(self) init")
     }
@@ -282,7 +281,7 @@ class GZEUser: NSObject, Glossy {
 
         self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
         self.gender = "gender" <~~ json
-        self.searchForGender = ("searchForGender" <~~ json) ?? []
+        self.searchForGender = "searchForGender" <~~ json
 
         if let weight: Double = "weight" <~~ json {
             self.weight = Float(weight)

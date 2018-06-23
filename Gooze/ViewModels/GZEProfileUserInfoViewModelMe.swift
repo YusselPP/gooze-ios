@@ -39,7 +39,10 @@ class GZEProfileUserInfoViewModelMe: GZEProfileViewModelMe, GZEProfileUserInfoVi
     let languagesAction = MutableProperty<CocoaAction<UIButton>?>(nil)
     let interestedInAction = MutableProperty<CocoaAction<UIButton>?>(nil)
 
+    let editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+
     let (dismissSignal, _) = Signal<Void, NoError>.pipe()
+    let (segueToUpdateProfile, segueToUpdateProfileObs) = Signal<GZEUpdateProfileViewModel?, NoError>.pipe()
     // END GZEProfileUserInfoViewModel protocol
 
     override var user: GZEUser {
@@ -54,6 +57,8 @@ class GZEProfileUserInfoViewModelMe: GZEProfileViewModelMe, GZEProfileUserInfoVi
         log.debug("\(self) init")
 
         populate(user)
+
+        editUserAction.value = CocoaAction(createEditUserAction())
     }
 
     private func populate(_ user: GZEUser) {
@@ -101,6 +106,21 @@ class GZEProfileUserInfoViewModelMe: GZEProfileViewModelMe, GZEProfileUserInfoVi
         }
 
         profilePic.value = user.profilePic?.urlRequest
+    }
+
+    private func createEditUserAction() -> Action<Void, Void, NoError> {
+        return Action {[weak self] in
+            guard let this = self else {return SignalProducer.empty}
+            let mutableUser = MutableProperty(this.user)
+            mutableUser.signal.observeValues {[weak self] in
+                guard let this = self else {return}
+                this.user = $0
+            }
+            this.segueToUpdateProfileObs.send(
+                value: GZEUpdateProfileViewModel(this.userRepository, user: this.user, mutableUser: mutableUser)
+            )
+            return SignalProducer.empty
+        }
     }
 
     // MARK: - Deinitializers

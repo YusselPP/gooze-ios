@@ -13,20 +13,15 @@ class GZEPickerDelegate<T>: NSObject, UIPickerViewDelegate {
 
     var width: CGFloat = 200
     var titles: [[String?]]
-    var elements: [[T?]]
+    var elements: [[T]]
 
-    let selectedElements = MutableProperty<[T?]>([T?]())
+    let selectedElements = MutableProperty<[T]>([T]())
 
-
-    init(titles: [[String?]], elements: [[T?]]) {
+    init(titles: [[String?]], elements: [[T]]) {
         self.titles = titles
         self.elements = elements
         super.init()
         log.debug("\(self) init")
-
-        //self.selectedElements.value = [T?].init(repeating: nil, count: self.elements.count)
-        // Autoselect first element of each component
-        self.selectedElements.value = self.elements.map{ $0.first.flatMap{$0} }
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -53,5 +48,19 @@ class GZEPickerDelegate<T>: NSObject, UIPickerViewDelegate {
     // MARK: - Deinitializers
     deinit {
         log.debug("\(self) disposed")
+    }
+}
+
+extension GZEPickerDelegate where T: Equatable {
+    func getSelectedElementPos(inComponent component: Int) -> Int? {
+        return (
+            self
+                .elements[component]
+                .index(where: {
+                    [weak self] (element) in
+                    guard let this = self else {return false}
+                    return element == this.selectedElements.value[component]
+                })
+        )
     }
 }

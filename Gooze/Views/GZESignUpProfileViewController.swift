@@ -34,6 +34,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         case language
         case interests
         case searchFor
+        case editProfile
     }
     var _scene: Scene = .profilePic
     var scene: Scene {
@@ -140,8 +141,6 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
 
         usernameLabel.setWhiteFontFormat()
 
-        phraseTopLine.isHidden = true
-        phraseBotLine.isHidden = true
         phraseTextField.autocapitalizationType = .sentences
         originTextField.autocapitalizationType = .words
         languageTextField.autocapitalizationType = .words
@@ -154,9 +153,6 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         setTextFieldFormat(languageTextField, placeholder: viewModel.languageLabelText)
         setTextFieldFormat(interestsTextField, placeholder: viewModel.interestsLabelText)
 
-        interestsTextField.returnKeyType = .done
-
-        searchForGenderLabel.isHidden = true
         searchForGenderLabel.setWhiteFontFormat()
         serachForGenderGesture = UITapGestureRecognizer(target: self, action: #selector(searchForGenderTapped))
         searchForGenderLabel.addGestureRecognizer(serachForGenderGesture)
@@ -166,32 +162,53 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         let toolBar = GZEPickerUIToolbar()
         toolBar.onDone = ptr(self, GZESignUpProfileViewController.pickerDoneTapped)
         toolBar.onClose = ptr(self, GZESignUpProfileViewController.pickerCloseTapped)
-
+        if scene == .editProfile {
+            toolBar.rightButtonTitle = .doneButtonTitle
+        }
 
         birthdayPicker.datePickerMode = .date
         birthdayPicker.maximumDate = Date()
         birthdayTextField.inputView = birthdayPicker
         birthdayTextField.inputAccessoryView = toolBar
+        birthdayPicker.date = viewModel.birthday.map{$0 == nil ? Date() : $0!}.value
 
         genderPicker.dataSource = viewModel.genderPickerDatasource
         genderPicker.delegate = viewModel.genderPickerDelegate
         genderTextField.inputView = genderPicker
         genderTextField.inputAccessoryView = toolBar
+        if let selectedPos = viewModel.genderPickerDelegate.getSelectedElementPos(inComponent: 0) {
+            genderPicker.selectRow(selectedPos, inComponent: 0, animated: false)
+        }
 
         heightPicker.dataSource = viewModel.heightPickerDatasource
         heightPicker.delegate = viewModel.heightPickerDelegate
         heightTextField.inputView = heightPicker
         heightTextField.inputAccessoryView = toolBar
+        for num in 0..<heightPicker.numberOfComponents {
+            if let selectedPos = viewModel.heightPickerDelegate.getSelectedElementPos(inComponent: num) {
+                heightPicker.selectRow(selectedPos, inComponent: num, animated: false)
+            }
+        }
 
         weightPicker.dataSource = viewModel.weightPickerDatasource
         weightPicker.delegate = viewModel.weightPickerDelegate
         weightTextField.inputView = weightPicker
         weightTextField.inputAccessoryView = toolBar
+        for num in 0..<weightPicker.numberOfComponents {
+            if let selectedPos = viewModel.weightPickerDelegate.getSelectedElementPos(inComponent: num) {
+                weightPicker.selectRow(selectedPos, inComponent: num, animated: false)
+            }
+        }
 
         interestsPicker.dataSource = viewModel.interestPickerDatasource
         interestsPicker.delegate = viewModel.interestPickerDelegate
         interestsTextField.inputView = interestsPicker
         interestsTextField.inputAccessoryView = toolBar
+        for num in 0..<interestsPicker.numberOfComponents {
+            if let selectedPos = viewModel.interestPickerDelegate.getSelectedElementPos(inComponent: num) {
+                interestsPicker.selectRow(selectedPos, inComponent: num, animated: false)
+            }
+        }
     }
 
     func setupBindings() {
@@ -201,14 +218,17 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         }
         //profileImageView.reactive.image <~ viewModel.profilePic
         //profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
-        viewModel.profilePic.producer.startWithValues{[weak self] in
-            guard let this = self else {return}
-            if let img = $0 {
-                this.profileImageView.image = img.af_imageFiltered(withCoreImageFilter: "CIPhotoEffectNoir")
-            } else {
-                this.profileImageView.image = nil
-            }
-        }
+
+        // **** TEST SIGNUP *****
+//        viewModel.profilePic.producer.startWithValues{[weak self] in
+//            guard let this = self else {return}
+//            if let img = $0 {
+//                this.profileImageView.image = img.af_imageFiltered(withCoreImageFilter: "CIPhotoEffectNoir")
+//            } else {
+//                this.profileImageView.image = nil
+//            }
+//        }
+        profileImageView.reactive.noirImageUrlRequestLoading <~ viewModel.profilePicRequest
         phraseTextField.reactive.text <~ viewModel.phrase
         genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }
         searchForGenderLabel.reactive.text <~ viewModel.searchForGenderLabel
@@ -263,6 +283,24 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         viewModel.origin <~ originTextField.reactive.continuousTextValues
         viewModel.languages <~ languageTextField.reactive.continuousTextValues
         //viewModel.interestedIn <~ interestsTextField.reactive.continuousTextValues
+
+
+        skipButton.reactive.isHidden <~ viewModel.skipButtonIsHidden
+        phraseTextField.reactive.isHidden <~ viewModel.phraseTextFieldIsHidden
+        phraseTopLine.reactive.isHidden <~ viewModel.phraseTopLineIsHidden
+        phraseBotLine.reactive.isHidden <~ viewModel.phraseBotLineIsHidden
+        genderTextField.reactive.isHidden <~ viewModel.genderTextFieldIsHidden
+        birthdayTextField.reactive.isHidden <~ viewModel.birthdayTextFieldIsHidden
+        heightTextField.reactive.isHidden <~ viewModel.heightTextFieldIsHidden
+        weightTextField.reactive.isHidden <~ viewModel.weightTextFieldIsHidden
+        originTextField.reactive.isHidden <~ viewModel.originTextFieldIsHidden
+        languageTextField.reactive.isHidden <~ viewModel.languageTextFieldIsHidden
+        interestsTextField.reactive.isHidden <~ viewModel.interestsTextFieldIsHidden
+        searchForGenderLabel.reactive.isHidden <~ viewModel.searchForGenderLabelIsHidden
+
+        viewModel.navigationRightButton.producer.startWithValues {[weak self] in
+            self?.navigationItem.rightBarButtonItem = $0
+        }
     }
 
     func setupActions() {
@@ -282,8 +320,12 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
     func setTextFieldFormat(_ textField: UITextField, placeholder: String) {
         textField.delegate = self
 
-        textField.returnKeyType = .next
-        textField.isHidden = true
+        if scene == .editProfile {
+            textField.returnKeyType = .done
+        } else {
+            textField.returnKeyType = .next
+        }
+
         textField.backgroundColor = UIColor.clear
         textField.borderStyle = .none
         textField.textColor = UIColor.white
@@ -308,7 +350,11 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
     }
 
     func onUpdateSuccess(_ user: GZEUser) {
-        performSegue(withIdentifier: profileToPhotoEditSegue, sender: saveButton)
+        if scene == .editProfile {
+            previousController(animated: true)
+        } else {
+            performSegue(withIdentifier: profileToPhotoEditSegue, sender: saveButton)
+        }
     }
 
     func onError(_ error: GZEError) {
@@ -326,7 +372,9 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
 
     func pickerDoneTapped(_ sender: UIBarButtonItem) {
         if let field = activeField {
-            if textFieldShouldReturn(field) {}
+            if textFieldShouldReturn(field) {
+                field.resignFirstResponder()
+            }
         }
     }
 
@@ -353,7 +401,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
     func backButtonTapped(_ sender: Any) {
         switch scene {
         case .profilePic,
-            .profilePicSet: previousController(animated: true)
+            .profilePicSet,
+            .editProfile: previousController(animated: true)
         case .phrase: scene = .profilePicSet
         case .gender: scene = .phrase
         case .birthday: scene = .gender
@@ -386,16 +435,18 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         log.debug("Text editing")
         activeField = textField
 
-        switch textField {
-        case phraseTextField: scene = .phrase
-        case genderTextField: scene = .gender
-        case birthdayTextField: scene = .birthday
-        case heightTextField: scene = .height
-        case weightTextField: scene = .weight
-        case originTextField: scene = .origin
-        case languageTextField: scene = .language
-        case interestsTextField: scene = .interests
-        default: break
+        if scene != .editProfile {
+            switch textField {
+            case phraseTextField: scene = .phrase
+            case genderTextField: scene = .gender
+            case birthdayTextField: scene = .birthday
+            case heightTextField: scene = .height
+            case weightTextField: scene = .weight
+            case originTextField: scene = .origin
+            case languageTextField: scene = .language
+            case interestsTextField: scene = .interests
+            default: break
+            }
         }
 
         if textField == phraseTextField {
@@ -431,6 +482,11 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
        // default:
         //    break
        // }
+
+        if scene == .editProfile {
+            return true
+        }
+
         showNextScene()
         return false
     }
@@ -557,6 +613,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         case .language: showLanguageScene()
         case .interests: showInterestsScene()
         case .searchFor: showSearchForScene()
+        case .editProfile: showEditProfileScene()
         }
         log.debug("scene changed to: \(scene)")
     }
@@ -574,6 +631,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         case .language: scene = .interests
         case .interests: scene = .searchFor
         case .searchFor: updateProfile()
+        case .editProfile: updateProfile()
         }
     }
 
@@ -582,64 +640,64 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
     }
 
     func showProfilePicSetScene() {
-        phraseTextField.isHidden = false
-        phraseTopLine.isHidden = false
-        phraseBotLine.isHidden = false
+        viewModel.phraseTextFieldIsHidden.value = false
+        viewModel.phraseTopLineIsHidden.value = false
+        viewModel.phraseBotLineIsHidden.value = false
         phraseTextField.resignFirstResponder()
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showPhraseScene() {
-        phraseTextField.isHidden = false
-        phraseTopLine.isHidden = false
-        phraseBotLine.isHidden = false
+        viewModel.phraseTextFieldIsHidden.value = false
+        viewModel.phraseTopLineIsHidden.value = false
+        viewModel.phraseBotLineIsHidden.value = false
         phraseTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showGenderScene() {
-        genderTextField.isHidden = false
+        viewModel.genderTextFieldIsHidden.value = false
         genderTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showBirthdayScene() {
-        birthdayTextField.isHidden = false
+        viewModel.birthdayTextFieldIsHidden.value = false
         birthdayTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showHeightScene() {
-        heightTextField.isHidden = false
+        viewModel.heightTextFieldIsHidden.value = false
         heightTextField.becomeFirstResponder()
     }
 
     func showWeightScene() {
-        weightTextField.isHidden = false
+        viewModel.weightTextFieldIsHidden.value = false
         weightTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showOriginScene() {
-        originTextField.isHidden = false
+        viewModel.originTextFieldIsHidden.value = false
         originTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showLanguageScene() {
-        languageTextField.isHidden = false
+        viewModel.languageTextFieldIsHidden.value = false
         languageTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
     }
 
     func showInterestsScene() {
-        interestsTextField.isHidden = false
+        viewModel.interestsTextFieldIsHidden.value = false
         interestsTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
@@ -647,10 +705,28 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
 
     func showSearchForScene() {
         interestsTextField.resignFirstResponder()
-        searchForGenderLabel.isHidden = false
+        viewModel.searchForGenderLabelIsHidden.value = false
         navigationItem.setLeftBarButton(backButton, animated: true)
 
         searchForGenderTapped()
+    }
+
+    func showEditProfileScene() {
+        viewModel.skipButtonIsHidden.value = true
+
+        viewModel.phraseTextFieldIsHidden.value = false
+        viewModel.phraseTopLineIsHidden.value = false
+        viewModel.phraseBotLineIsHidden.value = false
+        viewModel.genderTextFieldIsHidden.value = false
+        viewModel.birthdayTextFieldIsHidden.value = false
+        viewModel.heightTextFieldIsHidden.value = false
+        viewModel.weightTextFieldIsHidden.value = false
+        viewModel.originTextFieldIsHidden.value = false
+        viewModel.languageTextFieldIsHidden.value = false
+        viewModel.interestsTextFieldIsHidden.value = false
+        viewModel.searchForGenderLabelIsHidden.value = false
+
+        viewModel.navigationRightButton.value = nil
     }
 
     // GZEDimissVCDelegate

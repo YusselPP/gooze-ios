@@ -12,7 +12,7 @@ import ReactiveCocoa
 import enum Result.NoError
 
 class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfileUserInfoViewModel {
-    
+
     // MARK - GZEProfileUserInfoViewModel protocol
     
     // basic data
@@ -40,6 +40,9 @@ class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfi
     let interestedInAction = MutableProperty<CocoaAction<UIButton>?>(nil)
 
     let (dismissSignal, _) = Signal<Void, NoError>.pipe()
+
+    var editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    var (segueToUpdateProfile, _) = Signal<GZEUpdateProfileViewModel?, NoError>.pipe()
     
     
     // MARK - init

@@ -10,11 +10,19 @@ import UIKit
 
 class GZEPickerUIToolbar: UIToolbar {
 
-    let closeButtonTitle = "vm.pickerToolbar.closeButton.title".localized()
+    enum ButtonTitle: String {
+        case nextButtonTitle = "vm.pickerToolbar.nextButton.title"
+        case doneButtonTitle = "vm.pickerToolbar.doneButton.title"
+        case closeButtonTitle = "vm.pickerToolbar.closeButton.title"
 
-    var doneButtonTitle = "vm.pickerToolbar.doneButton.title".localized() {
+        var localized: String {
+            return self.rawValue.localized()
+        }
+    }
+
+    var rightButtonTitle = ButtonTitle.nextButtonTitle {
         didSet {
-            doneButton.title = doneButtonTitle
+            doneButton.title = rightButtonTitle.localized
         }
     }
 
@@ -40,8 +48,8 @@ class GZEPickerUIToolbar: UIToolbar {
 
     private func initProperties() {
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        closeButton.title = closeButtonTitle
-        doneButton.title = doneButtonTitle
+        closeButton.title = ButtonTitle.closeButtonTitle.localized
+        doneButton.title = ButtonTitle.nextButtonTitle.localized
 
         self.setItems([closeButton, spaceButton, doneButton], animated: false)
 
