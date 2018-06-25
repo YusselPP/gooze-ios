@@ -25,6 +25,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     var saveGalleryAction: CocoaAction<UIButton>!
 
     var selectedThumbnail: MutableProperty<UIImage?>?
+    var selectedThumbnailRequest: MutableProperty<URLRequest?>?
 
     var photoImageViews: [UIImageView] = []
 
@@ -283,11 +284,17 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
             //this.backScrollView.centerContent(animated: true)
         }
 
+        mainImageView.reactive.imageUrlRequestLoading <~ viewModel.mainImageRequest
+
         for (index, imageView) in photoImageViews.enumerated() {
             if index < viewModel.thumbnails.count {
                 imageView.tag = index
                 imageView.reactive.image <~ viewModel.thumbnails[index]
                 imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(thumbnailImageTapped(_:))))
+            }
+
+            if index < viewModel.thumbnailsRequest.count {
+                imageView.reactive.imageUrlRequestLoading <~ viewModel.thumbnailsRequest[index]
             }
         }
 
@@ -448,7 +455,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
     @IBAction func thumbnailTapped(_ sender: UIView) {
         selectTumbnail(tag: sender.tag)
 
-        if selectedThumbnail?.value == nil {
+        if selectedThumbnail?.value == nil && selectedThumbnailRequest?.value == nil {
             //showCamera()
             scene = .cameraOrReel
         }
@@ -456,7 +463,17 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
 
     func selectTumbnail(tag: Int) {
         selectedThumbnail = viewModel.thumbnails[tag]
-        viewModel.mainImage.value = selectedThumbnail?.value
+        selectedThumbnailRequest = viewModel.thumbnailsRequest[tag]
+
+        displaySelectedThumbanail()
+    }
+
+    func displaySelectedThumbanail() {
+        if selectedThumbnail?.value != nil {
+            viewModel.mainImage.value = selectedThumbnail?.value
+        } else {
+            viewModel.mainImageRequest.value = selectedThumbnailRequest?.value
+        }
     }
 
     @IBAction func showBlurButtonTapped(_ sender: Any) {
@@ -860,7 +877,8 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         showBackButton(true)
         showNextButton(false)
 
-        viewModel.mainImage.value = selectedThumbnail?.value
+        // viewModel.mainImage.value = selectedThumbnail?.value
+        displaySelectedThumbanail()
 
         editButtonView.isHidden = false
         bottomRightButton.setTitle(viewModel.saveButtonTitle.uppercased(), for: .normal)

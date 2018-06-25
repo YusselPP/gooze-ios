@@ -637,6 +637,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
 
     func showProfilePicScene() {
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showProfilePicSetScene() {
@@ -645,6 +646,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         viewModel.phraseBotLineIsHidden.value = false
         phraseTextField.resignFirstResponder()
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showPhraseScene() {
@@ -654,6 +656,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         phraseTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showGenderScene() {
@@ -661,6 +664,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         genderTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showBirthdayScene() {
@@ -668,11 +672,13 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         birthdayTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showHeightScene() {
         viewModel.heightTextFieldIsHidden.value = false
         heightTextField.becomeFirstResponder()
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showWeightScene() {
@@ -680,6 +686,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         weightTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showOriginScene() {
@@ -687,6 +694,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         originTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showLanguageScene() {
@@ -694,6 +702,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         languageTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showInterestsScene() {
@@ -701,12 +710,14 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         interestsTextField.becomeFirstResponder()
 
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
     }
 
     func showSearchForScene() {
         interestsTextField.resignFirstResponder()
         viewModel.searchForGenderLabelIsHidden.value = false
         navigationItem.setLeftBarButton(backButton, animated: true)
+        viewModel.navigationRightButton.value = nextButton
 
         searchForGenderTapped()
     }

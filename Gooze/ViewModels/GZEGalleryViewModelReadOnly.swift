@@ -8,6 +8,8 @@
 
 import Foundation
 import ReactiveSwift
+import ReactiveCocoa
+import enum Result.NoError
 
 class GZEGalleryViewModelReadOnly: GZEProfileViewModelReadOnly, GZEGalleryViewModel {
 
@@ -20,6 +22,9 @@ class GZEGalleryViewModelReadOnly: GZEProfileViewModelReadOnly, GZEGalleryViewMo
         MutableProperty<URLRequest?>(nil),
         MutableProperty<URLRequest?>(nil)
     ]
+
+    var editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    var (segueToUpdatePhoto, _) = Signal<GZEUpdateProfileViewModel, NoError>.pipe()
 
     
     // MARK - init

@@ -2293,7 +2293,7 @@
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dm2-47-brv" customClass="GZEEditButton" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="274" y="80" width="30" height="30"/>
+                                <rect key="frame" x="274" y="72" width="30" height="30"/>
                                 <state key="normal" title="Edit"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yrh-cI-kqX" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
@@ -2311,7 +2311,7 @@
                             <constraint firstItem="gnQ-48-oJQ" firstAttribute="leading" secondItem="any-jm-akY" secondAttribute="leading" id="GUo-D0-B2I"/>
                             <constraint firstAttribute="trailing" secondItem="NKx-Uv-zYQ" secondAttribute="trailing" id="Jw9-lS-zkh"/>
                             <constraint firstItem="WKe-nt-VYt" firstAttribute="top" secondItem="fbs-it-s4n" secondAttribute="bottom" id="KBC-US-eHD"/>
-                            <constraint firstItem="Dm2-47-brv" firstAttribute="top" secondItem="fbs-it-s4n" secondAttribute="bottom" constant="16" id="LJC-gJ-WxH"/>
+                            <constraint firstItem="Dm2-47-brv" firstAttribute="top" secondItem="fbs-it-s4n" secondAttribute="bottom" constant="8" id="LJC-gJ-WxH"/>
                             <constraint firstAttribute="bottom" secondItem="Yrh-cI-kqX" secondAttribute="bottom" constant="15" id="P6Y-Xp-TOe"/>
                             <constraint firstAttribute="trailing" secondItem="gnQ-48-oJQ" secondAttribute="trailing" id="RRG-SW-WaE"/>
                             <constraint firstItem="NKx-Uv-zYQ" firstAttribute="top" secondItem="fbs-it-s4n" secondAttribute="bottom" id="VhB-RY-FWV"/>
@@ -2603,6 +2603,10 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3p2-GM-UB1" customClass="GZEEditButton" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="274" y="28" width="30" height="30"/>
+                                <state key="normal" title="Edit"/>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rpn-lD-cAQ" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
                                 <rect key="frame" x="110" y="521" width="100" height="32"/>
                                 <color key="backgroundColor" red="0.30196078430000001" green="0.30196078430000001" blue="0.30196078430000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2615,6 +2619,7 @@
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="wP3-af-OZI" firstAttribute="top" secondItem="TsG-tt-BHx" secondAttribute="bottom" constant="24" id="1KG-Za-dbx"/>
+                            <constraint firstAttribute="trailing" secondItem="3p2-GM-UB1" secondAttribute="trailing" constant="16" id="7bS-yZ-kX5"/>
                             <constraint firstAttribute="bottom" secondItem="Rpn-lD-cAQ" secondAttribute="bottom" constant="15" id="9ZT-W9-nfU"/>
                             <constraint firstAttribute="trailing" secondItem="Z1B-eJ-tc7" secondAttribute="trailing" id="A6k-pa-Nmj"/>
                             <constraint firstItem="Z1B-eJ-tc7" firstAttribute="leading" secondItem="Kdq-LB-mST" secondAttribute="leading" id="BND-B4-6OK"/>
@@ -2632,6 +2637,7 @@
                             <constraint firstAttribute="bottom" secondItem="Tol-XG-QfW" secondAttribute="bottom" id="ma5-z4-Wef"/>
                             <constraint firstAttribute="trailing" secondItem="Tol-XG-QfW" secondAttribute="trailing" id="miH-RK-AM7"/>
                             <constraint firstItem="Tol-XG-QfW" firstAttribute="top" secondItem="Kdq-LB-mST" secondAttribute="top" id="pU4-6V-sc7"/>
+                            <constraint firstItem="3p2-GM-UB1" firstAttribute="top" secondItem="TsG-tt-BHx" secondAttribute="bottom" constant="8" id="yC9-Uh-fNP"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -2646,6 +2652,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="contactButton" destination="Rpn-lD-cAQ" id="9oq-RA-lSF"/>
+                        <outlet property="editPhoto" destination="3p2-GM-UB1" id="p4R-7u-Ymn"/>
                         <outlet property="mainImageView" destination="qLu-KZ-vaT" id="rh0-I4-Zpt"/>
                         <outlet property="nextImageButton" destination="hhT-B1-yk9" id="rkP-GG-6Zw"/>
                         <outlet property="prevImageButton" destination="iJS-F2-jdZ" id="Qf9-NM-Abt"/>
@@ -2654,6 +2661,7 @@
                         <outlet property="thumbnail3" destination="gOZ-IZ-4Zb" id="TmU-4R-d7Y"/>
                         <outlet property="thumbnail4" destination="WpE-44-Nkl" id="ehV-cj-015"/>
                         <outlet property="usernameLabel" destination="W5h-Rk-XXe" id="MtA-cJ-gZo"/>
+                        <segue destination="66d-od-zfu" kind="show" identifier="segueToUpdateGallery" id="3gu-Js-oOo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MgU-v5-bKz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3316,10 +3324,11 @@
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ado-a7-Lxa"/>
-        <segue reference="ZKk-02-86h"/>
+        <segue reference="aoX-cG-RKK"/>
+        <segue reference="uRz-tZ-uiL"/>
         <segue reference="XJg-fM-c9J"/>
         <segue reference="be1-y5-0kc"/>
+        <segue reference="e66-sX-XQT"/>
         <segue reference="Dk2-YI-miw"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

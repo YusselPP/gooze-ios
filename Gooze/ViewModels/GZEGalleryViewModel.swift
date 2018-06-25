@@ -8,11 +8,16 @@
 
 import Foundation
 import ReactiveSwift
+import ReactiveCocoa
+import enum Result.NoError
 
 protocol GZEGalleryViewModel: GZEProfileViewModel {
 
     var username: MutableProperty<String?> { get }
 
     var thumbnails: [MutableProperty<URLRequest?>] { get }
-    
+
+    var editUserAction: MutableProperty<CocoaAction<GZEEditButton>?> { get }
+
+    var segueToUpdatePhoto: Signal<GZEUpdateProfileViewModel, NoError> { get }
 }

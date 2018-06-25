@@ -9,6 +9,7 @@
 import Foundation
 import Gloss
 import Alamofire
+import AlamofireImage
 import ReactiveSwift
 import Validator
 import Localize_Swift
@@ -107,12 +108,9 @@ class GZEUser: NSObject, Glossy {
 
         }
 
-        init?(image: UIImage?) {
-            if let image = image {
-                self.image = image
-            } else {
-                return nil
-            }
+        init(image: UIImage?, name: String?) {
+            self.image = image
+            self.name = name
         }
 
         init?(json: JSON) {
@@ -138,6 +136,27 @@ class GZEUser: NSObject, Glossy {
                 } else {
                     return nil
                 }
+            }
+        }
+
+        @discardableResult
+        func removeFromCache(_ cache: ImageRequestCache? = ImageDownloader.default.imageCache, withIdentifier identifier: String? = nil) -> Bool {
+            guard let cache = cache else {
+                log.error("Failed to remove from cache, nil cache storage provided")
+                return false
+            }
+
+            guard let urlRequest = self.urlRequest else {
+                log.error("Failed to remove from cache, nil urlRequest")
+                return false
+            }
+
+            if cache.removeImage(for: urlRequest, withIdentifier: identifier) {
+                log.debug("Succesfully removed from cahche: \(String(describing: urlRequest.url?.relativeString))")
+                return true
+            } else {
+                log.debug("Failed to remove from chach: \(String(describing: urlRequest.url?.relativeString))")
+                return false
             }
         }
     }
@@ -387,6 +406,38 @@ class GZEUser: NSObject, Glossy {
             dateRating: self.dateRating,
             goozeRating: self.goozeRating
         )
+    }
+
+    func setPhoto(fromFile file: GZEFile) {
+
+        guard self.photos != nil else {
+            log.error("photos array not set")
+            return
+        }
+
+        guard let photoName = try? file.name.asURL().deletingPathExtension().relativeString else {
+            log.error("Invalid photo name")
+            return
+        }
+
+        log.debug("photoName: \(photoName)")
+
+        guard
+            let optionalPos = photoName.split(separator: "_").map({Int($0)}).last,
+            let pos = optionalPos,
+            pos >= 0 && pos < self.photos!.count
+        else {
+            log.error("Invalid index")
+            return
+        }
+
+        self.photos![pos].name = file.name
+        self.photos![pos].container = file.container
+        self.photos![pos].url = "/containers/\(file.container)/download/\(file.name)"
+        self.photos![pos].blocked = false
+
+        // TODO apply the same to profilepic and searchpic, maybe move it to updateprofile view model
+        self.photos![pos].removeFromCache()
     }
 
     // MARK: Validation

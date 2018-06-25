@@ -72,14 +72,22 @@ class GZEUpdateProfileViewModel: NSObject {
     let searchPic = MutableProperty<UIImage?>(nil)
     
     let mainImage = MutableProperty<UIImage?>(nil)
+    let mainImageRequest = MutableProperty<URLRequest?>(nil)
     let genderOptions = GZEUser.Gender.array
     
-    var thumbnails = [MutableProperty<UIImage?>](arrayLiteral:
+    var thumbnails = [
         MutableProperty<UIImage?>(nil),
         MutableProperty<UIImage?>(nil),
         MutableProperty<UIImage?>(nil),
         MutableProperty<UIImage?>(nil)
-    )
+    ]
+
+    var thumbnailsRequest = [
+        MutableProperty<URLRequest?>(nil),
+        MutableProperty<URLRequest?>(nil),
+        MutableProperty<URLRequest?>(nil),
+        MutableProperty<URLRequest?>(nil)
+    ]
     
     let genderPickerDatasource: GZEPickerDatasource<GZEUser.Gender?>
     let genderPickerDelegate: GZEPickerDelegate<GZEUser.Gender?>
@@ -163,7 +171,7 @@ class GZEUpdateProfileViewModel: NSObject {
         let weightFirstDigit = ["0", "1"]
         let weightNumbers = (0...9).map{ "\($0)" }
         let weightTitles = [weightFirstDigit, weightNumbers, weightNumbers, [GZEUser.weightUnit]]
-        let weightValues = [weightFirstDigit, weightNumbers, weightNumbers, [""]]
+        let weightValues = [["", "1"], weightNumbers, weightNumbers, [""]]
         self.weightPickerDelegate = GZEPickerDelegate(titles: weightTitles, elements: weightValues)
         self.weightPickerDatasource = GZEPickerDatasource(elements: weightValues)
         self.weightPickerDelegate.width = 50
@@ -235,12 +243,17 @@ class GZEUpdateProfileViewModel: NSObject {
             saveProfilePicAction.values,
             saveSearchPicAction.values
         )
-            .observeValues {[weak self] user in
+            .observeValues { user in
                 log.debug("user updated: \(user.toJSON() as  Any)")
                 GZEAuthService.shared.authUser = user
                 // self?.user = user
                 mutableUser?.value = user
             }
+
+        saveProfilePicAction.values.observeValues{[weak self] user in
+            guard let this = self else {return}
+            this.profilePicRequest.value = user.profilePic?.urlRequest
+        }
     }
     
     func getChooseModeViewModel() -> GZEChooseModeViewModel {
@@ -276,23 +289,38 @@ class GZEUpdateProfileViewModel: NSObject {
     
     private func onSavePhotosAction() -> SignalProducer<GZEUser, GZEError> {
         
-        // TODO: remove old photos from server
-        self.user.photos = (
-            self.thumbnails
-                .flatMap{ GZEUser.Photo(image:$0.value) }
-        )
-        
+        // TODO: TEST overwirttings on server AND SIGNUP / EDIT PROFILE BEHAVIOUR
+        if self.user.photos == nil {
+            self.user.photos = (
+                self.thumbnails.enumerated()
+                    .map{ GZEUser.Photo(image: $0.element.value, name: "\(self.user.id)_gallery_\($0.offset).jpg") }
+            )
+        } else {
+            for (index, image) in self.thumbnails.enumerated() {
+                if image.value == nil {
+                    continue
+                }
+
+                if index >= self.user.photos!.count {
+                    log.error("Index out of bounds")
+                    break
+                }
+
+                self.user.photos![index] = GZEUser.Photo(image: image.value, name: "\(self.user.id)_gallery_\(index).jpg")
+            }
+        }
+
         return self.userRepository.savePhotos(self.user)
     }
     
     private func onSaveProfilePicAction() -> SignalProducer<GZEUser, GZEError> {
-        self.user.profilePic = self.profilePic.map{ GZEUser.Photo(image: $0) }.value
+        self.user.profilePic = self.profilePic.map{ GZEUser.Photo(image: $0, name: "\(self.user.id)_profile.jpg") }.value
         
         return self.userRepository.saveProfilePic(self.user)
     }
     
     private func onSaveSearchPicAction() -> SignalProducer<GZEUser, GZEError> {
-        self.user.searchPic = self.searchPic.map{ GZEUser.Photo(image: $0) }.value
+        self.user.searchPic = self.searchPic.map{ GZEUser.Photo(image: $0, name: "\(self.user.id)_search.jpg") }.value
         
         return self.userRepository.saveSearchPic(self.user)
     }
@@ -338,6 +366,17 @@ class GZEUpdateProfileViewModel: NSObject {
         languages.value = self.user.languages?.first
         if let interest = self.user.interestedIn?.first {
             interestPickerDelegate.selectedElements.value[0] = interest
+        }
+
+        // gallery
+        if let photos = self.user.photos {
+            for (index, photo) in photos.enumerated() {
+                if index >= thumbnailsRequest.count {
+                    log.warning("index out of bounds")
+                    break
+                }
+                thumbnailsRequest[index].value = photo.urlRequest
+            }
         }
     }
 

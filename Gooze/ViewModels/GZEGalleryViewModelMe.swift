@@ -23,6 +23,9 @@ class GZEGalleryViewModelMe: GZEProfileViewModelMe, GZEGalleryViewModel {
         MutableProperty<URLRequest?>(nil)
     ]
 
+    let editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    let (segueToUpdatePhoto, segueToUpdatePhotoObs) = Signal<GZEUpdateProfileViewModel, NoError>.pipe()
+
     override var user: GZEUser {
         didSet {
             populate(self.user)
@@ -35,6 +38,8 @@ class GZEGalleryViewModelMe: GZEProfileViewModelMe, GZEGalleryViewModel {
         log.debug("\(self) init")
 
         populate(user)
+
+        editUserAction.value = CocoaAction(createEditUserAction())
     }
 
     private func populate(_ user: GZEUser) {
@@ -47,6 +52,21 @@ class GZEGalleryViewModelMe: GZEProfileViewModelMe, GZEGalleryViewModel {
                 }
                 thumbnails[i].value = photo.urlRequest
             }
+        }
+    }
+
+    private func createEditUserAction() -> Action<Void, Void, NoError> {
+        return Action {[weak self] in
+            guard let this = self else {return SignalProducer.empty}
+            let mutableUser = MutableProperty(this.user)
+            mutableUser.signal.observeValues {[weak self] in
+                guard let this = self else {return}
+                this.user = $0
+            }
+            this.segueToUpdatePhotoObs.send(
+                value: GZEUpdateProfileViewModel(this.userRepository, user: this.user, mutableUser: mutableUser)
+            )
+            return SignalProducer.empty
         }
     }
 

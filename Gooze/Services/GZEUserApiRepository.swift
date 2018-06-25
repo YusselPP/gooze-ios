@@ -11,6 +11,7 @@ import Localize_Swift
 import ReactiveSwift
 import Gloss
 import Alamofire
+import AlamofireImage
 import Validator
 
 class GZEUserApiRepository: GZEUserRepositoryProtocol {
@@ -373,6 +374,8 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                                 user.profilePic!.url = "/containers/\(file.container)/download/\(file.name)"
                                 user.profilePic!.blocked = false
 
+                                user.profilePic!.removeFromCache(withIdentifier: NoirFilter().identifier)
+
                                 log.debug(user.toJSON() as Any)
                             }
 
@@ -427,6 +430,8 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
                             user.searchPic!.url = "/containers/\(file.container)/download/\(file.name)"
                             user.searchPic!.blocked = false
 
+                            user.searchPic!.removeFromCache(withIdentifier: NoirFilter().identifier)
+
                             log.debug(user.toJSON() as Any)
                         }
 
@@ -453,7 +458,6 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     }
 
-    //TODO: delete overwritten photos
     func savePhotos(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
             if let photos = user.photos, photos.count > 0 {
@@ -474,14 +478,11 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                     return SignalProducer<GZEUser, GZEError> { sink, disposable in
 
-                        for (index, file) in files.enumerated() {
+                        for file in files {
                             log.debug(file.toJSON() as Any)
                             log.debug(user.toJSON() as Any)
 
-                            user.photos![index].name = file.name
-                            user.photos![index].container = file.container
-                            user.photos![index].url = "/containers/\(file.container)/download/\(file.name)"
-                            user.photos![index].blocked = false
+                            user.setPhoto(fromFile: file)
                         }
 
                         sink.send(value: user)
