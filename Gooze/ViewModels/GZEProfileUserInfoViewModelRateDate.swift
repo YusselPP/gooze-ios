@@ -42,6 +42,7 @@ class GZEProfileUserInfoViewModelRateDate: GZEProfileViewModelRateDate, GZEProfi
 
     let (dismissSignal, dismissObserver) = Signal<Void, NoError>.pipe()
     var editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    var editUserButtonIsHidden = MutableProperty<Bool>(true)
     var (segueToUpdateProfile, _) = Signal<GZEUpdateProfileViewModel?, NoError>.pipe()
 
 

@@ -136,6 +136,10 @@ class GZEUpdateProfileViewModel: NSObject {
     var genderCheckListVM: GZECheckListViewModel {
         return GZECheckListViewModel(options: self.genderOptions.map{$0.displayValue}, selectedIndexes: self.searchForGender, title: genderSearchForLabelText)
     }
+
+    var paymentViewModel: GZEPaymentMethodsViewModelAdded {
+        return GZEPaymentMethodsViewModelAdded()
+    }
     
     var usernameExistsAction: Action<Void, Bool, GZEError>!
     var emailExistsAction: Action<Void, Bool, GZEError>!

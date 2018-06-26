@@ -23,6 +23,7 @@ protocol GZEPaymentMethodsViewModel {
     var addPayPal: Signal<Void, NoError> {get}
 
     var title: MutableProperty<String?> {get}
+    var navigationRightButton: MutableProperty<UIBarButtonItem?> {get}
     var paymentslist: MutableProperty<[GZEPaymentCellModel]> {get}
 
     var bottomActionButtonTitle: MutableProperty<String> {get}

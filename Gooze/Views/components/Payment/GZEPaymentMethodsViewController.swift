@@ -12,9 +12,11 @@ import ReactiveCocoa
 import BraintreeDropIn
 import SwiftOverlays
 
-class GZEPaymentMethodsViewController: UIViewController {
+class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
 
     var viewModel: GZEPaymentMethodsViewModel!
+
+    weak var dismissDelegate: GZEDismissVCDelegate?
 
     let backButton = GZEBackUIBarButtonItem()
 
@@ -23,6 +25,7 @@ class GZEPaymentMethodsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        log.debug("\(self) init")
 
         setupInterfaceObjects()
         setupBindings()
@@ -45,7 +48,8 @@ class GZEPaymentMethodsViewController: UIViewController {
 
     func setupInterfaceObjects() {
         self.backButton.onButtonTapped = {[weak self] _ in
-            self?.previousController(animated: true)
+            guard let this = self else {return}
+            this.dismissDelegate?.onDismissTapped(this)
         }
         self.navigationItem.leftBarButtonItem = backButton
         
@@ -56,6 +60,10 @@ class GZEPaymentMethodsViewController: UIViewController {
     func setupBindings() {
         // Producers
         self.navigationItem.reactive.title <~ self.viewModel.title
+        self.viewModel.navigationRightButton.producer.startWithValues{
+            [weak self] in
+            self?.navigationItem.rightBarButtonItem = $0
+        }
         self.bottomActionButton.reactive.title <~ self.viewModel.bottomActionButtonTitle
         self.bottomActionButton.reactive.isHidden <~ self.viewModel.bottomActionButtonHidden
         self.viewModel.error.producer.skipNil().startWithValues{
@@ -66,12 +74,11 @@ class GZEPaymentMethodsViewController: UIViewController {
         }
 
         // Signals
-        self.viewModel.loading.signal.skipRepeats().observeValues{[weak self] loading in
-            guard let this = self else {return}
+        self.viewModel.loading.signal.skipRepeats().observeValues{loading in
             if loading {
-                SwiftOverlays.showCenteredWaitOverlay(this.view)
+                SwiftOverlays.showBlockingWaitOverlay()
             } else {
-                SwiftOverlays.removeAllOverlaysFromView(this.view)
+                SwiftOverlays.removeAllBlockingOverlays()
             }
         }
         self.viewModel.segueAvailableMethods.signal.observeValues{[weak self] vm in
@@ -86,6 +93,7 @@ class GZEPaymentMethodsViewController: UIViewController {
             }
 
             controller.viewModel = vm
+            controller.dismissDelegate = self
             navController.pushViewController(controller, animated: true)
         }
         self.viewModel.addPayPal.signal.observeValues {[weak self] in
@@ -95,16 +103,23 @@ class GZEPaymentMethodsViewController: UIViewController {
                 guard let this = self else {return}
                 this.viewModel.loading.value = false
                 if success {
-                    this.previousController(animated: true)
+                    this.dismissDelegate?.onDismissTapped(this)
                 }
             }
         }
         self.viewModel.dismiss.signal.observeValues{[weak self] in
-            self?.previousController(animated: true)
+            guard let this = self else {return}
+            this.dismissDelegate?.onDismissTapped(this)
         }
 
         // Actions
         self.bottomActionButton.reactive.pressed = self.viewModel.bottomActionButtonAction
+    }
+    // MARK: - DismissDelegate
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZEPaymentMethodsViewController.self) {
+            vc.previousController(animated: true)
+        }
     }
 
     /*
@@ -117,4 +132,7 @@ class GZEPaymentMethodsViewController: UIViewController {
     }
     */
 
+    deinit {
+        log.debug("\(self) disposed")
+    }
 }

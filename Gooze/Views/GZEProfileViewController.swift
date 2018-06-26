@@ -171,6 +171,7 @@ class GZEProfileViewController: UIViewController {
         interestsButton.reactive.pressed = viewModel.interestedInAction.value
 
         editButton.reactive.pressed = viewModel.editUserAction.value
+        editButton.reactive.isHidden <~ viewModel.editUserButtonIsHidden
     }
     
     // MARK: - Deinitializers

@@ -24,6 +24,7 @@ class GZEGalleryViewModelMe: GZEProfileViewModelMe, GZEGalleryViewModel {
     ]
 
     let editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    var editUserButtonIsHidden = MutableProperty<Bool>(false)
     let (segueToUpdatePhoto, segueToUpdatePhotoObs) = Signal<GZEUpdateProfileViewModel, NoError>.pipe()
 
     override var user: GZEUser {

@@ -14,8 +14,10 @@ import ALCameraViewController
 import Photos
 import SwiftOverlays
 
-class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
+class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZEDismissVCDelegate {
 
+    let segueToPayment = "segueToPayment"
+    
     var blur: GZEBlur?
 
     var viewModel: GZEUpdateProfileViewModel!
@@ -1047,15 +1049,51 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate {
         backScrollView.contentInset.bottom = vInset
     }
 
-    /*
+    // MARK: - GZEDismissVCDelegate
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZEPaymentMethodsViewController.self) {
+            let loginDismiss = viewModel.dismiss
+            viewModel.dismiss = {[weak self] in
+                guard let this = self else {return}
+                this.performSegue(withIdentifier: this.segueToPayment, sender: nil)
+                this.viewModel.dismiss = loginDismiss
+            }
+            vc.previousController(animated: true)
+        }
+    }
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == segueToPayment {
+            showPaymentView(segue.destination)
+        }
     }
-    */
+
+
+    func showPaymentView(_ vc: UIViewController) {
+        log.debug("Trying to show payment view...")
+        if let view = vc as? GZEPaymentMethodsViewController {
+
+            view.dismissDelegate = self
+
+            let vm = self.viewModel.paymentViewModel
+            let nextButton = GZENextUIBarButtonItem()
+            nextButton.onButtonTapped = {[weak self] _ in
+                self?.showChooseModeController()
+            }
+            vm.navigationRightButton.value = nextButton
+
+            view.viewModel = vm
+        } else {
+            log.error("Unable to instantiate GZEPaymentViewController")
+            GZEAlertService.shared.showBottomAlert(text: GZERepositoryError.UnexpectedError.localizedDescription)
+        }
+    }
+
     func showChooseModeController() {
         self.viewModel.dismiss?()
     }

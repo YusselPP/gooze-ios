@@ -250,7 +250,10 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
                     log.error(error)
                     this.onError(error)
                     completion?(false)
-                default: break
+                case .interrupted:
+                    completion?(false)
+                case .completed:
+                    completion?(false)
                 }
         }
     }

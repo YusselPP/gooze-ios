@@ -25,6 +25,7 @@ class GZEPaymentMethodsViewModelAvailable: GZEPaymentMethodsViewModel {
     let (addPayPal, addPayPalObs) = Signal<Void, NoError>.pipe()
 
     let title = MutableProperty<String?>(nil)
+    let navigationRightButton = MutableProperty<UIBarButtonItem?>(nil)
     let paymentslist = MutableProperty<[GZEPaymentCellModel]>([])
 
     let bottomActionButtonTitle = MutableProperty<String>("")
@@ -46,7 +47,9 @@ class GZEPaymentMethodsViewModelAvailable: GZEPaymentMethodsViewModel {
             GZEPaymentCellModel(
                 title: BTUIKViewUtil.name(forPaymentMethodType: .payPal),
                 icon: BTUIKViewUtil.vectorArtView(for: .payPal, size: .large),
-                onTap: self.handleAddPayPalMethod
+                onTap: {[weak self] in
+                    self?.handleAddPayPalMethod($0)
+                }
             )
         )
     }

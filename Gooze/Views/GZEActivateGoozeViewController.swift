@@ -11,7 +11,7 @@ import MapKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
+class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDismissVCDelegate {
 
     let segueToProfile = "segueToProfile"
     let segueToMyProfile = "segueToMyProfile"
@@ -544,6 +544,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
+    // MARK: Dismiss delegate
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZEPaymentMethodsViewController.self) {
+           vc.previousController(animated: true)
+        }
+    }
+
 
      // MARK: - Navigation
 
@@ -645,6 +652,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate {
         if let vc = vc as? GZEPaymentMethodsViewController {
 
             vc.viewModel = self.viewModel.paymentViewModel
+            vc.dismissDelegate = self
 
         } else {
             log.error("Unable to cast segue.destination as? GZEChatsViewController")

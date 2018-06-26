@@ -24,6 +24,7 @@ class GZEGalleryViewModelReadOnly: GZEProfileViewModelReadOnly, GZEGalleryViewMo
     ]
 
     var editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    var editUserButtonIsHidden = MutableProperty<Bool>(true)
     var (segueToUpdatePhoto, _) = Signal<GZEUpdateProfileViewModel, NoError>.pipe()
 
     

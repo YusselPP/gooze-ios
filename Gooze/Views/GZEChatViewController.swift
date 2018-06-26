@@ -10,7 +10,7 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 
-class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate, GZEDismissVCDelegate {
 
     let segueToPayment = "segueToPayment"
     let segueToMap = "segueToMap"
@@ -254,6 +254,13 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view, safeInsets: false)
     }
 
+    // MARK: Dismiss delegate
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZEPaymentMethodsViewController.self) {
+            vc.previousController(animated: true)
+        }
+    }
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -281,6 +288,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                 return
             }
             view.viewModel = vm
+            view.dismissDelegate = self
 
         } else {
             log.error("Unable to instantiate GZEPaymentViewController")

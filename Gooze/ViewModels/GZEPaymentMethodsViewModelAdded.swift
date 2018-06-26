@@ -25,6 +25,7 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
     let (addPayPal, addPayPalObs) = Signal<Void, NoError>.pipe()
 
     let title = MutableProperty<String?>(nil)
+    let navigationRightButton = MutableProperty<UIBarButtonItem?>(nil)
     let paymentslist = MutableProperty<[GZEPaymentCellModel]>([])
 
     let bottomActionButtonTitle = MutableProperty<String>("")

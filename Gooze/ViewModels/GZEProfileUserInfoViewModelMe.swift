@@ -40,6 +40,7 @@ class GZEProfileUserInfoViewModelMe: GZEProfileViewModelMe, GZEProfileUserInfoVi
     let interestedInAction = MutableProperty<CocoaAction<UIButton>?>(nil)
 
     let editUserAction = MutableProperty<CocoaAction<GZEEditButton>?>(nil)
+    var editUserButtonIsHidden = MutableProperty<Bool>(false)
 
     let (dismissSignal, _) = Signal<Void, NoError>.pipe()
     let (segueToUpdateProfile, segueToUpdateProfileObs) = Signal<GZEUpdateProfileViewModel?, NoError>.pipe()

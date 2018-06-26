@@ -18,6 +18,7 @@ protocol GZEGalleryViewModel: GZEProfileViewModel {
     var thumbnails: [MutableProperty<URLRequest?>] { get }
 
     var editUserAction: MutableProperty<CocoaAction<GZEEditButton>?> { get }
+    var editUserButtonIsHidden: MutableProperty<Bool> { get }
 
     var segueToUpdatePhoto: Signal<GZEUpdateProfileViewModel, NoError> { get }
 }

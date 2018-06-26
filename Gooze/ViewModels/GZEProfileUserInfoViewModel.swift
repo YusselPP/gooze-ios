@@ -38,6 +38,7 @@ protocol GZEProfileUserInfoViewModel: GZEProfileViewModel {
     var interestedInAction: MutableProperty<CocoaAction<UIButton>?> { get }
 
     var editUserAction: MutableProperty<CocoaAction<GZEEditButton>?> { get }
+    var editUserButtonIsHidden: MutableProperty<Bool> { get }
 
     var dismissSignal: Signal<Void, NoError> { get }
     var segueToUpdateProfile: Signal<GZEUpdateProfileViewModel?, NoError> { get }

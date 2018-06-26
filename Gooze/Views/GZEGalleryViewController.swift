@@ -195,6 +195,7 @@ class GZEGalleryViewController: UIViewController {
         contactButton.reactive.pressed = viewModel.bottomButtonAction
 
         editPhoto.reactive.pressed = viewModel.editUserAction.value
+        editPhoto.reactive.isHidden <~ viewModel.editUserButtonIsHidden
 
         // UI bindings
         //mainImageView.reactive.image <~ selectedThumbnail.map{$0?.image}

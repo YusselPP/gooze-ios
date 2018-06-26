@@ -1199,6 +1199,7 @@
                         <outlet property="viewHeightConstraint" destination="G6l-yV-Au8" id="3fh-Br-NtB"/>
                         <outlet property="viewLeadingSuperviewLeadingConstrint" destination="5Zp-7f-z2C" id="2na-Z4-3sc"/>
                         <outlet property="viewTopImageContainerBottomConstraint" destination="53P-uU-e2y" id="teY-ob-mKR"/>
+                        <segue destination="j8o-Hv-891" kind="show" identifier="segueToPayment" id="1Ut-GE-1n8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Jp-4V-1S0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3325,7 +3326,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aoX-cG-RKK"/>
-        <segue reference="uRz-tZ-uiL"/>
+        <segue reference="1Ut-GE-1n8"/>
         <segue reference="XJg-fM-c9J"/>
         <segue reference="be1-y5-0kc"/>
         <segue reference="e66-sX-XQT"/>

@@ -216,18 +216,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         usernameLabel.reactive.text <~ viewModel.username.map { username -> String? in
             return username?.uppercased()
         }
-        //profileImageView.reactive.image <~ viewModel.profilePic
-        //profileImageView.reactive.imageUrlRequest <~ viewModel.profilePic
 
-        // **** TEST SIGNUP *****
-//        viewModel.profilePic.producer.startWithValues{[weak self] in
-//            guard let this = self else {return}
-//            if let img = $0 {
-//                this.profileImageView.image = img.af_imageFiltered(withCoreImageFilter: "CIPhotoEffectNoir")
-//            } else {
-//                this.profileImageView.image = nil
-//            }
-//        }
         profileImageView.reactive.noirImageUrlRequestLoading <~ viewModel.profilePicRequest
         phraseTextField.reactive.text <~ viewModel.phrase
         genderTextField.reactive.text <~ viewModel.gender.map { $0?.displayValue }
@@ -574,6 +563,11 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
 
             if let aSender = sender as? UIButton, aSender == saveButton {
                 viewController.mode = .editGalleryPic
+                let loginDismiss = viewModel.dismiss
+                viewModel.dismiss = {[weak self] in
+                    viewController.performSegue(withIdentifier: viewController.segueToPayment, sender: nil)
+                    self?.viewModel.dismiss = loginDismiss
+                }
             } else {
                 viewController.mode = .editProfilePic
             }
