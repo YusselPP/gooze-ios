@@ -23,8 +23,14 @@ class GZEChatService: NSObject {
     var chatSocket: ChatSocket? {
         return GZESocketManager.shared[ChatSocket.namespace] as? ChatSocket
     }
+
+    let chatMessageRepository: GZEChatMessageRepositoryProtocol = GZEChatMessageApiRepository()
     
-    var activeChatId: String?
+    var activeChatId: String? {
+        didSet {
+            activeChatDidSet()
+        }
+    }
 
     override init() {
         super.init()
@@ -358,6 +364,27 @@ class GZEChatService: NSObject {
         log.debug("chat controller instantiated. Setting up its view model")
         chatController.viewModel = viewModel
         navController.pushViewController(chatController, animated: true, completion: completion)
+    }
+
+    func activeChatDidSet() {
+        guard let activeChatId = self.activeChatId else {
+            log.debug("activeChatId set to nil")
+            return
+        }
+
+        log.debug("setting messages from chat: \(activeChatId) with read status")
+        chatMessageRepository
+            .setRead(chatId: activeChatId)
+            .start{[weak self] in
+                switch $0 {
+                case .value(let count):
+                    log.debug("updated messages: \(count)")
+                case .failed(let error):
+                    log.error(error)
+                    self?.errorMessage.value = error.localizedDescription
+                default: break
+                }
+            }
     }
 
     func cleanup() {
