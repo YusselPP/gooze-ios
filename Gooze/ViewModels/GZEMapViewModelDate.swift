@@ -38,7 +38,9 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
         return GZERatingsViewModelRateDate(user: self.annotationUser.value)
     }
     let (ratingViewSignal, ratingViewObserver) = Signal<Void, NoError>.pipe()
+    let (segueToHelp, segueToHelpObs) = Signal<GZEHelpViewModel, NoError>.pipe()
     let (exitSignal, exitObserver) = Signal<Void, NoError>.pipe()
+
     let (dropdownActionSignal, dropdownAction) = Signal<Int, NoError>.pipe()
 
     func viewWillAppear(mapViewContainer: UIView) {
@@ -295,9 +297,12 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                 }
             }
 
-        dropdownActionSignal.observeValues {index in
-            if index == 1 {
-                //cancelDate.apply().start()
+        dropdownActionSignal.observeValues {[weak self] index in
+            guard let this = self else {return}
+            if index == 0 {
+                this.segueToHelpObs.send(value: GZEHelpViewModelGooze())
+            } else if index == 1 {
+                cancelDate.apply().start()
             }
         }
     }

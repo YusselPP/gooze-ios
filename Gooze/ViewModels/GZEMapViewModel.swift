@@ -33,6 +33,7 @@ protocol GZEMapViewModel {
 
     var ratingViewModel: GZERatingsViewModel { get }
     var ratingViewSignal: Signal<Void, NoError> { get }
+    var segueToHelp: Signal<GZEHelpViewModel, NoError> { get }
     var exitSignal: Signal<Void, NoError> { get }
 
     var dropdownAction: Observer<Int, NoError> {get}

@@ -74,11 +74,12 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
         }
 
         // Signals
-        self.viewModel.loading.signal.skipRepeats().observeValues{loading in
+        self.viewModel.loading.signal.skipRepeats().observeValues{[weak self] loading in
+            guard let this = self else {return}
             if loading {
-                SwiftOverlays.showBlockingWaitOverlay()
+                SwiftOverlays.showCenteredWaitOverlay(this.view)
             } else {
-                SwiftOverlays.removeAllBlockingOverlays()
+                SwiftOverlays.removeAllOverlaysFromView(this.view)
             }
         }
         self.viewModel.segueAvailableMethods.signal.observeValues{[weak self] vm in
@@ -97,7 +98,7 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
             navController.pushViewController(controller, animated: true)
         }
         self.viewModel.addPayPal.signal.observeValues {[weak self] in
-            guard let this = self else {return}
+            guard let this = self, !this.viewModel.loading.value else {return}
             this.viewModel.loading.value = true
             PayPalService.shared.savePaymentMethod(presenter: this) {[weak self] success in
                 guard let this = self else {return}

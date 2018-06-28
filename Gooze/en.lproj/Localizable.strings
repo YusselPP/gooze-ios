@@ -169,6 +169,12 @@
 "vm.paymentMethods.addMethod"="Add payment method";
 "vm.paymentMethods.title.selectMethod"="Select payment method";
 
+// ViewModel/GZEHelViewModelGooze
+"vm.help.title"="Help";
+"vm.help.send"="Send";
+"vm.help.subject"="Subject";
+"vm.help.body"="Message";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.nextButton.title"="Next";
@@ -227,7 +233,7 @@
 "service.dates.requestSuccessfullySent"="Your request has been sent";
 "service.dates.requestSuccessfullyAccepted"="The request has been accepted";
 "service.dates.requestAccepted"="%@ has accepted your request";
-"service.dates.dateCreated"="A date has been created";
+"service.dates.dateCreated"="Payment confirmed. A date has been created";
 
 "service.chat.invalidChatId"="An error ocurred while opening the chat";
 "service.chat.messageReceived"="%@ has sent you a message";

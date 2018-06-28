@@ -11,10 +11,11 @@ import ReactiveSwift
 import ReactiveCocoa
 import DropDown
 
-class GZEMapViewController: UIViewController {
+class GZEMapViewController: UIViewController, GZEDismissVCDelegate {
 
-    var segueToRatings = "segueToRatings"
-    var unwindToActivateGooze = "unwindToActivateGooze"
+    let segueToRatings = "segueToRatings"
+    let segueToHelp = "segueToHelp"
+    let unwindToActivateGooze = "unwindToActivateGooze"
     var viewModel: GZEMapViewModel!
 
     var userBalloons = [GZEUserBalloon]()
@@ -78,7 +79,7 @@ class GZEMapViewController: UIViewController {
         self.topLabel.textColor = .black
 
         self.bottomActionView.accessoryButton.setImage(#imageLiteral(resourceName: "button-plus"), for: .normal)
-        self.bottomActionView.accessoryButton.imageEdgeInsets = UIEdgeInsets(top: 6, left: 5, bottom: 6, right: 5)
+        self.bottomActionView.accessoryButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 5)
 
         self.dropDown.anchorView = self.bottomActionView.accessoryButton
         self.dropDown.dataSource = ["Ayuda", "Cancelar cita"]
@@ -129,6 +130,11 @@ class GZEMapViewController: UIViewController {
             this.performSegue(withIdentifier: this.segueToRatings, sender: nil)
         }
 
+        self.viewModel.segueToHelp.observeValues{[weak self] in
+            guard let this = self else {return}
+            this.performSegue(withIdentifier: this.segueToHelp, sender: $0)
+        }
+
         self.viewModel.exitSignal.observeValues{[weak self] in
             guard let this = self else {return}
             this.performSegue(withIdentifier: this.unwindToActivateGooze, sender: nil)
@@ -143,6 +149,13 @@ class GZEMapViewController: UIViewController {
             }
     }
 
+    // MARK: Dismiss delegate
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZEHelpViewController.self) {
+            vc.previousController(animated: true)
+        }
+    }
+
 
     // MARK: - Navigation
 
@@ -154,6 +167,13 @@ class GZEMapViewController: UIViewController {
 
             prepareRatingView(segue.destination)
 
+        } else if segue.identifier == segueToHelp {
+
+            GZEHelpViewController.prepareHelpView(
+                presenter: self,
+                viewController: segue.destination,
+                vm: sender
+            )
         }
     }
 

@@ -97,6 +97,11 @@ class GZEMenuMain {
             controller.performSegue(withIdentifier: controller.segueToTips, sender: nil)
         })
 
+        let (_, helpCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
+            guard let controller = self?.controller else {return}
+            controller.performSegue(withIdentifier: controller.segueToHelp, sender: GZEHelpViewModelGooze())
+        })
+
         chatButton = createMenuItemButton(title: menuItemTitleChats, action: chatCocoaAction, hasBadge: true)
 
         let menuItems = [
@@ -118,8 +123,8 @@ class GZEMenuMain {
             //createMenuSeparator(),
             createMenuItemButton(title: menuItemTitleTips, action: tipsCocoaAction),
             createMenuSeparator(),
-            //createMenuItemButton(title: menuItemTitleHelp, action: profileCocoaAction),
-            //createMenuSeparator(),
+            createMenuItemButton(title: menuItemTitleHelp, action: helpCocoaAction),
+            createMenuSeparator(),
             //createMenuItemButton(title: menuItemTitleConfiguration, action: profileCocoaAction),
             //createMenuSeparator(),
             logoutButton

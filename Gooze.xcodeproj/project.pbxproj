@@ -90,6 +90,9 @@
 		8D290705207827D400C2F865 /* GZEMapSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D290704207827D400C2F865 /* GZEMapSlider.swift */; };
 		8D295E3920CDFABC00A78A7B /* PayPalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D295E3820CDFABC00A78A7B /* PayPalService.swift */; };
 		8D295E3B20CDFB8D00A78A7B /* GZEPayPalRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D295E3A20CDFB8D00A78A7B /* GZEPayPalRouter.swift */; };
+		8D29625120E501F700972958 /* GZEHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29625020E501F700972958 /* GZEHelpViewController.swift */; };
+		8D29625320E5160100972958 /* GZEHelpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29625220E5160100972958 /* GZEHelpViewModel.swift */; };
+		8D29625520E5169E00972958 /* GZEHelpViewModelGooze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29625420E5169E00972958 /* GZEHelpViewModelGooze.swift */; };
 		8D29A6F92068778C00830E6D /* GZEAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29A6F82068778C00830E6D /* GZEAlertService.swift */; };
 		8D29C0AC20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0AB20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift */; };
 		8D29C0AE20BD5D7C0084A1F3 /* GZEPaymentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29C0AD20BD5D7C0084A1F3 /* GZEPaymentRepository.swift */; };
@@ -344,6 +347,9 @@
 		8D290704207827D400C2F865 /* GZEMapSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMapSlider.swift; sourceTree = "<group>"; };
 		8D295E3820CDFABC00A78A7B /* PayPalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPalService.swift; sourceTree = "<group>"; };
 		8D295E3A20CDFB8D00A78A7B /* GZEPayPalRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPayPalRouter.swift; sourceTree = "<group>"; };
+		8D29625020E501F700972958 /* GZEHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEHelpViewController.swift; sourceTree = "<group>"; };
+		8D29625220E5160100972958 /* GZEHelpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEHelpViewModel.swift; sourceTree = "<group>"; };
+		8D29625420E5169E00972958 /* GZEHelpViewModelGooze.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEHelpViewModelGooze.swift; sourceTree = "<group>"; };
 		8D29A6F82068778C00830E6D /* GZEAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAlertService.swift; sourceTree = "<group>"; };
 		8D29C0AB20BD5D6D0084A1F3 /* GZEConektaApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConektaApiRepository.swift; sourceTree = "<group>"; };
 		8D29C0AD20BD5D7C0084A1F3 /* GZEPaymentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPaymentRepository.swift; sourceTree = "<group>"; };
@@ -895,6 +901,7 @@
 				8D576E7720B97D75004509CE /* GZETipsViewController.swift */,
 				8D576EB320BA5C15004509CE /* GZEAddCreditCardViewController.swift */,
 				8D21A01220DAE55A008FF564 /* GZECheckListViewController.swift */,
+				8D29625020E501F700972958 /* GZEHelpViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -961,6 +968,8 @@
 				8D83115A20D557E600EF4BAC /* GZEWebViewModelTerms.swift */,
 				8D21A01420DAE777008FF564 /* GZECheckListViewModel.swift */,
 				8D21A01E20DAEC89008FF564 /* GZECheckListItem.swift */,
+				8D29625220E5160100972958 /* GZEHelpViewModel.swift */,
+				8D29625420E5169E00972958 /* GZEHelpViewModelGooze.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1385,6 +1394,7 @@
 				8DF1BE461FA824B800FFE02F /* GZEAccesToken.swift in Sources */,
 				8D576EAA20B9CC13004509CE /* Token.m in Sources */,
 				8DC81BEE204E4CC60099B417 /* GZEButton.swift in Sources */,
+				8D29625120E501F700972958 /* GZEHelpViewController.swift in Sources */,
 				8D0551F81FC0164900BC3915 /* GZERegisterCodeViewController.swift in Sources */,
 				8D572DB91F9D334000B824FA /* GZELoginViewModel.swift in Sources */,
 				8D06CC502043A9400034A90C /* GZEMethodPointer.swift in Sources */,
@@ -1452,6 +1462,7 @@
 				8D576EA920B9CC13004509CE /* Conekta.m in Sources */,
 				8D250C8120B2E8DA00D3E06B /* GZERateCommentsRouter.swift in Sources */,
 				8D219F0620895ED700BAEEE5 /* GZENumberHelper.swift in Sources */,
+				8D29625320E5160100972958 /* GZEHelpViewModel.swift in Sources */,
 				F0B4DF2D1FD76883002E4F18 /* Dictionary+Extension.swift in Sources */,
 				8D9711B31FC307D200E98F95 /* GZEConstants.swift in Sources */,
 				8D22DD9E2039AF3C0088D5F5 /* GZEBlur.swift in Sources */,
@@ -1468,6 +1479,7 @@
 				8D210BF220D7D29F00F1ECCD /* GZEDeviceTokenRepository.swift in Sources */,
 				8D033C5E206EC9A500AF47E6 /* GZEChatBubbleView.swift in Sources */,
 				8DD035331FB55105008EBEAD /* UIImageView+Extension.swift in Sources */,
+				8D29625520E5169E00972958 /* GZEHelpViewModelGooze.swift in Sources */,
 				8D227CB720D552F000564DEE /* GZEDismissVCDelegate.swift in Sources */,
 				8D2A9C5020BE440F00D4D9EB /* GZEOrientationNotifications.swift in Sources */,
 				8DF5CEF6206275A5006C2702 /* GZELoadingViewModel.swift in Sources */,

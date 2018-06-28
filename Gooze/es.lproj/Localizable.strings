@@ -169,6 +169,12 @@
 "vm.paymentMethods.addMethod"="Agregar forma de pago";
 "vm.paymentMethods.title.selectMethod"="Seleccionar forma de pago";
 
+// ViewModel/GZEHelViewModelGooze
+"vm.help.title"="Ayuda";
+"vm.help.send"="Enviar";
+"vm.help.subject"="Asunto";
+"vm.help.body"="Mensaje";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.nextButton.title"="Siguiente";

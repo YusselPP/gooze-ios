@@ -1410,6 +1410,7 @@
                         <segue destination="Dcf-Vz-JEP" kind="show" identifier="segueToRatings" id="aoX-cG-RKK"/>
                         <segue destination="OWp-Sl-Whd" kind="show" identifier="segueToMyProfile" id="7Qg-7B-R48"/>
                         <segue destination="j8o-Hv-891" kind="show" identifier="segueToPayment" id="uRz-tZ-uiL"/>
+                        <segue destination="OOY-bx-l2I" kind="show" identifier="segueToHelp" id="R1T-5h-Xv7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5c-ka-Vea" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1813,6 +1814,67 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JWL-Ve-M0t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3261" y="2078"/>
+        </scene>
+        <!--Help View Controller-->
+        <scene sceneID="VRF-c2-Okn">
+            <objects>
+                <viewController id="OOY-bx-l2I" customClass="GZEHelpViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uXB-ll-BNy"/>
+                        <viewControllerLayoutGuide type="bottom" id="XYu-YS-4MJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fCx-Vg-pdW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="vri-vQ-5kC">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rIi-L8-22F">
+                                <rect key="frame" x="24" y="94" width="327" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="t7x-X1-oo5">
+                                <rect key="frame" x="24" y="154" width="327" height="200"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="liz-1M-tuO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oIa-Je-Z5K" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="164" y="617" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="XYu-YS-4MJ" firstAttribute="top" secondItem="vri-vQ-5kC" secondAttribute="bottom" id="1Yq-Je-DCo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="t7x-X1-oo5" secondAttribute="trailing" constant="8" id="3XZ-Rs-1QR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="rIi-L8-22F" secondAttribute="trailing" constant="8" id="3gb-at-6tU"/>
+                            <constraint firstItem="oIa-Je-Z5K" firstAttribute="centerX" secondItem="fCx-Vg-pdW" secondAttribute="centerX" id="EAb-cr-HCh"/>
+                            <constraint firstAttribute="trailing" secondItem="vri-vQ-5kC" secondAttribute="trailing" id="RY8-yM-ak8"/>
+                            <constraint firstItem="XYu-YS-4MJ" firstAttribute="top" secondItem="oIa-Je-Z5K" secondAttribute="bottom" constant="20" id="UNc-WB-qSJ"/>
+                            <constraint firstItem="t7x-X1-oo5" firstAttribute="leading" secondItem="fCx-Vg-pdW" secondAttribute="leadingMargin" constant="8" id="Uwn-WA-NWP"/>
+                            <constraint firstItem="vri-vQ-5kC" firstAttribute="top" secondItem="fCx-Vg-pdW" secondAttribute="top" id="VBb-1K-9WI"/>
+                            <constraint firstItem="rIi-L8-22F" firstAttribute="top" secondItem="uXB-ll-BNy" secondAttribute="bottom" constant="30" id="cen-Dx-hwu"/>
+                            <constraint firstItem="rIi-L8-22F" firstAttribute="leading" secondItem="fCx-Vg-pdW" secondAttribute="leadingMargin" constant="8" id="lcn-h1-4Ly"/>
+                            <constraint firstItem="vri-vQ-5kC" firstAttribute="leading" secondItem="fCx-Vg-pdW" secondAttribute="leading" id="lw7-5e-MDI"/>
+                            <constraint firstItem="t7x-X1-oo5" firstAttribute="top" secondItem="rIi-L8-22F" secondAttribute="bottom" constant="30" id="sqw-b6-8EU"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bodyTextView" destination="t7x-X1-oo5" id="d8Q-r6-MpT"/>
+                        <outlet property="bottomButton" destination="oIa-Je-Z5K" id="Syo-k7-k1E"/>
+                        <outlet property="subjectTextField" destination="rIi-L8-22F" id="Wxw-xS-zKb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rgS-qW-rrm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4004" y="2867"/>
         </scene>
         <!--Payment Methods View Controller-->
         <scene sceneID="rqN-QR-aNu">
@@ -3300,6 +3362,7 @@
                         <outlet property="userBalloon5" destination="UVq-3e-Nhg" id="MfJ-GK-qQt"/>
                         <segue destination="Dcf-Vz-JEP" kind="show" identifier="segueToRatings" id="ado-a7-Lxa"/>
                         <segue destination="o48-wT-lZe" kind="unwind" identifier="unwindToActivateGooze" unwindAction="unwindToActivateGoozeWithSegue:" id="J3W-ph-6cA"/>
+                        <segue destination="OOY-bx-l2I" kind="show" identifier="segueToHelp" id="n0C-k6-0IU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m2o-Wf-tkR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3325,8 +3388,9 @@
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aoX-cG-RKK"/>
+        <segue reference="ado-a7-Lxa"/>
         <segue reference="uRz-tZ-uiL"/>
+        <segue reference="n0C-k6-0IU"/>
         <segue reference="XJg-fM-c9J"/>
         <segue reference="be1-y5-0kc"/>
         <segue reference="e66-sX-XQT"/>

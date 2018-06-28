@@ -20,6 +20,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     let segueToTips = "segueToTips"
     let segueToRatings = "segueToRatings"
     let segueToPayment = "segueToPayment"
+    let segueToHelp = "segueToHelp"
 
     enum Scene {
         case activate
@@ -560,6 +561,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     func onDismissTapped(_ vc: UIViewController) {
         if vc.isKind(of: GZEPaymentMethodsViewController.self) {
            vc.previousController(animated: true)
+        } else if vc.isKind(of: GZEHelpViewController.self) {
+            vc.previousController(animated: true)
         }
     }
 
@@ -602,6 +605,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             prepareChatSegue(segue.destination)
         } else if segue.identifier == segueToPayment {
             preparePaymentSegue(segue.destination)
+        } else if segue.identifier == segueToHelp {
+
+            GZEHelpViewController.prepareHelpView(
+                presenter: self,
+                viewController: segue.destination,
+                vm: sender
+            )
         }
      }
 
