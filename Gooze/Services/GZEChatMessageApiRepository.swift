@@ -34,6 +34,16 @@ class GZEChatMessageApiRepository: GZEChatMessageRepositoryProtocol {
     }
 
 
+    func count(filter: JSON) -> SignalProducer<Int, GZEError> {
+        return SignalProducer {sink, disposable in
+            Alamofire.request(GZEChatMessageRouter.count(filter: filter))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
+                    (json: JSON) in
+                    return json["count"] as? Int
+                }))
+        }
+    }
+
     func update(filter: JSON, data: JSON) -> SignalProducer<Int, GZEError> {
         return SignalProducer {sink, disposable in
             Alamofire.request(GZEChatMessageRouter.update(filter: filter, data: data))

@@ -9,6 +9,7 @@
 import Foundation
 import ReactiveSwift
 import CoreLocation
+import Gloss
 
 class GZEActivateGoozeViewModel {
 
@@ -20,6 +21,9 @@ class GZEActivateGoozeViewModel {
 
     let userResults = MutableProperty<[GZEUserConvertible]>([])
     let userOtherResults = MutableProperty<[GZEUserConvertible]>([])
+
+    let messagesCount = MutableProperty<[String: Int]>([:])
+    let mode = MutableProperty<GZEChatViewMode?>(nil)
 
     let searchViewTitle = "vm.search.viewTitle".localized()
     let zeroResultsMessage = "vm.search.zeroResultsMessage".localized()
@@ -88,6 +92,20 @@ class GZEActivateGoozeViewModel {
             .observeValues {user in
                 GZEAuthService.shared.authUser = user
         }
+
+        GZEChatService.shared.unreadCount
+            .producer
+            .take(during: self.messagesCount.lifetime)
+            .startWithValues{[weak self] in
+                self?.messagesCount.value = $0
+            }
+
+        self.mode.producer
+            .skipNil()
+            .skipRepeats()
+            .startWithValues{
+                GZEChatService.shared.updateUnreadMessages(mode: $0)
+            }
     }
 
     func getChatsViewModel(_ mode: GZEChatViewMode) -> GZEChatsViewModelDates {

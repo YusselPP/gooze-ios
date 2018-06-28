@@ -272,6 +272,21 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
+    func unreadMessagesCount(mode: GZEChatViewMode) -> SignalProducer<[String: Int], GZEError> {
+        guard let userId = GZEAuthService.shared.authUser?.id else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer{sink, disposable in
+
+            Alamofire.request(GZEUserRouter.unreadMessagesCount(id: userId, parameters: ["mode": mode.rawValue]))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
+                    (json: JSON) in
+                    json as? [String: Int]
+                }))
+        }
+    }
+
     // MARK: Auth
 
     func login(_ email: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError> {

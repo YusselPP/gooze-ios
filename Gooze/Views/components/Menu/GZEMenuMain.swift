@@ -44,6 +44,8 @@ class GZEMenuMain {
         }
     }
 
+    var chatButton: GZEButton!
+
     var switchModeGoozeButton: GZEButton!
 
     weak var controller: GZEActivateGoozeViewController?
@@ -95,14 +97,14 @@ class GZEMenuMain {
             controller.performSegue(withIdentifier: controller.segueToTips, sender: nil)
         })
 
-
+        chatButton = createMenuItemButton(title: menuItemTitleChats, action: chatCocoaAction, hasBadge: true)
 
         let menuItems = [
             createMenuItemButton(title: menuItemTitleProfile, action: profileCocoaAction),
             createMenuSeparator(),
             self.switchModeGoozeButton,
             createMenuSeparator(),
-            createMenuItemButton(title: menuItemTitleChats, action: chatCocoaAction),
+            chatButton,
             createMenuSeparator(),
             //createMenuItemButton(title: menuItemTitleHistory, action: profileCocoaAction),
             //createMenuSeparator(),
@@ -143,13 +145,22 @@ class GZEMenuMain {
         return (action, cocoaAction)
     }
 
-    func createMenuItemButton(title: String, action: CocoaAction<GZEButton>) -> GZEButton {
+    func createMenuItemButton(title: String, action: CocoaAction<GZEButton>, hasBadge: Bool = false) -> GZEButton {
         let button = GZEButton()
         button.setTitle(title, for: .normal)
         button.reactive.pressed = action
         button.backgroundColor = .clear
         button.widthConstraint.isActive = false
         button.heightConstraint.constant = 45
+
+        if hasBadge {
+            button.pp_addBadge(withNumber: 1)
+            button.pp_moveBadgeWith(x: UIScreen.main.bounds.width / 2 + 30, y: 11)
+            button.pp_setBadgeLabelAttributes{label in
+                label?.backgroundColor = GZEConstants.Color.mainGreen
+                label?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+            }
+        }
         return button
     }
 

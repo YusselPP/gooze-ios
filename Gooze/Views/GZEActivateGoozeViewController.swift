@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import ReactiveSwift
 import ReactiveCocoa
+import PPBadgeView
 
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDismissVCDelegate {
 
@@ -143,6 +144,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         if self.isObservingRequests {
             self.observeRequests()
         }
+
+        if let mode = self.viewModel.mode.value {
+            GZEChatService.shared.updateUnreadMessages(mode: mode)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -201,6 +206,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     }
 
     func setupBindings() {
+        viewModel.messagesCount
+            .map{$0.reduce(0, {$0 + $1.value})}
+            .producer.startWithValues {
+                GZEMenuMain.shared.navButton.pp_addBadge(withNumber: $0)
+                GZEMenuMain.shared.chatButton.pp_addBadge(withNumber: $0)
+            }
+
         viewModel.sliderValue <~ topSlider.reactive.values
 
         dateRequest.signal.skipNil().skipRepeats().observeValues{[weak self] dateRequest in
@@ -694,6 +706,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     }
 
     func showActivateScene() {
+        viewModel.mode.value = .gooze
+
         topControls.isHidden = false
         topControlsBackground.isHidden = false
         activateGoozeButton.isHidden = false
@@ -756,6 +770,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     }
 
     func showSearchScene() {
+        viewModel.mode.value = .client
         topControls.isHidden = false
         topControlsBackground.isHidden = false
         activateGoozeButton.isHidden = false

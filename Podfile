@@ -24,6 +24,8 @@ target 'Gooze' do
   pod 'DropDown'
   pod 'FBSDKLoginKit'
 
+  pod 'PPBadgeView'
+
   # Includes Cards and PayPal
   pod 'Braintree'
   pod 'BraintreeDropIn'

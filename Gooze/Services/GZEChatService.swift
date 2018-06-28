@@ -17,6 +17,7 @@ class GZEChatService: NSObject {
     let messagesChunkSize = 20
     let messages = MutableProperty<[String: [GZEChatMessage]]>([:])
     let lastMessage = MutableProperty<GZEChatMessage?>(nil)
+    let unreadCount = MutableProperty<[String: Int]>([:])
 
     let errorMessage = MutableProperty<String?>(nil)
 
@@ -25,6 +26,7 @@ class GZEChatService: NSObject {
     }
 
     let chatMessageRepository: GZEChatMessageRepositoryProtocol = GZEChatMessageApiRepository()
+    let userRepository: GZEUserRepositoryProtocol = GZEUserApiRepository()
     
     var activeChatId: String? {
         didSet {
@@ -34,6 +36,7 @@ class GZEChatService: NSObject {
 
     override init() {
         super.init()
+        self.unreadCount.signal.observeValues{log.debug($0)}
     }
 
     func retrieveNewMessages(chatId: String) {
@@ -214,12 +217,16 @@ class GZEChatService: NSObject {
     
     func receive(message: GZEChatMessage, username: String, chat: GZEChat, dateRequest: GZEDateRequest, mode: GZEChatViewMode) {
         log.debug("adding received message")
-        
-        if self.activeChatId == nil || self.activeChatId! != message.chatId {
+
+        if let activeChatId = self.activeChatId, activeChatId == message.chatId {
+            log.debug("Received message on active chat, notification won't be shown")
+            markAsRead(chatId: activeChatId)
+        } else {
             clear(chatId: message.chatId)
             showNotification(chat: chat, dateRequest: dateRequest, mode: mode, username: username)
-        } else {
-            log.debug("Received message on active chat, notification won't be shown")
+            if let count = self.unreadCount.value[message.chatId] {
+                self.unreadCount.value[message.chatId] = count + 1
+            }
         }
         
         self.upsert(message: message)
@@ -372,24 +379,50 @@ class GZEChatService: NSObject {
             return
         }
 
-        log.debug("setting messages from chat: \(activeChatId) with read status")
+        markAsRead(chatId: activeChatId)
+    }
+
+    func markAsRead(chatId: String) {
+        log.debug("setting messages from chat: \(chatId) with read status")
         chatMessageRepository
-            .setRead(chatId: activeChatId)
+            .setRead(chatId: chatId)
             .start{[weak self] in
                 switch $0 {
                 case .value(let count):
                     log.debug("updated messages: \(count)")
+                    if var chatCount = self?.unreadCount.value[chatId] {
+                        chatCount = max(chatCount - count, 0)
+                        self?.unreadCount.value[chatId] = chatCount
+                    }
                 case .failed(let error):
                     log.error(error)
                     self?.errorMessage.value = error.localizedDescription
                 default: break
                 }
-            }
+        }
+    }
+
+    func updateUnreadMessages(mode: GZEChatViewMode) {
+        userRepository.unreadMessagesCount(mode: mode)
+            .start{[weak self]event in
+                guard let this = self else {return}
+
+                switch event {
+                case .value(let messagesCount):
+                    this.unreadCount.value = messagesCount
+                case .failed(let err):
+                    log.error(err)
+                default: break
+                }
+        }
     }
 
     func cleanup() {
         self.activeChatId = nil
         self.messages.value = [:]
+        self.lastMessage.value = nil
+        self.errorMessage.value = nil
+        self.unreadCount.value = [:]
     }
 
     // MARK: deinit

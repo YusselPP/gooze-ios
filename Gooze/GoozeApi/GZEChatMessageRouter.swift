@@ -11,6 +11,7 @@ import Alamofire
 
 enum GZEChatMessageRouter: URLRequestConvertible {
 
+    case count(filter: Parameters)
     case update(filter: Parameters, data: Parameters)
 
     var route: String {
@@ -19,6 +20,8 @@ enum GZEChatMessageRouter: URLRequestConvertible {
 
     var method: HTTPMethod {
         switch self {
+        case .count:
+            return .get
         case .update:
             return .post
         }
@@ -26,6 +29,8 @@ enum GZEChatMessageRouter: URLRequestConvertible {
 
     var path: String {
         switch self {
+        case .count:
+            return "/count"
         case .update:
             return "/update"
         }
@@ -41,11 +46,14 @@ enum GZEChatMessageRouter: URLRequestConvertible {
 
         // Auth
         switch self {
-        case .update:
+        case .count,
+             .update:
             urlRequest.setValue(GZEAuthService.shared.token?.id, forHTTPHeaderField: "Authorization")
         }
 
         switch self {
+        case .count(let filter):
+            urlRequest = try LBURLEncoding.queryString.encode(urlRequest, with: filter)
         case .update(let filter, let data):
             urlRequest = try LBURLEncoding.queryString.encode(urlRequest, with: filter)
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: data)
