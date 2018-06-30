@@ -20,6 +20,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     let segueToTips = "segueToTips"
     let segueToRatings = "segueToRatings"
     let segueToPayment = "segueToPayment"
+    let segueToBalance = "segueToBalance"
     let segueToHelp = "segueToHelp"
 
     enum Scene {
@@ -135,7 +136,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
         }
 
-        self.initMapKit()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500)) {[weak self] in
+            self?.initMapKit()
+        }
 
         if self.shouldRestartSearchingAnmiation {
             self.shouldRestartSearchingAnmiation = false
@@ -563,6 +566,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
            vc.previousController(animated: true)
         } else if vc.isKind(of: GZEHelpViewController.self) {
             vc.previousController(animated: true)
+        } else if vc.isKind(of: GZEBalanceViewController.self) {
+            vc.previousController(animated: true)
         }
     }
 
@@ -608,6 +613,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         } else if segue.identifier == segueToHelp {
 
             GZEHelpViewController.prepareHelpView(
+                presenter: self,
+                viewController: segue.destination,
+                vm: sender
+            )
+        } else if segue.identifier == segueToBalance {
+
+            GZEBalanceViewController.prepareView(
                 presenter: self,
                 viewController: segue.destination,
                 vm: sender

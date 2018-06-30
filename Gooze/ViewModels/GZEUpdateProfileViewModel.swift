@@ -293,7 +293,6 @@ class GZEUpdateProfileViewModel: NSObject {
     
     private func onSavePhotosAction() -> SignalProducer<GZEUser, GZEError> {
         
-        // TODO: TEST overwirttings on server AND SIGNUP / EDIT PROFILE BEHAVIOUR
         if self.user.photos == nil {
             self.user.photos = (
                 self.thumbnails.enumerated()

@@ -175,6 +175,9 @@
 "vm.help.subject"="Subject";
 "vm.help.body"="Message";
 
+// ViewModel/GZEBalanceViewModelPay
+"vm.balance.pay.title"="Transactions";
+
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
 "vm.pickerToolbar.nextButton.title"="Next";

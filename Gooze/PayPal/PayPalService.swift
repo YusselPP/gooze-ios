@@ -64,7 +64,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func charge(amount: Double, paymentMethodNonce: String) -> SignalProducer<JSON, GZEError> {
+    func charge(amount: Double, paymentMethodNonce: String, dateRequest: GZEDateRequest) -> SignalProducer<JSON, GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
@@ -80,7 +80,11 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
             let parameters: Parameters = [
                 "amount": amount,
                 "paymentMethodNonce": paymentMethodNonce,
-                "deviceData": PayPalService.deviceData
+                "deviceData": PayPalService.deviceData,
+                "description": "Recipient: \(dateRequest.recipient.username), DateRequest: \(dateRequest.id)",
+                "dateRequestId": dateRequest.id,
+                "fromUserId": dateRequest.sender.id,
+                "toUserId": dateRequest.recipient.id
             ]
 
             Alamofire.request(GZEPayPalRouter.createCharge(parameters: parameters))
@@ -88,7 +92,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func charge(amount: Double, paymentMethodToken: String) -> SignalProducer<JSON, GZEError> {
+    func charge(amount: Double, paymentMethodToken: String, dateRequest: GZEDateRequest) -> SignalProducer<JSON, GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
@@ -104,7 +108,11 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
             let parameters: Parameters = [
                 "amount": amount,
                 "paymentMethodToken": paymentMethodToken,
-                "deviceData": PayPalService.deviceData
+                "deviceData": PayPalService.deviceData,
+                "description": "Recipient: \(dateRequest.recipient.username), DateRequest: \(dateRequest.id)",
+                "dateRequestId": dateRequest.id,
+                "fromUserId": dateRequest.sender.id,
+                "toUserId": dateRequest.recipient.id
             ]
 
             Alamofire.request(GZEPayPalRouter.createCharge(parameters: parameters))
@@ -112,7 +120,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func createCharge(presenter: UIViewController, amount: Double) {
+    func createCharge(presenter: UIViewController, amount: Double, dateRequest: GZEDateRequest) {
         self.fetchClientToken()
             .flatMap(.latest) {[weak self] clientToken -> SignalProducer<BTDropInResult, GZEError> in
                 guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
@@ -123,7 +131,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
                     return SignalProducer(error: .repository(error: .UnexpectedError))
                 }
 
-                return this.charge(amount: amount, paymentMethodNonce: nonce)
+                return this.charge(amount: amount, paymentMethodNonce: nonce, dateRequest: dateRequest)
             }
             .start{[weak self] in
                 guard let this = self else {

@@ -59,7 +59,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                                 onTap: {[weak self] _ in
                                     guard let this = self else {return}
                                     this.loading.value = true
-                                    PayPalService.shared.charge(amount: amount, paymentMethodToken: method.token)
+                                    PayPalService.shared.charge(amount: amount, paymentMethodToken: method.token, dateRequest: dateRequest.value)
                                         .start{[weak self] in
                                             guard let this = self else {return}
                                             this.loading.value = false

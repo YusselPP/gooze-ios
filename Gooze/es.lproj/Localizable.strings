@@ -169,11 +169,14 @@
 "vm.paymentMethods.addMethod"="Agregar forma de pago";
 "vm.paymentMethods.title.selectMethod"="Seleccionar forma de pago";
 
-// ViewModel/GZEHelViewModelGooze
+// ViewModel/GZEHelpViewModelGooze
 "vm.help.title"="Ayuda";
 "vm.help.send"="Enviar";
 "vm.help.subject"="Asunto";
 "vm.help.body"="Mensaje";
+
+// ViewModel/GZEBalanceViewModelPay
+"vm.balance.pay.title"="Transacciones";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
@@ -201,7 +204,7 @@
 "menu.item.title.history"="Historial";
 "menu.item.title.payment"="Formas de pago";
 "menu.item.title.coupons"="Créditos y cupones";
-"menu.item.title.transactions"="Resumen de operaciones";
+"menu.item.title.transactions"="Transacciones";
 "menu.item.title.invite"="Invitar amigos";
 "menu.item.title.tips"="Consejos";
 "menu.item.title.help"="Obten ayuda";

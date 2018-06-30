@@ -22,6 +22,13 @@ class GZEDateHelper {
         return dateFormatter
     }
 
+    static var displayDateTimeFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .medium
+        return dateFormatter
+    }
+
     /// Returns the amount of years from another date
     static func years(from date: Date, to: Date) -> Int {
         return Calendar.current.dateComponents(Set([Calendar.Component.year]), from: date, to: to).year ?? 0

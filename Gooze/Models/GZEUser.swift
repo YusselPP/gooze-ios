@@ -436,7 +436,6 @@ class GZEUser: NSObject, Glossy {
         self.photos![pos].url = "/containers/\(file.container)/download/\(file.name)"
         self.photos![pos].blocked = false
 
-        // TODO apply the same to profilepic and searchpic, maybe move it to updateprofile view model
         self.photos![pos].removeFromCache()
     }
 

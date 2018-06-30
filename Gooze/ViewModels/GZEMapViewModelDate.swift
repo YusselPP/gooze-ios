@@ -277,7 +277,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                     this.bottomButtonAction.value = this.exitAction
                     this.topLabelText.value = this.topLabelCanceled
 
-                case .ending: // TODO: determinar que pasa aqui
+                case .ending:
                     if mode == .gooze && date.recipientEnded || mode == .client && date.senderEnded {
                         // if I ended top label must say waiting for other user to end
                         // disable end action
