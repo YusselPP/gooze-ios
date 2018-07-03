@@ -11,6 +11,7 @@ import MapKit
 import ReactiveSwift
 import ReactiveCocoa
 import PPBadgeView
+import SwiftOverlays
 
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDismissVCDelegate {
 
@@ -136,8 +137,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
         }
 
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500)) {[weak self] in
+        let overlay = SwiftOverlays.showCenteredWaitOverlay(self.mapViewContainer)
+        overlay.backgroundColor = .clear
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {[weak self] in
             self?.initMapKit()
+            overlay.removeFromSuperview()
         }
 
         if self.shouldRestartSearchingAnmiation {

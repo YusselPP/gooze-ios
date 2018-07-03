@@ -820,7 +820,6 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
 
     func onSaveGallerySuccess(user: GZEUser) {
         log.debug("Gallery saved")
-        // TODO: Send to fill payment data
         showChooseModeController()
     }
 

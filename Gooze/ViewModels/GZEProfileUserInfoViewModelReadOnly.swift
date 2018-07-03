@@ -28,7 +28,7 @@ class GZEProfileUserInfoViewModelReadOnly: GZEProfileViewModelReadOnly, GZEProfi
     let origin = MutableProperty<String?>(nil)
     let languages = MutableProperty<String?>(nil)
     let interestedIn = MutableProperty<String?>(nil)
-    // TODO: Implement ocupation in user model
+
     let ocupation = MutableProperty<String?>(nil)
 
     let ageAction = MutableProperty<CocoaAction<UIButton>?>(nil)

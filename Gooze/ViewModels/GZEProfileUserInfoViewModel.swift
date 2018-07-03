@@ -26,7 +26,7 @@ protocol GZEProfileUserInfoViewModel: GZEProfileViewModel {
     var origin: MutableProperty<String?> { get }
     var languages: MutableProperty<String?> { get }
     var interestedIn: MutableProperty<String?> { get }
-    // TODO: Implement ocupation in user model
+
     var ocupation: MutableProperty<String?> { get }
 
     var ageAction: MutableProperty<CocoaAction<UIButton>?> { get }

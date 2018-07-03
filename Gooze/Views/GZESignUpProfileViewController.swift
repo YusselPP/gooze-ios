@@ -92,8 +92,6 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         setupActions()
 
         showProfilePicScene()
-
-        // TODO: How to know what gender search for
     }
 
     override func viewWillAppear(_ animated: Bool) {

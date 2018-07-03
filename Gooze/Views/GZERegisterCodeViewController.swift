@@ -464,7 +464,6 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         topButton.removeAllTargets()
         bottomButton.removeAllTargets()
 
-        // TODO: Implement facebook login
         topButton.addTarget(self, action: #selector(loginButtonClicked), for: .touchUpInside)
         bottomButton.addTarget(self, action: #selector(showEmailScene), for: .touchUpInside)
 
