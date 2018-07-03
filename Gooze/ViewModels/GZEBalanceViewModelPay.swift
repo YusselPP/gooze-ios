@@ -41,17 +41,29 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
             }
         }
 
+        let authUser = GZEAuthService.shared.authUser
+
         self.rightLabelText <~ self.transactions
-            .map{$0.map{$0.amount}}
-            .map{$0.reduce(0, {$0 + $1})}
+            .map{$0.reduce(0.0, {
+                let trans = $1
+                if trans.from == authUser?.username {
+                    return $0 - trans.amount
+                } else {
+                    return $0 + trans.amount
+                }
+            })}
             .map{GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: $0)) ?? "$0"}
 
         self.rightLabelTextColor <~ self.transactions
-            .map{$0.map{$0.amount}}
-            .map{$0.reduce(0, {$0 + $1})}
+            .map{$0.reduce(Double(0) , {
+                let trans = $1
+                if trans.from == authUser?.username {
+                    return $0 - trans.amount
+                } else {
+                    return $0 + trans.amount
+                }
+            })}
             .map{$0 < 0 ? .red : .green}
-
-        let authUser = GZEAuthService.shared.authUser
 
         self.list <~ (
             self.transactions
