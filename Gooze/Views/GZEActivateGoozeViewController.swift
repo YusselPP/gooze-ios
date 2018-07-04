@@ -222,6 +222,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             }
 
         viewModel.sliderValue <~ topSlider.reactive.values
+        topSlider.reactive.value <~ viewModel.sliderValue
 
         dateRequest.signal.skipNil().skipRepeats().observeValues{[weak self] dateRequest in
             guard let this = self, let tappedBalloon = this.tappedUserBaloon else {return}
@@ -389,14 +390,14 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
             topSlider.maximumValue = 3
             topSlider.value = 1
-            viewModel.sliderValue.value = 1
+            viewModel.sliderValue.value = 2
         } else {
             sliderPostfix = "kms"
             sliderStep = 1
 
             topSlider.maximumValue = 50
             topSlider.value = 1
-            viewModel.sliderValue.value = 1
+            viewModel.sliderValue.value = 25
         }
     }
 

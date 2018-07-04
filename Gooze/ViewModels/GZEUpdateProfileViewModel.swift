@@ -50,6 +50,7 @@ class GZEUpdateProfileViewModel: NSObject {
     let saveButtonTitle = "vm.signUp.saveButtonTitle".localized()
     
     let textFieldValidationFailed = "vm.signUp.textField.validation.failed".localized()
+    let searchingForLabel = "vm.signUp.searchingFor.label".localized()
     
     // basic sign up
     let username = MutableProperty<String?>(nil)
@@ -134,7 +135,7 @@ class GZEUpdateProfileViewModel: NSObject {
     let searchForGender = MutableProperty<[Int]>([])
 
     var genderCheckListVM: GZECheckListViewModel {
-        return GZECheckListViewModel(options: self.genderOptions.map{$0.displayValue}, selectedIndexes: self.searchForGender, title: genderSearchForLabelText)
+        return GZECheckListViewModel(options: self.genderOptions.map{$0.displayPlural}, selectedIndexes: self.searchForGender, title: genderSearchForLabelText)
     }
 
     var paymentViewModel: GZEPaymentMethodsViewModelAdded {
@@ -213,9 +214,10 @@ class GZEUpdateProfileViewModel: NSObject {
                 }
 
                 return selectedIdx.sorted()
-                    .flatMap{[weak self] in self?.genderOptions[$0].displayValue}
+                    .flatMap{[weak self] in self?.genderOptions[$0].displayPlural}
                     .joined(separator: ", ")
             }
+            .map{[weak self] in "\(self?.searchingForLabel ?? "") \($0 ?? "")"}
         )
         
         self.height <~ self.heightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + $1 }) }

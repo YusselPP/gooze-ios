@@ -287,6 +287,18 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
+    func sendEmail(subject: String, text: String) -> SignalProducer<Void, GZEError> {
+        guard GZEAuthService.shared.authUser != nil else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer{sink, disposable in
+
+            Alamofire.request(GZEUserRouter.sendEmail(parameters: ["mail": ["subject": subject, "text": text]]))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {()}))
+        }
+    }
+
     // MARK: Auth
 
     func login(_ email: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError> {

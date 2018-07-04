@@ -30,6 +30,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case photo(url: String)
 
     case unreadMessagesCount(id: String, parameters: Parameters)
+    case sendEmail(parameters: Parameters)
 
     static let baseURLString = GZEAppConfig.goozeApiUrl
     static let route = "GoozeUsers"
@@ -43,7 +44,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .reset,
              .resetPassword,
              .sendLocationUpdate,
-             .addRate:
+             .addRate,
+             .sendEmail:
             return .post
         case .readUser,
              .count,
@@ -95,6 +97,8 @@ enum GZEUserRouter: URLRequestConvertible {
 
         case .unreadMessagesCount(let id, _):
             return "\(GZEUserRouter.route)/\(id)/unreadMessagesCount"
+        case .sendEmail:
+            return "\(GZEUserRouter.route)/sendEmail"
         }
     }
 
@@ -125,7 +129,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .publicProfile,
              .addRate,
              .photo,
-             .unreadMessagesCount:
+             .unreadMessagesCount,
+             .sendEmail:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         default:
             break
@@ -138,7 +143,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .reset(let parameters),
              .resetPassword(let parameters),
              .sendLocationUpdate(let parameters),
-             .addRate(_, let parameters):
+             .addRate(_, let parameters),
+             .sendEmail(let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
 
         case .count(let parameters),

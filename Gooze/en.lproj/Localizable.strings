@@ -63,6 +63,10 @@
 "female"="female";
 "other"="other";
 
+"male.plural"="males";
+"female.plural"="females";
+"other.plural"="others";
+
 // ViewModel/GZEWebViewModelTerms
 "vm.web.terms"="Terms & conditions";
 
@@ -90,6 +94,8 @@
 "vm.signUp.applyBlurButtonTitle"="Apply";
 "vm.signUp.nextButtonTitle"="Next";
 "vm.signUp.saveButtonTitle"="Save";
+
+"vm.signUp.searchingFor.label"="Searching for";
 
 // ViewModel/GZELoginViewController
 "vm.login.loginViewTitle"="Login";

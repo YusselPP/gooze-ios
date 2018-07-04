@@ -31,10 +31,15 @@ class GZEHelpViewModelGooze: GZEHelpViewModel {
     let bodyText = MutableProperty<String?>(nil)
     // END: - GZEHelpViewModel protocol
 
+    let userRepository: GZEUserRepositoryProtocol = GZEUserApiRepository()
     lazy var sendAction: CocoaAction<GZEButton> = {
         return CocoaAction<GZEButton>(
-            Action<Void, Void, GZEError>(enabledIf: self.bottomButtonEnabled){
-                SignalProducer.empty
+            Action<Void, Void, GZEError>(enabledIf: self.bottomButtonEnabled){[weak self]_ in
+                guard let this = self else {return SignalProducer.empty}
+                guard let subject = this.subjectText.value, let text = this.bodyText.value, !subject.isEmpty, !text.isEmpty else {
+                    return SignalProducer(error: .validation(error: .required(fieldName: this.bodyPlaceholder.value)))
+                }
+                return this.userRepository.sendEmail(subject: subject, text: text)
             }
         )
     }()

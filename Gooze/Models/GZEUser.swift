@@ -36,6 +36,10 @@ class GZEUser: NSObject, Glossy {
         var displayValue: String {
             return self.rawValue.localized().capitalizingFirstLetter()
         }
+
+        var displayPlural: String {
+            return "\(self.rawValue).plural".localized().capitalizingFirstLetter()
+        }
     }
 
     enum Status: String {

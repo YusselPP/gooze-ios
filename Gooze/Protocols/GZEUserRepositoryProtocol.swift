@@ -31,4 +31,5 @@ protocol GZEUserRepositoryProtocol {
     func add(ratings: GZERatings, userId: String) -> SignalProducer<Bool, GZEError>
 
     func unreadMessagesCount(mode: GZEChatViewMode) -> SignalProducer<[String: Int], GZEError>
+    func sendEmail(subject: String, text: String) -> SignalProducer<Void, GZEError>
 }
