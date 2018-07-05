@@ -53,10 +53,10 @@ class GZESocket: SocketIOClient {
 
         self.on(clientEvent: .disconnect) {data, ack in
             log.error("Socket disconnected. Reason: \(data[0])")
-            GZEAlertService.shared.showBottomAlert(text: "socket.disconnected".localized(), duration: 0, animated: true, onTapped: {[weak self] in
-                self?.reconnect()
-                GZEAlertService.shared.dismissBottomAlert()
-            })
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.connect()
+            }
         }
 
         self.on(clientEvent: .reconnect) {data, ack in
