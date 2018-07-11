@@ -12,6 +12,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import PPBadgeView
 import SwiftOverlays
+import enum Result.NoError
 
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDismissVCDelegate {
 
@@ -35,6 +36,14 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         case searchResults
         case resultsList
         case otherResultsList
+
+        var isRequestResults: Bool {
+            return (
+                self == .requestResults ||
+                self == .requestResultsList ||
+                self == .requestOtherResultsList
+            )
+        }
     }
     var scene = Scene.search {
         didSet {
@@ -69,6 +78,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     var isObservingRequests = false
     var disposeRequestsObserver: Disposable?
     var isInitialPositionSet = false
+
+    let (shown, shownObs) = Signal<Bool, NoError>.pipe()
+    let sceneProperty = MutableProperty<Scene>(.search)
 
     var sliderPostfix = "km"
     var sliderStep: Float = 1
@@ -133,6 +145,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        self.shownObs.send(value: true)
+
         if let authorizationMessage = locationService.requestAuthorization() {
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
         }
@@ -160,6 +174,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+
+        self.shownObs.send(value: false)
 
         if self.isObservingRequests {
             self.stopObservingRequests()
@@ -214,6 +230,52 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     }
 
     func setupBindings() {
+
+        self.shown.signal
+            .combineLatest(
+                with: self.sceneProperty.signal.combinePrevious(.search)
+            )
+//            .filter{
+//                let shown = $0
+//                let (prevScene, scene) = $1
+//
+//                log.debug("shown filter: shown: \(shown), prevScene: \(prevScene), scene: \(scene)")
+//                return (
+//                    shown == true &&
+//                    !prevScene.isRequestResults &&
+//                    scene.isRequestResults
+//                )
+//            }
+            .flatMap(.latest){
+                (shown, scenes) -> Signal<GZESocket.Event, NoError> in
+                let (prevScene, scene) = scenes
+
+                log.debug("shown: \(shown), prevScene: \(prevScene), scene: \(scene)")
+
+                guard
+                    let dateSocket = GZEDatesService.shared.dateSocket,
+                    shown == true &&
+                    //!prevScene.isRequestResults &&
+                    scene.isRequestResults
+                else {
+                    return Signal.never
+                }
+
+                return dateSocket
+                    .socketEventsEmitter
+                    .signal
+                    .skipNil()
+                    .filter { $0 == .authenticated }
+            }
+            .observeValues {[weak self] _ in
+                log.debug("socket auth event received")
+                guard let this = self else {
+                    return
+                }
+                GZEDatesService.shared.findUnrespondedRequests()
+                //this.getUpdatedRequest(this.dateRequest.value?.id)
+            }
+
         viewModel.messagesCount
             .map{$0.reduce(0, {$0 + $1.value})}
             .producer.startWithValues {
@@ -703,6 +765,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         hideAll()
         GZEAlertService.shared.dismissBottomAlert()
         GZEAlertService.shared.dismissTopAlert()
+        self.sceneProperty.value = self.scene
         switch scene {
         case .activate: showActivateScene()
         case .requestResults: showRequestResultsScene()
@@ -870,6 +933,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                 .receivedRequests.producer.startWithValues
                 {[weak self] receivedRequests in
                     guard let this = self else {return}
+
+                    // TODO: divide in two list: if request.sender.rate <= 0 others else normalresults
+                    //       if scene == .otherResults show others list else show normalResultsList
 
                     log.debug("receivedRequests updated: \(receivedRequests)")
                     this.viewModel.userResults.value = receivedRequests
