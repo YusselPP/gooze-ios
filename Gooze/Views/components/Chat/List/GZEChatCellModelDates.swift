@@ -13,6 +13,7 @@ class GZEChatCellModelDates: NSObject, GZEChatCellModel {
     let user: GZEUserConvertible?
     let title: String?
     let preview: String?
+    let unreadMessages: Int
     let onClose: HandlerBlock<GZEChatsCollectionViewCell>?
     let onTap: HandlerBlock<GZEChatsCollectionViewCell>?
     let isBlocked: Bool
@@ -23,6 +24,7 @@ class GZEChatCellModelDates: NSObject, GZEChatCellModel {
         user: GZEUserConvertible? = nil,
         title: String? = nil,
         preview: String? = nil,
+        unreadMessages: Int = 0,
         onClose: HandlerBlock<GZEChatsCollectionViewCell>? = nil,
         onTap: HandlerBlock<GZEChatsCollectionViewCell>? = nil,
         isBlocked: Bool = false,
@@ -32,6 +34,7 @@ class GZEChatCellModelDates: NSObject, GZEChatCellModel {
         self.user = user
         self.title = title
         self.preview = preview
+        self.unreadMessages = unreadMessages
         self.onClose = onClose
         self.onTap = onTap
         self.isBlocked = isBlocked

@@ -1752,6 +1752,7 @@
                         <outlet property="messageTextView" destination="bKa-QG-jUT" id="myh-VT-c0G"/>
                         <outlet property="messagesTableView" destination="cJq-Cg-ZAs" id="WxM-yG-sdn"/>
                         <outlet property="sendButton" destination="e1P-j5-Our" id="V5u-Kq-aXT"/>
+                        <outlet property="stackView" destination="KYB-LL-jXh" id="RzF-4w-ieJ"/>
                         <outlet property="topActionView" destination="uu3-SP-25Y" id="bQW-im-X1r"/>
                         <outlet property="topTextInput" destination="6hE-Od-5hh" id="U0J-zJ-r1W"/>
                         <segue destination="kUb-St-bmY" kind="show" identifier="segueToMap" id="NX9-RF-Mkp"/>
@@ -3488,7 +3489,7 @@
         <segue reference="aoX-cG-RKK"/>
         <segue reference="uRz-tZ-uiL"/>
         <segue reference="R1T-5h-Xv7"/>
-        <segue reference="XJg-fM-c9J"/>
+        <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>
         <segue reference="e66-sX-XQT"/>
         <segue reference="Dk2-YI-miw"/>

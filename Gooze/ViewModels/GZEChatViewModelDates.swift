@@ -276,7 +276,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
                     } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
                         this.topAccessoryButtonIsHidden.value = false
-                        this.topButtonTitle.value = "\(formattedAmount)"
+                        this.topButtonTitle.value = "\(formattedAmount) MXN"
                     } else {
                         this.topAccessoryButtonIsHidden.value = true
                         this.topButtonTitle.value = this.setAmountButtonTitle
@@ -288,6 +288,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 self.dateRequest.producer
                 )
                 .take(until: self.stopSignal)
+                
                 .startWithValues{[weak self] (amount, dateRequest) in
                     guard let this = self else {return}
 
@@ -297,7 +298,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
 
                     } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
                         this.topButtonIsHidden.value = false
-                        this.topButtonTitle.value =  "\(String(format: this.acceptAmountButtonTitle, formattedAmount))"
+                        this.topButtonTitle.value =  "\(String(format: this.acceptAmountButtonTitle, formattedAmount)) MXN"
                     } else {
                         this.topButtonIsHidden.value = true
                         this.topButtonTitle.value =  ""
@@ -349,7 +350,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.stopObservingMessages()
         self.messagesObserver = self.messages.bindingTarget <~ GZEChatService.shared.messages.map {[weak self] in
             guard let this = self else { log.error("self was disposed");  return [] }
-            return $0[this.chat.id] ?? []
+            return $0[this.chat.id]?.sorted(by: { $0.createdAt.compare($1.createdAt) == .orderedAscending }) ?? []
         }
         GZEChatService.shared.retrieveHistory(chatId: chat.id)
     }

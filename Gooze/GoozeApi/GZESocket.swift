@@ -13,7 +13,7 @@ import Gloss
 
 class GZESocket: SocketIOClient {
 
-    static let ackTimeout: Double = 60
+    static let ackTimeout: Double = 30
 
     enum Event: String {
         case reconnect

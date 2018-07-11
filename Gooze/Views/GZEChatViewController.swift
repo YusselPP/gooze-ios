@@ -32,7 +32,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self.topTextInput.backgroundColor = GZEConstants.Color.buttonBackground
             self.topTextInput.font = GZEConstants.Font.main
             self.topTextInput.textColor = GZEConstants.Color.mainTextColor
-            self.topTextInput.tintColor = GZEConstants.Color.mainTextColor
+            self.topTextInput.keyboardType = .decimalPad
             self.topTextInput.delegate = self
         }
     }
@@ -50,7 +50,8 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageInputContainerBottomSpacing: NSLayoutConstraint!
     @IBOutlet weak var messageInputHeightConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var stackView: UIStackView!
+
     
     override func viewDidLoad() {
         log.debug("\(self) init")
@@ -59,6 +60,8 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         backButton.onButtonTapped = {[weak self] _ in
             self?.previousController(animated: true)
         }
+
+        self.topTextInput.tintColor = GZEConstants.Color.mainTextColor
 
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
         let underline = UIView()
@@ -85,6 +88,8 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.navigationItem.titleView = titleView
 
         usernameLabel.text = self.viewModel.username.map{$0?.uppercased()}.value
+
+        self.messagesTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onStackViewTapped(_:))))
 
         self.navigationItem.setLeftBarButton(backButton, animated: false)
         //self.navigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
@@ -226,12 +231,19 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         
         return true
     }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.viewModel.topTextInput.value = ""
+    }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         log.debug("textFieldDidEndEditing")
         self.viewModel.topTextInputIsHidden.value = true
     }
-    
+
+    func onStackViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
 
     // MARK: - KeyboardNotifications
     func keyboardWillShow(notification: Notification) {

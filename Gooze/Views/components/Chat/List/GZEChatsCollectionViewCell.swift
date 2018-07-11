@@ -44,6 +44,11 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
             return self.previewView.preview.text
         }
     }
+    var unreadMessages: Int = 0 {
+        didSet {
+            self.photoView.pp_addBadge(withNumber: self.unreadMessages)
+        }
+    }
 
     var onClose: HandlerBlock<GZEChatsCollectionViewCell>?
     var onTap: HandlerBlock<GZEChatsCollectionViewCell>?
@@ -73,6 +78,8 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
     let photoView = GZEChatsPhotoView()
     let previewView = GZEChatsPreviewView()
     let openView = GZEChatsOpenView()
+
+    let photoViewWidth: CGFloat = 80
 
     var borders = [CALayer]()
 
@@ -105,6 +112,12 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
         self.addGestureRecognizer(swipeLeft)
         self.addGestureRecognizer(swipeRight)
 
+        self.photoView.pp_addBadge(withNumber: 0)
+        self.photoView.pp_moveBadgeWith(x: photoViewWidth - 5, y: 7)
+        self.photoView.pp_setBadgeLabelAttributes{label in
+            label?.backgroundColor = GZEConstants.Color.mainGreen
+            label?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        }
 
         self.closeView.onTap = handleClose
         self.photoView.onTap = handleTap
@@ -132,7 +145,7 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
         self.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor).isActive = true
 
         self.closeView.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        self.photoView.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        self.photoView.widthAnchor.constraint(equalToConstant: photoViewWidth).isActive = true
         self.openView.widthAnchor.constraint(equalToConstant: 25).isActive = true
     }
 
@@ -140,6 +153,7 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
         self.user = model.user
         self.title = model.title
         self.preview = model.preview
+        self.unreadMessages = model.unreadMessages
         self.onClose = model.onClose
         self.onTap = model.onTap
         self.isBlocked = model.isBlocked
@@ -150,6 +164,7 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
         self.user = nil
         self.title = nil
         self.preview = nil
+        self.unreadMessages = 0
         self.onClose = nil
         self.onTap = nil
         self.isBlocked = false

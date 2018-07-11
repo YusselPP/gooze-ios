@@ -54,9 +54,10 @@ class GZEChatsViewModelDates: GZEChatsViewModel {
         log.debug("\(self) init, mode: \(mode)")
 
         self.title.value = self.chatsTitle
-        self.chatsList <~ self.dateRequests.map{[weak self] dateRequests in
+        self.chatsList <~ self.dateRequests.combineLatest(with: GZEChatService.shared.unreadCount).map{[weak self]  in
             log.debug("dateRequests changed, updating chat list")
             guard let this = self else {return []}
+            let (dateRequests, unreadCount) = $0
             var list = [GZEChatCellModelDates]()
             for dateRequest in dateRequests {
                 let chatUser: GZEChatUser
@@ -64,11 +65,16 @@ class GZEChatsViewModelDates: GZEChatsViewModel {
                 case .client: chatUser = dateRequest.recipient
                 case .gooze: chatUser = dateRequest.sender
                 }
+                var unreadMessages = 0
+                if let chatId = dateRequest.chat?.id {
+                    unreadMessages = unreadCount[chatId] ?? 0
+                }
                 list.append(GZEChatCellModelDates(
                     id: dateRequest.id,
                     user: chatUser,
                     title: chatUser.username,
                     preview: dateRequest.chat?.messages.last?.localizedText(),
+                    unreadMessages: unreadMessages,
                     onClose: {[weak self] _ in
                         self?.closeDateRequest(dateRequest)
                     },

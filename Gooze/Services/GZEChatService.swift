@@ -34,6 +34,8 @@ class GZEChatService: NSObject {
         }
     }
 
+    let failedQueue = GZERetryQueue()
+
     override init() {
         super.init()
         self.unreadCount.signal.observeValues{log.debug($0)}
@@ -47,7 +49,12 @@ class GZEChatService: NSObject {
             return
         }
 
-        guard let lastMessage = self.messages.value[chatId]?.last else {
+        let lastMessageOpt = (
+            self.messages.value[chatId]?
+                .sorted(by: {$0.createdAt.compare($1.createdAt) == .orderedDescending})
+                .first(where: {$0.status != .sending})
+        )
+        guard let lastMessage = lastMessageOpt else {
             self.retrieveHistory(chatId: chatId)
             return
         }
@@ -68,16 +75,17 @@ class GZEChatService: NSObject {
             ] as [String : Any]
 
         chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
-            //log.debug("Message sent. Ack data: \(data)")
 
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
-                log.error("No ack received from server")
+                log.error(DatesSocketError.noAck)
+                self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
                 return
             }
 
             if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
 
                 log.error("\(String(describing: error.toJSON()))")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
 
             } else if
                 let newMessagesJson = data[1] as? [JSON],
@@ -102,8 +110,11 @@ class GZEChatService: NSObject {
 
                     self?.messages.value[chatId] = reversedNewMessages
                 }
+
+                self?.markAsRead(chatId: chatId)
             } else {
                 log.error("Unable to parse data to expected objects")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             }
         }
     }
@@ -131,16 +142,17 @@ class GZEChatService: NSObject {
             ] as [String : Any]
 
         chatSocket.emitWithAck(.retrieveMessages, chatId, filter).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
-            //log.debug("Message sent. Ack data: \(data)")
 
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
-                log.error("No ack received from server")
+                log.error(DatesSocketError.noAck)
+                self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
                 return
             }
 
             if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
 
                 log.error("\(String(describing: error.toJSON()))")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
 
             } else if
                 let historyMessagesJson = data[1] as? [JSON],
@@ -165,52 +177,67 @@ class GZEChatService: NSObject {
                 }
             } else {
                 log.error("Unable to parse data to expected objects")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             }
         }
     }
 
-    func send(message: GZEChatMessage, username: String, chat: GZEChat, dateRequest: GZEDateRequest, mode: String) {
+    func send(message: GZEChatMessage, username: String, chat: GZEChat, dateRequest: GZEDateRequest, mode: String, upsert: Bool = true) {
         log.debug("Sending message..\(String(describing: message.toJSON()))")
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return
         }
 
         guard let messageJson = message.toJSON() else {
             log.error("Failed to parse GZEChatMessage to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return
         }
         
         guard let chatJson = chat.toJSON() else {
             log.error("Failed to parse GZEChat to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return
         }
 
         guard let dateRequestJson = dateRequest.toJSON() else {
             log.error("Failed to parse GZEDateRequest to JSON")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return
         }
 
-        self.upsert(message: message)
+        if upsert {
+            self.upsert(message: message)//{$0.contentCompare(message)}
+        }
         chatSocket.emitWithAck(.sendMessage, messageJson, username, chatJson, dateRequestJson, mode).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
             log.debug("Message sent. Ack data: \(data)")
             
             if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {
-                log.error("No ack received from server")
+                log.error(DatesSocketError.noAck)
+                log.debug("message: \(message)")
+                // self?.errorMessage.value = DatesSocketError.noAck.localizedDescription
+                self?.failedQueue.push {[weak self] in
+                    self?.send(message: message, username: username, chat: chat, dateRequest: dateRequest, mode: mode, upsert: false)
+                }
                 return
             }
             
             if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
                 
                 log.error("\(String(describing: error.toJSON()))")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
                 
             } else if let updatedMessageJson = data[1] as? JSON, let updatedMessage = GZEChatMessage(json: updatedMessageJson) {
-                
-                self?.upsert(message: updatedMessage) { $0 === message }
-                log.debug("Message successfully sent")
+
+                log.debug("Message successfully sent. message: \(message)")
+                self?.upsert(message: updatedMessage)// {$0.contentCompare(message)}
+                log.debug("Sent message upserted")
                 
             } else {
                 log.error("Unable to parse data to expected objects")
+                self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             }
         }
     }
@@ -235,13 +262,11 @@ class GZEChatService: NSObject {
     func request(amount: Double, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode, senderUsername: String) -> SignalProducer<GZEDateRequest, GZEError> {
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
-            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return SignalProducer(error: .datesSocket(error: .unexpected))
         }
         
         guard let chatJson = chat.toJSON() else {
             log.error("Failed to parse GZEChat to JSON")
-            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return SignalProducer(error: .datesSocket(error: .unexpected))
         }
         
@@ -249,7 +274,6 @@ class GZEChatService: NSObject {
         
         guard let messageJson = GZEChatMessage(text: "service.chat.amountRequest.received|\(senderUsername)|\(formattedAmount)", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
             log.error("Failed to parse GZEChatMessage to JSON")
-            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
             return SignalProducer(error: .datesSocket(error: .unexpected))
         }
         
@@ -423,6 +447,7 @@ class GZEChatService: NSObject {
         self.lastMessage.value = nil
         self.errorMessage.value = nil
         self.unreadCount.value = [:]
+        self.failedQueue.clear()
     }
 
     // MARK: deinit

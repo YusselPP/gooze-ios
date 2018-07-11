@@ -12,6 +12,7 @@ import Gloss
 class GZEChatMessage: NSObject, Glossy {
 
     enum Status: String {
+        case sending
         case sent = "sent"
         case received = "received"
         case read = "read" 
@@ -51,7 +52,7 @@ class GZEChatMessage: NSObject, Glossy {
         self.chatId = chatId
         //self.recipientId = recipientId
         self.type = .user
-        self.status = .sent
+        self.status = .sending
         self.createdAt = Date()
         self.updatedAt = Date()
         super.init()
@@ -67,7 +68,7 @@ class GZEChatMessage: NSObject, Glossy {
         self.chatId = chatId
         //self.recipientId = recipientId
         self.type = type
-        self.status = .sent
+        self.status = .sending
         self.createdAt = Date()
         self.updatedAt = Date()
         super.init()
@@ -162,6 +163,16 @@ class GZEChatMessage: NSObject, Glossy {
         return text
     }
 
+    func contentCompare(_ message: GZEChatMessage) -> Bool {
+        return (
+            self.chatId == message.chatId &&
+            self.senderId == message.senderId &&
+            self.text == message.text &&
+            self.type.rawValue == message.type.rawValue &&
+            GZEDateHelper.dateFormatter.string(from: self.createdAt) == GZEDateHelper.dateFormatter.string(from: message.createdAt)
+        )
+    }
+
     // MARK: - Deinitializer
     deinit {
         //log.debug("\(self) disposed")
@@ -182,6 +193,6 @@ func ==(lhs: GZEChatMessage, rhs: GZEChatMessage) -> Bool {
     if let lhsId = lhs.id, let rhsId = rhs.id {
         return lhsId == rhsId
     }
-    return false
+    return lhs.contentCompare(rhs)
 }
 

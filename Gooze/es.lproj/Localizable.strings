@@ -123,7 +123,7 @@
 "vm.search.zeroResultsMessage"="No se encontraron resultados";
 "vm.search.searchingButtonTitle"="Buscando...";
 "vm.search.otherResultsButtonTitle"="Ver otros";
-"vm.search.othersResultsWarning"="Advertencia: Los siguientes usuarios no cuentan con el minimo de valoraciones, o bien han sido calificados negativamente";
+"vm.search.othersResultsWarning"="Advertencia: Los siguientes usuarios no cuentan con calificaciones positivas";
 "vm.search.backButtonTitle"="Regresar";
 
 "vm.activate.activateButtonTitle"="Activar gooze";
@@ -242,6 +242,7 @@
 "service.dates.requestSuccessfullySent"="Se ha enviado tu solicitud";
 "service.dates.requestSuccessfullyAccepted"="Has aceptado la solicitud";
 "service.dates.requestAccepted"="%@ ha aceptado tu solicitud";
+"service.dates.requestReceived"="%@ te envió una solicitud";
 "service.dates.dateCreated"="Pago confirmado. Se ha generado una cita.";
 
 "service.chat.invalidChatId"="Ocurrió un error al intentar abrir el chat";
