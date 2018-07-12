@@ -75,8 +75,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     var showRequestResultsListAction: CocoaAction<GZEButton>!
     var showRequestOtherResultsListAction: CocoaAction<GZEButton>!
 
-    var isObservingRequests = false
-    var disposeRequestsObserver: Disposable?
     var isInitialPositionSet = false
 
     let (shown, shownObs) = Signal<Bool, NoError>.pipe()
@@ -163,10 +161,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             self.isSearchingAnimationEnabled = true
         }
 
-        if self.isObservingRequests {
-            self.observeRequests()
-        }
-
         if let mode = self.viewModel.mode.value {
             GZEChatService.shared.updateUnreadMessages(mode: mode)
         }
@@ -176,10 +170,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         super.viewDidDisappear(animated)
 
         self.shownObs.send(value: false)
-
-        if self.isObservingRequests {
-            self.stopObservingRequests()
-        }
 
         if self.isSearchingAnimationEnabled {
             self.shouldRestartSearchingAnmiation = true
@@ -233,29 +223,16 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
         self.shown.signal
             .combineLatest(
-                with: self.sceneProperty.signal.combinePrevious(.search)
+                with: self.sceneProperty.signal
             )
-//            .filter{
-//                let shown = $0
-//                let (prevScene, scene) = $1
-//
-//                log.debug("shown filter: shown: \(shown), prevScene: \(prevScene), scene: \(scene)")
-//                return (
-//                    shown == true &&
-//                    !prevScene.isRequestResults &&
-//                    scene.isRequestResults
-//                )
-//            }
             .flatMap(.latest){
-                (shown, scenes) -> Signal<GZESocket.Event, NoError> in
-                let (prevScene, scene) = scenes
+                (shown, scene) -> Signal<GZESocket.Event, NoError> in
 
-                log.debug("shown: \(shown), prevScene: \(prevScene), scene: \(scene)")
+                log.debug("shown: \(shown), scene: \(scene)")
 
                 guard
                     let dateSocket = GZEDatesService.shared.dateSocket,
                     shown == true &&
-                    //!prevScene.isRequestResults &&
                     scene.isRequestResults
                 else {
                     return Signal.never
@@ -269,11 +246,39 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             }
             .observeValues {[weak self] _ in
                 log.debug("socket auth event received")
-                guard let this = self else {
-                    return
+                guard let this = self else {return}
+                this.findUnrespondedRequests()
+            }
+
+        self.shown.signal
+            .combineLatest(
+                with: self.sceneProperty.signal
+            )
+            .flatMap(.latest){
+                (shown, scene) -> Signal<GZEDateRequest, NoError> in
+
+                log.debug("shown: \(shown), scene: \(scene)")
+
+                guard shown == true && scene.isRequestResults else {
+                    return Signal.never
                 }
-                GZEDatesService.shared.findUnrespondedRequests()
-                //this.getUpdatedRequest(this.dateRequest.value?.id)
+
+                return (
+                    GZEDatesService.shared
+                        .lastReceivedRequest
+                        .signal
+                        .skipNil()
+                )
+            }
+            .observeValues{
+                [weak self] receivedRequest in
+                log.debug("dateRequest received: \(receivedRequest.id)")
+                guard let this = self else {return}
+                this.viewModel.userResults.value.upsert(receivedRequest){
+                    guard let dateRequest = $0 as? GZEDateRequest else {return false}
+                    return dateRequest.id == receivedRequest.id
+                }
+                this.updateReceivedRequests(this.viewModel.userResults.value)
             }
 
         viewModel.messagesCount
@@ -353,6 +358,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
 
     func updateBalloons() {
+        hideBalloons()
         let users = viewModel.userResults.value
         log.debug(users)
         if users.count == 0 {
@@ -515,7 +521,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             switch scene {
             case .activate:
                 scene = .requestResults
-                GZEDatesService.shared.findUnrespondedRequests()
+                findUnrespondedRequests()
 
             case .searching:
                 if let users = user as? [GZEUserConvertible] {
@@ -815,8 +821,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
         activateGoozeButton.setTitle(viewModel.activateButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = activateGoozeAction
-        stopObservingRequests()
-        isObservingRequests = false
+        //stopObservingRequests()
+        //isObservingRequests = false
     }
 
     func showRequestResultsScene() {
@@ -830,12 +836,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         activateGoozeButton.reactive.pressed = showRequestResultsListAction
 
         showBalloons()
-        observeRequests()
     }
 
     func showRequestResultsListScene() {
-        //disposeRequestsObserver?.dispose()
-        //disposeRequestsObserver = nil
         hideBalloons()
 
         usersList.onDismiss = { [weak self] in
@@ -926,33 +929,38 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         usersList.actionButton.reactive.pressed = showResultsListAction
         GZEAlertService.shared.showTopAlert(text: viewModel.othersResultsWarning)
     }
-    
-    func observeRequests() {
-        if (disposeRequestsObserver == nil) {
-            disposeRequestsObserver = GZEDatesService.shared
-                .receivedRequests.producer.startWithValues
-                {[weak self] receivedRequests in
-                    guard let this = self else {return}
 
-                    // TODO: divide in two list: if request.sender.rate <= 0 others else normalresults
-                    //       if scene == .otherResults show others list else show normalResultsList
-
-                    log.debug("receivedRequests updated: \(receivedRequests)")
-                    this.viewModel.userResults.value = receivedRequests
-                    this.usersList.users = this.viewModel.userResults.value
-                    this.updateBalloons()
-
-                    if this.scene == .requestResults {
-                        this.showBalloons()
-                    }
+    func findUnrespondedRequests() {
+        GZEDatesService.shared.findUnrespondedRequests()
+            .start {[weak self] event in
+                log.debug("event received: \(event)")
+                guard let this = self else {return}
+                switch event {
+                case .value(let dateRequests):
+                    this.updateReceivedRequests(dateRequests)
+                case .failed(let error):
+                    this.onError(error)
+                default: break
+                }
             }
-            isObservingRequests = true
-        }
     }
 
-    func stopObservingRequests() {
-        disposeRequestsObserver?.dispose()
-        disposeRequestsObserver = nil
+    func onError(_ error: GZEError) {
+        GZEAlertService.shared.showBottomAlert(text: error.localizedDescription)
+    }
+
+    func updateReceivedRequests(_ receivedRequests: [GZEUserConvertible]) {
+        // TODO: divide in two list: if request.sender.rate <= 0 others else normalresults
+        //       if scene == .otherResults show others list else show normalResultsList
+
+        log.debug("receivedRequests updated: \(receivedRequests)")
+        self.viewModel.userResults.value = receivedRequests
+        self.usersList.users = self.viewModel.userResults.value
+        self.updateBalloons()
+
+        if self.scene == .requestResults {
+            self.showBalloons()
+        }
     }
 
     // MARK: - Deinitializers

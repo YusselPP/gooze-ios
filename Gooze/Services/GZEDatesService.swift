@@ -55,17 +55,8 @@ class GZEDatesService: NSObject {
         }
     }
     
-    func findUnrespondedRequests() {
-        GZEDateRequestApiRepository().findUnresponded().startWithSignal{[weak self] sink, disposable in
-            sink.observe { event in
-                log.debug("event received: \(event)")
-                switch event {
-                case .value(let dateRequests):
-                    self?.receivedRequests.value = dateRequests
-                default: break
-                }
-            }
-        }
+    func findUnrespondedRequests() -> SignalProducer<[GZEDateRequest], GZEError> {
+        return self.dateRequestRepository.findUnresponded()
     }
 
     func find(byId id: String) -> SignalProducer<GZEDateRequest, GZEError> {
