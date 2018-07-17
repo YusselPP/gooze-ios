@@ -55,6 +55,7 @@ class GZEDoubleCtrlView: UIView {
     var topViewTappedHandler: ((UITapGestureRecognizer) -> ())?
     var bottomViewTappedHandler: ((UITapGestureRecognizer) -> ())?
 
+    var topHeightConstraint: NSLayoutConstraint?
     
     private let topView = UIView()
     private let bottomView = UIView()
@@ -158,7 +159,8 @@ class GZEDoubleCtrlView: UIView {
             topView.leadingAnchor.constraint(equalTo: topCtrlView.leadingAnchor).isActive = true
             topView.trailingAnchor.constraint(equalTo: topCtrlView.trailingAnchor).isActive = true
             topView.bottomAnchor.constraint(equalTo: topCtrlView.bottomAnchor, constant: 9).isActive = true
-            topCtrlView.heightAnchor.constraint(equalToConstant: 21).isActive = true
+            topHeightConstraint = topCtrlView.heightAnchor.constraint(equalToConstant: 21)
+            topHeightConstraint?.isActive = true
         }
     }
 

@@ -402,6 +402,10 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         self.viewModel.dismiss?()
     }
 
+    func performTermsSegue() {
+        self.performSegue(withIdentifier: self.segueToTerms, sender: nil)
+    }
+
     // MARK: Scenes
     func showRegisterCodeScene() {
         scene = .registerCode
@@ -534,32 +538,55 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         scene = .terms
         showNavigationBar(true, animated: true)
 
-        topLabel.text = "Aceptar términos y condiciones"
+        bottomLabel.text = "vm.signUp.nextButtonTitle".localized().uppercased()
+
         let switchContainer = UIView()
         let botSwitch = UISwitch()
+        let termsLabel = GZELabel()
+
+        switchContainer.isUserInteractionEnabled = true
         botSwitch.onTintColor = GZEConstants.Color.mainGreen
         botSwitch.tintColor = GZEConstants.Color.mainGreen
+        termsLabel.setWhiteFontFormat()
+        let acceptTermsText = "vm.signUp.acceptTerms".localized()
+        let textRange = NSMakeRange(0, acceptTermsText.count)
+        let attributedText = NSMutableAttributedString(string: acceptTermsText)
+        attributedText.addAttribute(NSUnderlineStyleAttributeName , value: NSUnderlineStyle.styleSingle.rawValue, range: textRange)
+        termsLabel.attributedText = attributedText
+
+        termsLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(performTermsSegue)))
+
         switchContainer.translatesAutoresizingMaskIntoConstraints = false
         botSwitch.translatesAutoresizingMaskIntoConstraints = false
+        termsLabel.translatesAutoresizingMaskIntoConstraints = false
+        termsLabel.isUserInteractionEnabled = true
 
+        switchContainer.addSubview(termsLabel)
         switchContainer.addSubview(botSwitch)
 
-        switchContainer.topAnchor.constraint(equalTo: botSwitch.topAnchor, constant: -15).isActive = true
+        switchContainer.bottomAnchor.constraint(equalTo: botSwitch.bottomAnchor, constant: 15).isActive = true
         switchContainer.centerXAnchor.constraint(equalTo: botSwitch.centerXAnchor).isActive = true
+
+        botSwitch.topAnchor.constraint(equalTo: termsLabel.bottomAnchor, constant: 15).isActive = true
+        switchContainer.centerXAnchor.constraint(equalTo: termsLabel.centerXAnchor).isActive = true
+
+        switchContainer.topAnchor.constraint(equalTo: termsLabel.topAnchor).isActive = true
 
         viewModel.termsAccepted.producer.startWithValues {
             botSwitch.setOn($0, animated: true)
         }
         viewModel.termsAccepted <~ botSwitch.reactive.isOnValues
 
-        dblCtrlView.topCtrlView = topLabel
-        dblCtrlView.bottomCtrlView = switchContainer
+        dblCtrlView.topCtrlView = switchContainer
+        dblCtrlView.bottomCtrlView = bottomLabel
+
+        dblCtrlView.topHeightConstraint?.isActive = false
 
         dblCtrlView.topViewTappedHandler = { [unowned self] _ in
-            self.performSegue(withIdentifier: self.segueToTerms, sender: nil)
+            self.viewModel.termsAccepted.value = !self.viewModel.termsAccepted.value
         }
         dblCtrlView.bottomViewTappedHandler = { [unowned self] _ in
-            self.viewModel.termsAccepted.value = !self.viewModel.termsAccepted.value
+            self.nextButtonTapped(self.nextBarButton.button)
         }
     }
 
@@ -570,8 +597,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
 
         messageLabel.text = viewModel.successfulSignUp.uppercased()
 
-        topLabel.text = viewModel.createProfileText.uppercased()
-        bottomLabel.text = viewModel.skipProfileText.uppercased()
+        topLabel.text = viewModel.skipProfileText.uppercased()
+        bottomLabel.text = viewModel.createProfileText.uppercased()
 
         dblCtrlView.topCtrlView = topLabel
         dblCtrlView.bottomCtrlView = bottomLabel
@@ -601,10 +628,10 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         bottomLabel.setColor(GZEConstants.Color.mainTextColor, animated: true)
 
         dblCtrlView.topViewTappedHandler = { [unowned self] _ in
-            self.createProfileController()
+            self.chooseModeController()
         }
         dblCtrlView.bottomViewTappedHandler = { [unowned self] _ in
-            self.chooseModeController()
+            self.createProfileController()
         }
         topTextField.resignFirstResponder()
     }

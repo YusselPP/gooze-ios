@@ -76,6 +76,7 @@
 "vm.signUp.createProfileText"="Create profile";
 "vm.signUp.skipProfileText"="Skip";
 "vm.signUp.success"="Successfully registered!";
+"vm.signUp.acceptTerms"="I agree to the terms and conditions";
 
 "vm.signUp.textField.validation.failed"="Enter valid information";
 

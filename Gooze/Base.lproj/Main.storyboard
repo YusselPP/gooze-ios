@@ -185,7 +185,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zZ2-W4-Q35" customClass="GZECheckListCollectionView" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="16" y="64" width="343" height="603"/>
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xIK-sV-NXa">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -237,13 +237,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xbO-Sj-Jkc">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="cCx-TY-NnN">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jgt-hf-4Co">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P9F-hy-S2v">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="606.5"/>
@@ -712,13 +712,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dO2-in-Qrd">
-                                <rect key="frame" x="0.0" y="64" width="375" height="368.5"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="412.5"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.20000000000000001" maximumZoomScale="5" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1l-1m-VOV">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4hT-lE-ril">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
                                             </imageView>
                                         </subviews>
                                         <constraints>
@@ -731,23 +731,23 @@
                                         </constraints>
                                     </scrollView>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n3U-KK-ELb">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wOa-CL-T0W">
-                                        <rect key="frame" x="3" y="0.0" width="369" height="368.5"/>
+                                        <rect key="frame" x="-19" y="0.0" width="413" height="412.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="wOa-CL-T0W" secondAttribute="height" multiplier="1:1" id="Yzm-pl-OQy"/>
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GeZ-wd-uBD">
-                                        <rect key="frame" x="0.0" y="120" width="375" height="129"/>
+                                        <rect key="frame" x="0.0" y="142" width="375" height="129"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="GeZ-wd-uBD" secondAttribute="height" multiplier="32:11" id="ELb-jC-hTg"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vA2-6o-xIQ">
-                                        <rect key="frame" x="166.5" y="154.5" width="42" height="60"/>
+                                        <rect key="frame" x="166.5" y="176.5" width="42" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgm-dZ-tx6">
                                                 <rect key="frame" x="5" y="-1" width="32" height="22"/>
@@ -792,14 +792,14 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsu-W6-Fua">
-                                        <rect key="frame" x="127.5" y="124.5" width="120" height="120"/>
+                                        <rect key="frame" x="127.5" y="146.5" width="120" height="120"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tsu-W6-Fua" secondAttribute="height" multiplier="1:1" id="8Bb-kh-ION"/>
                                             <constraint firstAttribute="height" constant="120" id="CgV-eh-oPJ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdP-PT-gBJ" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="8" width="359" height="352.5"/>
+                                        <rect key="frame" x="8" y="8" width="359" height="396.5"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MLo-Oz-9ew">
                                         <rect key="frame" x="298" y="10" width="67" height="57"/>
@@ -3492,7 +3492,7 @@
         <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>
         <segue reference="e66-sX-XQT"/>
-        <segue reference="Dk2-YI-miw"/>
+        <segue reference="Hhf-2f-EG4"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
