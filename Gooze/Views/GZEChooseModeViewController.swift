@@ -19,6 +19,7 @@ class GZEChooseModeViewController: UIViewController {
     let backButton = GZEBackUIBarButtonItem()
     let beButton = UIButton()
     let searchButton = UIButton()
+    let exitButton = GZEExitAppButton.shared
 
     @IBOutlet weak var showHelpButton: UIButton!
 
@@ -35,13 +36,14 @@ class GZEChooseModeViewController: UIViewController {
 
         log.debug("\(self) init")
 
-        let exitButton = GZEExitAppButton.shared
         exitButton.presenter = self
 
-        navigationItem.leftBarButtonItem = backButton
+        // navigationItem.leftBarButtonItem = backButton
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = exitButton
 
-        backButton.onButtonTapped = {
-            exitButton.buttonTapped($0)
+        backButton.onButtonTapped = {[weak self] in
+            self?.exitButton.buttonTapped($0)
         }
         closeHelpButton.onButtonTapped = {[weak self] in
             self?.closeHelpButtonTapped($0)
@@ -116,7 +118,7 @@ class GZEChooseModeViewController: UIViewController {
                 self.clientHelpLabel.alpha = 0
                 self.closeHelpButton.customView?.alpha = 0
                 self.showHelpButton.alpha = 1
-                self.navigationItem.rightBarButtonItem = nil
+                self.navigationItem.rightBarButtonItem = self.exitButton
             }
             self.view.layoutIfNeeded()
         }
