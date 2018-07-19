@@ -26,6 +26,10 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
     let title = MutableProperty<String?>(nil)
     let navigationRightButton = MutableProperty<UIBarButtonItem?>(nil)
+
+    let topMainButtonTitle = MutableProperty<String>("")
+    let topMainButtonHidden = MutableProperty<Bool>(false)
+
     let paymentslist = MutableProperty<[GZEPaymentCellModel]>([])
 
     let bottomActionButtonTitle = MutableProperty<String>("")
@@ -41,6 +45,8 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
         log.debug("\(self) init")
 
         self.title.value = "vm.paymentMethods.title.selectMethod".localized().uppercased()
+        // TODO: config currency and gooze tax 
+        self.topMainButtonTitle.value = (GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) ?? "$0") + " MXN"
         self.bottomActionButtonTitle.value = "vm.paymentMethods.add".localized().uppercased()
         self.bottomActionButtonAction = CocoaAction(self.createAddPaymentAction())
 

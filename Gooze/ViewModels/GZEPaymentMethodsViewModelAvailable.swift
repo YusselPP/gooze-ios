@@ -26,6 +26,10 @@ class GZEPaymentMethodsViewModelAvailable: GZEPaymentMethodsViewModel {
 
     let title = MutableProperty<String?>(nil)
     let navigationRightButton = MutableProperty<UIBarButtonItem?>(nil)
+
+    let topMainButtonTitle = MutableProperty<String>("")
+    let topMainButtonHidden = MutableProperty<Bool>(true)
+    
     let paymentslist = MutableProperty<[GZEPaymentCellModel]>([])
 
     let bottomActionButtonTitle = MutableProperty<String>("")

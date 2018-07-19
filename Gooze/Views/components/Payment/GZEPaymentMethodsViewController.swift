@@ -20,6 +20,7 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
 
     let backButton = GZEBackUIBarButtonItem()
 
+    @IBOutlet weak var topActionView: GZEChatActionView!
     @IBOutlet weak var paymentsCollectionView: GZEPaymentCollectionView!
     @IBOutlet weak var bottomActionButton: GZEButton!
 
@@ -52,6 +53,9 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
             this.dismissDelegate?.onDismissTapped(this)
         }
         self.navigationItem.leftBarButtonItem = backButton
+
+        self.topActionView.accessoryButtonWidth = 0
+        self.topActionView.accessoryButton.isHidden = true
         
         self.bottomActionButton.setGrayFormat()
         self.paymentsCollectionView.backgroundColor = .clear
@@ -64,6 +68,10 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
             [weak self] in
             self?.navigationItem.rightBarButtonItem = $0
         }
+
+        self.topActionView.mainButton.reactive.title <~ self.viewModel.topMainButtonTitle
+        self.topActionView.mainButton.reactive.isHidden <~ self.viewModel.topMainButtonHidden
+
         self.bottomActionButton.reactive.title <~ self.viewModel.bottomActionButtonTitle
         self.bottomActionButton.reactive.isHidden <~ self.viewModel.bottomActionButtonHidden
         self.viewModel.error.producer.skipNil().startWithValues{
