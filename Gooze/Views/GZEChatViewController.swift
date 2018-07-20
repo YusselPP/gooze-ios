@@ -132,6 +132,10 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
 
     func setupBindings() {
+        self.viewModel.error.signal.skipNil().observeValues{
+            GZEAlertService.shared.showBottomAlert(text: $0)
+        }
+
         self.topActionView.mainButton.reactive.title <~ self.viewModel.topButtonTitle
         self.topActionView.reactive.isHidden <~ self.viewModel.topButtonIsHidden
         self.topActionView.mainButton.reactive.pressed = self.viewModel.topButtonAction

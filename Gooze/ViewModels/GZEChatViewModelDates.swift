@@ -87,6 +87,8 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let setAmountButtonTitle = "vm.datesChat.setAmountButtonTitle".localized().uppercased()
     let acceptAmountButtonTitle = "vm.datesChat.acceptAmountButtonTitle".localized().uppercased()
     let dateButtonTitle = "vm.datesChat.dateButtonTitle".localized().uppercased()
+    let errorDigitsOnly = "vm.datesChat.error.digitsOnly".localized()
+    let errorPositiveNumber = "vm.datesChat.error.positiveNumber".localized()
     let amount = MutableProperty<Double?>(nil)
     let dateRequest: MutableProperty<GZEDateRequest>
     
@@ -125,9 +127,19 @@ class GZEChatViewModelDates: GZEChatViewModel {
         }.debounce(60, on: QueueScheduler.main)
 
         if mode == .gooze {
-            self.amount <~ self.topTextInput.map{ amountText -> Double? in
-                if let amountText = amountText {
-                    return Double(amountText)
+            self.amount <~ self.topTextInput.map{[weak self] amountText -> Double? in
+                if let amountText = amountText, !amountText.isEmpty {
+                    guard let amountDouble = Double(amountText) else {
+                        self?.error.value = self?.errorDigitsOnly
+                        return nil
+                    }
+
+                    guard amountDouble > 0 else {
+                        self?.error.value = self?.errorPositiveNumber
+                        return nil
+                    }
+
+                    return amountDouble
                 } else {
                     return nil
                 }

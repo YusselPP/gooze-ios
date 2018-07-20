@@ -149,6 +149,8 @@
 "vm.datesChat.setAmountButtonTitle"="Establecer monto";
 "vm.datesChat.acceptAmountButtonTitle"="Aceptar %@";
 "vm.datesChat.dateButtonTitle"="Ver cita";
+"vm.datesChat.error.digitsOnly"="Establece el monto con dígitos únicamente";
+"vm.datesChat.error.positiveNumber"="El monto debe ser mayor que 0";
 
 // ViewModel/GZEMapViewModelDate
 "vm.map.date.chat"="Ir a chat";

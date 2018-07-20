@@ -149,6 +149,8 @@
 "vm.datesChat.setAmountButtonTitle"="Set amount";
 "vm.datesChat.acceptAmountButtonTitle"="Accept %@";
 "vm.datesChat.dateButtonTitle"="Date";
+"vm.datesChat.error.digitsOnly"="Amount should consist of only digits";
+"vm.datesChat.error.positiveNumber"="Amount must be greater than 0";
 
 // ViewModel/GZEMapViewModelDate
 "vm.map.date.chat"="Chat";
