@@ -82,12 +82,11 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
         }
 
         // Signals
-        self.viewModel.loading.signal.skipRepeats().observeValues{[weak self] loading in
-            guard let this = self else {return}
+        self.viewModel.loading.signal.skipRepeats().observeValues{loading in
             if loading {
-                SwiftOverlays.showCenteredWaitOverlay(this.view)
+                SwiftOverlays.showBlockingWaitOverlay()
             } else {
-                SwiftOverlays.removeAllOverlaysFromView(this.view)
+                SwiftOverlays.removeAllBlockingOverlays()
             }
         }
         self.viewModel.segueAvailableMethods.signal.observeValues{[weak self] vm in
