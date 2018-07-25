@@ -166,6 +166,8 @@
 "vm.map.date.canceled"="Date has been canceled";
 "vm.map.date.ended"="Date has ended";
 
+"vm.map.date.arriving"="%@ is arriving to meeting point";
+
 // ViewModel/GZEChatsViewModelDates
 "vm.chats.list.error.closeDate"="Finish the on going date, before closing the chat";
 

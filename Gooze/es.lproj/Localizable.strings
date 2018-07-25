@@ -166,8 +166,10 @@
 "vm.map.date.canceled"="Cita cancelada";
 "vm.map.date.ended"="Cita finalizada";
 
+"vm.map.date.arriving"="%@ está llegando al punto de encuentro";
+
 // ViewModel/GZEChatsViewModelDates
-"vm.chats.list.error.closeDate"="Debes terminar la cita en curso para cerrar el chat";
+"vm.chats.list.error.closeDate"="Debes terminar la cita en curso para poder cerrar el chat";
 
 // ViewModel/GZEAddCreditCardModelPay
 "vm.add.credit.card.text"="Agregar";

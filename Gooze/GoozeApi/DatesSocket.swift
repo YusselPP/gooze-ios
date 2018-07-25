@@ -111,7 +111,7 @@ class DatesSocket: GZESocket {
             log.debug("Charge success on date request [id=\(dateRequest.id)]")
 
             GZEDatesService.shared.upsert(dateRequest: dateRequest)
-            GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id)
+            GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id, dateLocation: dateRequest.location)
 
             ack.with()
         }
