@@ -256,7 +256,7 @@ class GZEDatesService: NSObject {
 
                     log.debug("Date successfully created")
                     GZEDatesService.shared.upsert(dateRequest: dateRequest)
-                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id, dateLocation: dateRequest.location)
+                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id, dateRequest: dateRequest)
                     sink.send(value: dateRequest)
                     sink.sendCompleted()
 
@@ -281,7 +281,7 @@ class GZEDatesService: NSObject {
         return self.dateRequestRepository.cancelDate(dateRequest)
     }
 
-    func sendLocationUpdate(to recipientId: String, dateLocation: GZEUser.GeoPoint) {
+    func sendLocationUpdate(to recipientId: String, dateRequest: GZEDateRequest) {
         guard let authUser = GZEAuthService.shared.authUser else {return}
 
         let user = GZEUser(
@@ -299,15 +299,15 @@ class GZEDatesService: NSObject {
                 user.currentLocation = GZEUser.GeoPoint(CLCoord: location.coordinate)
                 guard let this = self else {return SignalProducer.empty}
 
-                let isArriving = location.distance(from: dateLocation.toCLLocation()) < 100
+                let isArriving = location.distance(from: dateRequest.location.toCLLocation()) < 100
 
                 if UIApplication.shared.applicationState == .background {
-                    return this.sendLocationUpdateInBackground(to: recipientId, user: user, isArriving: isArriving).throttle(10.0, on: QueueScheduler.main).flatMapError{ error in
+                    return this.sendLocationUpdateInBackground(to: recipientId, user: user, isArriving: isArriving, dateRequestId: dateRequest.id).throttle(10.0, on: QueueScheduler.main).flatMapError{ error in
                         log.error(error.localizedDescription)
                         return SignalProducer.empty
                     }
                 } else {
-                    return this.sendLocationUpdateInForeground(to: recipientId, user: user, isArriving: isArriving).flatMapError{ error in
+                    return this.sendLocationUpdateInForeground(to: recipientId, user: user, isArriving: isArriving, dateRequestId: dateRequest.id).flatMapError{ error in
                         log.error(error.localizedDescription)
                         return SignalProducer.empty
                     }
@@ -324,7 +324,7 @@ class GZEDatesService: NSObject {
         self.sendLocationDisposable?.dispose()
     }
 
-    func sendLocationUpdateInForeground(to recipientId: String, user: GZEUser, isArriving: Bool) -> SignalProducer<Bool, GZEError> {
+    func sendLocationUpdateInForeground(to recipientId: String, user: GZEUser, isArriving: Bool, dateRequestId: String) -> SignalProducer<Bool, GZEError> {
         log.debug("sendLocationUpdateInForeground")
         guard let dateSocket = self.dateSocket else {
             log.error("Date socket not found")
@@ -340,7 +340,7 @@ class GZEDatesService: NSObject {
 
         return SignalProducer { sink, disposable in
             log.debug("emitting updateLocation...")
-            dateSocket.emitWithAck(.updateLocation, recipientId, userJson, isArriving).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
+            dateSocket.emitWithAck(.updateLocation, recipientId, userJson, isArriving, dateRequestId).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
                 log.debug("ack data: \(data)")
 
                 disposable.add {
@@ -368,7 +368,7 @@ class GZEDatesService: NSObject {
         }
     }
 
-    func sendLocationUpdateInBackground(to recipientId: String, user: GZEUser, isArriving: Bool) -> SignalProducer<Bool, GZEError> {
+    func sendLocationUpdateInBackground(to recipientId: String, user: GZEUser, isArriving: Bool, dateRequestId: String) -> SignalProducer<Bool, GZEError> {
         log.debug("sendLocationUpdateInBackground")
         guard let userJson = user.toJSON() else {
             log.error("Failed to parse GZEUser to JSON")
@@ -390,7 +390,8 @@ class GZEDatesService: NSObject {
             let params: [String: Any] = ["location": [
                 "recipientId": recipientId,
                 "user": userJson,
-                "isArriving": isArriving
+                "isArriving": isArriving,
+                "dateRequestId": dateRequestId
             ]]
 
             this.bgSessionManager.request(GZEUserRouter.sendLocationUpdate(parameters: params))
@@ -463,9 +464,9 @@ class GZEDatesService: NSObject {
                 }
 
                 if mode == .gooze {
-                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id, dateLocation: dateRequest.location)
+                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id, dateRequest: dateRequest)
                 } else {
-                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id, dateLocation: dateRequest.location)
+                    GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id, dateRequest: dateRequest)
                 }
             }
     }
