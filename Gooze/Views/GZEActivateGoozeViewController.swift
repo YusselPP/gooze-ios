@@ -930,6 +930,10 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         GZEAlertService.shared.showTopAlert(text: viewModel.othersResultsWarning)
     }
 
+    func showOnDateScene() {
+        
+    }
+
     func findUnrespondedRequests() {
         GZEDatesService.shared.findUnrespondedRequests()
             .start {[weak self] event in

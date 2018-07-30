@@ -55,7 +55,7 @@ class GZEMapViewController: UIViewController, GZEDismissVCDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.viewWillAppear(mapViewContainer: self.mapViewContainer                       )
+        self.viewModel.viewWillAppear(mapViewContainer: self.mapViewContainer)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -78,8 +78,9 @@ class GZEMapViewController: UIViewController, GZEDismissVCDelegate {
         self.topLabel.font = GZEConstants.Font.main
         self.topLabel.textColor = .black
 
+        self.bottomActionView.accessoryButtonWidth += 6
         self.bottomActionView.accessoryButton.setImage(#imageLiteral(resourceName: "button-plus"), for: .normal)
-        self.bottomActionView.accessoryButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 5)
+        self.bottomActionView.accessoryButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 6)
 
         self.dropDown.anchorView = self.bottomActionView.accessoryButton
         self.dropDown.dataSource = ["Ayuda", "Cancelar cita"]
