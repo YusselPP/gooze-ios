@@ -70,7 +70,7 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
         }
 
         self.topActionView.mainButton.reactive.title <~ self.viewModel.topMainButtonTitle
-        self.topActionView.mainButton.reactive.isHidden <~ self.viewModel.topMainButtonHidden
+        self.topActionView.reactive.isHidden <~ self.viewModel.topMainButtonHidden
 
         self.bottomActionButton.reactive.title <~ self.viewModel.bottomActionButtonTitle
         self.bottomActionButton.reactive.isHidden <~ self.viewModel.bottomActionButtonHidden

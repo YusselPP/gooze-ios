@@ -95,7 +95,7 @@ class GZEPaymentCollectionView: UICollectionView, UICollectionViewDelegate, UICo
     }
 
     private func calcCellHeight(indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 60
     }
 
 

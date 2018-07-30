@@ -16,6 +16,7 @@ enum GZEError: Error {
     case payment(error: GZEPaymentError)
     case conektaToken(error: GZEConektaTokenError)
     case facebookError(error: Error)
+    case message(text: String)
 }
 
 extension GZEError: LocalizedError {
@@ -39,6 +40,8 @@ extension GZEError: LocalizedError {
             message = error.messageToPurchaser ?? "Unexpected Error".localized()
         case .facebookError(let error):
             message = error.localizedDescription
+        case .message(let text):
+            message = text.localized()
         }
         
         return message

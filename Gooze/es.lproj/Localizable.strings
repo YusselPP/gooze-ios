@@ -179,6 +179,7 @@
 "vm.paymentMethods.add"="Agregar";
 "vm.paymentMethods.addMethod"="Agregar forma de pago";
 "vm.paymentMethods.title.selectMethod"="Seleccionar forma de pago";
+"vm.paymentMethods.pay"="Pagar";
 
 // ViewModel/GZEHelpViewModelGooze
 "vm.help.title"="Ayuda";
