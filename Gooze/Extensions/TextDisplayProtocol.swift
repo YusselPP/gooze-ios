@@ -98,3 +98,30 @@ extension UITextField: TextDisplay {
         return self.isSecureTextEntry
     }
 }
+
+extension UITextView: TextDisplay {
+
+    func setColor(_ color: UIColor) {
+        self.textColor = color
+    }
+
+    func setTextFont(_ font: UIFont) {
+        self.font = font
+    }
+
+    func setAlignment(_ alignment: NSTextAlignment) {
+        self.textAlignment = alignment
+    }
+
+    func getText() -> String? {
+        return self.text
+    }
+
+    func setDisplayText(_ text: String?)  {
+        self.text = text
+    }
+
+    func hasSecureEntry() -> Bool{
+        return self.isSecureTextEntry
+    }
+}

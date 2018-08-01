@@ -18,8 +18,10 @@ class GZEHelpViewController: UIViewController, UITextViewDelegate {
 
     let backButton = GZEBackUIBarButtonItem()
 
-    @IBOutlet weak var subjectTextField: UITextField!
-    @IBOutlet weak var bodyTextView: UITextView!
+    let subjectTextField = UITextField()
+    let bodyTextView = UITextView()
+
+    @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var bottomButton: GZEButton!
 
     override func viewDidLoad() {
@@ -56,9 +58,6 @@ class GZEHelpViewController: UIViewController, UITextViewDelegate {
 
         self.subjectTextField.backgroundColor = UIColor.clear
         self.subjectTextField.borderStyle = .none
-        self.subjectTextField.textColor = UIColor.white
-        self.subjectTextField.textAlignment = .left
-        self.subjectTextField.font = GZEConstants.Font.main
         self.subjectTextField.attributedPlaceholder = NSAttributedString(
             string: viewModel.subjectPlaceholder.value,
             attributes: [
@@ -67,10 +66,23 @@ class GZEHelpViewController: UIViewController, UITextViewDelegate {
             ]
         )
         self.bodyTextView.backgroundColor = .clear
-        self.bodyTextView.textColor = UIColor.white
-        self.bodyTextView.font = GZEConstants.Font.main
         self.bodyTextView.tintColor = GZEConstants.Color.buttonBackground
         self.bodyTextView.delegate = self
+
+        self.dblCtrlView.topCtrlView = self.subjectTextField
+        self.dblCtrlView.bottomCtrlView = self.bodyTextView
+        self.dblCtrlView.topViewTappedHandler = {
+            [weak self] _ in
+            self?.subjectTextField.becomeFirstResponder()
+        }
+        self.dblCtrlView.topViewTappedHandler = {
+            [weak self] _ in
+            self?.bodyTextView.becomeFirstResponder()
+        }
+        self.dblCtrlView.separatorWidth = 120
+        let screenHeight = UIScreen.main.bounds.height
+        self.dblCtrlView.bottomHeightConstraint?.constant = screenHeight / 8 * 5
+        self.dblCtrlView.centerYConstraint?.constant = screenHeight / 8
     }
 
     func setupBindings() {
