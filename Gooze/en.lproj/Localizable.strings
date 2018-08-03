@@ -151,6 +151,7 @@
 "vm.datesChat.dateButtonTitle"="Date";
 "vm.datesChat.error.digitsOnly"="Amount should consist of only digits";
 "vm.datesChat.error.positiveNumber"="Amount must be greater than 0";
+"vm.datesChat.error.sendMessage.unavailable"="%@ is not available anymore";
 
 // ViewModel/GZEMapViewModelDate
 "vm.map.date.chat"="Chat";
@@ -250,6 +251,7 @@
 "service.dates.requestAccepted"="%@ has accepted your request";
 "service.dates.requestReceived"="%@ sent you a request";
 "service.dates.dateCreated"="Payment confirmed. A date has been created";
+"service.dates.becameUnavailable"="%@ is not available anymore";
 
 "service.chat.invalidChatId"="An error ocurred while opening the chat";
 "service.chat.messageReceived"="%@ has sent you a message";

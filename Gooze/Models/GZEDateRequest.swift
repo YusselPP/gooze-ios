@@ -32,6 +32,10 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     let senderClosed: Bool
     let recipientClosed: Bool
 
+    var isBlocked: Bool {
+        return self.status != .accepted && self.status != .onDate
+    }
+
     init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Double? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool) {
         self.id = id
         self.status = status

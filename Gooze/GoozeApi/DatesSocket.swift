@@ -141,6 +141,18 @@ class DatesSocket: GZESocket {
                 GZEDatesService.shared.stopSendingLocationUpdates()
             }
 
+            let authUserId = GZEAuthService.shared.authUser?.id
+            var username = ""
+
+            if dateRequest.status == .rejected {
+                if dateRequest.sender.id == authUserId {
+                    username = dateRequest.recipient.username
+                } else {
+                    username = dateRequest.sender.username
+                }
+                GZEAlertService.shared.showTopAlert(text: String(format: "service.dates.becameUnavailable".localized(), username))
+            }
+
             ack.with()
         }
     }

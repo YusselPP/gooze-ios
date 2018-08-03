@@ -215,12 +215,11 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
 
-        var closeProperty: String
-        if mode == .client {
-            closeProperty = "senderClosed"
-        } else {
-            closeProperty = "recipientClosed"
+        guard let dateRequestJson = dateRequest.toJSON() else {
+            log.error("Unnable to parse dateRequest to JSON")
+            return SignalProducer(error: .repository(error: .UnexpectedError))
         }
+        
 
         return SignalProducer { sink, disposable in
 
@@ -230,7 +229,7 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
 
             log.debug("closing date...")
 
-            Alamofire.request(GZEDateRequestRouter.update(id: dateRequest.id, parameters: [closeProperty: true]))
+            Alamofire.request(GZEDateRequestRouter.closeChat(parameters: ["dateRequest": dateRequestJson, "mode": mode.rawValue]))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
         }
     }

@@ -230,6 +230,12 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
+            guard !this.dateRequest.value.isBlocked else {
+                let error = GZEError.message(text: "vm.datesChat.error.sendMessage.unavailable", args: [this.username.value ?? ""])
+                this.error.value = error.localizedDescription
+                return SignalProducer(error: error)
+            }
+
             guard let messageText = this.inputMessage.value else {
                 return SignalProducer(error: .validation(error: .required(fieldName: "messageText")))
             }

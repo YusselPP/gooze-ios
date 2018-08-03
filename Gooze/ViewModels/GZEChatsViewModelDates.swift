@@ -79,7 +79,7 @@ class GZEChatsViewModelDates: GZEChatsViewModel {
                         self?.closeDateRequest(dateRequest)
                     },
                     onTap: {[weak self] _ in self?.onChatTapped(dateRequest, chatUser)},
-                    isBlocked: dateRequest.status != .accepted && dateRequest.status != .onDate
+                    isBlocked: dateRequest.isBlocked
                 ))
             }
             return list

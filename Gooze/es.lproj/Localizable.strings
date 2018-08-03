@@ -151,6 +151,7 @@
 "vm.datesChat.dateButtonTitle"="Ver cita";
 "vm.datesChat.error.digitsOnly"="Establece el monto con dígitos únicamente";
 "vm.datesChat.error.positiveNumber"="El monto debe ser mayor que 0";
+"vm.datesChat.error.sendMessage.unavailable"="%@ ya no esta disponible";
 
 // ViewModel/GZEMapViewModelDate
 "vm.map.date.chat"="Ir a chat";
@@ -202,7 +203,7 @@
 "vm.profile.contactTitle"="Contactar";
 "vm.profile.acceptRequestTitle"="Aceptar contacto";
 "vm.profile.acceptedRequestButtonTitle"="Ir al chat";
-"vm.profile.rejectedRequestButtonTitle"="Solicitud rechazada";
+"vm.profile.rejectedRequestButtonTitle"="Solicitud cancelada";
 "vm.profile.sentRequestButtonTitle"="Solicitud enviada";
 "vm.profile.endedRequestButtonTitle"="Cita finalizada";
 
@@ -250,6 +251,7 @@
 "service.dates.requestAccepted"="%@ ha aceptado tu solicitud";
 "service.dates.requestReceived"="%@ te envió una solicitud";
 "service.dates.dateCreated"="Pago confirmado. Se ha generado una cita.";
+"service.dates.becameUnavailable"="%@ ya no está disponible";
 
 "service.chat.invalidChatId"="Ocurrió un error al intentar abrir el chat";
 "service.chat.messageReceived"="%@ te ha enviado mensaje";

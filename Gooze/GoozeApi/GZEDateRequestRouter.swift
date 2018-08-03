@@ -17,6 +17,7 @@ enum GZEDateRequestRouter: URLRequestConvertible {
     case startDate(json: Parameters)
     case endDate(json: Parameters)
     case cancelDate(json: Parameters)
+    case closeChat(parameters: Parameters)
 
     static let baseURLString = GZEAppConfig.goozeApiUrl
     static let route = "DateRequests"
@@ -27,7 +28,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
             return .get
         case .startDate,
              .endDate,
-             .cancelDate:
+             .cancelDate,
+             .closeChat:
             return .post
         case .update:
             return .patch
@@ -46,6 +48,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
             return "\(GZEDateRequestRouter.route)/endDate"
         case .cancelDate:
             return "\(GZEDateRequestRouter.route)/cancelDate"
+        case .closeChat:
+            return "\(GZEDateRequestRouter.route)/closeChat"
         }
     }
 
@@ -69,7 +73,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
              .update,
              .startDate,
              .endDate,
-             .cancelDate:
+             .cancelDate,
+             .closeChat:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         }
 
@@ -81,7 +86,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
              .endDate(let json),
              .cancelDate(let json):
             urlRequest = try JSONEncoding.default.encode(urlRequest, withJSONObject: json)
-        case .update(_, let parameters):
+        case .update(_, let parameters),
+             .closeChat(let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         }
 

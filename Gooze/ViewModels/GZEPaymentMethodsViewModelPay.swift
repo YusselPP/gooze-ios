@@ -146,7 +146,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
             guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
 
             guard let method = this.methodProperty.value else {
-                return SignalProducer(error: .message(text: this.selectPaymentMethodText))
+                return SignalProducer(error: .message(text: this.selectPaymentMethodText, args: []))
             }
 
             return this.createCharge(method: method)
