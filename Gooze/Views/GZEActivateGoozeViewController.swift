@@ -287,6 +287,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                     guard let dateRequest = $0 as? GZEDateRequest else {return false}
                     return dateRequest.id == receivedRequest.id
                 }
+                this.viewModel.userResults.value.sort{
+                    ($0.getUser().overallRating ?? 0) > ($1.getUser().overallRating ?? 0)
+                }
                 this.updateReceivedRequests(this.viewModel.userResults.value)
             }
 

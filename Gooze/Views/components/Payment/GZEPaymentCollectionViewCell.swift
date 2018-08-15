@@ -127,6 +127,7 @@ class GZEPaymentCollectionViewCell: UICollectionViewCell {
         self.iconView.translatesAutoresizingMaskIntoConstraints = false
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.topBorder.translatesAutoresizingMaskIntoConstraints = false
+        self.check.translatesAutoresizingMaskIntoConstraints = false
 
         self.topAnchor.constraint(equalTo: self.stackView.topAnchor, constant: -10).isActive = true
         self.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor).isActive = true
@@ -135,6 +136,9 @@ class GZEPaymentCollectionViewCell: UICollectionViewCell {
 
         self.iconView.widthAnchor.constraint(equalToConstant: 40).isActive = true
         self.iconView.heightAnchor.constraint(equalToConstant: 28).isActive = true
+
+        self.check.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        self.check.heightAnchor.constraint(equalToConstant: 28).isActive = true
 
         self.topAnchor.constraint(equalTo: self.topBorder.topAnchor).isActive = true
         self.trailingAnchor.constraint(equalTo: self.topBorder.trailingAnchor).isActive = true
