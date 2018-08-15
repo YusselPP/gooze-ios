@@ -37,6 +37,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         case resultsList
         case otherResultsList
 
+        case onDate
+
         var isRequestResults: Bool {
             return (
                 self == .requestResults ||
@@ -52,7 +54,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             }
         }
         willSet {
-            if isViewLoaded {
+            if isViewLoaded && self.scene != newValue {
                 self.previousScene = self.scene
             }
         }
@@ -74,6 +76,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     var showOtherResultsListAction: CocoaAction<GZEButton>!
     var showRequestResultsListAction: CocoaAction<GZEButton>!
     var showRequestOtherResultsListAction: CocoaAction<GZEButton>!
+    var gotoActiveDateAction: CocoaAction<GZEButton>!
 
     var isInitialPositionSet = false
 
@@ -144,6 +147,12 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         super.viewWillAppear(animated)
 
         self.shownObs.send(value: true)
+
+//        if GZEAuthService.shared.authUser?.activeDateRequest != nil {
+//            scene = .onDate
+//        } else if scene == .onDate {
+//            scene = previousScene ?? .search
+//        }
 
         if let authorizationMessage = locationService.requestAuthorization() {
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
@@ -281,6 +290,36 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                 this.updateReceivedRequests(this.viewModel.userResults.value)
             }
 
+        self.shown.signal
+            .flatMap(.latest){
+                shown -> SignalProducer<GZEUser?, NoError> in
+
+                log.debug("shown: \(shown)")
+
+                guard shown else {
+                    return SignalProducer.never
+                }
+
+                return GZEAuthService.shared
+                    .authUserProperty
+                    .producer
+            }
+            .map{$0?.activeDateRequest}
+            .observeValues {[weak self] activeRequest in
+                log.debug("authUser changed, activeRequest: \(String(describing: activeRequest?.toJSON()))")
+                guard let this = self else {return}
+                if let request = activeRequest {
+                    log.debug("request id: \(request.id)")
+                    if this.scene != .onDate {
+                        this.scene = .onDate
+                    }
+                } else {
+                    if this.scene == .onDate {
+                        this.scene = .search
+                    }
+                }
+        }
+
         viewModel.messagesCount
             .map{$0.reduce(0, {$0 + $1.value})}
             .producer.startWithValues {
@@ -327,6 +366,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         }
         showRequestOtherResultsListAction = CocoaAction(Action<Void,Void,GZEError>{SignalProducer.empty}) { [weak self] _ in
             self?.scene = .requestOtherResultsList
+        }
+        gotoActiveDateAction = CocoaAction(
+            Action<Void,Void,GZEError>{SignalProducer.empty}
+        ) { [weak self] _ in
+            self?.gotoActiveDate()
         }
 
         viewModel.findGoozeAction.events.observeValues {[weak self] in
@@ -715,6 +759,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                  .resultsList,
                  .otherResultsList:
                 scene = .search
+            case .onDate:
+                scene = .onDate
             }
         }
     }
@@ -738,16 +784,30 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     func prepareChatSegue(_ vc: UIViewController) {
         if let vc = vc as? GZEChatsViewController {
             let mode: GZEChatViewMode
-            if
-                scene == .activate ||
-                scene == .requestResults ||
-                scene == .requestResultsList ||
-                scene == .requestOtherResultsList
-            {
+
+            switch scene {
+            case .activate,
+                 .requestResults,
+                 .requestResultsList,
+                 .requestOtherResultsList:
                 mode = .gooze
-            } else {
+            case .search,
+                 .searching,
+                 .searchResults,
+                 .resultsList,
+                 .otherResultsList:
                 mode = .client
+            case .onDate:
+                if
+                    let authUser = GZEAuthService.shared.authUser,
+                    let userMode = authUser.activeDateRequest?.getUserMode(authUser)
+                {
+                    mode = userMode
+                } else {
+                    mode = .client
+                }
             }
+
             vc.viewModel = self.viewModel.getChatsViewModel(mode)
 
         } else {
@@ -783,6 +843,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         case .searchResults: showSearchResultsScene()
         case .resultsList : showAllResultsScene()
         case .otherResultsList: showOtherResultsListScene()
+
+        case .onDate: showOnDateScene()
         }
         log.debug("scene changed: \(scene)")
     }
@@ -931,7 +993,15 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     }
 
     func showOnDateScene() {
-        
+        isSearchingAnimationEnabled = false
+        shouldRestartSearchingAnmiation = false
+
+        activateGoozeButton.isHidden = false
+
+        activateGoozeButton.setTitle(viewModel.gotoActiveDateTitle.uppercased(), for: .normal)
+        activateGoozeButton.reactive.pressed = gotoActiveDateAction
+
+        hideBalloons()
     }
 
     func findUnrespondedRequests() {
@@ -964,6 +1034,48 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
         if self.scene == .requestResults {
             self.showBalloons()
+        }
+    }
+
+    func gotoActiveDate() {
+
+        guard let chatsController = storyboard?.instantiateViewController(withIdentifier: "GZEChatsViewController") as? GZEChatsViewController else {
+            log.error("Unable to instantiate GZEChatsViewController")
+            return
+        }
+
+        guard let chatController = storyboard?.instantiateViewController(withIdentifier: "GZEChatViewController") else {
+            log.error("Unable to instantiate GZEChatViewController")
+            return
+        }
+
+        prepareChatSegue(chatsController)
+
+        if
+            let authUser = GZEAuthService.shared.authUser,
+            let activeDateRequest = authUser.activeDateRequest,
+            let chat = activeDateRequest.chat,
+            let mode = activeDateRequest.getUserMode(authUser)
+        {
+            let username = (
+                mode == .client ?
+                activeDateRequest.recipient.username :
+                activeDateRequest.sender.username
+            )
+
+            let chatVm = GZEChatViewModelDates(
+                chat: chat,
+                dateRequest: MutableProperty(activeDateRequest),
+                mode: mode,
+                username: username
+            )
+
+            chatsController.prepareChatSegue(chatController, vm: chatVm)
+
+            self.navigationController?.pushViewControllers([chatsController, chatController], animated: false)
+        } else {
+            log.debug("The current user has not a valid active date")
+            onError(.message(text: "vm.activate.activeDateNotFound".localized(), args: []))
         }
     }
 

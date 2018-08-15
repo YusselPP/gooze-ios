@@ -104,6 +104,16 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             return false
         }
     }
+
+    func getUserMode(_ aUser: GZEUser) -> GZEChatViewMode? {
+        if aUser.id == self.sender.id {
+            return .client
+        } else if aUser.id == self.recipient.id {
+            return .gooze
+        }
+
+        return nil
+    }
     
     // MARK: - GZEUserConvertible
     enum UserMode {

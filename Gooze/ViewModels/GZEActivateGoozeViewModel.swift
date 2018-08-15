@@ -37,6 +37,8 @@ class GZEActivateGoozeViewModel {
     let searchButtonTitle = "vm.activate.searchButtonTitle".localized()
     let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
 
+    let gotoActiveDateTitle = "vm.activate.gotoActiveDateTitle".localized()
+
     var paymentViewModel: GZEPaymentMethodsViewModelAdded {
         return GZEPaymentMethodsViewModelAdded()
     }

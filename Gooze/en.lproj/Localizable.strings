@@ -132,6 +132,9 @@
 "vm.activate.searchButtonTitle"="Search gooze";
 "vm.activate.allResultsButtonTitle"="View all results";
 
+"vm.activate.gotoActiveDateTitle"="Date";
+"vm.activate.activeDateNotFound"="There is no an active date";
+
 // ViewModel/GZEProfileUserInfoViewModelRateDate
 "profile.rate.date.accept"="Accept";
 

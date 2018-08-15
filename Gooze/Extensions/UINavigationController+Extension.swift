@@ -32,4 +32,10 @@ extension UINavigationController {
             completion?()
         }
     }
+
+    func pushViewControllers(_ inViewControllers: [UIViewController], animated: Bool) {
+        var stack = self.viewControllers
+        stack.append(contentsOf: inViewControllers)
+        self.setViewControllers(stack, animated: animated)
+    }
 }

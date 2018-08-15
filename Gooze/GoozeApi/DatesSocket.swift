@@ -108,8 +108,20 @@ class DatesSocket: GZESocket {
                 log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")
                 return
             }
+
+            guard let userJson = data[1] as? JSON, let user = GZEUser(json: userJson) else {
+                log.error("Unable to parse data[1], expected data[1] to be a GZEUser, found: \(data[1])")
+                return
+            }
+
             log.debug("Charge success on date request [id=\(dateRequest.id)]")
 
+            // TODO: Test updated authUser
+            if user.id == GZEAuthService.shared.authUser?.id {
+                GZEAuthService.shared.authUser = user
+            } else {
+                log.error("Missmatch user received")
+            }
             GZEDatesService.shared.upsert(dateRequest: dateRequest)
             GZEDatesService.shared.sendLocationUpdate(to: dateRequest.sender.id, dateRequest: dateRequest)
 
@@ -133,7 +145,7 @@ class DatesSocket: GZESocket {
                 log.error("Unable to parse data[0], expected data[0] to be a dateRequest, found: \(data[0])")
                 return
             }
-            log.debug("Date started on date request [id=\(dateRequest.id)]")
+            log.debug("Date request [id=\(dateRequest.id)] changed its status")
 
             GZEDatesService.shared.upsert(dateRequest: dateRequest)
 
@@ -152,6 +164,18 @@ class DatesSocket: GZESocket {
                 }
                 GZEAlertService.shared.showTopAlert(text: String(format: "service.dates.becameUnavailable".localized(), username))
             }
+
+            // Update authUser if its included on data
+            if let userJson = data[1] as? JSON, let user = GZEUser(json: userJson) {
+                log.debug("Updating authUser[id=\(String(describing: authUserId))] with user found at data[1] \(data[1])")
+
+                if user.id == authUserId {
+                    GZEAuthService.shared.authUser = user
+                } else {
+                    log.error("Missmatch user received")
+                }
+            }
+
 
             ack.with()
         }

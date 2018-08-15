@@ -87,23 +87,8 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
 
             log.debug("trying to find user unresponded date requests")
 
-            let params =
-                [
-                    "filter": [
-                        "where": [
-                            "or": [
-                                ["status": GZEDateRequest.Status.sent.rawValue],
-                                ["status": GZEDateRequest.Status.received.rawValue],
-                                ["status": GZEDateRequest.Status.accepted.rawValue],
-                                ["status": GZEDateRequest.Status.onDate.rawValue]
-                            ],
-                            "recipientClosed": false,
-                            "recipientId": userId
-                        ],
-                        "include": ["sender", "recipient", "chat", "date"]
-                    ]
-                ] as [String : Any]
-            Alamofire.request(GZEDateRequestRouter.find(parameters: params))
+            let params: JSON = ["userId": userId]
+            Alamofire.request(GZEDateRequestRouter.findUnresponded(parameters: params))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { jsonArray in
 
                     return [GZEDateRequest].from(jsonArray: jsonArray)
@@ -164,7 +149,7 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
-    func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+    func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
@@ -183,11 +168,22 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             log.debug("ending date...")
 
             Alamofire.request(GZEDateRequestRouter.endDate(json: dateRequestJson))
-                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) -> (GZEDateRequest, GZEUser)? in
+
+                    guard let dateJson = json["dateRequest"] as? JSON, let dateRequest = GZEDateRequest(json: dateJson) else {
+                        return nil
+                    }
+
+                    guard let userJson = json["user"] as? JSON, let user = GZEUser(json: userJson) else {
+                        return nil
+                    }
+
+                    return (dateRequest, user)
+                }))
         }
     }
 
-    func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+    func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
@@ -206,7 +202,18 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             log.debug("canceling date...")
 
             Alamofire.request(GZEDateRequestRouter.cancelDate(json: dateRequestJson))
-                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) -> (GZEDateRequest, GZEUser)? in
+
+                    guard let dateJson = json["dateRequest"] as? JSON, let dateRequest = GZEDateRequest(json: dateJson) else {
+                        return nil
+                    }
+
+                    guard let userJson = json["user"] as? JSON, let user = GZEUser(json: userJson) else {
+                        return nil
+                    }
+
+                    return (dateRequest, user)
+                }))
         }
     }
 

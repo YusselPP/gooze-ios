@@ -132,6 +132,9 @@
 "vm.activate.searchButtonTitle"="Buscar gooze";
 "vm.activate.allResultsButtonTitle"="Listado completo";
 
+"vm.activate.gotoActiveDateTitle"="Ver cita";
+"vm.activate.activeDateNotFound"="No hay una cita en proceso";
+
 // ViewModel/GZEProfileUserInfoViewModelRateDate
 "profile.rate.date.accept"="Aceptar";
 

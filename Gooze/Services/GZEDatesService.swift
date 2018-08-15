@@ -252,7 +252,16 @@ class GZEDatesService: NSObject {
                     self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
                     sink.send(error: .datesSocket(error: .unexpected))
 
-                } else if let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) {
+                } else if
+                    let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson),
+                    let userJson = data[2] as? JSON, let user = GZEUser(json: userJson)
+                {
+                    // TODO: Test updated authUser
+                    if user.id == GZEAuthService.shared.authUser?.id {
+                        GZEAuthService.shared.authUser = user
+                    } else {
+                        log.error("Missmatch user received")
+                    }
 
                     log.debug("Date successfully created")
                     GZEDatesService.shared.upsert(dateRequest: dateRequest)
@@ -275,10 +284,32 @@ class GZEDatesService: NSObject {
 
     func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
         return self.dateRequestRepository.endDate(dateRequest)
+            .map{
+                let (dateRequest, user) = $0
+
+                if user.id == GZEAuthService.shared.authUser?.id {
+                    GZEAuthService.shared.authUser = user
+                } else {
+                    log.error("Missmatch user received")
+                }
+
+                return dateRequest
+            }
     }
 
     func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
         return self.dateRequestRepository.cancelDate(dateRequest)
+            .map{
+                let (dateRequest, user) = $0
+
+                if user.id == GZEAuthService.shared.authUser?.id {
+                    GZEAuthService.shared.authUser = user
+                } else {
+                    log.error("Missmatch user received")
+                }
+
+                return dateRequest
+        }
     }
 
     func sendLocationUpdate(to recipientId: String, dateRequest: GZEDateRequest) {

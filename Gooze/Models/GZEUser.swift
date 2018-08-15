@@ -231,6 +231,8 @@ class GZEUser: NSObject, Glossy {
     var searchPic: Photo?
     var photos: [Photo]?
 
+    var activeDateRequest: GZEDateRequest?
+
     // Ratings
     var imagesRating: GZERatings.Rating?
     var complianceRating: GZERatings.Rating?
@@ -334,6 +336,8 @@ class GZEUser: NSObject, Glossy {
         self.photos = "photos" <~~ json
         self.profilePic = "profilePic" <~~ json
         self.searchPic = "searchPic" <~~ json
+
+        self.activeDateRequest = "activeDateRequest" <~~ json
 
         self.imagesRating = "imagesRating" <~~ json
         self.complianceRating = "complianceRating" <~~ json

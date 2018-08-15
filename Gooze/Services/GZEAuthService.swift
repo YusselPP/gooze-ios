@@ -25,7 +25,12 @@ class GZEAuthService: NSObject {
         }
     }
 
-    var authUser: GZEUser?
+    var authUser: GZEUser? {
+        didSet {
+            self.authUserProperty.value = self.authUser
+        }
+    }
+    let authUserProperty = MutableProperty<GZEUser?>(nil)
 
     var isAuthenticated: Bool {
         if let token = self.token, self.authUser != nil {
