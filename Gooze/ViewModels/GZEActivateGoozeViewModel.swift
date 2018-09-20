@@ -127,8 +127,11 @@ class GZEActivateGoozeViewModel {
                 return SignalProducer(error: .repository(error: .AuthRequired))
             }
 
+            let currentLocation = GZEUser.GeoPoint(CLCoord: this.mapCenterLocation.value)
+
             let user = GZEUser(id: authUser.id, username: authUser.username, email: authUser.email)
-            user.currentLocation = GZEUser.GeoPoint(CLCoord: this.mapCenterLocation.value)
+            user.currentLocation =  currentLocation
+            user.currentLoc = [currentLocation.lng, currentLocation.lat]
             user.activeUntil = Date(timeIntervalSinceNow: Double(this.sliderValue.value * 60 * 60))
 
             log.debug(user.toJSON() as Any)

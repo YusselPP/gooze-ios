@@ -129,8 +129,10 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
             this.loading.value = false
 
             switch event {
-            case .value(let newdateRequest):
+            case .value(let value):
+                let (newdateRequest, newSender) = value
                 this.dateRequest.value = newdateRequest
+                GZEAuthService.shared.authUser = newSender
                 this.dismissObs.send(value: ())
             case .failed(let err):
                 this.onError(err)
@@ -141,7 +143,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     }
 
     // Private Methods
-    func createPayAction() -> Action<Void, GZEDateRequest, GZEError> {
+    func createPayAction() -> Action<Void, (GZEDateRequest, GZEUser), GZEError> {
         return Action.init(enabledIf: self.bottomActionButtonEnabled) {[weak self] in
             guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
 
@@ -154,43 +156,60 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     }
 
     func createCharge(method: GZEPaymentMethod)
-        -> SignalProducer<GZEDateRequest, GZEError> {
+        -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
 
-        self.loading.value = true
-        return (
-            PayPalService.shared
-                // TODO: Create a service in the server that has this two actions(paypal charge and create date) in order to avoid network errors in date creation
-                .charge(amount: self.amount, paymentMethodToken: method.token, dateRequest: self.dateRequest.value)
-                .flatMap(.latest){[weak self] response -> SignalProducer<GZEDateRequest, GZEError>  in
-                    guard let this = self else {return SignalProducer.empty}
-
-                    guard let success = response["success"] as? Bool else {
-                        log.error("Invalid response from server")
-                        return SignalProducer(error: .repository(error: .UnexpectedError))
-                    }
-
-                    guard success else {
-                        log.error("Server response: \(response)")
-                        if let message = response["message"] as? String {
-                            this.error.value = message
-                            return SignalProducer.empty
-                        } else {
-                            return SignalProducer(error: .repository(error: .UnexpectedError))
-                        }
-                    }
-
-                    return (
-                        GZEDatesService.shared.createCharge(
-                            requestId: this.dateRequest.value.id,
-                            senderId: this.senderId,
-                            username: this.username,
-                            chat: this.chat,
-                            mode: this.mode
-                        )
-                    )
-                }
-        )
+            self.loading.value = true
+            return (
+                GZEDatesService.shared.createCharge(
+                    dateRequest: self.dateRequest.value,
+                    amount: self.amount,
+                    paymentMethodToken: method.token,
+                    senderId: self.senderId,
+                    username: self.username,
+                    chat: self.chat,
+                    mode: self.mode
+                )
+            )
     }
+
+//    func createCharge(method: GZEPaymentMethod)
+//        -> SignalProducer<GZEDateRequest, GZEError> {
+//
+//        self.loading.value = true
+//        return (
+//            PayPalService.shared
+//                // TODO: Create a service in the server that has this two actions(paypal charge and create date) in order to avoid network errors in date creation
+//                .charge(amount: self.amount, paymentMethodToken: method.token, dateRequest: self.dateRequest.value)
+//                .flatMap(.latest){[weak self] response -> SignalProducer<GZEDateRequest, GZEError>  in
+//                    guard let this = self else {return SignalProducer.empty}
+//
+//                    guard let success = response["success"] as? Bool else {
+//                        log.error("Invalid response from server")
+//                        return SignalProducer(error: .repository(error: .UnexpectedError))
+//                    }
+//
+//                    guard success else {
+//                        log.error("Server response: \(response)")
+//                        if let message = response["message"] as? String {
+//                            this.error.value = message
+//                            return SignalProducer.empty
+//                        } else {
+//                            return SignalProducer(error: .repository(error: .UnexpectedError))
+//                        }
+//                    }
+//
+//                    return (
+//                        GZEDatesService.shared.createCharge(
+//                            requestId: this.dateRequest.value.id,
+//                            senderId: this.senderId,
+//                            username: this.username,
+//                            chat: this.chat,
+//                            mode: this.mode
+//                        )
+//                    )
+//                }
+//        )
+//    }
 
     func onError(_ error: GZEError) {
         self.error.value = error.localizedDescription

@@ -211,6 +211,18 @@ class GZEDatesService: NSObject {
         }
     }
 
+    func createCharge(dateRequest: GZEDateRequest, amount: Double, paymentMethodToken: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
+        return dateRequestRepository.createCharge(
+            dateRequest: dateRequest,
+            amount: amount,
+            paymentMethodToken: paymentMethodToken,
+            senderId: senderId,
+            username: username,
+            chat: chat,
+            mode: mode
+        )
+    }
+
     func createCharge(requestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<GZEDateRequest, GZEError> {
         guard let dateSocket = self.dateSocket else {
             log.error("Date socket not found")

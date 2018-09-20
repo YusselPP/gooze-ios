@@ -241,6 +241,55 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
+    func createCharge(dateRequest: GZEDateRequest, amount: Double, paymentMethodToken: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
+
+        guard let chatJson = chat.toJSON() else {
+            log.error("Failed to parse GZEChat to JSON")
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        guard let messageJson = GZEChatMessage(text: "service.dates.dateCreated", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
+            log.error("Failed to parse GZEChatMessage to JSON")
+            return SignalProducer(error: .datesSocket(error: .unexpected))
+        }
+
+        return SignalProducer { sink, disposable in
+            disposable.add {
+                log.debug("createCharge SignalProducer disposed")
+            }
+
+            log.debug("creating charge...")
+
+            let parameters: JSON = [
+                "amount": amount,
+                "paymentMethodToken": paymentMethodToken,
+                "deviceData": PayPalService.deviceData,
+                "description": "Recipient: \(dateRequest.recipient.username), DateRequest: \(dateRequest.id)",
+                "dateRequestId": dateRequest.id,
+                "fromUserId": dateRequest.sender.id,
+                "toUserId": dateRequest.recipient.id,
+
+                "message": messageJson,
+                "username": username,
+                "chat": chatJson,
+                "mode": mode.rawValue
+            ]
+
+            Alamofire.request(GZEDateRequestRouter.createCharge(parameters: parameters))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) -> (GZEDateRequest, GZEUser)? in
+                    guard let dateJson = json["dateRequest"] as? JSON, let dateRequest = GZEDateRequest(json: dateJson) else {
+                        return nil
+                    }
+
+                    guard let userJson = json["sender"] as? JSON, let user = GZEUser(json: userJson) else {
+                        return nil
+                    }
+
+                    return (dateRequest, user)
+                }))
+        }
+    }
+
     // MARK: Deinitializers
     deinit {
         log.debug("\(self) disposed")
