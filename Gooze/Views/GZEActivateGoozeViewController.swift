@@ -317,8 +317,24 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                         this.scene = .onDate
                     }
                 } else {
-                    if this.scene == .onDate {
+                    switch this.scene {
+                    case .activate,
+                         .requestResults,
+                         .requestResultsList,
+                         .requestOtherResultsList:
+                        this.scene = .activate
+                    case .search,
+                         .searching,
+                         .searchResults,
+                         .resultsList,
+                         .otherResultsList:
                         this.scene = .search
+                    case .onDate:
+                        if this.viewModel.mode.value == .gooze {
+                            this.scene = .activate
+                        } else {
+                            this.scene = .search
+                        }
                     }
                 }
         }
@@ -749,23 +765,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
     @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {
         log.debug("segue.identifier: \(unwindToActivateGooze)")
-        if segue.identifier == "unwindToActivateGooze" {
-            switch scene {
-            case .activate,
-                 .requestResults,
-                 .requestResultsList,
-                 .requestOtherResultsList:
-                scene = .activate
-            case .search,
-                 .searching,
-                 .searchResults,
-                 .resultsList,
-                 .otherResultsList:
-                scene = .search
-            case .onDate:
-                scene = .onDate
-            }
-        }
     }
 
     func prepareMyProfileSegue(_ vc: UIViewController) {
@@ -1000,6 +999,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         shouldRestartSearchingAnmiation = false
 
         activateGoozeButton.isHidden = false
+
+        setMenuButton()
 
         activateGoozeButton.setTitle(viewModel.gotoActiveDateTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = gotoActiveDateAction
