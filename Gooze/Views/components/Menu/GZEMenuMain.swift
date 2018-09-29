@@ -63,6 +63,9 @@ class GZEMenuMain {
         return self.createMenuItemButton(title: self.menuItemTitleLogout, action: self.logoutCocoaAction)
     }()
 
+    let switchModeEnabled = MutableProperty(true)
+    let (disposeSignal, disposeObs) = Signal<Void, NoError>.pipe()
+
     init() {
         //let profileCocoaAction = CocoaAction<GZEButton>(Action<Void, Void, NoError>{SignalProducer.empty})
 
@@ -70,6 +73,22 @@ class GZEMenuMain {
             guard let controller = self?.controller else {return}
             controller.performSegue(withIdentifier: controller.segueToMyProfile, sender: nil)
         })
+
+
+        GZEAuthService.shared
+            .authUserProperty
+            .producer
+            .take(until: self.disposeSignal)
+            .startWithValues {[weak self] authUser in
+                guard let this = self else {return}
+                if let request = authUser?.activeDateRequest {
+                    log.debug("request id: \(request.id)")
+                    this.switchModeEnabled.value = false
+                } else {
+                    this.switchModeEnabled.value = true
+                }
+            }
+
 
         let (_, switchModeCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
             guard let controller = self?.controller else {return}
@@ -79,7 +98,7 @@ class GZEMenuMain {
             } else {
                 controller.scene = .activate
             }
-        })
+        }, enabledIf: switchModeEnabled)
         self.switchModeGoozeButton = createMenuItemButton(title: menuItemTitleSearchGooze, action: switchModeCocoaAction)
 
         let (_, chatCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
@@ -140,8 +159,8 @@ class GZEMenuMain {
         }
     }
 
-    func createMenuAction(producer: SignalProducer<Void, NoError> = SignalProducer.empty, onCloseMenu: CompletionBlock? = nil) -> (Action<(), Void, NoError>, CocoaAction<GZEButton>) {
-        let action = Action{ () -> SignalProducer<Void, NoError> in
+    func createMenuAction(producer: SignalProducer<Void, NoError> = SignalProducer.empty, enabledIf: MutableProperty<Bool> = MutableProperty(true), onCloseMenu: CompletionBlock? = nil) -> (Action<(), Void, NoError>, CocoaAction<GZEButton>) {
+        let action = Action(enabledIf: enabledIf){ () -> SignalProducer<Void, NoError> in
             log.debug("Menu action pressed")
             return producer
         }
@@ -191,5 +210,9 @@ class GZEMenuMain {
         separator.widthAnchor.constraint(equalTo: line.widthAnchor, multiplier: 1.5).isActive = true
 
         return separator
+    }
+
+    deinit {
+        disposeObs.send(value: ())
     }
 }

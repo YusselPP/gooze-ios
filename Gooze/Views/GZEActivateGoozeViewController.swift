@@ -253,6 +253,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                     .skipNil()
                     .filter { $0 == .authenticated }
             }
+            .take(during: self.reactive.lifetime)
             .observeValues {[weak self] _ in
                 log.debug("socket auth event received")
                 guard let this = self else {return}
@@ -279,6 +280,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                         .skipNil()
                 )
             }
+            .take(during: self.reactive.lifetime)
             .observeValues{
                 [weak self] receivedRequest in
                 log.debug("dateRequest received: \(receivedRequest.id)")
@@ -308,6 +310,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                     .producer
             }
             .map{$0?.activeDateRequest}
+            .take(during: self.reactive.lifetime)
             .observeValues {[weak self] activeRequest in
                 log.debug("authUser changed, activeRequest: \(String(describing: activeRequest?.toJSON()))")
                 guard let this = self else {return}
