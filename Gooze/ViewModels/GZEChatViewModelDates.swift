@@ -35,11 +35,13 @@ class GZEChatViewModelDates: GZEChatViewModel {
     
     let topTextInput = MutableProperty<String?>(nil)
     let topTextInputIsHidden = MutableProperty<Bool>(true)
+    let topTextInputIsEditing = MutableProperty<Bool>(false)
+    let (topTextInputEndEditingSignal, topTextInputEndEditingObs) = Signal<Void, NoError>.pipe()
 
     let inputMessage = MutableProperty<String?>(nil)
     let sendButtonImage = MutableProperty<UIImage?>(nil)
     let sendButtonEnabled = MutableProperty<Bool>(true)
-    var sendButtonAction: CocoaAction<UIButton>!
+    let sendButtonAction = MutableProperty<CocoaAction<UIButton>?>(nil)
 
     var paymentViewModel: GZEPaymentMethodsViewModel? {
         return getPaymentViewModel()
@@ -91,6 +93,9 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let errorPositiveNumber = "vm.datesChat.error.positiveNumber".localized()
     let amount = MutableProperty<Double?>(nil)
     let dateRequest: MutableProperty<GZEDateRequest>
+
+    var sendMessageAction: CocoaAction<UIButton>?
+    var sendAmountAction: CocoaAction<UIButton>?
     
     
     // MARK: - init
@@ -115,9 +120,12 @@ class GZEChatViewModelDates: GZEChatViewModel {
             this.setAmount(dateRequest.amount)
         }
 
+        self.sendMessageAction = CocoaAction(self.createSendAction())
+        self.sendAmountAction = CocoaAction(topAction)
+
         self.topButtonAction = CocoaAction(self.createTopButtonAction())
-        self.topAccessoryButtonAction = CocoaAction(topAction)
-        self.sendButtonAction = CocoaAction(self.createSendAction())
+        self.topAccessoryButtonAction = self.sendAmountAction
+        self.sendButtonAction.value = self.sendMessageAction
         
         self.retrieveHistoryProducer = SignalProducer {[weak self] sink, disposable in
             log.debug("retrieve history producer called")
@@ -125,6 +133,17 @@ class GZEChatViewModelDates: GZEChatViewModel {
             GZEChatService.shared.retrieveHistory(chatId: this.chat.id)
             sink.sendCompleted()
         }.debounce(60, on: QueueScheduler.main)
+
+        self.sendButtonAction <~ self.topTextInputIsEditing.map{
+            [weak self] isEditing -> CocoaAction<UIButton>? in
+            guard let this = self else {return nil}
+
+            if isEditing {
+                return this.sendAmountAction
+            } else {
+                return this.sendMessageAction
+            }
+        }
 
         if mode == .gooze {
             self.amount <~ self.topTextInput.map{[weak self] amountText -> Double? in
@@ -193,6 +212,8 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 log.error("self disposed before executing action")
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
+
+            this.topTextInputEndEditingObs.send(value: ())
             
             guard let sender = GZEAuthService.shared.authUser else {
                 log.error("sender is nil")

@@ -90,6 +90,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         usernameLabel.text = self.viewModel.username.map{$0?.uppercased()}.value
 
         self.messagesTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onStackViewTapped(_:))))
+        self.messageInputContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onStackViewTapped(_:))))
 
         self.navigationItem.setLeftBarButton(backButton, animated: false)
         //self.navigationItem.reactive.title <~ self.viewModel.username.map{$0?.uppercased()}
@@ -155,6 +156,22 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         
         self.viewModel.topTextInput <~ self.topTextInput.reactive.continuousTextValues
         self.topTextInput.reactive.text <~ self.viewModel.topTextInput
+
+        self.viewModel.topTextInputIsEditing <~ (
+            self.topTextInput.reactive
+                .controlEvents(.editingDidBegin)
+                .map{_ in true}
+        )
+        self.viewModel.topTextInputIsEditing <~ (
+            self.topTextInput.reactive
+                .controlEvents(.editingDidEnd)
+                .map{_ in false}
+        )
+
+        self.viewModel.topTextInputEndEditingSignal.observeValues {[weak self] in
+            guard let this = self else {return}
+            this.topTextInput.endEditing(true)
+        }
         
         self.viewModel.topTextInputIsHidden.producer.startWithValues {[weak self] isHidden in
             self?.topTextInput.isHidden = isHidden
@@ -174,7 +191,10 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self?.messagesTableView.messagesObserver.send(value: $0)
         }
 
-        self.sendButton.reactive.pressed = self.viewModel.sendButtonAction
+        self.viewModel.sendButtonAction.producer.startWithValues {[weak self] action in
+            guard let this = self else {return}
+            this.sendButton.reactive.pressed = action
+        }
         
         self.viewModel.showPaymentViewSignal.observeValues {[weak self] _ in
             guard let this = self else {return}
@@ -246,7 +266,7 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
 
     func onStackViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        self.view.endEditing(true)
+        self.topTextInput.endEditing(true)
     }
 
     // MARK: - KeyboardNotifications

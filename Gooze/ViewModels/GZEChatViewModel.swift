@@ -31,10 +31,12 @@ protocol GZEChatViewModel {
     
     var topTextInput: MutableProperty<String?> { get }
     var topTextInputIsHidden: MutableProperty<Bool> { get }
+    var topTextInputIsEditing: MutableProperty<Bool> { get }
+    var topTextInputEndEditingSignal: Signal<Void, NoError> { get }
 
     var inputMessage: MutableProperty<String?> { get }
     var sendButtonImage: MutableProperty<UIImage?> { get }
-    var sendButtonAction: CocoaAction<UIButton>! { get }
+    var sendButtonAction: MutableProperty<CocoaAction<UIButton>?> { get }
 
     var paymentViewModel: GZEPaymentMethodsViewModel? { get }
     var mapViewModel: GZEMapViewModel { get }
