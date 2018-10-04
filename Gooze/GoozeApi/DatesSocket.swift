@@ -1,4 +1,4 @@
-//
+ //
 //  DatesSocket.swift
 //  Gooze
 //
@@ -159,10 +159,8 @@ class DatesSocket: GZESocket {
             if dateRequest.status == .rejected {
                 if dateRequest.sender.id == authUserId {
                     username = dateRequest.recipient.username
-                } else {
-                    username = dateRequest.sender.username
+                    GZEAlertService.shared.showTopAlert(text: String(format: "service.dates.becameUnavailable".localized(), username))
                 }
-                GZEAlertService.shared.showTopAlert(text: String(format: "service.dates.becameUnavailable".localized(), username))
             }
 
             // Update authUser if its included on data

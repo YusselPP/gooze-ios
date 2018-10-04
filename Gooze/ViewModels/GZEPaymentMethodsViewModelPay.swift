@@ -172,45 +172,6 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
             )
     }
 
-//    func createCharge(method: GZEPaymentMethod)
-//        -> SignalProducer<GZEDateRequest, GZEError> {
-//
-//        self.loading.value = true
-//        return (
-//            PayPalService.shared
-//                // TODO: Create a service in the server that has this two actions(paypal charge and create date) in order to avoid network errors in date creation
-//                .charge(amount: self.amount, paymentMethodToken: method.token, dateRequest: self.dateRequest.value)
-//                .flatMap(.latest){[weak self] response -> SignalProducer<GZEDateRequest, GZEError>  in
-//                    guard let this = self else {return SignalProducer.empty}
-//
-//                    guard let success = response["success"] as? Bool else {
-//                        log.error("Invalid response from server")
-//                        return SignalProducer(error: .repository(error: .UnexpectedError))
-//                    }
-//
-//                    guard success else {
-//                        log.error("Server response: \(response)")
-//                        if let message = response["message"] as? String {
-//                            this.error.value = message
-//                            return SignalProducer.empty
-//                        } else {
-//                            return SignalProducer(error: .repository(error: .UnexpectedError))
-//                        }
-//                    }
-//
-//                    return (
-//                        GZEDatesService.shared.createCharge(
-//                            requestId: this.dateRequest.value.id,
-//                            senderId: this.senderId,
-//                            username: this.username,
-//                            chat: this.chat,
-//                            mode: this.mode
-//                        )
-//                    )
-//                }
-//        )
-//    }
-
     func onError(_ error: GZEError) {
         self.error.value = error.localizedDescription
     }
