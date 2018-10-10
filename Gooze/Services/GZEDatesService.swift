@@ -292,6 +292,17 @@ class GZEDatesService: NSObject {
 
     func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
         return self.dateRequestRepository.startDate(dateRequest)
+            .map{
+                let (dateRequest, user) = $0
+
+                if user.id == GZEAuthService.shared.authUser?.id {
+                    GZEAuthService.shared.authUser = user
+                } else {
+                    log.error("Missmatch user received")
+                }
+
+                return dateRequest
+            }
     }
 
     func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {

@@ -88,8 +88,6 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     init(dateRequest: MutableProperty<GZEDateRequest>, mode: GZEChatViewMode) {
         self.dateRequest = dateRequest
 
-        log.debug("active request: \(dateRequest)")
-
         var userId: String
         var username: String
         if mode == .gooze {
@@ -202,11 +200,14 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
 
                 let myDistance = myLocation.distance(from: this.dateRequest.value.location.toCLLocation())
 
+                log.debug("last location. myDistance: \(myDistance), mode: \(mode), recipientStarted: \(date.recipientStarted), senderStarted: \(date.senderStarted)")
                 if myDistance < 10000 && (mode == .gooze && !date.recipientStarted || mode == .client && !date.senderStarted) {
+                    log.debug("last location. action start")
                     this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleStart
                     this.bottomButtonAction.value = this.startDateAction
                 } else {
+                    log.debug("last location. action chat")
                     this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleChat
                     this.bottomButtonAction.value = this.chatAction
@@ -248,14 +249,19 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
             .startWithValues {[weak self] date in
                 guard let this = self else {return}
 
+                log.debug("date.status: \(date.status)")
+
                 switch date.status {
                 case .route,
                      .starting:
+                    log.debug("dateRequest.producer. mode: \(mode), recipientStarted: \(date.recipientStarted), senderStarted: \(date.senderStarted)")
                     if (mode == .gooze && !date.recipientStarted || mode == .client && !date.senderStarted) {
+                        log.debug("startDateAction")
                         this.bottomButtonActionEnabled.value = true
                         this.bottomButtonTitle.value = this.bottomButtonTitleStart
                         this.bottomButtonAction.value = this.startDateAction
                     } else {
+                        log.debug("chatAction")
                         this.bottomButtonActionEnabled.value = true
                         this.bottomButtonTitle.value = this.bottomButtonTitleChat
                         this.bottomButtonAction.value = this.chatAction

@@ -18,6 +18,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
     static let deviceData = PPDataCollector.collectPayPalDeviceData()
 
     var presenter: UIViewController?
+    var presenterCompletion: CompletionBlock?
 
     func fetchClientToken() -> SignalProducer<String, GZEError> {
 
@@ -154,12 +155,16 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
             }
     }
 
-    func requestBillingAgreement(presenter: UIViewController, clientToken: String) -> SignalProducer<BTPayPalAccountNonce, GZEError> {
+    func requestBillingAgreement(presenter: UIViewController, clientToken: String, presentCompletion: CompletionBlock? = nil) -> SignalProducer<BTPayPalAccountNonce, GZEError> {
         self.presenter = presenter
+        self.presenterCompletion = presentCompletion
         let braintreeClient = BTAPIClient(authorization: clientToken)!
         let payPalDriver = BTPayPalDriver(apiClient: braintreeClient)
         payPalDriver.viewControllerPresentingDelegate = self
         payPalDriver.appSwitchDelegate = self // Optional
+
+
+        log.debug("requesting billing agreement")
 
         let request = BTPayPalRequest()
         request.billingAgreementDescription = "Gooze payments" //Displayed in customer's PayPal account
@@ -201,6 +206,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
 
             if let customerId = authUser.paypalCustomerId {
                 let parameters: Parameters = [
+                    "userId": authUser.id,
                     "paymentMethodNonce": paymentMethodNonce,
                     "customerId": customerId
                 ]
@@ -209,6 +215,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
                     .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink) { $0 })
             } else {
                 let parameters: Parameters = [
+                    "userId": authUser.id,
                     "paymentMethodNonce": paymentMethodNonce
                 ]
 
@@ -218,11 +225,11 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func savePaymentMethod(presenter: UIViewController, completion: HandlerBlock<Bool>? = nil) {
+    func savePaymentMethod(presenter: UIViewController, presentCompletion: CompletionBlock? = nil, completion: HandlerBlock<Bool>? = nil) {
         self.fetchClientToken()
             .flatMap(.latest) {[weak self] clientToken -> SignalProducer<BTPayPalAccountNonce, GZEError> in
                 guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
-                return this.requestBillingAgreement(presenter: presenter, clientToken: clientToken)
+                return this.requestBillingAgreement(presenter: presenter, clientToken: clientToken, presentCompletion: presentCompletion)
             }
             .flatMap(.latest) {[weak self] tokenizedAccount -> SignalProducer<JSON, GZEError> in
                 guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
@@ -243,8 +250,10 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
                         return
                     }
 
-                    if success, let customer = response["customer"] as? JSON {
-                        GZEAuthService.shared.authUser?.paypalCustomerId = customer["id"] as? String
+                    if success {
+                        if let customer = response["customer"] as? JSON {
+                            GZEAuthService.shared.authUser?.paypalCustomerId = customer["id"] as? String
+                        }
                         completion?(true)
                     } else {
                         log.error("Error: \(String(describing: response))")
@@ -295,7 +304,8 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
     // MARK: - BTViewControllerPresentingDelegate
 
     func paymentDriver(_ driver: Any, requestsPresentationOf viewController: UIViewController) {
-        self.presenter?.present(viewController, animated: true, completion: nil)
+        log.debug("presenting btvc")
+        self.presenter?.present(viewController, animated: true, completion: self.presenterCompletion)
     }
 
     func paymentDriver(_ driver: Any, requestsDismissalOf viewController: UIViewController) {

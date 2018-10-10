@@ -320,19 +320,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                         this.scene = .onDate
                     }
                 } else {
-                    switch this.scene {
-                    case .activate,
-                         .requestResults,
-                         .requestResultsList,
-                         .requestOtherResultsList:
-                        this.scene = .activate
-                    case .search,
-                         .searching,
-                         .searchResults,
-                         .resultsList,
-                         .otherResultsList:
-                        this.scene = .search
-                    case .onDate:
+                    if this.scene == .onDate {
                         if this.viewModel.mode.value == .gooze {
                             this.scene = .activate
                         } else {
@@ -768,6 +756,23 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
     @IBAction func unwindToActivateGooze(segue: UIStoryboardSegue) {
         log.debug("segue.identifier: \(unwindToActivateGooze)")
+
+        switch self.scene {
+        case .activate,
+             .requestResults,
+             .requestResultsList,
+             .requestOtherResultsList:
+            self.scene = .activate
+        case .search,
+             .searching,
+             .searchResults,
+             .resultsList,
+             .otherResultsList:
+            self.scene = .search
+        default:
+            break
+        }
+
     }
 
     func prepareMyProfileSegue(_ vc: UIViewController) {

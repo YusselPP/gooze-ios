@@ -126,7 +126,7 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
-    func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<GZEDateRequest, GZEError> {
+    func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
@@ -145,7 +145,18 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             log.debug("starting date...")
 
             Alamofire.request(GZEDateRequestRouter.startDate(json: dateRequestJson))
-                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEDateRequest.init))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) -> (GZEDateRequest, GZEUser)? in
+
+                    guard let dateJson = json["dateRequest"] as? JSON, let dateRequest = GZEDateRequest(json: dateJson) else {
+                        return nil
+                    }
+
+                    guard let userJson = json["user"] as? JSON, let user = GZEUser(json: userJson) else {
+                        return nil
+                    }
+
+                    return (dateRequest, user)
+                }))
         }
     }
 

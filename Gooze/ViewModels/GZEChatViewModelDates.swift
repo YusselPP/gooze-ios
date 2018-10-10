@@ -187,6 +187,12 @@ class GZEChatViewModelDates: GZEChatViewModel {
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
+            guard !this.dateRequest.value.isBlocked else {
+                let error = GZEError.message(text: "vm.datesChat.error.sendMessage.unavailable", args: [this.username.value ?? ""])
+                this.error.value = error.localizedDescription
+                return SignalProducer(error: error)
+            }
+
 
             if (this.dateRequest.value.date) != nil {
                 this.showMapView()
@@ -218,6 +224,12 @@ class GZEChatViewModelDates: GZEChatViewModel {
             guard let sender = GZEAuthService.shared.authUser else {
                 log.error("sender is nil")
                 return SignalProducer(error: .repository(error: .UnexpectedError))
+            }
+
+            guard !this.dateRequest.value.isBlocked else {
+                let error = GZEError.message(text: "vm.datesChat.error.sendMessage.unavailable", args: [this.username.value ?? ""])
+                this.error.value = error.localizedDescription
+                return SignalProducer(error: error)
             }
             
             guard let amount = this.amount.value else {
