@@ -23,6 +23,7 @@
 "validation.invalidCardNumber"="Enter a valid card number";
 
 // Protocols/DatesSocketError
+"error.socket.dates.paymentMethodRequired"="A payment method is required";
 "error.socket.dates.requestAlreadySent"="Your request has been sent";
 "error.socket.dates.invalidSatus"="Request already accepted or rejected";
 "error.socket.dates.noAck"="Unable to establish communication with server";

@@ -9,6 +9,7 @@
 import Foundation
 
 enum DatesSocketError: String {
+    case paymentMethodRequired = "PAYMENT_METHOD_REQUIRED"
     case requestAlreadySent = "DATE_REQUEST_ALREADY_SENT"
     case invalidSatus = "REQUEST_INVALID_STATUS"
     case noAck
@@ -23,15 +24,17 @@ extension DatesSocketError: LocalizedError {
         var message: String
         
         switch self {
+        case .paymentMethodRequired:
+            message = "error.socket.dates.paymentMethodRequired"
         case .requestAlreadySent:
-            message = "error.socket.dates.requestAlreadySent".localized()
+            message = "error.socket.dates.requestAlreadySent"
         case .invalidSatus:
-            message = "error.socket.dates.invalidSatus".localized()
+            message = "error.socket.dates.invalidSatus"
         case .noAck:
-            message = "error.socket.dates.noAck".localized()
+            message = "error.socket.dates.noAck"
         case .unexpected:
-            message = "error.socket.dates.unexpected".localized()
+            message = "error.socket.dates.unexpected"
         }
-        return message
+        return message.localized()
     }
 }

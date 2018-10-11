@@ -125,16 +125,8 @@ class GZEDatesService: NSObject {
                 }
                 
                 if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
-                    
-                    if error.code == DatesSocketError.requestAlreadySent.rawValue {
-                        log.debug("Request already sent")
-                        self?.errorMessage.value = DatesSocketError.requestAlreadySent.localizedDescription
-                        sink.send(error: .datesSocket(error: .requestAlreadySent))
-                    } else {
-                        log.error("\(String(describing: error.toJSON()))")
-                        self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
-                        sink.send(error: .datesSocket(error: .unexpected))
-                    }
+
+                    self?.handleError(error, sink)
                     
                 } else if let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) {
                     
@@ -184,15 +176,7 @@ class GZEDatesService: NSObject {
                 
                 if let errorJson = data[0] as? JSON, let error = GZEApiError(json: errorJson) {
                     
-                    if error.code == DatesSocketError.invalidSatus.rawValue {
-                        log.debug("Request invalid status")
-                        self?.errorMessage.value = DatesSocketError.invalidSatus.localizedDescription
-                        sink.send(error: .datesSocket(error: .invalidSatus))
-                    } else {
-                        log.error("\(String(describing: error.toJSON()))")
-                        self?.errorMessage.value = DatesSocketError.unexpected.localizedDescription
-                        sink.send(error: .datesSocket(error: .unexpected))
-                    }
+                   self?.handleError(error, sink)
                     
                 } else if let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson) {
                     
@@ -523,6 +507,19 @@ class GZEDatesService: NSObject {
                     GZEDatesService.shared.sendLocationUpdate(to: dateRequest.recipient.id, dateRequest: dateRequest)
                 }
             }
+    }
+
+    func handleError(_ error: GZEApiError, _ sink: Observer<GZEDateRequest, GZEError>) {
+        guard let errorCode = error.code, let datesError = DatesSocketError(rawValue: errorCode) else {
+            log.error("\(String(describing: error.toJSON()))")
+            self.errorMessage.value = DatesSocketError.unexpected.localizedDescription
+            sink.send(error: .datesSocket(error: .unexpected))
+            return
+        }
+
+        log.debug("Error: \(datesError)")
+        self.errorMessage.value = datesError.localizedDescription
+        sink.send(error: .datesSocket(error: datesError))
     }
 
     func cleanup() {
