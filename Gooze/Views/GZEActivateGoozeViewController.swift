@@ -148,12 +148,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
         self.shownObs.send(value: true)
 
-//        if GZEAuthService.shared.authUser?.activeDateRequest != nil {
-//            scene = .onDate
-//        } else if scene == .onDate {
-//            scene = previousScene ?? .search
-//        }
-
         if let authorizationMessage = locationService.requestAuthorization() {
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
         }
@@ -415,12 +409,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         hideBalloons()
         let users = viewModel.userResults.value
         log.debug(users)
-        if users.count == 0 {
-            if scene == .searching {
-                scene = .search
-                GZEAlertService.shared.showBottomAlert(text: viewModel.zeroResultsMessage)
-            }
-        }
 
         var loadCompleteCount = 0
 
@@ -547,6 +535,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         case .activate,
              .search:
             previousController(animated: true)
+        case .searching:
+            viewModel.stopSearchObs.send(value: ())
+            scene = .search
         case .searchResults:
             scene = .search
         case .resultsList:
@@ -579,6 +570,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
             case .searching:
                 if let users = user as? [GZEUserConvertible] {
+                    if users.count > 0 {
+                        viewModel.stopSearchObs.send(value: ())
+                    }
                     for user in users {
                         if let dateReq = user as? GZEDateRequest {
                             dateReq.userMode = .recipient
@@ -599,6 +593,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             }
         case .failed(let err):
             onActionError(err)
+        case .completed:
+            if scene == .searching {
+                if viewModel.userResults.value.count == 0 {
+                    scene = .search
+                    GZEAlertService.shared.showBottomAlert(text: viewModel.zeroResultsMessage)
+                }
+            }
         default:
             break;
         }

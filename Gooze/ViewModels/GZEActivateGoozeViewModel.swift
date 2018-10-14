@@ -10,6 +10,7 @@ import Foundation
 import ReactiveSwift
 import CoreLocation
 import Gloss
+import enum Result.NoError
 
 class GZEActivateGoozeViewModel {
 
@@ -24,6 +25,8 @@ class GZEActivateGoozeViewModel {
 
     let messagesCount = MutableProperty<[String: Int]>([:])
     let mode = MutableProperty<GZEChatViewMode?>(nil)
+
+    let (stopSearchSignal, stopSearchObs) = Signal<Void, NoError>.pipe()
 
     let searchViewTitle = "vm.search.viewTitle".localized()
     let zeroResultsMessage = "vm.search.zeroResultsMessage".localized()
@@ -148,7 +151,30 @@ class GZEActivateGoozeViewModel {
                 return SignalProducer(error: .repository(error: .UnexpectedError))
             }
 
-            return this.userRepository.find(byLocation: GZEUser.GeoPoint(CLCoord: this.mapCenterLocation.value), maxDistance: this.sliderValue.value, limit: this.searchLimit.value)
+
+            return (
+                SignalProducer.merge([
+                    (
+                        SignalProducer<Int, NoError>(value: 1)
+                        .prefix(SignalProducer.empty.delay(10, on: QueueScheduler.main))
+                        .flatMap(.latest, transform: {[weak self] _ -> SignalProducer<[GZEUserConvertible], GZEError> in
+                            guard let this = self else {return SignalProducer.empty}
+                            return this.userRepository.find(
+                                byLocation: GZEUser.GeoPoint(CLCoord: this.mapCenterLocation.value),
+                                maxDistance: this.sliderValue.value,
+                                limit: this.searchLimit.value
+                            )
+                        })
+                        .repeat(5)
+                    ),
+                    this.userRepository.find(
+                        byLocation: GZEUser.GeoPoint(CLCoord: this.mapCenterLocation.value),
+                        maxDistance: this.sliderValue.value,
+                        limit: this.searchLimit.value
+                    )
+                ])
+                .take(until: this.stopSearchSignal)
+            )
         }
     }
 
