@@ -259,7 +259,7 @@ class GZEChatService: NSObject {
         self.upsert(message: message)
     }
     
-    func request(amount: Double, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode, senderUsername: String) -> SignalProducer<GZEDateRequest, GZEError> {
+    func request(amount: Decimal, dateRequestId: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode, senderUsername: String) -> SignalProducer<GZEDateRequest, GZEError> {
         guard let chatSocket = self.chatSocket else {
             log.error("Chat socket not found")
             return SignalProducer(error: .datesSocket(error: .unexpected))
@@ -269,8 +269,10 @@ class GZEChatService: NSObject {
             log.error("Failed to parse GZEChat to JSON")
             return SignalProducer(error: .datesSocket(error: .unexpected))
         }
+
+        log.debug("decimal amount desc: \(amount.description)")
         
-        let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
+        let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: amount)) ?? "\(amount)"
         
         guard let messageJson = GZEChatMessage(text: "service.chat.amountRequest.received|\(senderUsername)|\(formattedAmount)", senderId: senderId, chatId: chat.id, type: .info).toJSON() else {
             log.error("Failed to parse GZEChatMessage to JSON")
@@ -283,7 +285,7 @@ class GZEChatService: NSObject {
                 log.debug("requestAmount signal disposed")
             }
             
-            chatSocket.emitWithAck(.requestAmount, messageJson, username, chatJson, dateRequestId, mode.rawValue, amount).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
+            chatSocket.emitWithAck(.requestAmount, messageJson, username, chatJson, dateRequestId, mode.rawValue, amount.description).timingOut(after: GZESocket.ackTimeout) {[weak self] data in
                 log.debug("Message sent. Ack data: \(data)")
                 
                 if let data = data[0] as? String, data == SocketAckStatus.noAck.rawValue {

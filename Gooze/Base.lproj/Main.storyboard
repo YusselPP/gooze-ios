@@ -203,6 +203,18 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="11x-lc-Pin">
+                                <rect key="frame" x="312" y="622" width="37" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="dwQ-jL-2dt"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="kj8-Bb-780"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="onBotRightButtonTapped:" destination="6aQ-zl-sfP" eventType="touchUpInside" id="tF9-6N-RSk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -211,12 +223,15 @@
                             <constraint firstItem="zZ2-W4-Q35" firstAttribute="top" secondItem="31k-r1-IOP" secondAttribute="bottom" id="Gba-sw-Ttt"/>
                             <constraint firstAttribute="trailing" secondItem="7ip-qC-Rcx" secondAttribute="trailing" id="Or5-1i-neH"/>
                             <constraint firstItem="zZ2-W4-Q35" firstAttribute="trailing" secondItem="BtI-tT-ec4" secondAttribute="trailingMargin" id="cgl-K7-RMI"/>
+                            <constraint firstItem="pro-EQ-aw3" firstAttribute="top" secondItem="11x-lc-Pin" secondAttribute="bottom" constant="10" id="gSc-vn-y5x"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="11x-lc-Pin" secondAttribute="trailing" constant="10" id="hJp-FK-QTT"/>
                             <constraint firstItem="pro-EQ-aw3" firstAttribute="top" secondItem="7ip-qC-Rcx" secondAttribute="bottom" id="jJZ-WK-cPx"/>
                             <constraint firstItem="7ip-qC-Rcx" firstAttribute="top" secondItem="BtI-tT-ec4" secondAttribute="top" id="kiV-lL-qEh"/>
                             <constraint firstItem="7ip-qC-Rcx" firstAttribute="leading" secondItem="BtI-tT-ec4" secondAttribute="leading" id="pPK-7H-5Fo"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="botRightButton" destination="11x-lc-Pin" id="jyZ-Ut-c9d"/>
                         <outlet property="checkList" destination="zZ2-W4-Q35" id="2SX-XF-Yd8"/>
                     </connections>
                 </viewController>
@@ -712,13 +727,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dO2-in-Qrd">
-                                <rect key="frame" x="0.0" y="20" width="375" height="412.5"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="368.5"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.20000000000000001" maximumZoomScale="5" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1l-1m-VOV">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4hT-lE-ril">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
                                             </imageView>
                                         </subviews>
                                         <constraints>
@@ -731,23 +746,23 @@
                                         </constraints>
                                     </scrollView>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n3U-KK-ELb">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wOa-CL-T0W">
-                                        <rect key="frame" x="-19" y="0.0" width="413" height="412.5"/>
+                                        <rect key="frame" x="3" y="0.0" width="369" height="368.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="wOa-CL-T0W" secondAttribute="height" multiplier="1:1" id="Yzm-pl-OQy"/>
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GeZ-wd-uBD">
-                                        <rect key="frame" x="0.0" y="142" width="375" height="129"/>
+                                        <rect key="frame" x="0.0" y="120" width="375" height="129"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="GeZ-wd-uBD" secondAttribute="height" multiplier="32:11" id="ELb-jC-hTg"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vA2-6o-xIQ">
-                                        <rect key="frame" x="166.5" y="176.5" width="42" height="60"/>
+                                        <rect key="frame" x="166.5" y="154.5" width="42" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgm-dZ-tx6">
                                                 <rect key="frame" x="5" y="-1" width="32" height="22"/>
@@ -792,14 +807,14 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsu-W6-Fua">
-                                        <rect key="frame" x="127.5" y="146.5" width="120" height="120"/>
+                                        <rect key="frame" x="127.5" y="124.5" width="120" height="120"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tsu-W6-Fua" secondAttribute="height" multiplier="1:1" id="8Bb-kh-ION"/>
                                             <constraint firstAttribute="height" constant="120" id="CgV-eh-oPJ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdP-PT-gBJ" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="8" width="359" height="396.5"/>
+                                        <rect key="frame" x="8" y="8" width="359" height="352.5"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MLo-Oz-9ew">
                                         <rect key="frame" x="298" y="10" width="67" height="57"/>
@@ -3497,12 +3512,12 @@
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aoX-cG-RKK"/>
+        <segue reference="ado-a7-Lxa"/>
         <segue reference="uRz-tZ-uiL"/>
-        <segue reference="R1T-5h-Xv7"/>
+        <segue reference="n0C-k6-0IU"/>
         <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>
-        <segue reference="3gu-Js-oOo"/>
+        <segue reference="e66-sX-XQT"/>
         <segue reference="Dk2-YI-miw"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

@@ -44,7 +44,7 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
         let authUser = GZEAuthService.shared.authUser
 
         self.rightLabelText <~ self.transactions
-            .map{$0.reduce(0.0, {
+            .map{$0.reduce(Decimal(0), {
                 let trans = $1
                 if trans.from == authUser?.username {
                     return $0 - trans.amount
@@ -52,10 +52,10 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
                     return $0 + trans.amount
                 }
             })}
-            .map{GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: $0)) ?? "$0"}
+            .map{GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: $0)) ?? "$0"}
 
         self.rightLabelTextColor <~ self.transactions
-            .map{$0.reduce(Double(0) , {
+            .map{$0.reduce(Decimal(0) , {
                 let trans = $1
                 if trans.from == authUser?.username {
                     return $0 - trans.amount
@@ -72,7 +72,7 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
                         GZEBalanceCellModel(
                             author: trans.from == authUser?.username ? trans.to : trans.from,
                             date: GZEDateHelper.displayDateTimeFormatter.string(from: trans.createdAt),
-                            amount: GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: trans.amount)) ?? "$0",
+                            amount: GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: trans.amount)) ?? "$0",
                             amountColor: trans.from == authUser?.username ? .red : .green,
                             status: trans.status
                         )

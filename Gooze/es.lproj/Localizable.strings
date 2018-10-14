@@ -173,6 +173,8 @@
 
 "vm.map.date.arriving"="%@ está llegando al punto de encuentro";
 
+"vm.map.date.alreadyCanceled"="Cita cancelada";
+
 // ViewModel/GZEChatsViewModelDates
 "vm.chats.list.error.closeDate"="Debes terminar la cita en curso para poder cerrar el chat";
 

@@ -91,7 +91,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let dateButtonTitle = "vm.datesChat.dateButtonTitle".localized().uppercased()
     let errorDigitsOnly = "vm.datesChat.error.digitsOnly".localized()
     let errorPositiveNumber = "vm.datesChat.error.positiveNumber".localized()
-    let amount = MutableProperty<Double?>(nil)
+    let amount = MutableProperty<Decimal?>(nil)
     let dateRequest: MutableProperty<GZEDateRequest>
 
     var sendMessageAction: CocoaAction<UIButton>?
@@ -146,9 +146,9 @@ class GZEChatViewModelDates: GZEChatViewModel {
         }
 
         if mode == .gooze {
-            self.amount <~ self.topTextInput.map{[weak self] amountText -> Double? in
+            self.amount <~ self.topTextInput.map{[weak self] amountText -> Decimal? in
                 if let amountText = amountText, !amountText.isEmpty {
-                    guard let amountDouble = Double(amountText) else {
+                    guard let amountDouble = Decimal(string: amountText) else {
                         self?.error.value = self?.errorDigitsOnly
                         return nil
                     }
@@ -325,7 +325,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
                         this.topAccessoryButtonIsHidden.value = true
                         this.topButtonTitle.value = this.dateButtonTitle
 
-                    } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
+                    } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: amount)) {
                         this.topAccessoryButtonIsHidden.value = false
                         this.topButtonTitle.value = "\(formattedAmount) MXN"
                     } else {
@@ -347,7 +347,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
                         this.topButtonIsHidden.value = false
                         this.topButtonTitle.value = this.dateButtonTitle
 
-                    } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) {
+                    } else if let amount = amount, let formattedAmount = GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: amount)) {
                         this.topButtonIsHidden.value = false
                         this.topButtonTitle.value =  "\(String(format: this.acceptAmountButtonTitle, formattedAmount)) MXN"
                     } else {
@@ -382,7 +382,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
         )
     }
 
-    private func setAmount(_ amount: Double?) {
+    private func setAmount(_ amount: Decimal?) {
         self.amount.value = amount
         if let amount = amount {
             self.topTextInput.value = "\(amount)"

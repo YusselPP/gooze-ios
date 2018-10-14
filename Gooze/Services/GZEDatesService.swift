@@ -195,7 +195,7 @@ class GZEDatesService: NSObject {
         }
     }
 
-    func createCharge(dateRequest: GZEDateRequest, amount: Double, paymentMethodToken: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
+    func createCharge(dateRequest: GZEDateRequest, amount: Decimal, paymentMethodToken: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
         return dateRequestRepository.createCharge(
             dateRequest: dateRequest,
             amount: amount,

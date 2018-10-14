@@ -14,6 +14,7 @@ import enum Result.NoError
 class GZECheckListViewModel {
 
     let title = MutableProperty<String?>(nil)
+    let botRightButtonTitle = MutableProperty<String>("vm.signUp.nextButtonTitle".localized())
     let items = MutableProperty<[GZECheckListItem]?>(nil)
 
     // private properties

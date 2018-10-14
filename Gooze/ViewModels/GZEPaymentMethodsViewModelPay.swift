@@ -44,7 +44,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     // END GZEPaymentMethodsViewModel protocol
 
     // Private properties
-    let amount: Double
+    let amount: Decimal
     let dateRequest: MutableProperty<GZEDateRequest>
     let senderId: String
     let username: String
@@ -58,8 +58,8 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
         return self.createPayAction()
     }()
 
-    init(amount: Double, dateRequest: MutableProperty<GZEDateRequest>, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) {
-        self.amount = amount
+    init(amount: Decimal, dateRequest: MutableProperty<GZEDateRequest>, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) {
+        self.amount = amount * Decimal(string: "1.06")!
         self.dateRequest = dateRequest
         self.senderId = senderId
         self.username = username
@@ -70,7 +70,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
         self.title.value = selectPaymentMethodText.uppercased()
         // TODO: config currency and gooze tax 
-        self.topMainButtonTitle.value = (GZENumberHelper.shared.currencyFormatter.string(from: NSNumber(value: amount)) ?? "$0") + " MXN"
+        self.topMainButtonTitle.value = (GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: self.amount)) ?? "$0") + " MXN"
         self.bottomActionButtonTitle.value = payText.uppercased()
         self.bottomActionButtonAction = CocoaAction(self.payAction)
 

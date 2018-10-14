@@ -65,7 +65,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func charge(amount: Double, paymentMethodNonce: String, dateRequest: GZEDateRequest) -> SignalProducer<JSON, GZEError> {
+    func charge(amount: Decimal, paymentMethodNonce: String, dateRequest: GZEDateRequest) -> SignalProducer<JSON, GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
@@ -79,7 +79,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
             log.debug("charging")
 
             let parameters: Parameters = [
-                "amount": amount,
+                "amount": amount.description,
                 "paymentMethodNonce": paymentMethodNonce,
                 "deviceData": PayPalService.deviceData,
                 "description": "Recipient: \(dateRequest.recipient.username), DateRequest: \(dateRequest.id)",
@@ -93,7 +93,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func charge(amount: Double, paymentMethodToken: String, dateRequest: GZEDateRequest) -> SignalProducer<JSON, GZEError> {
+    func charge(amount: Decimal, paymentMethodToken: String, dateRequest: GZEDateRequest) -> SignalProducer<JSON, GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
@@ -107,7 +107,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
             log.debug("charging")
 
             let parameters: Parameters = [
-                "amount": amount,
+                "amount": amount.description,
                 "paymentMethodToken": paymentMethodToken,
                 "deviceData": PayPalService.deviceData,
                 "description": "Recipient: \(dateRequest.recipient.username), DateRequest: \(dateRequest.id)",
@@ -121,7 +121,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func createCharge(presenter: UIViewController, amount: Double, dateRequest: GZEDateRequest) {
+    func createCharge(presenter: UIViewController, amount: Decimal, dateRequest: GZEDateRequest) {
         self.fetchClientToken()
             .flatMap(.latest) {[weak self] clientToken -> SignalProducer<BTDropInResult, GZEError> in
                 guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}

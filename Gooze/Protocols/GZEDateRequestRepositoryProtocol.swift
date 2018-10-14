@@ -20,5 +20,5 @@ protocol GZEDateRequestRepositoryProtocol {
     func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>
     func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>
     func close(_ dateRequest: GZEDateRequest, mode: GZEChatViewMode) -> SignalProducer<GZEDateRequest, GZEError>
-    func createCharge(dateRequest: GZEDateRequest, amount: Double, paymentMethodToken: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>
+    func createCharge(dateRequest: GZEDateRequest, amount: Decimal, paymentMethodToken: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>
 }

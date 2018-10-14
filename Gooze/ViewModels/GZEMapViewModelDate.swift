@@ -67,6 +67,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let topLabelWaitingForYouToEnd = "vm.map.date.waitingForYouToEnd".localized()
     let topLabelCanceled = "vm.map.date.canceled".localized()
     let topLabelEnded = "vm.map.date.ended".localized()
+    let dateAlreadyCanceled = "vm.map.date.alreadyCanceled".localized()
 
     let DateService = GZEDatesService.shared
 
@@ -350,8 +351,12 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     }
 
     func createCancelDateAction() -> Action<Void, GZEDateRequest, GZEError> {
-        return Action(enabledIf: self.bottomButtonActionEnabled) {[weak self] in
+        return Action {[weak self] in
             guard let this = self else { log.error("self was disposed"); return SignalProducer(error: .repository(error: .UnexpectedError))}
+
+            guard this.dateRequest.value.date?.status != .canceled else {
+                return SignalProducer(error: .message(text: this.dateAlreadyCanceled, args: []))
+            }
 
             return this.DateService.cancelDate(this.dateRequest.value)
         }

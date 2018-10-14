@@ -27,7 +27,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     let recipient: GZEChatUser
     let location: GZEUser.GeoPoint
     let chat: GZEChat?
-    let amount: Double?
+    let amount: Decimal?
     let date: GZEDate?
     let senderClosed: Bool
     let recipientClosed: Bool
@@ -36,7 +36,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         return self.status != .accepted && self.status != .onDate
     }
 
-    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Double? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool) {
+    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Decimal? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool) {
         self.id = id
         self.status = status
         self.sender = sender
@@ -63,13 +63,23 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             log.error("Unable to instantiate. JSON doesn't include a required property")
             return nil
         }
+
+
+        if let amountString: String = "amount" <~~ json {
+            log.debug("json amount: \(amountString)")
+            let decimalAmount = Decimal(string: amountString)
+            self.amount = decimalAmount
+            log.debug("parsed decimal amount: \(String(describing: decimalAmount))")
+        } else {
+            self.amount = nil
+        }
+
         self.id = id
         self.status = status
         self.sender = sender
         self.recipient = recipient
         self.location = location
         self.chat = "chat" <~~ json
-        self.amount = "amount" <~~ json
         self.date = "date" <~~ json
         self.senderClosed = senderClosed
         self.recipientClosed = recipientClosed
@@ -84,7 +94,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             "recipient" ~~> self.recipient,
             "location" ~~> self.location,
             "chat" ~~> self.chat,
-            "amount" ~~> self.amount,
+            "amount" ~~> self.amount?.description,
             "date" ~~> self.date,
             "senderClosed" ~~> self.senderClosed,
             "recipientClosed" ~~> self.recipientClosed,

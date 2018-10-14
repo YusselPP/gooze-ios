@@ -15,6 +15,7 @@ class GZECheckListViewController: UIViewController {
     var viewModel: GZECheckListViewModel!
     weak var dismissDelegate: GZEDismissVCDelegate?
 
+    @IBOutlet weak var botRightButton: UIButton!
     @IBOutlet weak var checkList: GZECheckListCollectionView!
 
     override func viewDidLoad() {
@@ -37,12 +38,19 @@ class GZECheckListViewController: UIViewController {
             guard let this = self else {return}
             this.dismissDelegate?.onDismissTapped(this)
         }
+        let nextButton = GZENextUIBarButtonItem()
+        nextButton.onButtonTapped = {[weak self] _ in
+            guard let this = self else {return}
+            this.dismissDelegate?.onDismissTapped(this)
+        }
 
         navigationItem.leftBarButtonItem = backButton
+        navigationItem.rightBarButtonItem = nextButton
     }
 
     func setupBindings() {
         navigationItem.reactive.title <~ viewModel.title.map{$0?.capitalizingFirstLetter()}
+        botRightButton.reactive.title <~ viewModel.botRightButtonTitle
 
         // checkList
         DispatchQueue.main.async {[weak self] in
@@ -51,6 +59,9 @@ class GZECheckListViewController: UIViewController {
         }
     }
 
+    @IBAction func onBotRightButtonTapped(_ sender: Any) {
+        self.dismissDelegate?.onDismissTapped(self)
+    }
     /*
     // MARK: - Navigation
 

@@ -19,7 +19,7 @@ class GZETransaction: Gloss.Decodable {
 
     let from: String
     let to: String
-    let amount: Double
+    let amount: Decimal
     let status: String
     let paymentMethodName: String
     let createdAt: Date
@@ -28,7 +28,8 @@ class GZETransaction: Gloss.Decodable {
         guard
             let from: String = "fromUser.username" <~~ json,
             let to: String = "toUser.username" <~~ json,
-            let amount: Double = "amount" <~~ json,
+            let amountString: String = "amount" <~~ json,
+            let amount = Decimal(string: amountString),
             let status: String = "status" <~~ json,
             let paymentMethodName: String = "paymentMethod" <~~ json,
             let createdAt: Date = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json)
