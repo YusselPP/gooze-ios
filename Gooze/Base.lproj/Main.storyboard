@@ -1717,20 +1717,20 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e1P-j5-Our">
-                                        <rect key="frame" x="325" y="14" width="35" height="35"/>
+                                        <rect key="frame" x="315" y="5" width="55" height="55"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="35" id="DrT-aG-bet"/>
-                                            <constraint firstAttribute="height" constant="35" id="c0k-Lh-UI9"/>
+                                            <constraint firstAttribute="width" constant="55" id="DrT-aG-bet"/>
+                                            <constraint firstAttribute="height" constant="55" id="c0k-Lh-UI9"/>
                                         </constraints>
-                                        <inset key="imageEdgeInsets" minX="10" minY="7" maxX="10" maxY="7"/>
+                                        <inset key="imageEdgeInsets" minX="20" minY="17" maxX="20" maxY="17"/>
                                         <state key="normal" image="chat-send-button"/>
                                     </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="bKa-QG-jUT" secondAttribute="bottom" constant="15" id="66q-8V-bDG"/>
-                                    <constraint firstAttribute="trailing" secondItem="e1P-j5-Our" secondAttribute="trailing" constant="15" id="7WO-Sr-200"/>
-                                    <constraint firstItem="e1P-j5-Our" firstAttribute="leading" secondItem="bKa-QG-jUT" secondAttribute="trailing" constant="15" id="JsY-eX-6B9"/>
-                                    <constraint firstAttribute="bottom" secondItem="e1P-j5-Our" secondAttribute="bottom" constant="15" id="TkI-O2-PA1"/>
+                                    <constraint firstAttribute="trailing" secondItem="e1P-j5-Our" secondAttribute="trailing" constant="5" id="7WO-Sr-200"/>
+                                    <constraint firstItem="e1P-j5-Our" firstAttribute="leading" secondItem="bKa-QG-jUT" secondAttribute="trailing" constant="5" id="JsY-eX-6B9"/>
+                                    <constraint firstAttribute="bottom" secondItem="e1P-j5-Our" secondAttribute="bottom" constant="4" id="TkI-O2-PA1"/>
                                     <constraint firstItem="bKa-QG-jUT" firstAttribute="leading" secondItem="cnS-1k-LUP" secondAttribute="leading" constant="15" id="lrF-4i-uNe"/>
                                     <constraint firstItem="bKa-QG-jUT" firstAttribute="top" secondItem="cnS-1k-LUP" secondAttribute="top" constant="15" id="nyN-cV-uN1"/>
                                 </constraints>
@@ -3513,7 +3513,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aoX-cG-RKK"/>
-        <segue reference="uRz-tZ-uiL"/>
+        <segue reference="ZKk-02-86h"/>
         <segue reference="R1T-5h-Xv7"/>
         <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>
