@@ -1972,6 +1972,7 @@
                     </view>
                     <connections>
                         <outlet property="bottomActionButton" destination="4P5-c3-bwQ" id="BXj-aj-fTM"/>
+                        <outlet property="contentView" destination="ot7-v8-W5i" id="knJ-3Y-SYZ"/>
                         <outlet property="paymentsCollectionView" destination="Sjn-qM-qlR" id="Kd6-Ld-CXJ"/>
                         <outlet property="topActionView" destination="dQA-fu-mY3" id="KHc-hu-1Na"/>
                     </connections>

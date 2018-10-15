@@ -18,9 +18,11 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
 
     weak var dismissDelegate: GZEDismissVCDelegate?
 
-    var addingPayPal = false
     let backButton = GZEBackUIBarButtonItem()
 
+    let loadingView = GZELoadingUIView()
+
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var topActionView: GZEChatActionView!
     @IBOutlet weak var paymentsCollectionView: GZEPaymentCollectionView!
     @IBOutlet weak var bottomActionButton: GZEButton!
@@ -60,6 +62,8 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
         
         self.bottomActionButton.setGrayFormat()
         self.paymentsCollectionView.backgroundColor = .clear
+
+        self.loadingView.containerView = self.view
     }
 
     func setupBindings() {
@@ -83,11 +87,15 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
         }
 
         // Signals
-        self.viewModel.loading.signal.skipRepeats().observeValues{loading in
+        self.viewModel.loading.signal.skipRepeats().observeValues{
+            [weak self]loading in
+            guard let this = self else {return}
             if loading {
-                SwiftOverlays.showBlockingWaitOverlay()
+                //SwiftOverlays.showBlockingWaitOverlay()
+                this.loadingView.start()
             } else {
-                SwiftOverlays.removeAllBlockingOverlays()
+                //SwiftOverlays.removeAllBlockingOverlays()
+                this.loadingView.stop()
             }
         }
         self.viewModel.segueAvailableMethods.signal.observeValues{[weak self] vm in
@@ -106,17 +114,11 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
             navController.pushViewController(controller, animated: true)
         }
         self.viewModel.addPayPal.signal.observeValues {[weak self] in
-            guard let this = self, !this.addingPayPal else {return}
-            this.addingPayPal = true
-            PayPalService.shared.savePaymentMethod(presenter: this, presentCompletion: {
-                [weak self] in
-                log.debug("completion")
+            guard let this = self, !this.viewModel.loading.value else {return}
+            this.viewModel.loading.value = true
+            PayPalService.shared.savePaymentMethod(presenter: this) {[weak self] success in
                 guard let this = self else {return}
-                this.addingPayPal = false
-
-            }) {[weak self] success in
-                guard let this = self else {return}
-                this.addingPayPal = false
+                this.viewModel.loading.value = false
                 if success {
                     this.dismissDelegate?.onDismissTapped(this)
                 }

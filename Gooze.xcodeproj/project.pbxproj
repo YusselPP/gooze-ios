@@ -85,6 +85,7 @@
 		8D26D94320E5CEAE002D3586 /* GZEBalanceCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D26D94220E5CEAE002D3586 /* GZEBalanceCollectionView.swift */; };
 		8D26D94520E5CECD002D3586 /* GZEBalanceCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D26D94420E5CECD002D3586 /* GZEBalanceCollectionCell.swift */; };
 		8D26D94720E5CF29002D3586 /* GZEBalanceCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D26D94620E5CF29002D3586 /* GZEBalanceCellModel.swift */; };
+		8D2789FB217408B400029759 /* GZELoadingUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2789FA217408B400029759 /* GZELoadingUIView.swift */; };
 		8D27D03E1FBEB14E00263B6C /* GZEDateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */; };
 		8D283F7120E6A09D002DD5C8 /* GZEUserPaymentsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D283F7020E6A09D002DD5C8 /* GZEUserPaymentsRouter.swift */; };
 		8D283F7320E6A23A002DD5C8 /* GZEUserTransactionsRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D283F7220E6A23A002DD5C8 /* GZEUserTransactionsRepositoryProtocol.swift */; };
@@ -353,6 +354,7 @@
 		8D26D94220E5CEAE002D3586 /* GZEBalanceCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBalanceCollectionView.swift; sourceTree = "<group>"; };
 		8D26D94420E5CECD002D3586 /* GZEBalanceCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBalanceCollectionCell.swift; sourceTree = "<group>"; };
 		8D26D94620E5CF29002D3586 /* GZEBalanceCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBalanceCellModel.swift; sourceTree = "<group>"; };
+		8D2789FA217408B400029759 /* GZELoadingUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELoadingUIView.swift; sourceTree = "<group>"; };
 		8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateHelper.swift; sourceTree = "<group>"; };
 		8D283F7020E6A09D002DD5C8 /* GZEUserPaymentsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserPaymentsRouter.swift; sourceTree = "<group>"; };
 		8D283F7220E6A23A002DD5C8 /* GZEUserTransactionsRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEUserTransactionsRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -603,6 +605,14 @@
 			path = Balance;
 			sourceTree = "<group>";
 		};
+		8D2789F72174058700029759 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				8D2789FA217408B400029759 /* GZELoadingUIView.swift */,
+			);
+			path = Loading;
+			sourceTree = "<group>";
+		};
 		8D28ADB320B579FF003D3F9A /* List */ = {
 			isa = PBXGroup;
 			children = (
@@ -756,6 +766,7 @@
 		8DA575AB1FC3D5DF0001CE2A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				8D2789F72174058700029759 /* Loading */,
 				8D26D94120E5CE90002D3586 /* Balance */,
 				8D28B97420BAE94A00DEED83 /* Payment */,
 				8DBAB6E4206F42FE009586A5 /* Chat */,
@@ -1518,6 +1529,7 @@
 				8D22DD9E2039AF3C0088D5F5 /* GZEBlur.swift in Sources */,
 				8D169AEC204FFC850025C803 /* GZERatingsViewModel.swift in Sources */,
 				8D10766120B5C8DE00E9F22E /* CompletionBlock.swift in Sources */,
+				8D2789FB217408B400029759 /* GZELoadingUIView.swift in Sources */,
 				8DBAABE41FB8A12C00B15142 /* GZETextField.swift in Sources */,
 				8DABD904206BDEC600DF9C56 /* GZEActionAlertView.swift in Sources */,
 				8D169AEE204FFCA20025C803 /* GZERatingsViewModelReadOnly.swift in Sources */,
