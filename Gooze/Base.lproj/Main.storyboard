@@ -3391,7 +3391,7 @@
                                             <constraint firstAttribute="width" constant="55" id="EWi-Bt-cCs"/>
                                         </constraints>
                                     </imageView>
-                                    <view hidden="YES" verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Kx-Ow-IJh" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
+                                    <view verifyAmbiguity="off" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Kx-Ow-IJh" customClass="GZEUserBalloon" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="120" y="61" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="1Kx-Ow-IJh" secondAttribute="height" multiplier="1:1" id="Iir-gH-zS9"/>
@@ -3513,9 +3513,9 @@
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aoX-cG-RKK"/>
-        <segue reference="ZKk-02-86h"/>
-        <segue reference="R1T-5h-Xv7"/>
+        <segue reference="ado-a7-Lxa"/>
+        <segue reference="uRz-tZ-uiL"/>
+        <segue reference="n0C-k6-0IU"/>
         <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>
         <segue reference="e66-sX-XQT"/>

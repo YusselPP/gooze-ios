@@ -459,25 +459,27 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
         mapView.delegate = mapService
         mapView.showsUserLocation = true
 
-        let annotation = GZEUserAnnotation()
+        // Mario: Do not show real location, just update the distance
+        //let annotation = GZEUserAnnotation()
         let pointAnnotation = GZEPinAnnotation()
 
         pointAnnotation.coordinate = dateRequest.value.location.toCoreLocationCoordinate2D()
 
-        mapView.addAnnotation(annotation)
+        //mapView.addAnnotation(annotation)
         mapView.addAnnotation(pointAnnotation)
 
         mapView.reactive.isUserInteractionEnabled <~ self.isMapUserInteractionEnabled
 
-        self.annotationUser.producer.startWithValues {user in
-            annotation.user = user
-        }
+        //self.annotationUser.producer.startWithValues {user in
+        //    annotation.user = user
+        //}
 
-        self.userAnnotationLocation.producer.startWithValues{coord in
-            UIView.animate(withDuration: 0.25) {
-                annotation.coordinate = coord
-            }
-        }
+
+//        self.producer.startWithValues{coord in
+//            UIView.animate(withDuration: 0.25) {
+//                annotation.coordinate = coord
+//            }
+//        }
 
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapViewContainer.addSubview(mapView)

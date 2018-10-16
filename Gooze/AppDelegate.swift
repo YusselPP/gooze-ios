@@ -12,6 +12,7 @@ import SwiftyBeaver
 import Braintree
 import DropDown
 import FBSDKCoreKit
+import Gloss
 
 
 let log = SwiftyBeaver.self
@@ -115,6 +116,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.debug("remote notification received: \(userInfo)")
 
+        if
+            let payload = userInfo as? JSON,
+            let show: Bool = "showInApp" <~~ payload, show,
+            let msg: String = "aps.alert.loc-key" <~~ payload
+        {
+            let args: [String] = "aps.alert.loc-args" <~~ payload ?? []
+            GZEAlertService.shared.showTopAlert(text: String(format: msg.localized(), arguments: args))
+        }
     }
 
 
