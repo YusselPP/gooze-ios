@@ -1853,27 +1853,27 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0m6-q3-fyf" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="327" height="301.5"/>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oIa-Je-Z5K" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="140" y="558" width="46" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="oIa-Je-Z5K" secondAttribute="bottom" constant="15" id="K15-CB-Nhk"/>
+                                    <constraint firstItem="oIa-Je-Z5K" firstAttribute="centerX" secondItem="RiU-iN-f31" secondAttribute="centerX" id="NCS-yA-dNI"/>
                                     <constraint firstAttribute="trailing" secondItem="0m6-q3-fyf" secondAttribute="trailing" id="UVf-aC-chb"/>
                                     <constraint firstItem="0m6-q3-fyf" firstAttribute="top" secondItem="RiU-iN-f31" secondAttribute="top" id="XhB-Dr-jHA"/>
                                     <constraint firstItem="0m6-q3-fyf" firstAttribute="height" secondItem="RiU-iN-f31" secondAttribute="height" multiplier="0.5" id="abx-SR-EEC"/>
                                     <constraint firstItem="0m6-q3-fyf" firstAttribute="leading" secondItem="RiU-iN-f31" secondAttribute="leading" id="zm9-h0-8lW"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oIa-Je-Z5K" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="164" y="617" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="XYu-YS-4MJ" firstAttribute="top" secondItem="vri-vQ-5kC" secondAttribute="bottom" id="1Yq-Je-DCo"/>
-                            <constraint firstItem="oIa-Je-Z5K" firstAttribute="centerX" secondItem="fCx-Vg-pdW" secondAttribute="centerX" id="EAb-cr-HCh"/>
                             <constraint firstAttribute="trailingMargin" secondItem="RiU-iN-f31" secondAttribute="trailing" constant="8" id="NeA-Gr-nh3"/>
                             <constraint firstItem="RiU-iN-f31" firstAttribute="leading" secondItem="fCx-Vg-pdW" secondAttribute="leadingMargin" constant="8" id="R7P-qF-Zkl"/>
                             <constraint firstAttribute="trailing" secondItem="vri-vQ-5kC" secondAttribute="trailing" id="RY8-yM-ak8"/>
-                            <constraint firstItem="XYu-YS-4MJ" firstAttribute="top" secondItem="oIa-Je-Z5K" secondAttribute="bottom" constant="20" id="UNc-WB-qSJ"/>
                             <constraint firstItem="vri-vQ-5kC" firstAttribute="top" secondItem="fCx-Vg-pdW" secondAttribute="top" id="VBb-1K-9WI"/>
                             <constraint firstItem="XYu-YS-4MJ" firstAttribute="top" secondItem="RiU-iN-f31" secondAttribute="bottom" id="ciI-vh-y0E"/>
                             <constraint firstItem="RiU-iN-f31" firstAttribute="top" secondItem="uXB-ll-BNy" secondAttribute="bottom" id="d9h-Ap-Sft"/>
@@ -1882,7 +1882,9 @@
                     </view>
                     <connections>
                         <outlet property="bottomButton" destination="oIa-Je-Z5K" id="Syo-k7-k1E"/>
+                        <outlet property="containerView" destination="RiU-iN-f31" id="VMa-p8-Ad7"/>
                         <outlet property="dblCtrlView" destination="0m6-q3-fyf" id="wxb-yf-prj"/>
+                        <outlet property="viewBottomLayoutConstraint" destination="ciI-vh-y0E" id="Ncy-R8-622"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rgS-qW-rrm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3514,7 +3516,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ado-a7-Lxa"/>
-        <segue reference="uRz-tZ-uiL"/>
+        <segue reference="ZKk-02-86h"/>
         <segue reference="n0C-k6-0IU"/>
         <segue reference="YiG-yX-aa5"/>
         <segue reference="be1-y5-0kc"/>

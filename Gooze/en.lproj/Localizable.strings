@@ -193,6 +193,7 @@
 "vm.help.send"="Send";
 "vm.help.subject"="Subject";
 "vm.help.body"="Message";
+"vm.help.onLoadMessage"="Send your message and we'll review your case as soon as possible";
 
 // ViewModel/GZEBalanceViewModelPay
 "vm.balance.pay.title"="Transactions";

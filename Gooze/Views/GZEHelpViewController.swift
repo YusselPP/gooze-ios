@@ -24,22 +24,44 @@ class GZEHelpViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
     @IBOutlet weak var bottomButton: GZEButton!
 
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var viewBottomLayoutConstraint: NSLayoutConstraint!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
 
         setupInterfaceObjects()
         setupBindings()
+
+        GZEAlertService.shared.showTopAlert(text: "vm.help.onLoadMessage".localized())
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.viewModel.viewShownObs.send(value: true)
+        registerForKeyboarNotifications(
+            observer: self,
+            willShowSelector: #selector(keyboardWillShow(notification:)),
+            willHideSelector: #selector(keyboardWillHide(notification:))
+        )
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        deregisterFromKeyboardNotifications(observer: self)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.viewModel.viewShownObs.send(value: false)
+    }
+
+    override func viewDidLayoutSubviews() {
+        // let height = UIScreen.main.bounds.height
+        let height = containerView.bounds.height
+        self.dblCtrlView.bottomHeightConstraint?.constant = height / 8 * 5
+        self.dblCtrlView.centerYConstraint?.constant = height / 8
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,14 +97,11 @@ class GZEHelpViewController: UIViewController, UITextViewDelegate {
             [weak self] _ in
             self?.subjectTextField.becomeFirstResponder()
         }
-        self.dblCtrlView.topViewTappedHandler = {
+        self.dblCtrlView.bottomViewTappedHandler = {
             [weak self] _ in
             self?.bodyTextView.becomeFirstResponder()
         }
         self.dblCtrlView.separatorWidth = 120
-        let screenHeight = UIScreen.main.bounds.height
-        self.dblCtrlView.bottomHeightConstraint?.constant = screenHeight / 8 * 5
-        self.dblCtrlView.centerYConstraint?.constant = screenHeight / 8
     }
 
     func setupBindings() {
@@ -177,4 +196,16 @@ class GZEHelpViewController: UIViewController, UITextViewDelegate {
         viewController.dismissDelegate = presenter
         viewController.viewModel = vm
     }
+
+    // MARK: - KeyboardNotifications
+    func keyboardWillShow(notification: Notification) {
+        log.debug("keyboard will show")
+        resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomLayoutConstraint, notification: notification, view: self.view)
+    }
+
+    func keyboardWillHide(notification: Notification) {
+        log.debug("keyboard will hide")
+        resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomLayoutConstraint, notification: notification, view: self.view, safeInsets: false)
+    }
+
 }
