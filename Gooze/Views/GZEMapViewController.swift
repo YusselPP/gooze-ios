@@ -122,8 +122,9 @@ class GZEMapViewController: UIViewController, GZEDismissVCDelegate {
         self.bottomActionView.mainButton.reactive.title <~ self.viewModel.bottomButtonTitle
 
         self.viewModel.annotationUser.producer.startWithValues({
-            self.userBalloon1.setUser($0)
-            self.userBalloon1.setVisible(true)
+            [weak self] in
+            self?.userBalloon1.setUser($0)
+            self?.userBalloon1.setVisible(true)
         })
 
         // signals
