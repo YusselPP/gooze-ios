@@ -41,7 +41,8 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let (segueToHelp, segueToHelpObs) = Signal<GZEHelpViewModel, NoError>.pipe()
     let (exitSignal, exitObserver) = Signal<Void, NoError>.pipe()
 
-    let (dropdownActionSignal, dropdownAction) = Signal<Int, NoError>.pipe()
+    let (dropdownActionSignal, dropdownAction) = Signal<(Int, String), NoError>.pipe()
+    let dropdownActions = MutableProperty<[String]>([])
 
     func viewWillAppear(mapViewContainer: UIView) {
         self.startObservers()
@@ -67,7 +68,12 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let topLabelWaitingForYouToEnd = "vm.map.date.waitingForYouToEnd".localized()
     let topLabelCanceled = "vm.map.date.canceled".localized()
     let topLabelEnded = "vm.map.date.ended".localized()
+    let cancelDateButtonTitle = "vm.map.date.cancelDateButtonTitle".localized()
+    let helpButtonTitle = "vm.map.date.helpButtonTitle".localized()
     let dateAlreadyCanceled = "vm.map.date.alreadyCanceled".localized()
+    let cancelDateConfirmTitle = "vm.map.date.cancelDateConfirmTitle".localized()
+    let cancelDateConfirmMessage = "vm.map.date.cancelDateConfirmMessage".localized()
+
 
     let DateService = GZEDatesService.shared
 
@@ -88,6 +94,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     // MARK - init
     init(dateRequest: MutableProperty<GZEDateRequest>, mode: GZEChatViewMode) {
         self.dateRequest = dateRequest
+        self.dropdownActions.value = [self.helpButtonTitle, self.cancelDateButtonTitle]
 
         var userId: String
         var username: String
@@ -304,12 +311,20 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                 }
             }
 
-        dropdownActionSignal.observeValues {[weak self] index in
+        dropdownActionSignal.observeValues {[weak self] (_, item) in
             guard let this = self else {return}
-            if index == 0 {
+            if item == this.helpButtonTitle {
                 this.segueToHelpObs.send(value: GZEHelpViewModelGooze())
-            } else if index == 1 {
-                cancelDate.apply().start()
+            } else if item == this.cancelDateButtonTitle {
+                GZEAlertService.shared.showConfirmDialog(
+                    title: this.cancelDateConfirmTitle,
+                    message: this.cancelDateConfirmMessage,
+                    cancelButtonTitle: "No",
+                    destructiveButtonTitle: this.cancelDateButtonTitle,
+                    destructiveHandler: { _ in
+                        cancelDate.apply().start()
+                    }
+                )
             }
         }
     }

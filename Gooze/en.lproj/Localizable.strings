@@ -173,7 +173,13 @@
 
 "vm.map.date.arriving"="%@ is arriving to meeting point";
 
+"vm.map.date.cancelDateButtonTitle"="Cancel date";
+"vm.map.date.helpButtonTitle"="Help";
+
 "vm.map.date.alreadyCanceled"="Date has been canceled";
+"vm.map.date.cancelDateConfirmTitle"="Cancel date";
+"vm.map.date.cancelDateConfirmMessage"="Are you sure you want to cancel the date?";
+
 
 // ViewModel/GZEChatsViewModelDates
 "vm.chats.list.error.closeDate"="Finish the on going date, before closing the chat";

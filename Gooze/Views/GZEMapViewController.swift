@@ -83,12 +83,10 @@ class GZEMapViewController: UIViewController, GZEDismissVCDelegate {
         self.bottomActionView.accessoryButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 6)
 
         self.dropDown.anchorView = self.bottomActionView.accessoryButton
-        self.dropDown.dataSource = ["Ayuda", "Cancelar cita"]
         // Action triggered on selection
         self.dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             log.debug("Selected item: \(item) at index: \(index)")
-
-            self.viewModel.dropdownAction.send(value: index)
+            self.viewModel.dropdownAction.send(value: (index, item))
         }
 
         self.bottomActionView.accessoryButton.reactive.pressed = CocoaAction<UIButton>(Action<(), Any, GZEError>{SignalProducer.empty}) {[unowned self] _ in self.dropDown.show()}
@@ -126,6 +124,12 @@ class GZEMapViewController: UIViewController, GZEDismissVCDelegate {
             self?.userBalloon1.setUser($0)
             self?.userBalloon1.setVisible(true)
         })
+
+        self.viewModel.dropdownActions.producer.startWithValues({
+            [weak self] in
+            self?.dropDown.dataSource = $0
+        })
+
 
         // signals
         self.viewModel.dismissSignal.observeValues{[weak self] in

@@ -36,7 +36,8 @@ protocol GZEMapViewModel {
     var segueToHelp: Signal<GZEHelpViewModel, NoError> { get }
     var exitSignal: Signal<Void, NoError> { get }
 
-    var dropdownAction: Observer<Int, NoError> {get}
+    var dropdownAction: Observer<(Int, String), NoError> {get}
+    var dropdownActions: MutableProperty<[String]> {get}
 
     func viewWillAppear(mapViewContainer: UIView)
     func viewDidDisappear()
