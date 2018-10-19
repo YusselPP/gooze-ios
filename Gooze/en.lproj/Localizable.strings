@@ -216,6 +216,10 @@
 
 "vm.profile.rate.date.rate"="Rate";
 
+"vm.profile.addPaymentMethodRequest"="Add payment method?";
+"vm.profile.addPaymentMethodAnswerAdd"="Add";
+"vm.profile.addPaymentMethodAnswerLater"="Later";
+
 // Views/components/Menu/GZEMenu
 "menu.item.title.profile"="Profile";
 "menu.item.title.beGooze"="Be Gooze";

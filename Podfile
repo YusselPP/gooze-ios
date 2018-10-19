@@ -23,6 +23,7 @@ target 'Gooze' do
   pod 'SkyFloatingLabelTextField', '~> 3.0'
   pod 'DropDown'
   pod 'FBSDKLoginKit'
+  pod 'LGAlertView'
 
   pod 'PPBadgeView'
 

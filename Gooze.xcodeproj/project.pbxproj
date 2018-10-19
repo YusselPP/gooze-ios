@@ -182,6 +182,8 @@
 		8D83115B20D557E600EF4BAC /* GZEWebViewModelTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D83115A20D557E600EF4BAC /* GZEWebViewModelTerms.swift */; };
 		8D92A06320ADBCE700569036 /* GZEMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D92A06220ADBCE700569036 /* GZEMenu.swift */; };
 		8D9322B620497C1D00A039B1 /* GZEValidationPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9322B520497C1D00A039B1 /* GZEValidationPattern.swift */; };
+		8D9576282176CC6E00D8D139 /* GZEConfirmDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9576272176CC6E00D8D139 /* GZEConfirmDialog.swift */; };
+		8D95762B2176D15400D8D139 /* GZEModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D95762A2176D15400D8D139 /* GZEModal.swift */; };
 		8D9711B31FC307D200E98F95 /* GZEConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9711B21FC307D200E98F95 /* GZEConstants.swift */; };
 		8D9FF9F120422847003BE951 /* GZENavButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9FF9F020422847003BE951 /* GZENavButton.swift */; };
 		8D9FF9F32042292B003BE951 /* GZENextUIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9FF9F22042292B003BE951 /* GZENextUIBarButtonItem.swift */; };
@@ -459,6 +461,8 @@
 		8D83115A20D557E600EF4BAC /* GZEWebViewModelTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEWebViewModelTerms.swift; sourceTree = "<group>"; };
 		8D92A06220ADBCE700569036 /* GZEMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEMenu.swift; sourceTree = "<group>"; };
 		8D9322B520497C1D00A039B1 /* GZEValidationPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEValidationPattern.swift; sourceTree = "<group>"; };
+		8D9576272176CC6E00D8D139 /* GZEConfirmDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConfirmDialog.swift; sourceTree = "<group>"; };
+		8D95762A2176D15400D8D139 /* GZEModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEModal.swift; sourceTree = "<group>"; };
 		8D9711B21FC307D200E98F95 /* GZEConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEConstants.swift; sourceTree = "<group>"; };
 		8D9FF9F020422847003BE951 /* GZENavButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENavButton.swift; sourceTree = "<group>"; };
 		8D9FF9F22042292B003BE951 /* GZENextUIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENextUIBarButtonItem.swift; sourceTree = "<group>"; };
@@ -736,6 +740,15 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		8D9576292176D14000D8D139 /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+				8D95762A2176D15400D8D139 /* GZEModal.swift */,
+				8D9576272176CC6E00D8D139 /* GZEConfirmDialog.swift */,
+			);
+			path = Modal;
+			sourceTree = "<group>";
+		};
 		8DA28BEA1FA1895400EE1362 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -766,6 +779,7 @@
 		8DA575AB1FC3D5DF0001CE2A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				8D9576292176D14000D8D139 /* Modal */,
 				8D2789F72174058700029759 /* Loading */,
 				8D26D94120E5CE90002D3586 /* Balance */,
 				8D28B97420BAE94A00DEED83 /* Payment */,
@@ -1320,6 +1334,7 @@
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FloatRatingView/FloatRatingView.framework",
 				"${BUILT_PRODUCTS_DIR}/Gloss/Gloss.framework",
+				"${BUILT_PRODUCTS_DIR}/LGAlertView/LGAlertView.framework",
 				"${BUILT_PRODUCTS_DIR}/Localize-Swift/Localize_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/PPBadgeView/PPBadgeView.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
@@ -1346,6 +1361,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FloatRatingView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gloss.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LGAlertView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Localize_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PPBadgeView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
@@ -1515,8 +1531,10 @@
 				8D26D94320E5CEAE002D3586 /* GZEBalanceCollectionView.swift in Sources */,
 				8DF5CEF8206289F4006C2702 /* UIApplication+Extension.swift in Sources */,
 				8DBAB6E3206F42ED009586A5 /* GZEMessagesTableView.swift in Sources */,
+				8D9576282176CC6E00D8D139 /* GZEConfirmDialog.swift in Sources */,
 				8D22399820D823B4000C17C2 /* GZELibraryCollectionViewCell.swift in Sources */,
 				8D1B9ABF2044BB4800BFDBD2 /* GZEKeyboardNotifications.swift in Sources */,
+				8D95762B2176D15400D8D139 /* GZEModal.swift in Sources */,
 				8D9FF9F32042292B003BE951 /* GZENextUIBarButtonItem.swift in Sources */,
 				8D2E3C0C20E33097007889B1 /* GZEChatMessageApiRepository.swift in Sources */,
 				8D576EA920B9CC13004509CE /* Conekta.m in Sources */,

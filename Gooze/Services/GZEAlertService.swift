@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftOverlays
+import LGAlertView
 
 class GZEAlertService {
     static var shared = GZEAlertService()
@@ -104,14 +105,38 @@ class GZEAlertService {
         self.bottomAlert.dismiss()
     }
 
-    func showActionAlert(superview: UIView, text: String) {
-        superview.addSubview(self.actionAlert)
+    func showConfirmDialog(
+        title: String? = nil,
+        message: String? = nil,
+        buttonTitles: [String] = [],
+        cancelButtonTitle: String? = nil,
+        destructiveButtonTitle: String? = nil,
+        actionHandler: LGAlertViewActionHandler? = nil,
+        cancelHandler: LGAlertViewHandler? = nil,
+        destructiveHandler: LGAlertViewHandler? = nil
+    ) {
+        let alertView = LGAlertView(
+            title: title,
+            message: message,
+            style: .alert,
+            buttonTitles: buttonTitles,
+            cancelButtonTitle: cancelButtonTitle,
+            destructiveButtonTitle: destructiveButtonTitle,
+            actionHandler: actionHandler,
+            cancelHandler: cancelHandler,
+            destructiveHandler: destructiveHandler
+        )
 
-        superview.widthAnchor.constraint(equalTo: self.actionAlert.widthAnchor).isActive = true
-        superview.centerYAnchor.constraint(equalTo: self.actionAlert.centerYAnchor).isActive = true
-        superview.centerXAnchor.constraint(equalTo: self.actionAlert.centerXAnchor).isActive = true
+        alertView.backgroundColor = UIColor(white: 0.7, alpha: 1)
 
-        self.actionAlert.text = text
+        alertView.tintColor = .black
+        alertView.titleFont = GZEConstants.Font.main.increase(by: 2)
+        alertView.messageFont = GZEConstants.Font.main
+        alertView.buttonsFont = GZEConstants.Font.main.increase(by: 2)
+        alertView.cancelButtonFont = GZEConstants.Font.main.increase(by: 2)
+        alertView.destructiveButtonFont = GZEConstants.Font.main.increase(by: 2)
+
+        alertView.showAnimated()
     }
 
     func dismissActionAlert() {

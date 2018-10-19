@@ -54,6 +54,7 @@ PODS:
     - FBSDKCoreKit
   - FloatRatingView (2.0)
   - Gloss (1.2.4)
+  - LGAlertView (2.4.0)
   - Localize-Swift (2.0.0)
   - PPBadgeView (2.1.0)
   - ReactiveCocoa (5.0.3):
@@ -80,6 +81,7 @@ DEPENDENCIES:
   - FBSDKLoginKit
   - FloatRatingView (~> 2.0.0)
   - Gloss (~> 1.2.0)
+  - LGAlertView
   - Localize-Swift (~> 2.0)
   - PPBadgeView
   - ReactiveCocoa (= 5.0.3)
@@ -103,6 +105,7 @@ SPEC REPOS:
     - FBSDKLoginKit
     - FloatRatingView
     - Gloss
+    - LGAlertView
     - Localize-Swift
     - PPBadgeView
     - ReactiveCocoa
@@ -128,6 +131,7 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 88cb456349cfb3b554427ce4f8b43729d85dfb40
   FloatRatingView: 857ab8f10040d06a42fc979f486c8f9fecd2f2e5
   Gloss: 4e036074610fdb993abcb958ebcd7332588e2333
+  LGAlertView: 2f5e83dd5cc2537de57d98727650609e86197d1a
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
   PPBadgeView: 167006b3497ebb6222942313a6b827e79791aae6
   ReactiveCocoa: 066a855f613fb72f68258771095805fdb10312d2
@@ -140,6 +144,6 @@ SPEC CHECKSUMS:
   SwiftyBeaver: 91057725648ee4980308f1650af077d04b3654a0
   Validator: bf211c1d71b3f910d230c09c70e62429d0fef63a
 
-PODFILE CHECKSUM: f78ffe9d35e2897fc88a18b729c70c68f1ebf87a
+PODFILE CHECKSUM: cdace4cefdb3dfb0899a8eca7045a8d4329e7abc
 
 COCOAPODS: 1.5.3

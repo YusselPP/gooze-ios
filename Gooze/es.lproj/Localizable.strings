@@ -216,6 +216,10 @@
 
 "vm.profile.rate.date.rate"="Calificar";
 
+"vm.profile.addPaymentMethodRequest"="¿Agregar un método de pago ahora?";
+"vm.profile.addPaymentMethodAnswerAdd"="Agregar";
+"vm.profile.addPaymentMethodAnswerLater"="Más tarde";
+
 // Views/components/Menu/GZEMenu
 "menu.item.title.profile"="Perfil";
 "menu.item.title.beGooze"="Ser Gooze";

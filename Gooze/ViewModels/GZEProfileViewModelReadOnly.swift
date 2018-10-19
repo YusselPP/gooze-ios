@@ -40,7 +40,6 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     func startObservers() {
         self.appearObs.send(value: ())
 
-        self.observeMessages()
         self.observeRequests()
         self.observeSocketEvents()
 
@@ -66,7 +65,6 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
         self.stopObservingSocketEvents()
         self.stopObservingRequests()
-        self.stopObservingMessages()
 
         if let activeRequest = GZEDatesService.shared.activeRequest {
             activeRequest.signal
@@ -89,6 +87,9 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     let rejectedRequestButtonTitle = "vm.profile.rejectedRequestButtonTitle".localized().uppercased()
     let sentRequestButtonTitle = "vm.profile.sentRequestButtonTitle".localized().uppercased()
     let endedRequestButtonTitle = "vm.profile.endedRequestButtonTitle".localized().uppercased()
+    let addPaymentMethodRequest = "vm.profile.addPaymentMethodRequest".localized()
+    let addPaymentMethodAnswerAdd = "vm.profile.addPaymentMethodAnswerAdd".localized()
+    let addPaymentMethodAnswerLater = "vm.profile.addPaymentMethodAnswerLater".localized()
     let isContactButtonEnabled = MutableProperty<Bool>(false)
 
     var messagesObserver: Disposable?
@@ -119,6 +120,10 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         }
 
         return GZEChatViewModelDates(chat: chat, dateRequest: daRequestProperty, mode: chatMode, username: self.user.username)
+    }
+
+    var paymentsViewModel: GZEPaymentMethodsViewModel {
+        return GZEPaymentMethodsViewModelAdded()
     }
 
     // MARK - init
@@ -190,10 +195,12 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         case .value(let dateRequest):
             GZEDatesService.shared.upsert(dateRequest: dateRequest)
             self.dateRequest.value = dateRequest
+
             switch self.mode {
-                
-            case .request: self.openChat()
-            default: break
+            case .request:
+                self.openChat()
+            case .contact:
+                self.error.value = "service.dates.requestSuccessfullySent".localized()
             }
         case .failed(let error):
             onError(error)
@@ -202,6 +209,28 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     }
     
     private func onError(_ error: GZEError) {
+        switch error {
+        case .datesSocket(let datesError):
+            if datesError == .paymentMethodRequired {
+                GZEAlertService.shared.showConfirmDialog(
+                    title: error.localizedDescription,
+                    message: addPaymentMethodRequest,
+                    buttonTitles: [addPaymentMethodAnswerAdd],
+                    cancelButtonTitle: addPaymentMethodAnswerLater,
+                    actionHandler: {[weak self] _ in
+                        log.debug("Add pressed")
+                        self?.openAddPaymentMethodsView()
+                    },
+                    cancelHandler: { _ in
+                        log.debug("Cancel pressed")
+                    }
+                )
+                return
+            }
+        default:
+            break
+        }
+
         self.error.value = error.localizedDescription
     }
     
@@ -287,11 +316,24 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
             let controller = self.controller as? GZEProfilePageViewController,
             let chatViewModel = self.chatViewModel
         else {
-            log.debug("Unable to open chat view GZEProfilePageViewController is not set")
+            log.error("Unable to open chat view GZEProfilePageViewController is not set")
             return
         }
 
         controller.performSegue(withIdentifier: controller.segueToChat, sender: chatViewModel)
+    }
+
+    private func openAddPaymentMethodsView() {
+        log.debug("openAddPaymentMethodsView called")
+
+        guard
+            let controller = self.controller as? GZEProfilePageViewController
+        else {
+                log.error("Unable to payment view GZEProfilePageViewController is not set")
+                return
+        }
+
+        controller.performSegue(withIdentifier: controller.segueToPayments, sender: self.paymentsViewModel)
     }
 
     private func observeRequests() {
@@ -317,26 +359,6 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     private func stopObservingRequests() {
         self.requestsObserver?.dispose()
         self.requestsObserver = nil
-    }
-    
-    private func observeMessages() {
-        log.debug("start observing messages")
-        var messages: [Signal<String?, NoError>] = []
-        
-        messages.append(GZEDatesService.shared.message.signal)
-        messages.append(GZEDatesService.shared.errorMessage.signal)
-        
-        self.stopObservingMessages()
-        self.messagesObserver = self.error <~ Signal.merge(messages).map{msg -> String? in
-            log.debug("Message received: \(String(describing: msg))")
-            return msg
-        }
-    }
-    
-    private func stopObservingMessages() {
-        log.debug("stop observing messages")
-        self.messagesObserver?.dispose()
-        self.messagesObserver = nil
     }
     
     private func observeSocketEvents() {

@@ -8,9 +8,10 @@
 
 import UIKit
 
-class GZEProfilePageViewController: UIPageViewController {
+class GZEProfilePageViewController: UIPageViewController, GZEDismissVCDelegate {
 
     let segueToChat = "segueToChat"
+    let segueToPayments = "segueToPayments"
 
     var profileVm: GZEProfileUserInfoViewModel!
     var galleryVm: GZEGalleryViewModel!
@@ -99,6 +100,29 @@ class GZEProfilePageViewController: UIPageViewController {
             } else {
                 log.error("Unable to open GZEChatViewController, missing requiered parameters")
             }
+        } else if segue.identifier == segueToPayments {
+            preparePaymentSegue(segue.destination, vm: sender)
+        }
+    }
+
+    func preparePaymentSegue(_ vc: UIViewController, vm: Any?) {
+        if
+            let vc = vc as? GZEPaymentMethodsViewController,
+            let paymentVm = vm as? GZEPaymentMethodsViewModel
+        {
+
+            vc.viewModel = paymentVm
+            vc.dismissDelegate = self
+
+        } else {
+            log.error("Unable to cast segue.destination as? GZEPaymentMethodsViewController")
+        }
+    }
+
+    // MARK: Dismiss delegate
+    func onDismissTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZEPaymentMethodsViewController.self) {
+            vc.previousController(animated: true)
         }
     }
 

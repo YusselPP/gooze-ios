@@ -84,10 +84,10 @@ class DatesSocket: GZESocket {
 
             let recipient = dateRequest.recipient
             let message = String(format: "service.dates.requestAccepted".localized(), recipient.username)
-            GZEAlertService.shared.showTopAlert(text: message) {
+            GZEAlertService.shared.showTopAlert(text: message) {[weak self] in
                 guard let chat = dateRequest.chat else {
                     log.error("Unable to open the chat, found nil chat on date request")
-                    GZEDatesService.shared.errorMessage.value = "service.chat.invalidChatId".localized()
+                    self?.handleError(.message(text: "service.chat.invalidChatId", args: []))
                     return
                 }
                 var dateRequestProperty: MutableProperty<GZEDateRequest>
@@ -177,6 +177,10 @@ class DatesSocket: GZESocket {
 
             ack.with()
         }
+    }
+
+    func handleError(_ error: GZEError) {
+        GZEAlertService.shared.showBottomAlert(text: error.localizedDescription)
     }
 
     // MARK: - Deinitializers
