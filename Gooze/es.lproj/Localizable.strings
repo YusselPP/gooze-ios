@@ -193,6 +193,8 @@
 "vm.paymentMethods.addMethod"="Agregar forma de pago";
 "vm.paymentMethods.title.selectMethod"="Seleccionar forma de pago";
 "vm.paymentMethods.pay"="Pagar";
+"vm.paymentMethods.delete"="Eliminar";
+"vm.paymentMethods.delete.confirm.message"="¿Desesas eliminar esta forma de pago?";
 
 // ViewModel/GZEHelpViewModelGooze
 "vm.help.title"="Ayuda";

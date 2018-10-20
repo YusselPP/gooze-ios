@@ -297,6 +297,24 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
+    func deletePayPalMethod(_ payPalMethod: GZEPayPalPaymentMethod) -> SignalProducer<JSON, GZEError> {
+        guard GZEAuthService.shared.authUser != nil else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer{sink, disposable in
+
+            disposable.add {
+                log.debug("deletePayPalMethod SignalProducer disposed")
+            }
+
+            log.debug("deleting PayPal method")
+
+            Alamofire.request(GZEPayPalRouter.deletePaymentMethod(token: payPalMethod.token))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink) { $0 })
+        }
+    }
+
     func onError(_ error: GZEError) {
         GZEAlertService.shared.showBottomAlert(text: error.localizedDescription)
     }

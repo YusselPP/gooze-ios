@@ -11,6 +11,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
 import BraintreeDropIn
+import Gloss
 
 class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
 
@@ -41,6 +42,13 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
 
     // Private properties
 
+    let deleteTitle = "vm.paymentMethods.delete".localized()
+    let deleteConfirmMessage = "vm.paymentMethods.delete.confirm.message".localized()
+
+    lazy var deleteAction = {
+        return self.createDeleteAction()
+    }()
+
     init() {
         log.debug("\(self) init")
 
@@ -56,11 +64,27 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
                     this.loading.value = false
                     switch $0 {
                     case .value(let methods):
-                        this.paymentslist.value = methods.map{
+                        this.paymentslist.value = methods.map{ method in
                             GZEPaymentCellModel(
-                                title: $0.name,
+                                title: method.name,
                                 icon: BTUIKViewUtil.vectorArtView(for: .payPal, size: .large),
-                                onTap: nil)
+                                swipeActionEnabled: true,
+                                onTap: nil,
+                                onClose: {[weak self] cell in
+                                    log.debug("close tapped \(String(describing: cell.model?.title))")
+                                    guard let this = self else {return}
+                                    GZEAlertService.shared.showConfirmDialog(
+                                        title: this.deleteTitle,
+                                        message: this.deleteConfirmMessage,
+                                        cancelButtonTitle: "No",
+                                        destructiveButtonTitle: this.deleteTitle,
+                                        destructiveHandler: {[weak self] _ in
+                                            self?.loading.value = true
+                                            self?.deleteAction.apply(method).start()
+                                        }
+                                    )
+                                }
+                            )
                         }
                     case .failed(let error):
                         log.error(error)
@@ -68,6 +92,23 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
                     default: break
                     }
                 }
+            }
+        }
+
+        self.deleteAction.events.observeValues{[weak self] event in
+            log.debug("Event received: \(event)")
+            guard let this = self else {return}
+            this.loading.value = false
+
+            switch event {
+            case .completed:
+                // Reload payment methods
+                this.viewShownObs.send(value: true)
+                break
+            case .failed(let error):
+                this.onError(error)
+            default:
+                break
             }
         }
     }
@@ -80,6 +121,12 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
             this.segueAvailableMethodsObs.send(value: GZEPaymentMethodsViewModelAvailable())
 
             return SignalProducer.empty
+        }
+    }
+
+    func createDeleteAction() -> Action<GZEPayPalPaymentMethod, JSON, GZEError> {
+        return Action {method in
+            return PayPalService.shared.deletePayPalMethod(method)
         }
     }
 

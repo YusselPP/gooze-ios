@@ -193,6 +193,8 @@
 "vm.paymentMethods.addMethod"="Add payment method";
 "vm.paymentMethods.title.selectMethod"="Select payment method";
 "vm.paymentMethods.pay"="Pay";
+"vm.paymentMethods.delete"="Delete";
+"vm.paymentMethods.delete.confirm.message"="Are you sure you want to delete this payment method?";
 
 // ViewModel/GZEHelViewModelGooze
 "vm.help.title"="Help";

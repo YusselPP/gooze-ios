@@ -20,6 +20,7 @@ enum GZEPayPalRouter: URLRequestConvertible {
     case findPaymentMethods(customerId: String)
     case findPaymentMethod(token: String)
     case createPaymentMethod(parameters: Parameters)
+    case deletePaymentMethod(token: String)
 
     static let route = "Payments"
 
@@ -34,6 +35,8 @@ enum GZEPayPalRouter: URLRequestConvertible {
              .createCustomer,
              .createPaymentMethod:
             return .post
+        case .deletePaymentMethod:
+            return .delete
         }
     }
 
@@ -56,6 +59,8 @@ enum GZEPayPalRouter: URLRequestConvertible {
             return "paymentMethod/\(token)"
         case .createPaymentMethod:
             return "paymentMethod"
+        case .deletePaymentMethod(let token):
+            return "paymentMethod/\(token)"
         }
     }
 
@@ -75,7 +80,8 @@ enum GZEPayPalRouter: URLRequestConvertible {
              .createCustomer,
              .findPaymentMethods,
              .findPaymentMethod,
-             .createPaymentMethod:
+             .createPaymentMethod,
+             .deletePaymentMethod:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         }
 
@@ -83,7 +89,8 @@ enum GZEPayPalRouter: URLRequestConvertible {
         case .clientToken,
              .findCustomer,
              .findPaymentMethods,
-             .findPaymentMethod:
+             .findPaymentMethod,
+             .deletePaymentMethod:
             break
         case .createCharge(let parameters),
              .createCustomer(let parameters),
