@@ -21,6 +21,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
     var usernameExistsAction: CocoaAction<UIBarButtonItem>!
     var emailExistsAction: CocoaAction<UIBarButtonItem>!
     var facebookExistsAction: CocoaAction<UIBarButtonItem>!
+    var isValidRegisterCodeAction: CocoaAction<UIBarButtonItem>!
 
     let signUpToProfileSegue = "signUpToProfileSegue"
     let segueToTerms = "segueToTerms"
@@ -89,7 +90,11 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         topTextField.validationHandler = onTextFieldValidation
         topTextField.reactive.continuousTextValues.observeValues(onTextFieldChanged)
 
-        showRegisterCodeScene()
+        if viewModel.isRegisterCodeRequired {
+            showRegisterCodeScene()
+        } else {
+            showUsernameScene()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -130,11 +135,13 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         usernameExistsAction = CocoaAction(viewModel.usernameExistsAction, onActionExecute)
         emailExistsAction = CocoaAction(viewModel.emailExistsAction, onActionExecute)
         facebookExistsAction = CocoaAction(viewModel.facebookExistsAction, onActionExecute)
+        isValidRegisterCodeAction = CocoaAction(viewModel.isValidRegisterCodeAction, onActionExecute)
 
         viewModel.signupAction.events.observeValues(onUserEvent)
         viewModel.usernameExistsAction.events.observeValues(onBoolEvent)
         viewModel.emailExistsAction.events.observeValues(onBoolEvent)
         viewModel.facebookExistsAction.events.observeValues(onBoolEvent)
+        viewModel.isValidRegisterCodeAction.events.observeValues(onBoolEvent)
     }
 
     func setupNavBar() {
@@ -157,6 +164,12 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         switch event {
         case .value(let value):
             switch scene {
+            case .registerCode:
+                if let isValidRegisterCode = value as? Bool {
+                    onIsValidRegisterCodeSuccess(isValidRegisterCode)
+                } else {
+                    log.error("Unexpected value type[\(type(of: value))]. Expecting Bool")
+                }
             case .username:
                 if let exists = value as? Bool {
                     onUsernameExistsSuccess(exists)
@@ -188,6 +201,15 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
             onError(err)
         default:
             break
+        }
+    }
+
+    func onIsValidRegisterCodeSuccess(_ isValidRegisterCode: Bool) {
+        if !isValidRegisterCode {
+            let error = GZEError.message(text: viewModel.invalidRegisterCodeError, args: [])
+            onError(error)
+        } else {
+            showUsernameScene()
         }
     }
 
@@ -239,7 +261,11 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         case .registerCode:
             previousController(animated: true)
         case .username:
-            showRegisterCodeScene()
+            if viewModel.isRegisterCodeRequired {
+                showRegisterCodeScene()
+            } else {
+                previousController(animated: true)
+            }
         case .facebookOrEmail:
             showUsernameScene()
         case .email:
@@ -255,9 +281,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
 
     func nextButtonTapped(_ sender: Any) {
         switch scene {
-        case .registerCode:
-            showUsernameScene()
-        case .username,
+        case .registerCode,
+             .username,
              .email,
              .password:
             topTextField.validate()
@@ -299,7 +324,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
 
         switch scene {
             // Textfields with validation
-        case .username,
+        case .registerCode,
+             .username,
              .email,
              .password:
             return false
@@ -331,6 +357,8 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         case .valid:
             log.debug("textfield has valid input")
             switch scene {
+            case .registerCode:
+                isValidRegisterCodeAction.execute(nextBarButton)
             case .username:
                 usernameExistsAction.execute(nextBarButton)
             case .email:
@@ -417,8 +445,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         topTextField.isSecureTextEntry = false
         topTextField.autocapitalizationType = .none
         topTextField.text = viewModel.registerCode.value
-        // TODO: Define registerCode validations
-        // topTextField.validationRules = GZESignUpViewModel.validationRule.registerCode.stringRules
+        topTextField.validationRules = GZESignUpViewModel.validationRule.registerCode.stringRules
 
         bottomLabel.setText(viewModel.registerCodeLabelText.uppercased(), animated: true)
 

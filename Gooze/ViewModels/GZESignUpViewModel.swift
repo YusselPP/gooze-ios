@@ -39,8 +39,11 @@ class GZESignUpViewModel: NSObject {
     let createProfileText = "vm.signUp.createProfileText".localized()
     let skipProfileText = "vm.signUp.skipProfileText".localized()
     let successfulSignUp = "vm.signUp.success".localized()
-    
+
+    let invalidRegisterCodeError = "vm.signUp.invalidRegisterCode".localized()
     let textFieldValidationFailed = "vm.signUp.textField.validation.failed".localized()
+
+    var isRegisterCodeRequired: Bool = false
 
     // basic sign up
     let username = MutableProperty<String?>(nil)
@@ -54,6 +57,7 @@ class GZESignUpViewModel: NSObject {
         case username
         case email
         case password
+        case registerCode
 
         var stringRules: ValidationRuleSet<String>? {
             switch self {
@@ -63,6 +67,8 @@ class GZESignUpViewModel: NSObject {
                 return GZEUser.Validation.email.stringRule()
             case .password:
                 return GZEUser.Validation.password.stringRule()
+            case .registerCode:
+                return GZEUser.Validation.registerCode.stringRule()
             }
         }
     }
@@ -81,6 +87,9 @@ class GZESignUpViewModel: NSObject {
     var emailExistsAction: Action<Void, Bool, GZEError>!
     var facebookExistsAction: Action<Void, Bool, GZEError>!
     var signupAction: Action<Void, GZEUser, GZEError>!
+    lazy var isValidRegisterCodeAction: Action<Void, Bool, GZEError> = {
+        return self.createIsValidRegisterCodeAction()
+    }()
     
 
     init(_ userRepository: GZEUserRepositoryProtocol) {
@@ -136,6 +145,20 @@ class GZESignUpViewModel: NSObject {
         return self.userRepository.facebookExist(facebookId)
     }
 
+    private func createIsValidRegisterCodeAction() -> Action<Void, Bool, GZEError> {
+        return Action {[weak self] in
+            guard let this = self else {
+                return SignalProducer(error: .repository(error: .UnexpectedError))
+            }
+
+            guard let registerCode = this.registerCode.value else {
+                return SignalProducer(error: .validation(error: .required(fieldName: "Code")))
+            }
+
+            return this.userRepository.isValidRegisterCode(registerCode)
+        }
+    }
+
     private func onSignupAction() -> SignalProducer<GZEUser, GZEError> {
 
         guard let aUsername = username.value else {
@@ -150,9 +173,12 @@ class GZESignUpViewModel: NSObject {
             return SignalProducer(error: .validation(error: .required(fieldName: GZEUser.Validation.password.fieldName)))
         }
 
-        var userJSON: JSON? = nil
+        var userJSON: JSON = JSON()
         if let facebookId = facebookId.value {
-            userJSON = ["facebookId": facebookId]
+            userJSON["facebookId"] = facebookId
+        }
+        if let registerCode = registerCode.value {
+            userJSON["registerCode"] = registerCode
         }
 
         return self.userRepository.signUp(username: aUsername, email: aEmail, password: aPassword, userJSON: userJSON)

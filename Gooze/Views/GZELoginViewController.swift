@@ -10,6 +10,7 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 import SwiftOverlays
+import Gloss
 
 class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigationControllerDelegate {
 
@@ -226,7 +227,30 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
     }
 
     func signUpButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: registerCodeSegueId, sender: self)
+        showLoading()
+        GZEAppConfig.loadRemote().start{[weak self] event in
+            guard let this = self else {return}
+            this.hideLoading()
+
+            switch event {
+            case .value(let config):
+                if
+                    let isRegisterCodeRequired: Bool = "isRegisterCodeRequired" <~~ config,
+                    isRegisterCodeRequired
+                {
+                    this.viewModel.isRegisterCodeRequired = true
+                } else {
+                    this.viewModel.isRegisterCodeRequired = false
+                }
+
+                this.performSegue(withIdentifier: this.registerCodeSegueId, sender: this)
+            case .failed(let error):
+                this.onError(error)
+            default:
+                break
+            }
+        }
+
     }
 
     func backButtonTapped(_ sender: Any) {
@@ -277,7 +301,6 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
             if let viewController = segue.destination as? GZERegisterCodeViewController
             {
                 viewController.viewModel = viewModel.getSignUpViewModel()
-                viewController.viewModel.dismiss = viewModel.dismiss
             } else {
                 log.error("Unable to parse segue.destination as? GZERegisterCodeViewController")
             }

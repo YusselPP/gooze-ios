@@ -79,6 +79,8 @@
 "vm.signUp.success"="¡Registro exitoso!";
 "vm.signUp.acceptTerms"="Acepto los términos y condiciones";
 
+"vm.signUp.invalidRegisterCode"="Código inválido";
+"vm.signUp.registerCodeUsesExceeded"="El código ya fue usado";
 "vm.signUp.textField.validation.failed"="La información ingresada es inválida";
 
 "vm.singUp.validation.facebookExists"="Ya hay una cuenta asociada con este facebook";

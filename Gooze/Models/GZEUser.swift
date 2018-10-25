@@ -564,7 +564,9 @@ class GZEUser: NSObject, Glossy {
 //            case .language:
 //            case .interestedIn:
 //            
-//            case .registerCode:
+            case .registerCode:
+                ruleSet.add(rule: ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: fieldName)))
+                ruleSet.add(rule: ValidationRuleLength(max: 128, error: GZEValidationError.lengthMax(fieldName: fieldName, max: 128)))
 //            case .invitedBy:
             default:
                 log.warning("\(self) doesn't have string rules defined")

@@ -17,6 +17,7 @@ struct GZEApiError: Glossy {
     let message: String?
     let code: String?
     let details: GZEApiErrorDetail?
+    let args: [String]
 
     init?(json: JSON) {
         self.statusCode = "statusCode" <~~ json
@@ -24,6 +25,7 @@ struct GZEApiError: Glossy {
         self.message = "message" <~~ json
         self.code = "code" <~~ json
         self.details = "details" <~~ json
+        self.args = ("args" <~~ json) ?? []
     }
 
     func toJSON() -> JSON? {
@@ -40,7 +42,7 @@ struct GZEApiError: Glossy {
         if let message = self.details?.getMessage() {
             return message
         } else if let message = self.message {
-            return message.localized()
+            return String(format: message.localized(), arguments: self.args.map{$0.localized()})
         } else {
             return ""
         }

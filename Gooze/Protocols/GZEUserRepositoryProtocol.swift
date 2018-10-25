@@ -15,6 +15,7 @@ protocol GZEUserRepositoryProtocol {
     func create(username: String, email: String, password: String, userJSON: JSON?) -> SignalProducer<GZEUser, GZEError>
     func update(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func delete(byId id: String) -> SignalProducer<Bool, GZEError>
+    func isValidRegisterCode(_ code: String) -> SignalProducer<Bool, GZEError>
     func usernameExists(_ username: String) -> SignalProducer<Bool, GZEError>
     func emailExists(_ email: String) -> SignalProducer<Bool, GZEError>
     func facebookExist(_ facebookId: String) -> SignalProducer<Bool, GZEError>

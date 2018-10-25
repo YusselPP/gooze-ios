@@ -21,6 +21,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case publicProfile(id: String)
     case addRate(id: String, parameters: Parameters)
 
+    case signUp(parameters: Parameters)
     case login(parameters: Parameters, queryParams: Parameters)
     case facebookLogin(parameters: Parameters)
     case logout
@@ -29,6 +30,7 @@ enum GZEUserRouter: URLRequestConvertible {
 
     case photo(url: String)
 
+    case isValidRegisterCode(code: String)
     case unreadMessagesCount(id: String, parameters: Parameters)
     case sendEmail(parameters: Parameters)
 
@@ -38,6 +40,7 @@ enum GZEUserRouter: URLRequestConvertible {
     var method: HTTPMethod {
         switch self {
         case .createUser,
+             .signUp,
              .login,
              .facebookLogin,
              .logout,
@@ -52,7 +55,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .findByLocation,
              .publicProfile,
              .photo,
-             .unreadMessagesCount:
+             .unreadMessagesCount,
+             .isValidRegisterCode:
             return .get
         case .updateUser:
             return .patch
@@ -81,6 +85,8 @@ enum GZEUserRouter: URLRequestConvertible {
         case .addRate(let id, _):
             return "\(GZEUserRouter.route)/\(id)/addRate"
 
+        case .signUp:
+            return "\(GZEUserRouter.route)/signUp"
         case .login:
             return "\(GZEUserRouter.route)/login"
         case .facebookLogin:
@@ -95,6 +101,8 @@ enum GZEUserRouter: URLRequestConvertible {
         case .photo(let url):
             return url
 
+        case .isValidRegisterCode(let code):
+            return "\(GZEUserRouter.route)/isValidRegisterCode/\(code)"
         case .unreadMessagesCount(let id, _):
             return "\(GZEUserRouter.route)/\(id)/unreadMessagesCount"
         case .sendEmail:
@@ -138,7 +146,8 @@ enum GZEUserRouter: URLRequestConvertible {
 
 
         switch self {
-        case .createUser(let parameters),
+        case .signUp(let parameters),
+             .createUser(let parameters),
              .updateUser(_, let parameters),
              .reset(let parameters),
              .resetPassword(let parameters),

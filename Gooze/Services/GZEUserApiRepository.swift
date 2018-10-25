@@ -128,6 +128,29 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
+    func isValidRegisterCode(_ code: String) -> SignalProducer<Bool, GZEError> {
+        return SignalProducer{ sink, disposable in
+
+            disposable.add {
+                log.debug("isValidRegisterCode SignalProducer disposed")
+            }
+
+            log.debug("Validating register code...")
+
+            Alamofire.request(GZEUserRouter.isValidRegisterCode(code: code))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink) { (result: JSON) in
+
+                    guard let isValid = result["isValid"] as? Bool else {
+                        log.error("Unable to cast 'count' property to \(Bool.self)")
+                        sink.send(error: .repository(error: .UnexpectedError))
+                        return false
+                    }
+
+                    return isValid
+                })
+        }
+    }
+
     func usernameExists(_ username: String) -> SignalProducer<Bool, GZEError> {
 
         log.debug("requesting usernameExists")
@@ -320,13 +343,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
             case .valid:
                 let params = ["email": email!, "password": password!]
                 Alamofire.request(GZEUserRouter.login(parameters: params, queryParams: ["include": "user"]))
-                    .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
-                        let accessToken = GZEAccesToken(json: json)
-                        if accessToken != nil && accessToken!.user != nil {
-                            GZEAuthService.shared.login(token: accessToken!, user: accessToken!.user!)
-                        }
-                        return accessToken
-                    }))
+                    .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: this.handleLoginResponse))
             case .invalid(let failure):
                 if let error = failure.first as? GZEValidationError {
                     sink.send(error: .validation(error: error))
@@ -341,22 +358,22 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
     func facebookLogin(_ token: String) -> SignalProducer<GZEAccesToken, GZEError> {
 
-        return SignalProducer { sink, disposable in
+        return SignalProducer {[weak self] sink, disposable in
 
             disposable.add {
                 log.debug("login SignalProducer disposed")
             }
 
+            guard let this = self else {
+                log.error("Unable to complete the task. Self has been disposed.")
+                sink.send(error: .repository(error: .UnexpectedError))
+                return
+            }
+
             let params: JSON = ["token": token]
 
             Alamofire.request(GZEUserRouter.facebookLogin(parameters: params))
-                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) in
-                    let accessToken = GZEAccesToken(json: json)
-                    if accessToken != nil && accessToken!.user != nil {
-                        GZEAuthService.shared.login(token: accessToken!, user: accessToken!.user!)
-                    }
-                    return accessToken
-                }))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: this.handleLoginResponse))
         }
     }
 
@@ -536,23 +553,46 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
     }
 
     func signUp(username: String, email: String, password: String, userJSON: JSON? = nil) -> SignalProducer<GZEUser, GZEError> {
-        return (
-            self.create(username: username, email: email, password: password, userJSON: userJSON)
-            .flatMap(FlattenStrategy.latest, transform: {[weak self] _ -> SignalProducer<GZEUser, GZEError> in
-                guard let this = self else {
-                    log.error("Unable to complete the task. Self has been disposed.")
-                    return SignalProducer(error: .repository(error: .UnexpectedError))
-                }
-                return this.login(email, password).flatMap(FlattenStrategy.latest) { token -> SignalProducer<GZEUser, GZEError> in
-                    if let user = token.user {
-                        return SignalProducer(value: user)
-                    } else {
-                        log.error("Received token doesn't include the user.")
-                        return SignalProducer(error: .repository(error: .UnexpectedError))
-                    }
-                }
-            })
-        )
+
+        return SignalProducer<GZEAccesToken, GZEError> {[weak self] sink, disposable in
+
+            disposable.add {
+                log.debug("login SignalProducer disposed")
+            }
+
+            guard let this = self else {
+                log.error("Unable to complete the task. Self has been disposed.")
+                sink.send(error: .repository(error: .UnexpectedError))
+                return
+            }
+
+            var unwrappedUserJSON: JSON
+            if userJSON == nil {
+                unwrappedUserJSON = JSON()
+            } else {
+                unwrappedUserJSON = userJSON!
+            }
+
+            unwrappedUserJSON["username"] = username
+            unwrappedUserJSON["email"] = email
+            unwrappedUserJSON["password"] = password
+
+            let parameters: JSON = [
+                "user": unwrappedUserJSON,
+                "configName": GZEAppConfig.environment.rawValue
+            ]
+
+            Alamofire.request(GZEUserRouter.signUp(parameters: parameters))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: this.handleLoginResponse))
+
+        }.flatMap(FlattenStrategy.latest) { (token: GZEAccesToken) -> SignalProducer<GZEUser, GZEError> in
+            if let user = token.user {
+                return SignalProducer(value: user)
+            } else {
+                log.error("Received token doesn't include the user.")
+                return SignalProducer(error: .repository(error: .UnexpectedError))
+            }
+        }
     }
 
     private let emailRule = ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: GZEUser.Validation.username.fieldName))
@@ -565,6 +605,14 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         log.debug(result)
 
         return result
+    }
+
+    private func handleLoginResponse(json: JSON) -> GZEAccesToken? {
+        let accessToken = GZEAccesToken(json: json)
+        if accessToken != nil && accessToken!.user != nil {
+            GZEAuthService.shared.login(token: accessToken!, user: accessToken!.user!)
+        }
+        return accessToken
     }
 
 

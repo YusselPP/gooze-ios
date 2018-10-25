@@ -6,6 +6,9 @@
 //  Copyright © 2017 Gooze. All rights reserved.
 //
 import Foundation
+import ReactiveSwift
+import Alamofire
+import Gloss
 
 class GZEAppConfig {
     private static var config: [String: Any]?
@@ -104,9 +107,13 @@ class GZEAppConfig {
         config = appConfig;
     }
 
-    // TODO: Implement loading remote configurations
-    static func loadRemote() {
-
+    static func loadRemote() -> SignalProducer<JSON, GZEError> {
+        return SignalProducer {sink, disposable in
+            Alamofire.request(GZEAppConfigRouter.find(byName: environment.rawValue))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
+                    "config" <~~ $0
+                }))
+        }
     }
 
 

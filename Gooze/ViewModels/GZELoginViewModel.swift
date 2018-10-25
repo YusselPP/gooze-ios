@@ -22,6 +22,8 @@ class GZELoginViewModel {
 
     let displayOkTitle = "vm.login.alertOkButtonTitle".localized()
 
+    var isRegisterCodeRequired: Bool = false
+
     let userRepository: GZEUserRepositoryProtocol
 
     let email = MutableProperty<String?>("")
@@ -57,7 +59,11 @@ class GZELoginViewModel {
     }
 
     func getSignUpViewModel() -> GZESignUpViewModel {
-        return GZESignUpViewModel(userRepository)
+        let viewModel = GZESignUpViewModel(userRepository)
+        viewModel.dismiss = dismiss
+        viewModel.isRegisterCodeRequired = isRegisterCodeRequired
+
+        return viewModel
     }
 
     func getChooseModeViewModel() -> GZEChooseModeViewModel {
