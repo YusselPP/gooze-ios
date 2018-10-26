@@ -63,7 +63,7 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
                     return $0 + trans.amount
                 }
             })}
-            .map{$0 < 0 ? .red : .green}
+            .map{$0 < 0 ? GZEConstants.Color.textInputPlacehoderOnEdit : .white}
 
         self.list <~ (
             self.transactions
@@ -73,7 +73,7 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
                             author: trans.from == authUser?.username ? trans.to : trans.from,
                             date: GZEDateHelper.displayDateTimeFormatter.string(from: trans.createdAt),
                             amount: GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: trans.amount)) ?? "$0",
-                            amountColor: trans.from == authUser?.username ? .red : .green,
+                            amountColor: trans.from == authUser?.username ? GZEConstants.Color.textInputPlacehoderOnEdit : .white,
                             status: trans.status
                         )
                     }
