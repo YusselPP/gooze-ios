@@ -222,14 +222,14 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         birthdayTextField.reactive.text <~ viewModel.birthday.map {
             $0.flatMap { GZEDateHelper.displayDateFormatter.string(from: $0) }
         }
-        heightTextField.reactive.text <~ viewModel.height.map{ height in
+        heightTextField.reactive.text <~ viewModel.height.map{ height -> String? in
             if height == nil || height!.isEmpty || height == "0.00" {
                 return ""
             } else {
                 return "\(height ?? "") \(GZEUser.heightUnit)"
             }
         }
-        weightTextField.reactive.text <~ viewModel.weight.map{ weight in
+        weightTextField.reactive.text <~ viewModel.weight.map{ weight -> String? in
             if weight == nil || weight!.isEmpty || weight == "0" {
                 return ""
             } else {

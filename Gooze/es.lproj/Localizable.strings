@@ -22,6 +22,8 @@
 "validation.underAge"="Debes ser mayor de edad";
 "validation.invalidCardNumber"="Ingresa un número de tarjeta válido";
 
+"validation.profile.incomplete"="Es necesario completar tu perfil";
+
 // Protocols/DatesSocketError
 "error.socket.dates.paymentMethodRequired"="Es necesario agregar un método de pago";
 "error.socket.dates.requestAlreadySent"="Se ha enviado tu solicitud";

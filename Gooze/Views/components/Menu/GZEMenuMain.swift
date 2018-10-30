@@ -128,7 +128,7 @@ class GZEMenuMain {
 
         chatButton = createMenuItemButton(title: menuItemTitleChats, action: chatCocoaAction, hasBadge: true)
 
-        let menuItems = [
+        let menuItems: [UIView] = [
             createMenuItemButton(title: menuItemTitleProfile, action: profileCocoaAction),
             createMenuSeparator(),
             self.switchModeGoozeButton,
