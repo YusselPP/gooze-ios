@@ -175,7 +175,8 @@
 "vm.map.date.end"="End date";
 "vm.map.date.rate"="Rate";
 "vm.map.date.process"="Date in process";
-"vm.map.date.canceled"="Date has been canceled";
+"vm.map.date.canceled.user"="%@ has canceled the date";
+"vm.map.date.canceled.me"="You have canceled the date";
 "vm.map.date.ended"="Date has ended";
 
 "vm.map.date.arriving"="%@ is arriving to meeting point";

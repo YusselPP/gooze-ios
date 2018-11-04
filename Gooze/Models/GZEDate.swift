@@ -24,15 +24,19 @@ class GZEDate: NSObject, Glossy {
     let recipientStarted: Bool
     let senderEnded: Bool
     let recipientEnded: Bool
+    let senderCanceled: Bool
+    let recipientCanceled: Bool
 
     // let isDeleted: Bool
-    init(id: String, status: GZEDate.Status, senderStarted: Bool, recipientStarted: Bool, senderEnded: Bool, recipientEnded: Bool) {
+    init(id: String, status: GZEDate.Status, senderStarted: Bool, recipientStarted: Bool, senderEnded: Bool, recipientEnded: Bool, senderCanceled: Bool, recipientCanceled: Bool) {
         self.id = id
         self.status = status
         self.senderStarted = senderStarted
         self.recipientStarted = recipientStarted
         self.senderEnded = senderEnded
         self.recipientEnded = recipientEnded
+        self.senderCanceled = senderCanceled
+        self.recipientCanceled = recipientCanceled
     }
 
     required init?(json: JSON) {
@@ -42,7 +46,9 @@ class GZEDate: NSObject, Glossy {
             let senderStarted: Bool = "senderStarted" <~~ json,
             let recipientStarted: Bool = "recipientStarted" <~~ json,
             let senderEnded: Bool = "senderEnded" <~~ json,
-            let recipientEnded: Bool = "recipientEnded" <~~ json
+            let recipientEnded: Bool = "recipientEnded" <~~ json,
+            let senderCanceled: Bool = "senderCanceled" <~~ json,
+            let recipientCanceled: Bool = "recipientCanceled" <~~ json
             else {
                 log.debug("Unable to instantiate. Missing required parameter: \(json)")
                 return nil
@@ -54,6 +60,8 @@ class GZEDate: NSObject, Glossy {
         self.recipientStarted = recipientStarted
         self.senderEnded = senderEnded
         self.recipientEnded = recipientEnded
+        self.senderCanceled = senderCanceled
+        self.recipientCanceled = recipientCanceled
     }
 
     func toJSON() -> JSON? {
@@ -64,6 +72,8 @@ class GZEDate: NSObject, Glossy {
             "recipientStarted" ~~> self.recipientStarted,
             "senderEnded" ~~> self.senderEnded,
             "recipientEnded" ~~> self.recipientEnded,
+            "senderCanceled" ~~> self.senderCanceled,
+            "recipientCanceled" ~~> self.recipientCanceled,
             ])
     }
 }

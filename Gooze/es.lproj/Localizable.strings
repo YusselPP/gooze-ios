@@ -175,7 +175,8 @@
 "vm.map.date.end"="Finalizar cita";
 "vm.map.date.rate"="Calificar";
 "vm.map.date.process"="Cita en proceso";
-"vm.map.date.canceled"="Cita cancelada";
+"vm.map.date.canceled.user"="%@ ha cancelado la cita";
+"vm.map.date.canceled.me"="Has cancelado la cita";
 "vm.map.date.ended"="Cita finalizada";
 
 "vm.map.date.arriving"="%@ está llegando al punto de encuentro";

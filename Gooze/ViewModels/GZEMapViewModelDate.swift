@@ -66,7 +66,8 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
     let topLabelProcess = "vm.map.date.process".localized()
     let topLabelWaitingEnd = "vm.map.date.waitingEnd".localized()
     let topLabelWaitingForYouToEnd = "vm.map.date.waitingForYouToEnd".localized()
-    let topLabelCanceled = "vm.map.date.canceled".localized()
+    let topLabelCanceledUser = "vm.map.date.canceled.user".localized()
+    let topLabelCanceledMe = "vm.map.date.canceled.me".localized()
     let topLabelEnded = "vm.map.date.ended".localized()
     let cancelDateButtonTitle = "vm.map.date.cancelDateButtonTitle".localized()
     let helpButtonTitle = "vm.map.date.helpButtonTitle".localized()
@@ -286,10 +287,22 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                     this.topLabelText.value = this.topLabelEnded
                     this.ratingViewObserver.send(value: ())
                 case .canceled:
+                    let cancelUsername = (
+                        date.senderCanceled ?
+                            this.dateRequest.value.sender.username :
+                            this.dateRequest.value.recipient.username
+                    )
+
+                    let topLabel = (
+                        cancelUsername == username ?
+                            String(format: this.topLabelCanceledUser, cancelUsername) :
+                            this.topLabelCanceledMe
+                    )
+
                     this.bottomButtonActionEnabled.value = true
                     this.bottomButtonTitle.value = this.bottomButtonTitleExit
                     this.bottomButtonAction.value = this.exitAction
-                    this.topLabelText.value = this.topLabelCanceled
+                    this.topLabelText.value = topLabel
 
                 case .ending:
                     if mode == .gooze && date.recipientEnded || mode == .client && date.senderEnded {
