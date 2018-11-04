@@ -27,6 +27,7 @@ enum GZEUserRouter: URLRequestConvertible {
     case logout
     case reset(parameters: Parameters)
     case resetPassword(parameters: Parameters)
+    case activate(parameters: Parameters)
 
     case photo(url: String)
 
@@ -48,7 +49,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .resetPassword,
              .sendLocationUpdate,
              .addRate,
-             .sendEmail:
+             .sendEmail,
+             .activate:
             return .post
         case .readUser,
              .count,
@@ -97,6 +99,8 @@ enum GZEUserRouter: URLRequestConvertible {
             return "\(GZEUserRouter.route)/reset"
         case .resetPassword:
             return "\(GZEUserRouter.route)/resetPassword"
+        case .activate:
+            return "\(GZEUserRouter.route)/activate"
 
         case .photo(let url):
             return url
@@ -138,7 +142,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .addRate,
              .photo,
              .unreadMessagesCount,
-             .sendEmail:
+             .sendEmail,
+             .activate:
             urlRequest.setValue(GZEApi.instance.accessToken?.id, forHTTPHeaderField: "Authorization")
         default:
             break
@@ -153,7 +158,8 @@ enum GZEUserRouter: URLRequestConvertible {
              .resetPassword(let parameters),
              .sendLocationUpdate(let parameters),
              .addRate(_, let parameters),
-             .sendEmail(let parameters):
+             .sendEmail(let parameters),
+             .activate(let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
 
         case .count(let parameters),

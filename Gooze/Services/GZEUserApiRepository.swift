@@ -595,6 +595,31 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
+    func activate(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
+        return SignalProducer{sink, disposable in
+
+            disposable.add {
+                log.debug("activate SignalProducer disposed")
+            }
+
+            var params: JSON = [
+                "id": user.id,
+            ]
+
+            if let currentLocationJson = user.currentLocation?.toJSON() {
+                params["currentLocation"] = currentLocationJson
+            }
+
+            if let activeUntil = user.activeUntil {
+                params["activeUntil"] = GZEApi.dateFormatter.string(from: activeUntil)
+            }
+
+            Alamofire.request(GZEUserRouter.activate(parameters: ["params": params]))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: GZEUser.init))
+
+            }
+    }
+
     private let emailRule = ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: GZEUser.Validation.username.fieldName))
     private let passwordRule = ValidationRuleLength(min: 1, error: GZEValidationError.required(fieldName: GZEUser.Validation.password.fieldName))
 

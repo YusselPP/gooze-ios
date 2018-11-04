@@ -90,6 +90,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     let addPaymentMethodRequest = "vm.profile.addPaymentMethodRequest".localized()
     let addPaymentMethodAnswerAdd = "vm.profile.addPaymentMethodAnswerAdd".localized()
     let addPaymentMethodAnswerLater = "vm.profile.addPaymentMethodAnswerLater".localized()
+
+    let completeProfileRequest = "vm.profile.completeProfileRequest".localized()
+    let completeProfileRequestYes = "vm.profile.completeProfileRequestYes".localized()
+    let completeProfileRequestNo = "vm.profile.completeProfileRequestNo".localized()
+
     let isContactButtonEnabled = MutableProperty<Bool>(false)
 
     var messagesObserver: Disposable?
@@ -227,6 +232,25 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 )
                 return
             }
+            if datesError == .incompleteProfile {
+                GZEAlertService.shared.showConfirmDialog(
+                    title: error.localizedDescription,
+                    message: completeProfileRequest,
+                    buttonTitles: [completeProfileRequestYes],
+                    cancelButtonTitle: completeProfileRequestNo,
+                    actionHandler: {[weak self] _ in
+                        log.debug("Yes pressed")
+                        guard let this = self else {return}
+                        // TODO implement this
+                        // this.performSegue(withIdentifier: this.segueToMyProfile, sender: nil)
+                        this.openMyProfileView()
+                    },
+                    cancelHandler: { _ in
+                        log.debug("No pressed")
+                    }
+                )
+                return
+            }
         default:
             break
         }
@@ -334,6 +358,29 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         }
 
         controller.performSegue(withIdentifier: controller.segueToPayments, sender: self.paymentsViewModel)
+    }
+
+    private func openMyProfileView() {
+        log.debug("openMyProfileView called")
+
+        guard
+            let navController = self.controller?.navigationController,
+            let myProfileController = self.controller?.storyboard?.instantiateViewController(withIdentifier: "GZEProfilePageViewController") as? GZEProfilePageViewController
+        else {
+            log.error("Unable to open my profile view, failed to instantiate GZEProfilePageViewController")
+            return
+        }
+
+        guard let user = GZEAuthService.shared.authUser else {
+            log.error("Unable to open my profile view, Auth user not found")
+            return
+        }
+
+        myProfileController.profileVm = GZEProfileUserInfoViewModelMe(user)
+        myProfileController.ratingsVm = GZERatingsViewModelMe(user)
+        myProfileController.galleryVm = GZEGalleryViewModelMe(user)
+
+        navController.pushViewController(myProfileController, animated: true)
     }
 
     private func observeRequests() {

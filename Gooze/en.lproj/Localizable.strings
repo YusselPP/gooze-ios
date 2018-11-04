@@ -139,6 +139,9 @@
 
 "vm.activate.gotoActiveDateTitle"="Date";
 "vm.activate.activeDateNotFound"="There is no an active date";
+"vm.activate.completeProfileRequest"="Would you like to complete your profile?";
+"vm.activate.completeProfileRequestYes"="Yes";
+"vm.activate.completeProfileRequestNo"="No";
 
 // ViewModel/GZEProfileUserInfoViewModelRateDate
 "profile.rate.date.accept"="Accept";
@@ -231,6 +234,10 @@
 "vm.profile.addPaymentMethodRequest"="Add payment method?";
 "vm.profile.addPaymentMethodAnswerAdd"="Add";
 "vm.profile.addPaymentMethodAnswerLater"="Later";
+
+"vm.profile.completeProfileRequest"="Would you like to complete your profile?";
+"vm.profile.completeProfileRequestYes"="Yes";
+"vm.profile.completeProfileRequestNo"="No";
 
 // Views/components/Menu/GZEMenu
 "menu.item.title.profile"="Profile";

@@ -41,6 +41,9 @@ class GZEActivateGoozeViewModel {
     let allResultsButtonTitle = "vm.activate.allResultsButtonTitle".localized()
 
     let gotoActiveDateTitle = "vm.activate.gotoActiveDateTitle".localized()
+    let completeProfileRequest = "vm.activate.completeProfileRequest".localized()
+    let completeProfileRequestYes = "vm.activate.completeProfileRequestYes".localized()
+    let completeProfileRequestNo = "vm.activate.completeProfileRequestNo".localized()
 
     var paymentViewModel: GZEPaymentMethodsViewModelAdded {
         return GZEPaymentMethodsViewModelAdded()
@@ -139,7 +142,7 @@ class GZEActivateGoozeViewModel {
 
             log.debug(user.toJSON() as Any)
 
-            return this.userRepository.update(user)
+            return this.userRepository.activate(user)
         }
     }
 

@@ -139,6 +139,9 @@
 
 "vm.activate.gotoActiveDateTitle"="Ver cita";
 "vm.activate.activeDateNotFound"="No hay una cita en proceso";
+"vm.activate.completeProfileRequest"="¿Completar tu perfil ahora?";
+"vm.activate.completeProfileRequestYes"="Si";
+"vm.activate.completeProfileRequestNo"="No";
 
 // ViewModel/GZEProfileUserInfoViewModelRateDate
 "profile.rate.date.accept"="Aceptar";
@@ -231,6 +234,10 @@
 "vm.profile.addPaymentMethodRequest"="¿Agregar un método de pago ahora?";
 "vm.profile.addPaymentMethodAnswerAdd"="Agregar";
 "vm.profile.addPaymentMethodAnswerLater"="Más tarde";
+
+"vm.profile.completeProfileRequest"="¿Completar tu perfil ahora?";
+"vm.profile.completeProfileRequestYes"="Si";
+"vm.profile.completeProfileRequestNo"="No";
 
 // Views/components/Menu/GZEMenu
 "menu.item.title.profile"="Perfil";

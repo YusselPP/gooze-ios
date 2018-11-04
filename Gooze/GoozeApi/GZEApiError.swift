@@ -12,6 +12,10 @@ import Gloss
 
 struct GZEApiError: Glossy {
 
+    enum Code: String {
+        case userIncompleteProfile = "USER_INCOMPLETE_PROFILE"
+    }
+
     let statusCode: Int?
     let name: String?
     let message: String?

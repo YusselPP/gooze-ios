@@ -619,13 +619,42 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     }
 
     func onActionError(_ err: GZEError) {
-        GZEAlertService.shared.showBottomAlert(text: err.localizedDescription)
+
         if scene == .activate {
             self.activateGoozeButton.setGrayFormat()
             self.stopSearchAnimation()
         } else if scene == .searching {
             scene = .search
         }
+
+        switch err {
+        case .repository(let repoErr):
+            switch repoErr {
+            case .GZEApiError(let apiErr):
+                if apiErr.code == GZEApiError.Code.userIncompleteProfile.rawValue {
+                    GZEAlertService.shared.showConfirmDialog(
+                        title: err.localizedDescription,
+                        message: viewModel.completeProfileRequest,
+                        buttonTitles: [viewModel.completeProfileRequestYes],
+                        cancelButtonTitle: viewModel.completeProfileRequestNo,
+                        actionHandler: {[weak self] _ in
+                            log.debug("Yes pressed")
+                            guard let this = self else {return}
+                            this.performSegue(withIdentifier: this.segueToMyProfile, sender: nil)
+                        },
+                        cancelHandler: { _ in
+                            log.debug("No pressed")
+                        }
+                    )
+                    return
+                }
+            default: break
+            }
+        default:
+            break
+        }
+
+        GZEAlertService.shared.showBottomAlert(text: err.localizedDescription)
     }
 
     // MARK: - Mapkit
