@@ -104,6 +104,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     var isSearchAnimationInProgress = false
     var shouldRestartSearchingAnmiation = false
 
+    var activating = false
+
     let usersList = GZEUsersList()
 
     var backButton = GZEBackUIBarButtonItem()
@@ -263,7 +265,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
                 log.debug("shown: \(shown), scene: \(scene)")
 
-                guard shown == true && scene.isRequestResults else {
+                guard /*shown == true &&*/ scene.isRequestResults else {
                     return Signal.never
                 }
 
@@ -303,11 +305,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                     .authUserProperty
                     .producer
             }
-            .map{$0?.activeDateRequest}
+            //.map{$0?.activeDateRequest}
             .take(during: self.reactive.lifetime)
-            .observeValues {[weak self] activeRequest in
-                log.debug("authUser changed, activeRequest: \(String(describing: activeRequest?.toJSON()))")
+            .observeValues {[weak self] authUser in
+                let activeRequest = authUser?.activeDateRequest
+                log.debug("authUser changed, activeRequest: \(String(describing: authUser?.toJSON()))")
                 guard let this = self else {return}
+
                 if let request = activeRequest {
                     log.debug("request id: \(request.id)")
                     if this.scene != .onDate {
@@ -319,6 +323,21 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                             this.scene = .activate
                         } else {
                             this.scene = .search
+                        }
+                    }
+
+                    log.debug("isActivated: \(authUser?.isActivated ?? false)")
+                    // Show activated scene when user is activated
+                    if !this.activating {
+                        if let isActivated = authUser?.isActivated, isActivated {
+                            if !this.scene.isRequestResults {
+                                this.scene = .requestResults
+                                this.findUnrespondedRequests()
+                            }
+                        } else {
+                            if this.scene.isRequestResults {
+                                this.scene = .activate
+                            }
                         }
                     }
                 }
@@ -337,19 +356,24 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         dateRequest.signal.skipNil().skipRepeats().observeValues{[weak self] dateRequest in
             guard let this = self, let tappedBalloon = this.tappedUserBaloon else {return}
 
-            let (_, index) = this.viewModel.userResults.value.upsert(dateRequest){$0===tappedBalloon.userConvertible}
-            if index < this.userBalloons.count {
-                this.userBalloons[index].userConvertible = dateRequest
+            this.viewModel.userResults.value.upsert(dateRequest){
+                $0===tappedBalloon.userConvertible ||
+                ($0 as? GZEDateRequest)?.id == (tappedBalloon.userConvertible as? GZEDateRequest)?.id
             }
+            //if index < this.userBalloons.count {
+            //    this.userBalloons[index].userConvertible = dateRequest
+            //}
+            tappedBalloon.userConvertible = dateRequest
             if this.scene == .resultsList || this.scene == .requestResultsList {
-                this.usersList.users.upsert(dateRequest){$0===tappedBalloon.userConvertible}
-                tappedBalloon.userConvertible = dateRequest
+                //this.usersList.users.upsert(dateRequest){$0===tappedBalloon.userConvertible}
+                this.usersList.users = this.viewModel.userResults.value
             }
         }
 
         sliderLabel.reactive.text <~ viewModel.sliderValue.map { [unowned self] in "\($0) \(self.sliderPostfix)" }
 
         activateGoozeAction = CocoaAction(viewModel.activateGoozeAction) { [weak self] _ in
+            self?.activating = true
             self?.showLoading()
         }
         deactivateGoozeAction = CocoaAction(viewModel.deactivateGoozeAction) { [weak self] _ in
@@ -384,7 +408,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             self?.onUserEvent($0)
         }
         viewModel.activateGoozeAction.events.observeValues {[weak self] in
-            self?.onUserEvent($0)
+            self?.onActivateEvents($0)
         }
         viewModel.deactivateGoozeAction.events.observeValues {[weak self] in
             self?.onDeactivateEvents($0)
@@ -564,10 +588,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         switch event {
         case .value(let user):
             switch scene {
-            case .activate:
-                scene = .requestResults
-                findUnrespondedRequests()
-
             case .searching:
                 if let users = user as? [GZEUserConvertible] {
                     if users.count > 0 {
@@ -604,7 +624,23 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             break;
         }
     }
-    
+
+    private func onActivateEvents<T>(_ event: Event<T, GZEError>) {
+        log.debug("onActivateEvents: \(event)")
+        hideLoading()
+        activating = false
+        switch event {
+        case .value:
+            scene = .requestResults
+            findUnrespondedRequests()
+        case .failed(let err):
+            onActionError(err)
+        default:
+            break;
+        }
+    }
+
+
     private func onDeactivateEvents<T>(_ event: Event<T, GZEError>) {
         log.debug("onDeactivateEvents: \(event)")
         hideLoading()

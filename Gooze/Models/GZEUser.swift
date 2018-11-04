@@ -271,7 +271,7 @@ class GZEUser: NSObject, Glossy {
 
     var isActivated: Bool {
         if let activeUntil = self.activeUntil {
-            return activeUntil.compare(Date()) != .orderedDescending
+            return activeUntil.compare(Date()) != .orderedAscending
         } else {
             return false
         }
