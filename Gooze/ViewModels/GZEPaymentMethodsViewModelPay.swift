@@ -11,6 +11,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import enum Result.NoError
 import BraintreeDropIn
+import Gloss
 
 class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
@@ -44,13 +45,14 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     // END GZEPaymentMethodsViewModel protocol
 
     // Private properties
-    let amount: Decimal
     let dateRequest: MutableProperty<GZEDateRequest>
     let senderId: String
     let username: String
     let chat: GZEChat
     let mode: GZEChatViewMode
 
+    let amount = MutableProperty<Decimal>(0)
+    let clientTax = MutableProperty<Decimal>(0)
     let methodProperty = MutableProperty<GZEPaymentMethod?>(nil)
     let methods = MutableProperty<[GZEPaymentMethod]>([])
 
@@ -59,7 +61,6 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     }()
 
     init(amount: Decimal, dateRequest: MutableProperty<GZEDateRequest>, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) {
-        self.amount = amount * Decimal(string: "1.06")!
         self.dateRequest = dateRequest
         self.senderId = senderId
         self.username = username
@@ -69,16 +70,20 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
         log.debug("\(self) init")
 
         self.title.value = selectPaymentMethodText.uppercased()
-        // TODO: config currency and gooze tax 
-        self.topMainButtonTitle.value = (GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: self.amount)) ?? "$0") + " MXN"
         self.bottomActionButtonTitle.value = payText.uppercased()
         self.bottomActionButtonAction = CocoaAction(self.payAction)
 
+        self.amount <~ self.clientTax.map{amount * ($0 + 1)}
+        self.topMainButtonTitle <~ self.amount.map{
+            (GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: $0)) ?? "$0") + " MXN"
+        }
+
         self.methodProperty <~ self.methods.map{$0.first}
 
-        self.paymentslist <~ self.methods.combineLatest(with: methodProperty).map{
+
+        self.paymentslist <~ self.methods.combineLatest(with: methodProperty).map{[weak self] in
             let (methods, selectedMethod) = $0
-            return methods.map{ method in
+            return methods.map{[weak self] method in
                 GZEPaymentCellModel(
                     isSelection: method == selectedMethod,
                     title: method.name,
@@ -107,17 +112,28 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
             guard let this = self else {return}
             if shown {
                 this.loading.value = true
-                PayPalService.shared.getPaymentMethods().start {
-                    this.loading.value = false
-                    switch $0 {
-                    case .value(let methods):
-                        this.methods.value = methods
-                    case .failed(let error):
-                        log.error(error)
-                        this.onError(error)
-                    default: break
+
+                PayPalService.shared.getPaymentMethods()
+                    .combineLatest(with: GZEAppConfig.loadRemote()).start
+                    {[weak self] in
+                        guard let this = self else {return}
+                        this.loading.value = false
+                        switch $0 {
+                        case .value(let (methods, config)):
+                            this.methods.value = methods
+
+                            if
+                                let clientTaxString: String = "clientTax" <~~ config,
+                                let clientTax = Decimal(string: clientTaxString)
+                            {
+                                this.clientTax.value = clientTax
+                            }
+                        case .failed(let error):
+                            log.error(error)
+                            this.onError(error)
+                        default: break
+                        }
                     }
-                }
             }
         }
 
@@ -140,6 +156,8 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                 break
             }
         }
+
+        observeDateRequestUpdates()
     }
 
     // Private Methods
@@ -162,7 +180,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
             return (
                 GZEDatesService.shared.createCharge(
                     dateRequest: self.dateRequest.value,
-                    amount: self.amount,
+                    amount: self.amount.value,
                     paymentMethodToken: method.token,
                     senderId: self.senderId,
                     username: self.username,
@@ -174,6 +192,36 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
     func onError(_ error: GZEError) {
         self.error.value = error.localizedDescription
+    }
+
+    func observeDateRequestUpdates() {
+        log.debug("start observing date request updates")
+
+        Signal.merge([
+            GZEDatesService.shared.lastSentRequest.signal,
+            GZEDatesService.shared.lastReceivedRequest.signal
+        ])
+        .skipNil()
+        .filter{[weak self] in
+            guard let this = self else {return false}
+            return $0.id == this.dateRequest.value.id
+        }
+        //.take(until: viewShown.filter{!$0}.map{_ in ()})
+        .take(during: amount.lifetime)
+        .observe{[weak self] in
+            log.debug("event: \($0)")
+            guard let this = self else {return}
+            switch $0 {
+            case .value(let dateRequest):
+                this.dateRequest.value = dateRequest
+            default: break
+            }
+        }
+        /*.observeValues {[weak self] dateRequest in
+            guard let this = self else {return}
+            this.dateRequest.value = dateRequest
+        }*/
+
     }
 
     deinit {

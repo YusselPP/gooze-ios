@@ -57,6 +57,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
     let chat: GZEChat
     
     func startObservers() {
+        self.setAmount(self.dateRequest.value.amount)
         self.observeMessages()
         self.observeRequests()
         self.observeSocketEvents()
@@ -106,8 +107,6 @@ class GZEChatViewModelDates: GZEChatViewModel {
         self.username.value = username
         
         log.debug("\(self) init")
-
-        self.setAmount(self.dateRequest.value.amount)
 
         log.debug("active request: \(dateRequest)")
         

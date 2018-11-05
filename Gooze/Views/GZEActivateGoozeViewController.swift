@@ -79,6 +79,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     var gotoActiveDateAction: CocoaAction<GZEButton>!
 
     var isInitialPositionSet = false
+    var activateTimer: Timer?
 
     let (shown, shownObs) = Signal<Bool, NoError>.pipe()
     let sceneProperty = MutableProperty<Scene>(.search)
@@ -333,6 +334,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                             if !this.scene.isRequestResults {
                                 this.scene = .requestResults
                                 this.findUnrespondedRequests()
+                                if let activeUntil = authUser?.activeUntil {
+                                    this.initActivateTimer(date: activeUntil)
+                                }
                             }
                         } else {
                             if this.scene.isRequestResults {
@@ -625,14 +629,17 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         }
     }
 
-    private func onActivateEvents<T>(_ event: Event<T, GZEError>) {
+    private func onActivateEvents(_ event: Event<GZEUser, GZEError>) {
         log.debug("onActivateEvents: \(event)")
         hideLoading()
         activating = false
         switch event {
-        case .value:
+        case .value(let user):
             scene = .requestResults
             findUnrespondedRequests()
+            if let activeUntil = user.activeUntil {
+                initActivateTimer(date: activeUntil)
+            }
         case .failed(let err):
             onActionError(err)
         default:
@@ -957,6 +964,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         shouldRestartSearchingAnmiation = false
         activateGoozeButton.isEnabled = true
 
+        stopActivateTimer()
+
         activateGoozeButton.setTitle(viewModel.activateButtonTitle.uppercased(), for: .normal)
         activateGoozeButton.reactive.pressed = activateGoozeAction
         //stopObservingRequests()
@@ -1155,6 +1164,27 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             log.debug("The current user has not a valid active date")
             onError(.message(text: "vm.activate.activeDateNotFound".localized(), args: []))
         }
+    }
+
+    func deactivateUser() {
+        log.debug("deactivateUser called")
+        scene = .activate
+    }
+
+    func initActivateTimer(date: Date) {
+        if activateTimer != nil {
+            stopActivateTimer()
+        }
+
+        log.debug("activateTimer: \(date), now: \(Date())")
+
+        activateTimer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(deactivateUser), userInfo: nil, repeats: false)
+        RunLoop.main.add(activateTimer!, forMode: .commonModes)
+    }
+
+    func stopActivateTimer() {
+        activateTimer?.invalidate()
+        activateTimer = nil
     }
 
     // MARK: - Deinitializers
