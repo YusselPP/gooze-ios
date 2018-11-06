@@ -252,7 +252,18 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
-    func createCharge(dateRequest: GZEDateRequest, amount: Decimal, paymentMethodToken: String, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
+    func createCharge(
+        dateRequest: GZEDateRequest,
+        amount: Decimal,
+        clientTaxAmount: Decimal,
+        goozeTaxAmount: Decimal,
+        netAmount: Decimal,
+        paymentMethodToken: String,
+        senderId: String,
+        username: String,
+        chat: GZEChat,
+        mode: GZEChatViewMode
+    ) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
 
         guard let chatJson = chat.toJSON() else {
             log.error("Failed to parse GZEChat to JSON")
@@ -273,6 +284,9 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
 
             let parameters: JSON = [
                 "amount": amount.description,
+                "clientTaxAmount": clientTaxAmount.description,
+                "goozeTaxAmount": goozeTaxAmount.description,
+                "netAmount": netAmount.description,
                 "paymentMethodToken": paymentMethodToken,
                 "deviceData": PayPalService.deviceData,
                 "description": "Recipient: \(dateRequest.recipient.username), DateRequest: \(dateRequest.id)",

@@ -52,7 +52,11 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     let mode: GZEChatViewMode
 
     let amount = MutableProperty<Decimal>(0)
+    let netAmount = MutableProperty<Decimal>(0)
     let clientTax = MutableProperty<Decimal>(0)
+    let clientTaxAmount = MutableProperty<Decimal>(0)
+    let goozeTax = MutableProperty<Decimal>(0)
+    let goozeTaxAmount = MutableProperty<Decimal>(0)
     let methodProperty = MutableProperty<GZEPaymentMethod?>(nil)
     let methods = MutableProperty<[GZEPaymentMethod]>([])
 
@@ -73,7 +77,10 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
         self.bottomActionButtonTitle.value = payText.uppercased()
         self.bottomActionButtonAction = CocoaAction(self.payAction)
 
-        self.amount <~ self.clientTax.map{amount * ($0 + 1)}
+        self.goozeTaxAmount <~ self.goozeTax.map{amount * $0}
+        self.clientTaxAmount <~ self.clientTax.map{amount * $0}
+        self.amount <~ self.clientTaxAmount.map{amount + $0}
+        self.netAmount <~ self.goozeTaxAmount.map{amount - $0}
         self.topMainButtonTitle <~ self.amount.map{
             (GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: $0)) ?? "$0") + " MXN"
         }
@@ -128,6 +135,13 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                             {
                                 this.clientTax.value = clientTax
                             }
+
+                            if
+                                let goozeTaxString: String = "goozeTax" <~~ config,
+                                let goozeTax = Decimal(string: goozeTaxString)
+                            {
+                                this.goozeTax.value = goozeTax
+                            }
                         case .failed(let error):
                             log.error(error)
                             this.onError(error)
@@ -181,6 +195,9 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                 GZEDatesService.shared.createCharge(
                     dateRequest: self.dateRequest.value,
                     amount: self.amount.value,
+                    clientTaxAmount: self.clientTaxAmount.value,
+                    goozeTaxAmount: self.goozeTaxAmount.value,
+                    netAmount: self.netAmount.value,
                     paymentMethodToken: method.token,
                     senderId: self.senderId,
                     username: self.username,
