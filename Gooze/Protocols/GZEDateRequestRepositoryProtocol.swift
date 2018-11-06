@@ -25,7 +25,6 @@ protocol GZEDateRequestRepositoryProtocol {
         amount: Decimal,
         clientTaxAmount: Decimal,
         goozeTaxAmount: Decimal,
-        netAmount: Decimal,
         paymentMethodToken: String,
         senderId: String,
         username: String,
