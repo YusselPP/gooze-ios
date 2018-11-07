@@ -55,7 +55,7 @@ class GZEChatsPhotoView: UIView {
         self.trailingAnchor.constraint(equalTo: self.tapButton.trailingAnchor).isActive = true
     }
 
-    func handleTap() {
+    @objc func handleTap() {
         self.onTap?()
     }
 }

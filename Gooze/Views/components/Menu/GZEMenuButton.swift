@@ -20,7 +20,7 @@ class GZEMenuButton: GZENavButton {
         pp_moveBadgeWith(x: 1, y: 9)
         pp_setBadgeLabelAttributes{label in
             label?.backgroundColor = GZEConstants.Color.mainGreen
-            label?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+            label?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
         }
     }
 

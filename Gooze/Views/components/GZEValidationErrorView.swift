@@ -109,11 +109,11 @@ class GZEValidationErrorView: UIView {
         })
     }
     
-    open func handleTapped() {
+    @objc open func handleTapped() {
         self.onTapped?()
     }
     
-    func handleDismiss() {
+    @objc func handleDismiss() {
         self.dismiss()
     }
 

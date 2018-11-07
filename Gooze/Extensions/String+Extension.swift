@@ -21,7 +21,7 @@ extension String {
 
     func size(font: UIFont) -> CGSize {
         let nsString = self as NSString
-        return nsString.size(attributes: [NSFontAttributeName: font])
+        return nsString.size(withAttributes: [NSAttributedString.Key.font: font])
     }
 
     func matches(pattern: String) -> Bool {

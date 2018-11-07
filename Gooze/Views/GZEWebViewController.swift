@@ -66,7 +66,7 @@ class GZEWebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate
         self.titleLabel.reactive.text <~ self.viewModel.titleLabelText
     }
 
-    func onCloseTapped() {
+    @objc func onCloseTapped() {
         self.delegate?.onDismissTapped(self)
     }
 

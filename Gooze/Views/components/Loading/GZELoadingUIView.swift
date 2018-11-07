@@ -28,7 +28,7 @@ class GZELoadingUIView: UIView {
         }
     }
     let background = UIView()
-    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

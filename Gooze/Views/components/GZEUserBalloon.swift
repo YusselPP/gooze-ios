@@ -155,7 +155,7 @@ class GZEUserBalloon: UIView {
         ratingView.centerYAnchor.constraint(equalTo: starsView.centerYAnchor).isActive = true
     }
 
-    func tap(_ gestureRecognizer : UITapGestureRecognizer) {
+    @objc func tap(_ gestureRecognizer : UITapGestureRecognizer) {
         if gestureRecognizer.state == .ended {
             onTap?(gestureRecognizer, self)
         }

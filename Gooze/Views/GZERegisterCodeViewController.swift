@@ -383,12 +383,12 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
 
     // MARK: - KeyboardNotifications
 
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
         resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view, safeInsets: false)
     }
@@ -430,7 +430,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         self.viewModel.dismiss?()
     }
 
-    func performTermsSegue() {
+    @objc func performTermsSegue() {
         self.performSegue(withIdentifier: self.segueToTerms, sender: nil)
     }
 
@@ -513,7 +513,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         topTextField.resignFirstResponder()
     }
 
-    func showEmailScene() {
+    @objc func showEmailScene() {
         scene = .email
 
         showNavigationBar(true, animated: true)
@@ -578,7 +578,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
         let acceptTermsText = "vm.signUp.acceptTerms".localized()
         let textRange = NSMakeRange(0, acceptTermsText.count)
         let attributedText = NSMutableAttributedString(string: acceptTermsText)
-        attributedText.addAttribute(NSUnderlineStyleAttributeName , value: NSUnderlineStyle.styleSingle.rawValue, range: textRange)
+        attributedText.addAttribute(NSAttributedString.Key.underlineStyle , value: NSUnderlineStyle.single.rawValue, range: textRange)
         termsLabel.attributedText = attributedText
 
         termsLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(performTermsSegue)))
@@ -664,7 +664,7 @@ class GZERegisterCodeViewController: UIViewController, UITextFieldDelegate, GZED
     }
 
     // Facebook login
-    func loginButtonClicked() {
+    @objc func loginButtonClicked() {
         let fbService = GZEFacebookService.shared
         let overlay = SwiftOverlays.showCenteredWaitOverlay(self.view)
 

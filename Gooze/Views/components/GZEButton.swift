@@ -74,7 +74,7 @@ class GZEButton: UIButton {
         layer.shadowRadius = 0.0
     }
 
-    override func setTitle(_ title: String?, for state: UIControlState) {
+    override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
         if adjustsWidthToTitle {
             setWidthTofitTitle()
@@ -85,7 +85,7 @@ class GZEButton: UIButton {
         if let title = currentTitle as NSString? {
             log.debug("current title: \(title)")
             log.debug("font: \(titleLabel!.font!)")
-            let titleSize = title.size(attributes: [NSFontAttributeName: titleLabel!.font!])
+            let titleSize = title.size(withAttributes: [NSAttributedString.Key.font: titleLabel!.font!])
             var width = titleSize.width + titleEdgeInsets.left + titleEdgeInsets.right + 20
             log.debug("titleSize: \(titleSize)")
             log.debug("width: \(width)")

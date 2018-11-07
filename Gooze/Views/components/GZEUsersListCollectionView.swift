@@ -62,7 +62,7 @@ class GZEUsersListCollectionView: UICollectionView, UICollectionViewDataSource, 
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(self.padding, self.padding, self.padding, self.padding)
+        return UIEdgeInsets(top: self.padding, left: self.padding, bottom: self.padding, right: self.padding)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

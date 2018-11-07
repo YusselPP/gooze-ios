@@ -67,7 +67,7 @@ class GZEUsersList: UIView {
         }
     }
 
-    func dismiss() {
+    @objc func dismiss() {
         UIView.animate(withDuration: 0.5) {[weak self] in
             self?.alpha = 0
         }

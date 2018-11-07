@@ -121,7 +121,7 @@ class GZEChatBubbleView: UIView {
     private func changeImage(_ image: UIImage) {
         self.bubbleImageView.image = image
             .resizableImage(
-                withCapInsets: UIEdgeInsetsMake(15, 18, 15, 18),
+                withCapInsets: UIEdgeInsets(top: 15, left: 18, bottom: 15, right: 18),
                 resizingMode: .stretch
             )
             .withRenderingMode(.alwaysTemplate)

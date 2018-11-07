@@ -266,7 +266,7 @@ class GZEUser: NSObject, Glossy {
             return nil
         }
 
-        return comments.max{$0.0.count < $0.1.count}?.comment.localizedText()
+        return comments.max{$0.count < $1.count}?.comment.localizedText()
     }
 
     var isActivated: Bool {

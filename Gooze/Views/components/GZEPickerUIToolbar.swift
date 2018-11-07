@@ -29,8 +29,8 @@ class GZEPickerUIToolbar: UIToolbar {
     var onDone: ((UIBarButtonItem) -> ())?
     var onClose: ((UIBarButtonItem) -> ())?
 
-    let closeButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: #selector(closeButtonTapped(_:)))
-    let doneButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: #selector(doneButtonTapped(_:)))
+    let closeButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: self, action: #selector(closeButtonTapped(_:)))
+    let doneButton = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: self, action: #selector(doneButtonTapped(_:)))
 
     init() {
         super.init(frame: CGRect.zero)
@@ -47,7 +47,7 @@ class GZEPickerUIToolbar: UIToolbar {
     }
 
     private func initProperties() {
-        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         closeButton.title = ButtonTitle.closeButtonTitle.localized
         doneButton.title = ButtonTitle.nextButtonTitle.localized
 
@@ -59,11 +59,11 @@ class GZEPickerUIToolbar: UIToolbar {
         self.isUserInteractionEnabled = true
     }
 
-    func closeButtonTapped(_ sender: UIBarButtonItem) {
+    @objc func closeButtonTapped(_ sender: UIBarButtonItem) {
         onClose?(sender)
     }
 
-    func doneButtonTapped(_ sender: UIBarButtonItem) {
+    @objc func doneButtonTapped(_ sender: UIBarButtonItem) {
         onDone?(sender)
     }
 

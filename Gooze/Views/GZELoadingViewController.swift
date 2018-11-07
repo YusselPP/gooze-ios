@@ -26,7 +26,7 @@ class GZELoadingViewController: UIViewController {
         Timer.scheduledTimer(timeInterval: 0, target: self, selector: #selector(checkAuth), userInfo: nil, repeats: false)
     }
 
-    func checkAuth() {
+    @objc func checkAuth() {
         viewModel.loginStoredUser {[weak self] _ in
             log.debug("login stored user completed")
             guard let this = self else {

@@ -46,7 +46,7 @@ class GZEImageHelper {
 
         if
             let resizedImage = UIGraphicsGetImageFromCurrentImageContext(),
-            let compressedImageData = UIImageJPEGRepresentation(resizedImage, compression)
+            let compressedImageData = resizedImage.jpegData(compressionQuality: compression)
         {
             compressedImage = UIImage(data: compressedImageData)
         }

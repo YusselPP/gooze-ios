@@ -318,7 +318,7 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         textField.textColor = UIColor.white
         textField.textAlignment = .center
         textField.font = GZEConstants.Font.main
-        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: GZEConstants.Font.main])
+        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: GZEConstants.Font.main])
     }
 
     // MARK: - CocoaAction
@@ -369,11 +369,11 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
         activeField?.resignFirstResponder()
     }
 
-    func searchForGenderTapped() {
+    @objc func searchForGenderTapped() {
         performSegue(withIdentifier: segueToSearchGenderPicker, sender: nil)
     }
 
-    func updateProfile() {
+    @objc func updateProfile() {
         //let validationResult = heightTextField.validate()
         //    .merge(with: weightTextField.validate())
 
@@ -517,12 +517,12 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
 
     // MARK: - KeyboardNotifications
 
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
         resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view, safeInsets: false)
     }

@@ -6,5 +6,5 @@
 //  Copyright © 2018 Gooze. All rights reserved.
 //
 
-typealias HandlerBlock<T> = (T) -> ()
-typealias CompletionBlock = () -> ()
+typealias HandlerBlock<T> = ((T) -> ())
+typealias CompletionBlock = (() -> ())

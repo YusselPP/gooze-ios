@@ -83,12 +83,12 @@ class GZEChooseModeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func beButtonTapped(_ sender: Any) {
+    @objc func beButtonTapped(_ sender: Any) {
         goozeScene = .activate
         performSegue(withIdentifier: activateGoozeSegueId, sender: self)
     }
 
-    func searchButtonTapped(_ sender: Any) {
+    @objc func searchButtonTapped(_ sender: Any) {
         goozeScene = .search
         performSegue(withIdentifier: activateGoozeSegueId, sender: self)
     }

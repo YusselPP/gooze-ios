@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 class GZEPinAnnotationView: MKAnnotationView {
-    dynamic let pinImageView = UIImageView(image: #imageLiteral(resourceName: "pin-w-shadow"))
+    @objc dynamic let pinImageView = UIImageView(image: #imageLiteral(resourceName: "pin-w-shadow"))
 
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)

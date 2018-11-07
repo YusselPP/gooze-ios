@@ -114,12 +114,12 @@ class GZEBalanceCollectionCell: UICollectionViewCell {
         self.dateLabel.textColor = UIColor(white: 5/6, alpha: 1)
         self.statusLabel.textColor = UIColor(white: 5/6, alpha: 1)
 
-        self.rightView.setContentHuggingPriority(300, for: .horizontal)
-        self.rightView.setContentCompressionResistancePriority(800, for: .horizontal)
-        self.amountLabel.setContentHuggingPriority(300, for: .horizontal)
-        self.statusLabel.setContentHuggingPriority(300, for: .horizontal)
-        self.amountLabel.setContentCompressionResistancePriority(800, for: .horizontal)
-        self.statusLabel.setContentCompressionResistancePriority(800, for: .horizontal)
+        self.rightView.setContentHuggingPriority(UILayoutPriority(rawValue: 300), for: .horizontal)
+        self.rightView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 800), for: .horizontal)
+        self.amountLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 300), for: .horizontal)
+        self.statusLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 300), for: .horizontal)
+        self.amountLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 800), for: .horizontal)
+        self.statusLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 800), for: .horizontal)
 
         self.leftView.addSubview(self.authorLabel)
         self.leftView.addSubview(self.dateLabel)

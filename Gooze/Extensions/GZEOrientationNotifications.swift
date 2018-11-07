@@ -15,16 +15,16 @@ func registerForOrientationNotifications(observer: Any, didChangeselector: Selec
 
     let notifications = NotificationCenter.default
     if let didChangeselector = didChangeselector {
-        notifications.addObserver(observer, selector: didChangeselector, name: NSNotification.Name.UIApplicationDidChangeStatusBarOrientation, object: nil)
+        notifications.addObserver(observer, selector: didChangeselector, name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
     }
     if let willChangeSelector = willChangeSelector {
-        notifications.addObserver(observer, selector: willChangeSelector, name: NSNotification.Name.UIApplicationWillChangeStatusBarOrientation, object: nil)
+        notifications.addObserver(observer, selector: willChangeSelector, name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
     }
 }
 
 func deregisterFromOrientationNotifications(observer: Any) {
 
     let notifications = NotificationCenter.default
-    notifications.removeObserver(observer, name: NSNotification.Name.UIApplicationDidChangeStatusBarOrientation, object: nil)
-    notifications.removeObserver(observer, name: NSNotification.Name.UIApplicationWillChangeStatusBarOrientation, object: nil)
+    notifications.removeObserver(observer, name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
+    notifications.removeObserver(observer, name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
 }

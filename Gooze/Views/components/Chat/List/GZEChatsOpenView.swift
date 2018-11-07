@@ -46,7 +46,7 @@ class GZEChatsOpenView: UIView {
         self.leadingAnchor.constraint(equalTo: self.button.leadingAnchor).isActive = true
     }
 
-    func handleTap() {
+    @objc func handleTap() {
         self.onTap?()
     }
 }

@@ -116,7 +116,7 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
         self.photoView.pp_moveBadgeWith(x: photoViewWidth - 5, y: 7)
         self.photoView.pp_setBadgeLabelAttributes{label in
             label?.backgroundColor = GZEConstants.Color.mainGreen
-            label?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+            label?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
         }
 
         self.closeView.onTap = handleClose
@@ -218,7 +218,7 @@ class GZEChatsCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    func handleSwipe(_ gestureRecognizer : UISwipeGestureRecognizer) {
+    @objc func handleSwipe(_ gestureRecognizer : UISwipeGestureRecognizer) {
         if gestureRecognizer.state == .ended {
             log.debug("swipe gesture view: \(String(describing: gestureRecognizer.view))")
             log.debug("direction: \(gestureRecognizer.direction)")

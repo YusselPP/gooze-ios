@@ -73,7 +73,7 @@ class GZEGalleryViewController: UIViewController {
     }
 
     // MARK: - UIAction
-    func thumbnailTappedHandler(_ gesture: UITapGestureRecognizer) {
+    @objc func thumbnailTappedHandler(_ gesture: UITapGestureRecognizer) {
         if let view = gesture.view {
             selectThumbnail(pos: view.tag)
         }

@@ -51,7 +51,7 @@ class GZEChatsCloseView: UIView {
         self.widthAnchor.constraint(equalTo: self.button.heightAnchor).isActive = true
     }
 
-    func handleTap() {
+    @objc func handleTap() {
         self.onTap?()
     }
 }

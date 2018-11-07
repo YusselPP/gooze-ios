@@ -29,7 +29,7 @@ extension Modal where Self:UIView {
             UIView.animate(withDuration: 0.33, animations: {
                 self.backgroundView.alpha = 0.66
             })
-            UIView.animate(withDuration: 0.33, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10, options: UIViewAnimationOptions(rawValue: 0), animations: {
+            UIView.animate(withDuration: 0.33, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10, options: UIView.AnimationOptions(rawValue: 0), animations: {
                 // self.dialogView.center  = self.center
                 self.centerYConstraint?.constant = 0
                 self.layoutIfNeeded()
@@ -49,7 +49,7 @@ extension Modal where Self:UIView {
             }, completion: { (completed) in
 
             })
-            UIView.animate(withDuration: 0.33, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 10, options: UIViewAnimationOptions(rawValue: 0), animations: {
+            UIView.animate(withDuration: 0.33, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 10, options: UIView.AnimationOptions(rawValue: 0), animations: {
                 // self.dialogView.center = CGPoint(x: self.center.x, y: self.frame.height + self.dialogView.frame.height/2)
                 self.centerYConstraint?.constant = self.frame.height
                 self.layoutIfNeeded()

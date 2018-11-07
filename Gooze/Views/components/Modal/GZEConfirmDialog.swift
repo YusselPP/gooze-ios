@@ -116,7 +116,7 @@ class GZEConfirmDialog: UIView, Modal {
 
     }
 
-    func didTappedOnBackgroundView(){
+    @objc func didTappedOnBackgroundView(){
         dismiss(animated: true)
     }
 }

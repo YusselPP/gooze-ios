@@ -128,11 +128,11 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         let title = "\u{f09a}  " + "vm.login.facebookLogin".localized()
         let attributedTitle = NSMutableAttributedString(string: title)
         attributedTitle.setAttributes(
-            [NSFontAttributeName: GZEConstants.Font.mainAwesome],
+            [NSAttributedString.Key.font: GZEConstants.Font.mainAwesome],
             range: NSRange.init(location: 0, length: 1)
         )
         attributedTitle.setAttributes(
-            [NSFontAttributeName: GZEConstants.Font.main],
+            [NSAttributedString.Key.font: GZEConstants.Font.main],
             range: NSRange.init(location: 1, length: title.count - 2)
         )
 
@@ -222,11 +222,11 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
 
     // MARK: - UIAction
 
-    func loginButtonTapped(_ sender: UIButton) {
+    @objc func loginButtonTapped(_ sender: UIButton) {
         scene = .username
     }
 
-    func signUpButtonTapped(_ sender: UIButton) {
+    @objc func signUpButtonTapped(_ sender: UIButton) {
         showLoading()
         GZEAppConfig.loadRemote().start{[weak self] event in
             guard let this = self else {return}
@@ -392,7 +392,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
     }
 
     // Facebook login
-    func facebookLogin() {
+    @objc func facebookLogin() {
         let fbService = GZEFacebookService.shared
         let overlay = SwiftOverlays.showCenteredWaitOverlay(self.view)
 
@@ -415,18 +415,18 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
     }
 
     // MARK: - KeyboardNotifications
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
         resizeViewWithKeyboard(keyboardShow: true, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view)
     }
 
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: viewBottomSpaceConstraint, notification: notification, view: self.view, safeInsets: false)
     }
 
     // MARK: UINavigationControllerDelegate
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    private func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return DisolveInteractiveTransitioning()
     }
 

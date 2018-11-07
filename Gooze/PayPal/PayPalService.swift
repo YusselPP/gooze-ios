@@ -337,7 +337,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
     func appSwitcherWillPerformAppSwitch(_ appSwitcher: Any) {
         showLoadingUI()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(hideLoadingUI), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideLoadingUI), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     func appSwitcherWillProcessPaymentInfo(_ appSwitcher: Any) {
@@ -357,7 +357,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
     @objc func hideLoadingUI() {
         NotificationCenter
             .default
-            .removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+            .removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
         // ...
     }
 }

@@ -70,7 +70,7 @@ class GZEBlurViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
+    @objc func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
 
         let scale = gestureRecognizer.scale
 
@@ -95,7 +95,7 @@ class GZEBlurViewController: UIViewController {
         blur.draw()
     }
 
-    func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
+    @objc func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
 
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let translation = gestureRecognizer.translation(in: self.view)

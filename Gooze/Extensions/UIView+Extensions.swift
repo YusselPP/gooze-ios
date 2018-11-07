@@ -57,8 +57,8 @@ extension UIView {
 }
 
 
-extension UIViewAnimationCurve {
-    func toOptions() -> UIViewAnimationOptions {
-        return UIViewAnimationOptions(rawValue: UInt(rawValue << 16))
+extension UIView.AnimationCurve {
+    func toOptions() -> UIView.AnimationOptions {
+        return UIView.AnimationOptions(rawValue: UInt(rawValue << 16))
     }
 }

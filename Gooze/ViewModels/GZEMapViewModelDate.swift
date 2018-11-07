@@ -335,7 +335,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
                     cancelButtonTitle: "No",
                     destructiveButtonTitle: this.cancelDateButtonTitle,
                     destructiveHandler: { _ in
-                        cancelDate.apply().start()
+                        cancelDate.apply(()).start()
                     }
                 )
             }

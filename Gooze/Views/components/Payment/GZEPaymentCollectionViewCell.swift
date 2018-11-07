@@ -197,7 +197,7 @@ class GZEPaymentCollectionViewCell: UICollectionViewCell {
         self.onClose?(self)
     }
 
-    func handleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func handleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         self.onTap?(self)
     }
 
@@ -237,7 +237,7 @@ class GZEPaymentCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    func handleSwipe(_ gestureRecognizer : UISwipeGestureRecognizer) {
+    @objc func handleSwipe(_ gestureRecognizer : UISwipeGestureRecognizer) {
         guard swipeActionEnabled else { return }
         if gestureRecognizer.state == .ended {
             log.debug("swipe gesture view: \(String(describing: gestureRecognizer.view))")

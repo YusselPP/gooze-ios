@@ -265,12 +265,12 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.viewModel.topTextInputIsHidden.value = true
     }
 
-    func onStackViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func onStackViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         self.topTextInput.endEditing(true)
     }
 
     // MARK: - KeyboardNotifications
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
         if self.messagesTableView.isAtBottom {
             self.scrollTableOnShow = true
@@ -278,14 +278,14 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         resizeViewWithKeyboard(keyboardShow: true, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view)
     }
     
-    func keyboardDidShow(notification: Notification) {
+    @objc func keyboardDidShow(notification: Notification) {
         if self.scrollTableOnShow {
             self.scrollTableOnShow = false
             self.messagesTableView.scrollToBottom(animated: false)
         }
     }
     
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: self.messageInputContainerBottomSpacing, notification: notification, view: self.view, safeInsets: false)
     }

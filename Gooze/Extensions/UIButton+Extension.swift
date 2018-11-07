@@ -18,7 +18,7 @@ extension UIButton {
         addTarget(self, action: #selector(handleButtonPressedAnimation(_:)), for: .touchUpInside)
     }
 
-    func handleButtonPressedAnimation(_ sender: UIButton) {
+    @objc func handleButtonPressedAnimation(_ sender: UIButton) {
         UIView.animate(withDuration: 0.25, animations: {
             sender.alpha = 0
             sender.alpha = 1

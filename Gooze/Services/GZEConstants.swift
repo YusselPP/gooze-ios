@@ -75,11 +75,11 @@ class GZEConstants {
         static var mainSuperBig: UIFont {
             if GZEConstants.horizontalSize == .compact {
                 log.debug("using compact font")
-                return UIFont.systemFont(ofSize: 36, weight: UIFontWeightUltraLight)
+                return UIFont.systemFont(ofSize: 36, weight: UIFont.Weight.ultraLight)
 
             } else {
                 log.debug("using regular font")
-                return UIFont.systemFont(ofSize: 40, weight: UIFontWeightUltraLight)
+                return UIFont.systemFont(ofSize: 40, weight: UIFont.Weight.ultraLight)
             }
         }
 

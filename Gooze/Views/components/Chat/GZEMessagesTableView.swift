@@ -97,7 +97,7 @@ class GZEMessagesTableView: UICollectionView, UICollectionViewDelegate, UICollec
         let maxHeightForVisibleMessage = self.bounds.height
             - self.contentInset.top
             - self.contentInset.bottom
-        let scrollPosition: UICollectionViewScrollPosition = (cellSize.height > maxHeightForVisibleMessage) ? .bottom : .top
+        let scrollPosition: UICollectionView.ScrollPosition = (cellSize.height > maxHeightForVisibleMessage) ? .bottom : .top
 
         self.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
     }
@@ -173,7 +173,7 @@ class GZEMessagesTableView: UICollectionView, UICollectionViewDelegate, UICollec
                     guard let this = self else {return}
 
                     let atEndOfTable = this.isAtBottom
-                    let firstCell = this.indexPathsForVisibleItems.sorted{$0.0.row < $0.1.row}.first
+                    let firstCell = this.indexPathsForVisibleItems.sorted{$0.row < $1.row}.first
 
                     let changes = diff(old: this.messages, new: messages)
                     this.messages = messages
@@ -225,7 +225,7 @@ class GZEMessagesTableView: UICollectionView, UICollectionViewDelegate, UICollec
 
         let message = self.messages[indexPath.row]
 
-        let labelString = NSAttributedString(string: message.localizedText(), attributes: [NSFontAttributeName: GZEChatBubbleView.font])
+        let labelString = NSAttributedString(string: message.localizedText(), attributes: [NSAttributedString.Key.font: GZEChatBubbleView.font])
         let cellRect = labelString.boundingRect(with: CGSize(width: availableHorizontalWidth, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, context: nil)
 
         let cellHeight = verticalCellPadding + ceil(cellRect.height)

@@ -432,7 +432,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         }
     }
 
-    func editButtonViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func editButtonViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         if let view = gestureRecognizer.view {
             editPhotoButtonTapped(view)
         }
@@ -448,7 +448,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         scene = .cameraOrReel
     }
 
-    func thumbnailImageTapped(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func thumbnailImageTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         if let view = gestureRecognizer.view {
             thumbnailTapped(view)
         }
@@ -515,7 +515,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         showBlur(false)
     }
 
-    func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
+    @objc func blurPinched(_ gestureRecognizer: UIPinchGestureRecognizer) {
 
         guard gestureRecognizer.state == .began || gestureRecognizer.state == .changed else { return }
 
@@ -578,7 +578,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         blur?.draw()
     }
 
-    func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
+    @objc func blurPan(_ gestureRecognizer: UIPanGestureRecognizer) {
 
         guard gestureRecognizer.state == .began || gestureRecognizer.state == .changed else { return }
 
@@ -604,7 +604,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         blur?.draw()
     }
 
-    func showCamera() {
+    @objc func showCamera() {
         let cameraViewController = CameraViewController(croppingParameters: CroppingParameters(isEnabled: false, allowResizing: false, allowMoving: false)) { [weak self] image, asset in
 
             log.debug("camera controller handler")
@@ -638,7 +638,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         present(cameraViewController, animated: true, completion: nil)
     }
 
-    func showLibrary() {
+    @objc func showLibrary() {
         scene = .library
     }
 
@@ -698,13 +698,13 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
             setPortraitLayout()
         }
 
-        UIView.animate(withDuration: 0.3, animations: { [weak self] _ in
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.view.layoutIfNeeded()
         })
 
         self.setSearchOverlayConstraints()
 
-        UIView.animate(withDuration: 0.3, animations: { [weak self] _ in
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.view.layoutIfNeeded()
         })
 
@@ -776,7 +776,7 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         let maskLayer = CAShapeLayer()
         maskLayer.backgroundColor = UIColor.white.cgColor
         maskLayer.path = path;
-        maskLayer.fillRule = kCAFillRuleEvenOdd
+        maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
 
         overlayView.layer.mask = maskLayer
     }

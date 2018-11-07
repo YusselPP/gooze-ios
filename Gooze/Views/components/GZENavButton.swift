@@ -16,7 +16,7 @@ class GZENavButton: UIBarButtonItem {
     override init() {
         super.init()
         log.debug("\(self) init")
-        button.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControlEvents.touchUpInside)
+        button.addTarget(self, action: #selector(buttonTapped(_:)), for: UIControl.Event.touchUpInside)
         customView = button
     }
 
@@ -24,7 +24,7 @@ class GZENavButton: UIBarButtonItem {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func buttonTapped(_ sender: UIButton) {
+    @objc func buttonTapped(_ sender: UIButton) {
         onButtonTapped?(sender)
     }
 

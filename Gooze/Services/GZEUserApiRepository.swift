@@ -400,7 +400,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                     if let image = photo.image {
 
-                        imageData = UIImageJPEGRepresentation(image, 1)
+                        imageData = image.jpegData(compressionQuality: 1)
 
                         return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
                     } else {
@@ -455,7 +455,7 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                 if let image = photo.image {
 
-                    imageData = UIImageJPEGRepresentation(image, 1)
+                    imageData = image.jpegData(compressionQuality: 1)
 
                     return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
                 } else {
@@ -511,7 +511,8 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
 
                     if let image = photo.image {
 
-                        imageData = UIImageJPEGRepresentation(image, 1)
+                        imageData = image.jpegData(compressionQuality: 1)
+
 
                         return GZEFile(name: photo.name ?? "pic-\(index).jpg", size: imageData?.count ?? 0, container: GZEUser.Photo.container, type: "image/jpeg", data: imageData)
                     } else {

@@ -91,7 +91,7 @@ class GZEChatsPreviewView: UIView {
         self.lockButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
     }
 
-    func handleTap() {
+    @objc func handleTap() {
         self.onTap?()
     }
 

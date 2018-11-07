@@ -195,7 +195,7 @@ class GZEDoubleCtrlView: UIView {
         }
     }
 
-    func viewTapped(sender: UITapGestureRecognizer) {
+    @objc func viewTapped(sender: UITapGestureRecognizer) {
         switch sender.view {
         case .some(topView):
             log.debug("top view tapped")
@@ -257,7 +257,7 @@ class GZEDoubleCtrlView: UIView {
     }
 
     // MARK: KeyboardNotifications
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
         isKeyboardShown = true
         // sets separator width to textfield.text width
@@ -265,7 +265,7 @@ class GZEDoubleCtrlView: UIView {
         (bottomCtrlView as? UILabel)?.textColor = GZEConstants.Color.textInputPlacehoderOnEdit
     }
 
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         isKeyboardShown = false
         // No need to set separator width because textField

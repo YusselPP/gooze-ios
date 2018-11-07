@@ -211,7 +211,9 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         userBalloons.append(userBalloon5)
 
         userBalloons.forEach {
-            $0.onTap = ptr(self, GZEActivateGoozeViewController.userBalloonTapped)
+            $0.onTap = {[weak self] in
+                self?.userBalloonTapped($0, $1)
+            }
         }
 
         usersList.onUserTap = {[weak self] tapRecognizer, userBalloon in
@@ -680,7 +682,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                         message: viewModel.completeProfileRequest,
                         buttonTitles: [viewModel.completeProfileRequestYes],
                         cancelButtonTitle: viewModel.completeProfileRequestNo,
-                        actionHandler: {[weak self] _ in
+                        actionHandler: {[weak self] (_, _, _) in
                             log.debug("Yes pressed")
                             guard let this = self else {return}
                             this.performSegue(withIdentifier: this.segueToMyProfile, sender: nil)
@@ -751,11 +753,11 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         self.mapView = nil
     }
 
-    func centerMapToUserLocation() {
+    @objc func centerMapToUserLocation() {
         if let authorizationMessage = locationService.requestAuthorization() {
             GZEAlertService.shared.showBottomAlert(text: authorizationMessage)
         } else {
-            mapView.setRegion(MKCoordinateRegionMake(mapView.userLocation.coordinate, MKCoordinateSpanMake(0.01, 0.01)), animated: true)
+            mapView.setRegion(MKCoordinateRegion(center: mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
             GZEMapService.shared.centerCoordinate.value = mapView.userLocation.coordinate
         }
     }
@@ -1166,7 +1168,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         }
     }
 
-    func deactivateUser() {
+    @objc func deactivateUser() {
         log.debug("deactivateUser called")
         scene = .activate
     }
@@ -1179,7 +1181,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         log.debug("activateTimer: \(date), now: \(Date())")
 
         activateTimer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(deactivateUser), userInfo: nil, repeats: false)
-        RunLoop.main.add(activateTimer!, forMode: .commonModes)
+        RunLoop.main.add(activateTimer!, forMode: .common)
     }
 
     func stopActivateTimer() {

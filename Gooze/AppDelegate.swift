@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
         initialSetup()
@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         if url.scheme?.localizedCaseInsensitiveCompare("net.gooze.Gooze.payments") == .orderedSame {
             return BTAppSwitch.handleOpen(url, options: options)
         }
@@ -137,7 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let pageControl = UIPageControl.appearance()
         pageControl.backgroundColor = .clear
 
-        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: GZEConstants.Font.main, NSForegroundColorAttributeName: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: GZEConstants.Font.main, NSAttributedString.Key.foregroundColor: UIColor.white]
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         UINavigationBar.appearance().shadowImage = UIImage()
 
@@ -193,11 +193,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func setUpInitialController() {
+        log.debug("setUpInitialController")
         if
             // let navController = window?.rootViewController as? UINavigationController,
             // let initialController = navController.viewControllers.first as? GZELoadingViewController
             let initialController = window?.rootViewController as? GZELoadingViewController
         {
+            log.debug("\(initialController)")
             // Set up initial view model
             initialController.viewModel = GZELoadingViewModel(GZEUserApiRepository())
         } else {

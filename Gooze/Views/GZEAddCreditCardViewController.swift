@@ -104,12 +104,12 @@ class GZEAddCreditCardViewController: UIViewController {
 
     // MARK: - KeyboardNotifications
 
-    func keyboardWillShow(notification: Notification) {
+    @objc func keyboardWillShow(notification: Notification) {
         log.debug("keyboard will show")
         resizeViewWithKeyboard(keyboardShow: true, constraint: contentBottomConstrint, notification: notification, view: self.view)
     }
 
-    func keyboardWillHide(notification: Notification) {
+    @objc func keyboardWillHide(notification: Notification) {
         log.debug("keyboard will hide")
         resizeViewWithKeyboard(keyboardShow: false, constraint: contentBottomConstrint, notification: notification, view: self.view, safeInsets: false)
     }

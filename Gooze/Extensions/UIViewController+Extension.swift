@@ -14,7 +14,7 @@ extension UIViewController {
 
     func displayMessage(_ title: String?, _ message: String, onDismiss: (() -> ())? = nil) -> Void {
         let alert = UIAlertController(title: title ?? "Gooze", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { _ in onDismiss?() }))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { _ in onDismiss?() }))
         present(alert, animated: true)
     }
 
@@ -42,13 +42,13 @@ extension UIViewController {
     func addKeyboardInsetAndScroll(scrollView: UIScrollView, activeField: UIView?, notification: Notification) {
         if
             let info = notification.userInfo,
-            let kbSize = info[UIKeyboardFrameEndUserInfoKey] as? CGRect
+            let kbSize = info[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
         {
-            let duration = info[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.35
-            let curve = UIViewAnimationCurve(
-                rawValue: info[UIKeyboardAnimationCurveUserInfoKey] as? Int ?? UIViewAnimationCurve.linear.rawValue
+            let duration = info[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.35
+            let curve = UIView.AnimationCurve(
+                rawValue: info[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? UIView.AnimationCurve.linear.rawValue
             )
-            let options = curve?.toOptions() ?? UIViewAnimationOptions.curveLinear
+            let options = curve?.toOptions() ?? UIView.AnimationOptions.curveLinear
 
             log.debug(curve as Any)
             log.debug(options)

@@ -187,7 +187,7 @@ class GZEMenuMain {
             button.pp_moveBadgeWith(x: UIScreen.main.bounds.width / 2 + 30, y: 11)
             button.pp_setBadgeLabelAttributes{label in
                 label?.backgroundColor = GZEConstants.Color.mainGreen
-                label?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+                label?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
             }
         }
         return button

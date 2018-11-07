@@ -109,7 +109,7 @@ class GZELibraryCollectionView: UICollectionView, UICollectionViewDelegate, UICo
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(self.padding, self.padding, self.padding, self.padding)
+        return UIEdgeInsets(top: self.padding, left: self.padding, bottom: self.padding, right: self.padding)
     }
 
     // MARK: - Deinitializer

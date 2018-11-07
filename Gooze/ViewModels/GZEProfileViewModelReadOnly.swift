@@ -222,7 +222,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     message: addPaymentMethodRequest,
                     buttonTitles: [addPaymentMethodAnswerAdd],
                     cancelButtonTitle: addPaymentMethodAnswerLater,
-                    actionHandler: {[weak self] _ in
+                    actionHandler: {[weak self] (_, _, _) in
                         log.debug("Add pressed")
                         self?.openAddPaymentMethodsView()
                     },
@@ -238,7 +238,7 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     message: completeProfileRequest,
                     buttonTitles: [completeProfileRequestYes],
                     cancelButtonTitle: completeProfileRequestNo,
-                    actionHandler: {[weak self] _ in
+                    actionHandler: {[weak self] (_, _, _) in
                         log.debug("Yes pressed")
                         guard let this = self else {return}
                         // TODO implement this
