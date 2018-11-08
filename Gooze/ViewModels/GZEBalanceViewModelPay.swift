@@ -26,10 +26,20 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
     // END GZEBalanceViewModel protocol
 
     // Private properties
+    let mode: GZEChatViewMode
     let transactionsRepository: GZEUserTransactionsRepositoryProtocol = GZEUserTransactionsApiRepositroy()
     let transactions = MutableProperty<[GZETransaction]>([])
+    lazy var findTransactions: () -> SignalProducer<[GZETransaction], GZEError> = {
+        if self.mode == .gooze {
+            return self.transactionsRepository.findGooze
+        } else {
+            return self.transactionsRepository.findClient
+        }
+    }()
 
-    init() {
+    init(mode: GZEChatViewMode) {
+        self.mode = mode
+
         log.debug("\(self) init")
 
         self.title.value = "vm.balance.pay.title".localized()
@@ -46,10 +56,16 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
         self.rightLabelText <~ self.transactions
             .map{$0.reduce(Decimal(0), {
                 let trans = $1
-                if trans.from == authUser?.username {
-                    return $0 - trans.amount
+                //if trans.from == authUser?.username {
+                 //   return $0 - trans.amount
+                //} else {
+                //    return $0 + trans.amount
+                //}
+
+                if trans.goozeStatus == .paid {
+                    return $0 + (trans.paidAmount ?? Decimal(0))
                 } else {
-                    return $0 + trans.amount
+                    return $0 + trans.netAmount
                 }
             })}
             .map{GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: $0)) ?? "$0"}
@@ -57,10 +73,16 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
         self.rightLabelTextColor <~ self.transactions
             .map{$0.reduce(Decimal(0) , {
                 let trans = $1
-                if trans.from == authUser?.username {
-                    return $0 - trans.amount
+                //if trans.from == authUser?.username {
+                //   return $0 - trans.amount
+                //} else {
+                //    return $0 + trans.amount
+                //}
+
+                if trans.goozeStatus == .paid {
+                    return $0 + (trans.paidAmount ?? Decimal(0))
                 } else {
-                    return $0 + trans.amount
+                    return $0 + trans.netAmount
                 }
             })}
             .map{$0 < 0 ? GZEConstants.Color.textInputPlacehoderOnEdit : .white}
@@ -69,12 +91,20 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
             self.transactions
                 .map{
                     $0.map{trans in
-                        GZEBalanceCellModel(
+
+                        var amount: String
+                        if trans.goozeStatus == .paid {
+                            amount = trans.paidAmount?.toCurrencyString() ?? "$0"
+                        } else {
+                            amount = trans.netAmount.toCurrencyString() ?? "$0"
+                        }
+
+                        return GZEBalanceCellModel(
                             author: trans.from == authUser?.username ? trans.to : trans.from,
                             date: GZEDateHelper.displayDateTimeFormatter.string(from: trans.createdAt),
-                            amount: GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: trans.amount)) ?? "$0",
-                            amountColor: trans.from == authUser?.username ? GZEConstants.Color.textInputPlacehoderOnEdit : .white,
-                            status: trans.status
+                            amount: amount,
+                            amountColor: .white,
+                            status: trans.goozeStatus.localizedDescription
                         )
                     }
                 }
@@ -84,7 +114,7 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
     // Private Methods
     func updateBalance() {
         self.loading.value = true
-        self.transactionsRepository.findMine().start {[weak self] in
+        self.findTransactions().start {[weak self] in
             guard let this = self else {return}
             this.loading.value = false
             switch $0 {

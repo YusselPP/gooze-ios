@@ -70,6 +70,11 @@
 "female.plural"="females";
 "other.plural"="others";
 
+// Models/GZETransaction/GoozeStatus
+"model.transaction.status.paid"="Paid";
+"model.transaction.status.pending"="Pending";
+"model.transaction.status.review"="Reviewing";
+
 // ViewModel/GZEWebViewModelTerms
 "vm.web.terms"="Terms & conditions";
 

@@ -46,6 +46,35 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                 self == .requestOtherResultsList
             )
         }
+
+        var mode: GZEChatViewMode {
+            let mode: GZEChatViewMode
+
+            switch self {
+            case .activate,
+                 .requestResults,
+                 .requestResultsList,
+                 .requestOtherResultsList:
+                mode = .gooze
+            case .search,
+                 .searching,
+                 .searchResults,
+                 .resultsList,
+                 .otherResultsList:
+                mode = .client
+            case .onDate:
+                if
+                    let authUser = GZEAuthService.shared.authUser,
+                    let userMode = authUser.activeDateRequest?.getUserMode(authUser)
+                {
+                    mode = userMode
+                } else {
+                    mode = .client
+                }
+            }
+
+            return mode
+        }
     }
     var scene = Scene.search {
         didSet {
@@ -824,7 +853,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             GZEBalanceViewController.prepareView(
                 presenter: self,
                 viewController: segue.destination,
-                vm: sender
+                vm: GZEBalanceViewModelPay(mode: scene.mode)
             )
         }
      }
@@ -868,32 +897,8 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
 
     func prepareChatSegue(_ vc: UIViewController) {
         if let vc = vc as? GZEChatsViewController {
-            let mode: GZEChatViewMode
 
-            switch scene {
-            case .activate,
-                 .requestResults,
-                 .requestResultsList,
-                 .requestOtherResultsList:
-                mode = .gooze
-            case .search,
-                 .searching,
-                 .searchResults,
-                 .resultsList,
-                 .otherResultsList:
-                mode = .client
-            case .onDate:
-                if
-                    let authUser = GZEAuthService.shared.authUser,
-                    let userMode = authUser.activeDateRequest?.getUserMode(authUser)
-                {
-                    mode = userMode
-                } else {
-                    mode = .client
-                }
-            }
-
-            vc.viewModel = self.viewModel.getChatsViewModel(mode)
+            vc.viewModel = self.viewModel.getChatsViewModel(scene.mode)
 
         } else {
             log.error("Unable to cast segue.destination as? GZEChatsViewController")

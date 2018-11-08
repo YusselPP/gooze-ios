@@ -113,7 +113,7 @@ class GZEMenuMain {
 
         let (_, transactionsCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
             guard let controller = self?.controller else {return}
-            controller.performSegue(withIdentifier: controller.segueToBalance, sender: GZEBalanceViewModelPay())
+            controller.performSegue(withIdentifier: controller.segueToBalance, sender: nil)
         })
 
         let (_, tipsCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in

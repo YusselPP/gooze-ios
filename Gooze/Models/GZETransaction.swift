@@ -11,16 +11,32 @@ import Gloss
 
 class GZETransaction: Gloss.Decodable {
 
-    enum Status: String {
+    enum GoozeStatus: String {
         case paid
-        case confirmed = "settling"
-        case failed
+        case pending
+        case review
+
+        var localizedDescription: String {
+            var str: String
+            switch self {
+            case .paid:
+                str = "model.transaction.status.paid"
+            case .pending:
+                str = "model.transaction.status.pending"
+            case .review:
+                str = "model.transaction.status.review"
+            }
+            return str.localized()
+        }
     }
 
     let from: String
     let to: String
     let amount: Decimal
+    let netAmount: Decimal
+    let paidAmount: Decimal?
     let status: String
+    let goozeStatus: GoozeStatus
     let paymentMethodName: String
     let createdAt: Date
 
@@ -31,6 +47,7 @@ class GZETransaction: Gloss.Decodable {
             let amountString: String = "amount" <~~ json,
             let amount = Decimal(string: amountString),
             let status: String = "status" <~~ json,
+            let goozeStatus: GoozeStatus = "goozeStatus" <~~ json,
             let paymentMethodName: String = "paymentMethod" <~~ json,
             let createdAt: Date = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json)
         else {
@@ -42,7 +59,26 @@ class GZETransaction: Gloss.Decodable {
         self.to = to
         self.amount = amount
         self.status = status
+        self.goozeStatus = goozeStatus
         self.paymentMethodName = paymentMethodName
         self.createdAt = createdAt
+
+        if
+            let netAmountString: String = "netAmount" <~~ json,
+            let netAmount = Decimal(string: netAmountString)
+        {
+            self.netAmount = netAmount
+        } else {
+            self.netAmount = 0
+        }
+
+        if
+            let paidAmountString: String = "paidAmount" <~~ json,
+            let paidAmount = Decimal(string: paidAmountString)
+        {
+            self.paidAmount = paidAmount
+        } else {
+            self.paidAmount = nil
+        }
     }
 }
