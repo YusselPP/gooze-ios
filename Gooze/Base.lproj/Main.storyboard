@@ -1980,7 +1980,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vem-A2-nQU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4543" y="1298"/>
+            <point key="canvasLocation" x="4541.6000000000004" y="1297.6011994002999"/>
         </scene>
         <!--Add Credit Card View Controller-->
         <scene sceneID="MQK-Ru-bj2">
@@ -2194,6 +2194,10 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HyR-jZ-gf8" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="164.5" y="617" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -2202,12 +2206,15 @@
                             <constraint firstItem="TFk-4W-4wQ" firstAttribute="trailing" secondItem="gaH-Nc-ZZd" secondAttribute="trailingMargin" id="DHj-PB-Wu3"/>
                             <constraint firstItem="TFk-4W-4wQ" firstAttribute="top" secondItem="9Nh-QA-4Lv" secondAttribute="bottom" constant="8" id="I3q-t4-nEf"/>
                             <constraint firstItem="Oz9-oA-Bi9" firstAttribute="top" secondItem="TFk-4W-4wQ" secondAttribute="bottom" id="M8R-ED-6MY"/>
+                            <constraint firstItem="HyR-jZ-gf8" firstAttribute="centerX" secondItem="gaH-Nc-ZZd" secondAttribute="centerX" id="Vrl-O4-ZpZ"/>
                             <constraint firstItem="TYg-eX-nzT" firstAttribute="top" secondItem="gaH-Nc-ZZd" secondAttribute="top" id="auC-53-UBG"/>
                             <constraint firstItem="TYg-eX-nzT" firstAttribute="leading" secondItem="gaH-Nc-ZZd" secondAttribute="leading" id="feN-ai-BGg"/>
                             <constraint firstItem="TFk-4W-4wQ" firstAttribute="leading" secondItem="gaH-Nc-ZZd" secondAttribute="leadingMargin" id="mIY-T4-DI8"/>
+                            <constraint firstItem="Oz9-oA-Bi9" firstAttribute="top" secondItem="HyR-jZ-gf8" secondAttribute="bottom" constant="20" id="xCL-0d-0HT"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bottomActionButton" destination="HyR-jZ-gf8" id="8TE-Du-Xpj"/>
                         <outlet property="bottomStack" destination="kLK-IT-7eE" id="13k-XF-iKq"/>
                         <outlet property="collectionView" destination="XZf-PV-56J" id="yeO-UN-0cQ"/>
                         <outlet property="rightLabel" destination="wNM-yu-oph" id="X0m-mP-Wje"/>

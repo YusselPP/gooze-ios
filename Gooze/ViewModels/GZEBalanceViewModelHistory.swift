@@ -27,6 +27,10 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
     let bottomStackHidden = MutableProperty<Bool>(true)
 
     let dataAtBottom = false
+
+    let bottomActionButtonTitle = MutableProperty<String>("vm.balance.history.clear".localized().uppercased())
+    let bottomActionButtonHidden = MutableProperty<Bool>(false)
+    var bottomActionButtonCocoaAction: CocoaAction<GZEButton>?
     // END GZEBalanceViewModel protocol
 
     // Private properties
@@ -41,12 +45,21 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
         }
     }()
 
+    lazy var clearHistory: Action<Void, Void, GZEError> = {
+        Action {[weak self] in
+            guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
+            this.loading.value = true
+            return this.dateRequestRepository.clearHistory(mode: this.mode)
+        }
+    }()
+
     init(mode: GZEChatViewMode) {
         self.mode = mode
 
         log.debug("\(self) init")
 
         self.title.value = "vm.balance.history.title".localized()
+        self.bottomActionButtonCocoaAction = CocoaAction(self.clearHistory)
 
         self.viewShown.signal.observeValues {[weak self] shown in
             guard let this = self else {return}
@@ -78,6 +91,19 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
                         }
             }
         )
+
+        self.clearHistory.events.observeValues({[weak self] event in
+            log.debug("event: \(event)")
+            guard let this = self else {return}
+            this.loading.value = false
+            switch event {
+            case .completed:
+                this.updateBalance()
+            case .failed(let error):
+                this.onError(error)
+            default: break
+            }
+        })
     }
 
     // Private Methods

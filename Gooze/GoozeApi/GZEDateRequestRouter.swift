@@ -13,6 +13,7 @@ enum GZEDateRequestRouter: URLRequestConvertible {
 
     case find(parameters: Parameters)
     case update(id: String, parameters: Parameters)
+    case updateAll(query: Parameters, data: Parameters)
 
     case findUnresponded(parameters: Parameters)
 
@@ -31,7 +32,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
         case .find,
              .findUnresponded:
             return .get
-        case .startDate,
+        case .updateAll,
+             .startDate,
              .endDate,
              .cancelDate,
              .closeChat,
@@ -48,6 +50,8 @@ enum GZEDateRequestRouter: URLRequestConvertible {
             return "\(GZEDateRequestRouter.route)/"
         case .update(let id, _):
             return "\(GZEDateRequestRouter.route)/\(id)"
+        case .updateAll:
+            return "\(GZEDateRequestRouter.route)/update"
         case .findUnresponded:
             return "\(GZEDateRequestRouter.route)/findUnresponded"
         case .startDate:
@@ -82,6 +86,7 @@ enum GZEDateRequestRouter: URLRequestConvertible {
         case .find,
              .findUnresponded,
              .update,
+             .updateAll,
              .startDate,
              .endDate,
              .cancelDate,
@@ -103,6 +108,9 @@ enum GZEDateRequestRouter: URLRequestConvertible {
              .closeChat(let parameters),
              .createCharge(let parameters):
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
+        case .updateAll(let query, let data):
+            urlRequest = try LBURLEncoding.queryString.encode(urlRequest, with: query)
+            urlRequest = try JSONEncoding.default.encode(urlRequest, with: data)
         }
 
         return urlRequest

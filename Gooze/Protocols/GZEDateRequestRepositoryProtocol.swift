@@ -33,4 +33,5 @@ protocol GZEDateRequestRepositoryProtocol {
         chat: GZEChat,
         mode: GZEChatViewMode
     ) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>
+    func clearHistory(mode: GZEChatViewMode) -> SignalProducer<Void, GZEError>
 }

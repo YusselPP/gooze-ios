@@ -224,12 +224,14 @@
 "vm.help.subject"="Subject";
 "vm.help.body"="Message";
 "vm.help.onLoadMessage"="Send your message and we'll review your case as soon as possible";
+"vm.help.messageSend"="Message sent";
 
 // ViewModel/GZEBalanceViewModelPay
 "vm.balance.pay.title"="Transactions";
 
 // ViewModel/GZEBalanceViewModelHistory
 "vm.balance.history.title"="History";
+"vm.balance.history.clear"="Clear history";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";

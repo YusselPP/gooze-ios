@@ -140,8 +140,9 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             log.debug("trying to get goozeHistory")
 
             var filterWhere: JSON = [
-                "status": GZEDateRequest.Status.ended,
-                "recipientId": userId
+                "status": GZEDateRequest.Status.ended.rawValue,
+                "recipientId": userId,
+                "shownInRecipientHistory": true
             ]
 
             if let date = Date().add(month: -1) {
@@ -176,8 +177,9 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             log.debug("trying to get clientHistory")
 
             var filterWhere: JSON = [
-                "status": GZEDateRequest.Status.ended,
-                "senderId": userId
+                "status": GZEDateRequest.Status.ended.rawValue,
+                "senderId": userId,
+                "shownInSenderHistory": true
             ]
 
             if let date = Date().add(month: -1) {
@@ -381,6 +383,42 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                     }
 
                     return (dateRequest, user)
+                }))
+        }
+    }
+
+    func clearHistory(mode: GZEChatViewMode) -> SignalProducer<Void, GZEError> {
+        guard let userId = GZEAuthService.shared.authUser?.id else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("clearHistory SignalProducer disposed")
+            }
+
+            log.debug("clearing history...")
+
+            var whereFilter: JSON = [
+                "status": GZEDateRequest.Status.ended.rawValue
+            ]
+            var data: JSON = [:]
+
+            if mode == .client {
+                whereFilter["shownInSenderHistory"] = true
+                whereFilter["senderId"] = userId
+                data["shownInSenderHistory"] = false
+            } else {
+                whereFilter["shownInRecipientHistory"] = true
+                whereFilter["recipientId"] = userId
+                data["shownInRecipientHistory"] = false
+            }
+
+            Alamofire.request(GZEDateRequestRouter.updateAll(query: ["where": whereFilter], data: data))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
+                    (jsnon: JSON) -> Void in
+                    return ()
                 }))
         }
     }

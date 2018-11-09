@@ -318,7 +318,9 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         return SignalProducer{sink, disposable in
 
             Alamofire.request(GZEUserRouter.sendEmail(parameters: ["mail": ["subject": subject, "text": text]]))
-                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {()}))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
+                    (val: NSNull) -> Void in ()
+                }))
         }
     }
 

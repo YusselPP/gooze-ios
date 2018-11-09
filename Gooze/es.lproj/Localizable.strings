@@ -224,12 +224,14 @@
 "vm.help.subject"="Asunto";
 "vm.help.body"="Mensaje";
 "vm.help.onLoadMessage"="Envia tu mensaje para que revisemos tu caso a la brevedad";
+"vm.help.messageSend"="Mensaje enviado";
 
 // ViewModel/GZEBalanceViewModelPay
 "vm.balance.pay.title"="Transacciones";
 
 // ViewModel/GZEBalanceViewModelHistory
 "vm.balance.history.title"="Historial";
+"vm.balance.history.clear"="Borrar historial";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";

@@ -26,4 +26,8 @@ protocol GZEBalanceViewModel {
     var bottomStackHidden: MutableProperty<Bool> {get}
 
     var dataAtBottom: Bool {get}
+
+    var bottomActionButtonTitle: MutableProperty<String> {get}
+    var bottomActionButtonHidden: MutableProperty<Bool> {get}
+    var bottomActionButtonCocoaAction: CocoaAction<GZEButton>? {get}
 }

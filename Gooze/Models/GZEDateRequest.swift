@@ -31,12 +31,14 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     let date: GZEDate?
     let senderClosed: Bool
     let recipientClosed: Bool
+    let shownInSenderHistory: Bool
+    let shownInRecipientHistory: Bool
 
     var isBlocked: Bool {
         return self.status != .accepted && self.status != .onDate
     }
 
-    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Decimal? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool) {
+    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Decimal? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool, shownInSenderHistory: Bool, shownInRecipientHistory: Bool) {
         self.id = id
         self.status = status
         self.sender = sender
@@ -47,6 +49,8 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.date = date
         self.senderClosed = senderClosed
         self.recipientClosed = recipientClosed
+        self.shownInSenderHistory = shownInSenderHistory
+        self.shownInRecipientHistory = shownInRecipientHistory
         super.init()
     }
 
@@ -58,7 +62,9 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             let recipient: GZEChatUser = "recipient" <~~ json,
             let location: GZEUser.GeoPoint = "location" <~~ json,
             let senderClosed: Bool = "senderClosed" <~~ json,
-            let recipientClosed: Bool = "recipientClosed" <~~ json
+            let recipientClosed: Bool = "recipientClosed" <~~ json,
+            let shownInSenderHistory: Bool = "shownInSenderHistory" <~~ json,
+            let shownInRecipientHistory: Bool = "shownInRecipientHistory" <~~ json
         else {
             log.error("Unable to instantiate. JSON doesn't include a required property")
             return nil
@@ -83,6 +89,8 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.date = "date" <~~ json
         self.senderClosed = senderClosed
         self.recipientClosed = recipientClosed
+        self.shownInSenderHistory = shownInSenderHistory
+        self.shownInRecipientHistory = shownInRecipientHistory
         super.init()
     }
 
@@ -98,6 +106,8 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
             "date" ~~> self.date,
             "senderClosed" ~~> self.senderClosed,
             "recipientClosed" ~~> self.recipientClosed,
+            "shownInSenderHistory" ~~> self.shownInSenderHistory,
+            "shownInRecipientHistory" ~~> self.shownInRecipientHistory,
         ]);
     }
 
