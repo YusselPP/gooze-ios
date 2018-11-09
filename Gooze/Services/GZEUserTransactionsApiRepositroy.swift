@@ -69,13 +69,24 @@ class GZEUserTransactionsApiRepositroy: GZEUserTransactionsRepositoryProtocol {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
 
+        var filterWhere: JSON = [
+            "fromUserId": userId
+        ]
+
+        if let date = Date().add(month: -1) {
+            filterWhere["createdAt"] = [
+                "gte": date
+            ]
+        }
+
         let filter: JSON = [
             "filter": [
-                "where": [
-                    "fromUserId": userId
-                ],
+                "where": filterWhere,
                 "include": [
                     "fromUser", "toUser"
+                ],
+                "order": [
+                    "createdAt ASC"
                 ]
             ]
         ]
