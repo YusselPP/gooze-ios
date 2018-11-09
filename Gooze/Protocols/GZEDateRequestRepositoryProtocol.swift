@@ -16,6 +16,8 @@ protocol GZEDateRequestRepositoryProtocol {
     func findReceivedRequests(closed: Bool) -> SignalProducer<[GZEDateRequest], GZEError>
     func findUnresponded() -> SignalProducer<[GZEDateRequest], GZEError>
     func findActiveDate(by: String) -> SignalProducer<[GZEDateRequest], GZEError>
+    func goozeHistory() -> SignalProducer<[GZEDateRequest], GZEError>
+    func clientHistory() -> SignalProducer<[GZEDateRequest], GZEError>
     func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>
     func endDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>
     func cancelDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError>

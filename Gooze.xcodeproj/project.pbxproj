@@ -85,6 +85,7 @@
 		8D26D94320E5CEAE002D3586 /* GZEBalanceCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D26D94220E5CEAE002D3586 /* GZEBalanceCollectionView.swift */; };
 		8D26D94520E5CECD002D3586 /* GZEBalanceCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D26D94420E5CECD002D3586 /* GZEBalanceCollectionCell.swift */; };
 		8D26D94720E5CF29002D3586 /* GZEBalanceCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D26D94620E5CF29002D3586 /* GZEBalanceCellModel.swift */; };
+		8D2729A82194A2360069483C /* GZEBalanceViewModelHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2729A72194A2360069483C /* GZEBalanceViewModelHistory.swift */; };
 		8D2789FB217408B400029759 /* GZELoadingUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2789FA217408B400029759 /* GZELoadingUIView.swift */; };
 		8D27D03E1FBEB14E00263B6C /* GZEDateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */; };
 		8D28075D2194570C00ACADDE /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D28075C2194570C00ACADDE /* Date+Extension.swift */; };
@@ -359,6 +360,7 @@
 		8D26D94220E5CEAE002D3586 /* GZEBalanceCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBalanceCollectionView.swift; sourceTree = "<group>"; };
 		8D26D94420E5CECD002D3586 /* GZEBalanceCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBalanceCollectionCell.swift; sourceTree = "<group>"; };
 		8D26D94620E5CF29002D3586 /* GZEBalanceCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBalanceCellModel.swift; sourceTree = "<group>"; };
+		8D2729A72194A2360069483C /* GZEBalanceViewModelHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBalanceViewModelHistory.swift; sourceTree = "<group>"; };
 		8D2789FA217408B400029759 /* GZELoadingUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZELoadingUIView.swift; sourceTree = "<group>"; };
 		8D27D03D1FBEB14E00263B6C /* GZEDateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateHelper.swift; sourceTree = "<group>"; };
 		8D28075C2194570C00ACADDE /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -1041,6 +1043,7 @@
 				8D29625420E5169E00972958 /* GZEHelpViewModelGooze.swift */,
 				8D26D93F20E5CDD9002D3586 /* GZEBalanceViewModel.swift */,
 				8D289B0D20E63BAF008EAD47 /* GZEBalanceViewModelPay.swift */,
+				8D2729A72194A2360069483C /* GZEBalanceViewModelHistory.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1517,6 +1520,7 @@
 				8D192386204EB8FA005F6F5F /* GZEGalleryViewModel.swift in Sources */,
 				8DBAB6E8206F4CA8009586A5 /* GZEChatMessage.swift in Sources */,
 				8D250C7F20B2D93100D3E06B /* GZERateComment.swift in Sources */,
+				8D2729A82194A2360069483C /* GZEBalanceViewModelHistory.swift in Sources */,
 				8D283F7520E6A286002DD5C8 /* GZEUserTransactionsApiRepositroy.swift in Sources */,
 				8D29C0B720BD67F40084A1F3 /* GZEPaymentError.swift in Sources */,
 				8D289B1020E65284008EAD47 /* GZETransaction.swift in Sources */,

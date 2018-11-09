@@ -17,6 +17,27 @@ class GZEDate: NSObject, Glossy {
         case ending
         case ended
         case canceled
+
+        var localizedDescription: String {
+            var desc: String
+
+            switch self {
+            case .route:
+                desc = "model.date.status.route"
+            case .starting:
+                desc = "model.date.status.starting"
+            case .progress:
+                desc = "model.date.status.progress"
+            case .ending:
+                desc = "model.date.status.ending"
+            case .ended:
+                desc = "model.date.status.ended"
+            case .canceled:
+                desc = "model.date.status.canceled"
+            }
+
+            return desc.localized()
+        }
     }
     let id: String
     let status: GZEDate.Status
@@ -26,9 +47,10 @@ class GZEDate: NSObject, Glossy {
     let recipientEnded: Bool
     let senderCanceled: Bool
     let recipientCanceled: Bool
+    let createdAt: Date
 
     // let isDeleted: Bool
-    init(id: String, status: GZEDate.Status, senderStarted: Bool, recipientStarted: Bool, senderEnded: Bool, recipientEnded: Bool, senderCanceled: Bool, recipientCanceled: Bool) {
+    init(id: String, status: GZEDate.Status, senderStarted: Bool, recipientStarted: Bool, senderEnded: Bool, recipientEnded: Bool, senderCanceled: Bool, recipientCanceled: Bool, createdAt: Date) {
         self.id = id
         self.status = status
         self.senderStarted = senderStarted
@@ -37,6 +59,7 @@ class GZEDate: NSObject, Glossy {
         self.recipientEnded = recipientEnded
         self.senderCanceled = senderCanceled
         self.recipientCanceled = recipientCanceled
+        self.createdAt = createdAt
     }
 
     required init?(json: JSON) {
@@ -48,7 +71,8 @@ class GZEDate: NSObject, Glossy {
             let senderEnded: Bool = "senderEnded" <~~ json,
             let recipientEnded: Bool = "recipientEnded" <~~ json,
             let senderCanceled: Bool = "senderCanceled" <~~ json,
-            let recipientCanceled: Bool = "recipientCanceled" <~~ json
+            let recipientCanceled: Bool = "recipientCanceled" <~~ json,
+            let createdAt: Date = Decoder.decode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(json)
             else {
                 log.debug("Unable to instantiate. Missing required parameter: \(json)")
                 return nil
@@ -62,6 +86,7 @@ class GZEDate: NSObject, Glossy {
         self.recipientEnded = recipientEnded
         self.senderCanceled = senderCanceled
         self.recipientCanceled = recipientCanceled
+        self.createdAt = createdAt
     }
 
     func toJSON() -> JSON? {
@@ -74,6 +99,7 @@ class GZEDate: NSObject, Glossy {
             "recipientEnded" ~~> self.recipientEnded,
             "senderCanceled" ~~> self.senderCanceled,
             "recipientCanceled" ~~> self.recipientCanceled,
+            "createdAt" ~~> Encoder.encode(dateForKey: "createdAt", dateFormatter: GZEApi.dateFormatter)(self.createdAt)
             ])
     }
 }

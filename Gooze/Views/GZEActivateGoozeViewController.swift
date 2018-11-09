@@ -24,6 +24,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     let segueToPayment = "segueToPayment"
     let segueToBalance = "segueToBalance"
     let segueToHelp = "segueToHelp"
+    let segueToHistory = "segueToHistory"
 
     enum Scene {
         case activate
@@ -854,6 +855,13 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                 presenter: self,
                 viewController: segue.destination,
                 vm: GZEBalanceViewModelPay(mode: scene.mode)
+            )
+        } else if segue.identifier == segueToHistory {
+
+            GZEBalanceViewController.prepareView(
+                presenter: self,
+                viewController: segue.destination,
+                vm: GZEBalanceViewModelHistory(mode: scene.mode)
             )
         }
      }

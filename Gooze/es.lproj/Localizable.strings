@@ -75,6 +75,14 @@
 "model.transaction.status.pending"="Pendiente";
 "model.transaction.status.review"="En revisión";
 
+// Models/GZEDate/Status
+"model.date.status.route"="En camino";
+"model.date.status.starting"="Comenzando";
+"model.date.status.progress"="En progreso";
+"model.date.status.ending"="Terminanda";
+"model.date.status.ended"="Finalizada";
+"model.date.status.canceled"="Cancelada";
+
 // ViewModel/GZEWebViewModelTerms
 "vm.web.terms"="Términos y condiciones";
 
@@ -218,6 +226,9 @@
 
 // ViewModel/GZEBalanceViewModelPay
 "vm.balance.pay.title"="Transacciones";
+
+// ViewModel/GZEBalanceViewModelHistory
+"vm.balance.history.title"="Historial";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";

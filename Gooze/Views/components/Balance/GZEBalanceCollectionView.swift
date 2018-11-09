@@ -14,6 +14,8 @@ class GZEBalanceCollectionView: UICollectionView, UICollectionViewDelegate, UICo
 
     private let cellIdentifier = "GZEBalanceCollectionCell"
 
+    var dataAtBottom: Bool = true
+
     var cells: [GZEBalanceCellModel] {
         set {
             self.setCells(newValue)
@@ -89,8 +91,13 @@ class GZEBalanceCollectionView: UICollectionView, UICollectionViewDelegate, UICo
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let itemsHeight = CGFloat(50 * numberOfItems(inSection: section))
-        return UIEdgeInsets(top: max(self.frame.size.height - itemsHeight, 0), left: 0, bottom: 0, right: 0)
+
+        if dataAtBottom {
+            let itemsHeight = CGFloat(50 * numberOfItems(inSection: section))
+            return UIEdgeInsets(top: max(self.frame.size.height - itemsHeight, 0), left: 0, bottom: 0, right: 0)
+        }
+
+        return UIEdgeInsets.zero
     }
 
     // MARK: - Helpers

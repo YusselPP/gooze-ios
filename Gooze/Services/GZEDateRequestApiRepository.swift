@@ -126,6 +126,78 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         }
     }
 
+    func goozeHistory() -> SignalProducer<[GZEDateRequest], GZEError> {
+        guard let userId = GZEApi.instance.accessToken?.userId else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("goozeHistory SignalProducer disposed")
+            }
+
+            log.debug("trying to get goozeHistory")
+
+            var filterWhere: JSON = [
+                "status": GZEDateRequest.Status.ended,
+                "recipientId": userId
+            ]
+
+            if let date = Date().add(month: -1) {
+                filterWhere["createdAt"] = [
+                    "gte": date
+                ]
+            }
+
+            let params: JSON = [
+                "filter": [
+                    "where": filterWhere,
+                    "order": "createdAt DESC"
+                ]
+            ]
+
+            Alamofire.request(GZEDateRequestRouter.find(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: [GZEDateRequest].from))
+        }
+    }
+
+    func clientHistory() -> SignalProducer<[GZEDateRequest], GZEError> {
+        guard let userId = GZEApi.instance.accessToken?.userId else {
+            return SignalProducer(error: .repository(error: .AuthRequired))
+        }
+
+        return SignalProducer { sink, disposable in
+
+            disposable.add {
+                log.debug("clientHistory SignalProducer disposed")
+            }
+
+            log.debug("trying to get clientHistory")
+
+            var filterWhere: JSON = [
+                "status": GZEDateRequest.Status.ended,
+                "senderId": userId
+            ]
+
+            if let date = Date().add(month: -1) {
+                filterWhere["createdAt"] = [
+                    "gte": date
+                ]
+            }
+
+            let params: JSON = [
+                "filter": [
+                    "where": filterWhere,
+                    "order": "createdAt DESC"
+                ]
+            ]
+
+            Alamofire.request(GZEDateRequestRouter.find(parameters: params))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: [GZEDateRequest].from))
+        }
+    }
+
     func startDate(_ dateRequest: GZEDateRequest) -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
         guard GZEApi.instance.accessToken != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))

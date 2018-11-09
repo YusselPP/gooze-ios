@@ -22,4 +22,8 @@ protocol GZEBalanceViewModel {
     var list: MutableProperty<[GZEBalanceCellModel]> {get}
     var rightLabelText: MutableProperty<String?> {get}
     var rightLabelTextColor: MutableProperty<UIColor> {get}
+
+    var bottomStackHidden: MutableProperty<Bool> {get}
+
+    var dataAtBottom: Bool {get}
 }

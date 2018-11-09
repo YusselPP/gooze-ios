@@ -1425,6 +1425,7 @@
                         <segue destination="j8o-Hv-891" kind="show" identifier="segueToPayment" id="uRz-tZ-uiL"/>
                         <segue destination="OOY-bx-l2I" kind="show" identifier="segueToHelp" id="R1T-5h-Xv7"/>
                         <segue destination="iBv-gz-hoZ" kind="show" identifier="segueToBalance" id="qNa-CM-5aU"/>
+                        <segue destination="iBv-gz-hoZ" kind="show" identifier="segueToHistory" id="2Yf-uK-vbD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V5c-ka-Vea" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2207,6 +2208,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bottomStack" destination="kLK-IT-7eE" id="13k-XF-iKq"/>
                         <outlet property="collectionView" destination="XZf-PV-56J" id="yeO-UN-0cQ"/>
                         <outlet property="rightLabel" destination="wNM-yu-oph" id="X0m-mP-Wje"/>
                     </connections>
@@ -3514,6 +3516,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="aoX-cG-RKK"/>
+        <segue reference="2Yf-uK-vbD"/>
         <segue reference="uRz-tZ-uiL"/>
         <segue reference="R1T-5h-Xv7"/>
         <segue reference="XJg-fM-c9J"/>

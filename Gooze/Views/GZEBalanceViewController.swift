@@ -21,6 +21,7 @@ class GZEBalanceViewController: UIViewController {
 
     @IBOutlet weak var collectionView: GZEBalanceCollectionView!
     @IBOutlet weak var rightLabel: GZELabel!
+    @IBOutlet weak var bottomStack: UIStackView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +55,7 @@ class GZEBalanceViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = backButton
 
         self.collectionView.backgroundColor = .clear
+        self.collectionView.dataAtBottom = self.viewModel.dataAtBottom
     }
 
     func setupBindings() {
@@ -62,6 +64,7 @@ class GZEBalanceViewController: UIViewController {
         self.collectionView.reactive.cells <~ self.viewModel.list
         self.rightLabel.reactive.text <~ self.viewModel.rightLabelText
         self.rightLabel.reactive.textColor <~ self.viewModel.rightLabelTextColor
+        self.bottomStack.reactive.isHidden <~ self.viewModel.bottomStackHidden
         self.viewModel.error.producer.skipNil().startWithValues{
             GZEAlertService.shared.showBottomAlert(text: $0)
         }

@@ -17,12 +17,15 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
     let loading = MutableProperty<Bool>(false)
     let (viewShown, viewShownObs) = Signal<Bool, NoError>.pipe()
     let (dismiss, dismissObs) = Signal<Void, NoError>.pipe()
-    let title = MutableProperty<String?>(nil)
+    let title = MutableProperty<String?>("vm.balance.pay.title".localized())
     let navigationRightButton = MutableProperty<UIBarButtonItem?>(nil)
 
     let list = MutableProperty<[GZEBalanceCellModel]>([])
     let rightLabelText = MutableProperty<String?>(nil)
-    let rightLabelTextColor = MutableProperty<UIColor>(.green)
+    let rightLabelTextColor = MutableProperty<UIColor>(GZEConstants.Color.mainTextColor)
+    let bottomStackHidden = MutableProperty<Bool>(false)
+
+    let dataAtBottom = true
     // END GZEBalanceViewModel protocol
 
     // Private properties
@@ -37,12 +40,30 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
         }
     }()
 
+    let total = MutableProperty<Decimal>(Decimal(0))
+
     init(mode: GZEChatViewMode) {
         self.mode = mode
 
         log.debug("\(self) init")
 
-        self.title.value = "vm.balance.pay.title".localized()
+        if mode == .client {
+            self.bottomStackHidden.value = true
+        } else {
+            self.total <~ self.transactions.map{$0.reduce(Decimal(0), {
+                let trans = $1
+
+                if trans.goozeStatus == .paid {
+                    return $0 + (trans.paidAmount ?? Decimal(0))
+                } else {
+                    return $0 + trans.netAmount
+                }
+            })}
+
+            self.rightLabelText <~ self.total.map{
+                $0.toCurrencyString() ?? "$0"
+            }
+        }
 
         self.viewShown.signal.observeValues {[weak self] shown in
             guard let this = self else {return}
@@ -51,60 +72,28 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
             }
         }
 
-        let authUser = GZEAuthService.shared.authUser
-
-        self.rightLabelText <~ self.transactions
-            .map{$0.reduce(Decimal(0), {
-                let trans = $1
-                //if trans.from == authUser?.username {
-                 //   return $0 - trans.amount
-                //} else {
-                //    return $0 + trans.amount
-                //}
-
-                if trans.goozeStatus == .paid {
-                    return $0 + (trans.paidAmount ?? Decimal(0))
-                } else {
-                    return $0 + trans.netAmount
-                }
-            })}
-            .map{GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: $0)) ?? "$0"}
-
-        self.rightLabelTextColor <~ self.transactions
-            .map{$0.reduce(Decimal(0) , {
-                let trans = $1
-                //if trans.from == authUser?.username {
-                //   return $0 - trans.amount
-                //} else {
-                //    return $0 + trans.amount
-                //}
-
-                if trans.goozeStatus == .paid {
-                    return $0 + (trans.paidAmount ?? Decimal(0))
-                } else {
-                    return $0 + trans.netAmount
-                }
-            })}
-            .map{$0 < 0 ? GZEConstants.Color.textInputPlacehoderOnEdit : .white}
-
         self.list <~ (
             self.transactions
                 .map{
                     $0.map{trans in
 
-                        var amount: String
-                        if trans.goozeStatus == .paid {
-                            amount = trans.paidAmount?.toCurrencyString() ?? "$0"
+                        var amount: String?
+                        if mode == .client {
+                            amount = trans.amount.toCurrencyString()
                         } else {
-                            amount = trans.netAmount.toCurrencyString() ?? "$0"
+                            if trans.goozeStatus == .paid {
+                                amount = trans.paidAmount?.toCurrencyString()
+                            } else {
+                                amount = trans.netAmount.toCurrencyString()
+                            }
                         }
 
                         return GZEBalanceCellModel(
-                            author: trans.from == authUser?.username ? trans.to : trans.from,
+                            author: mode == .client ? trans.to : trans.from,
                             date: GZEDateHelper.displayDateTimeFormatter.string(from: trans.createdAt),
-                            amount: amount,
-                            amountColor: .white,
-                            status: trans.goozeStatus.localizedDescription
+                            amount: amount ?? "$0",
+                            amountColor: GZEConstants.Color.mainTextColor,
+                            status: mode == .client ? "" : trans.goozeStatus.localizedDescription
                         )
                     }
                 }
