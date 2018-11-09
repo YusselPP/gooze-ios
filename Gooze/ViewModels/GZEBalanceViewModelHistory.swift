@@ -58,21 +58,24 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
         self.list <~ (
             self.dateRequests
                 .map{
-                    $0.map{dateRequest in
+                    $0.filter({$0.date != nil})
+                        .sorted(by: {
+                            $0.date!.createdAt.compare($1.date!.createdAt) == .orderedDescending
+                        })
+                        .map{dateRequest in
+                            var date = ""
+                            if let createdAt = dateRequest.date?.createdAt {
+                                date = GZEDateHelper.displayDateTimeFormatter.string(from: createdAt)
+                            }
 
-                        var date = ""
-                        if let createdAt = dateRequest.date?.createdAt {
-                            date = GZEDateHelper.displayDateTimeFormatter.string(from: createdAt)
+                            return GZEBalanceCellModel(
+                                author: mode == .gooze ? dateRequest.sender.username : dateRequest.recipient.username,
+                                date: date,
+                                amount: dateRequest.amount?.toCurrencyString() ?? "$0",
+                                amountColor: .white,
+                                status: dateRequest.date?.status.localizedDescription ?? ""
+                            )
                         }
-
-                        return GZEBalanceCellModel(
-                            author: mode == .gooze ? dateRequest.sender.username : dateRequest.recipient.username,
-                            date: date,
-                            amount: dateRequest.amount?.toCurrencyString() ?? "$0",
-                            amountColor: .white,
-                            status: dateRequest.date?.status.localizedDescription ?? ""
-                        )
-                    }
             }
         )
     }
