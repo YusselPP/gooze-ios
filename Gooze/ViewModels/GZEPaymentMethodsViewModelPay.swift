@@ -30,6 +30,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
     let topMainButtonTitle = MutableProperty<String>("")
     let topMainButtonHidden = MutableProperty<Bool>(false)
+    var topMainButtonAction: CocoaAction<GZEButton>? = nil
 
     let paymentslist = MutableProperty<[GZEPaymentCellModel]>([])
 
@@ -41,6 +42,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     let selectPaymentMethodText = "vm.paymentMethods.title.selectMethod".localized()
     let addPaymentMethodTitle = "vm.paymentMethods.add".localized()
     let payText = "vm.paymentMethods.pay".localized()
+    let feeDescription = "vm.paymentMethods.feeDescription".localized()
 
     // END GZEPaymentMethodsViewModel protocol
 
@@ -50,6 +52,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     let username: String
     let chat: GZEChat
     let mode: GZEChatViewMode
+    let requestedAmount: Decimal
 
     let amount = MutableProperty<Decimal>(0)
     let clientTax = MutableProperty<Decimal>(0)
@@ -69,12 +72,18 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
         self.username = username
         self.chat = chat
         self.mode = mode
+        self.requestedAmount = amount
 
         log.debug("\(self) init")
 
         self.title.value = selectPaymentMethodText.uppercased()
         self.bottomActionButtonTitle.value = payText.uppercased()
         self.bottomActionButtonAction = CocoaAction(self.payAction)
+        self.topMainButtonAction = CocoaAction<GZEButton>(Action<(), Any, NoError>{_ in SignalProducer.empty}, {
+            [weak self] _ in
+            self?.showPayDetails()
+            return
+        }) as CocoaAction<GZEButton>
 
         self.goozeTaxAmount <~ self.goozeTax.map{amount * $0}
         self.clientTaxAmount <~ self.clientTax.map{amount * $0}
@@ -173,6 +182,16 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
     }
 
     // Private Methods
+    func showPayDetails() {
+        GZEAlertService.shared.showConfirmDialog(
+            message: (
+                "\(self.dateRequest.value.recipient.username): \(self.requestedAmount.toCurrencyString() ?? "$0")\n" +
+                "\(self.feeDescription): \(self.clientTaxAmount.value.toCurrencyString() ?? "$0")"
+            ),
+            cancelButtonTitle: "Ok"
+        )
+    }
+
     func createPayAction() -> Action<Void, (GZEDateRequest, GZEUser), GZEError> {
         return Action.init(enabledIf: self.bottomActionButtonEnabled) {[weak self] in
             guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}

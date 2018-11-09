@@ -27,6 +27,7 @@ protocol GZEPaymentMethodsViewModel {
 
     var topMainButtonTitle: MutableProperty<String> {get}
     var topMainButtonHidden: MutableProperty<Bool> {get}
+    var topMainButtonAction: CocoaAction<GZEButton>? {get}
 
     var paymentslist: MutableProperty<[GZEPaymentCellModel]> {get}
 

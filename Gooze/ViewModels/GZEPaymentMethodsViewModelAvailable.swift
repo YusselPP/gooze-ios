@@ -29,6 +29,7 @@ class GZEPaymentMethodsViewModelAvailable: GZEPaymentMethodsViewModel {
 
     let topMainButtonTitle = MutableProperty<String>("")
     let topMainButtonHidden = MutableProperty<Bool>(true)
+    let topMainButtonAction: CocoaAction<GZEButton>? = nil
     
     let paymentslist = MutableProperty<[GZEPaymentCellModel]>([])
 

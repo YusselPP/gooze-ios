@@ -216,6 +216,7 @@
 "vm.paymentMethods.pay"="Pagar";
 "vm.paymentMethods.delete"="Eliminar";
 "vm.paymentMethods.delete.confirm.message"="¿Desesas eliminar esta forma de pago?";
+"vm.paymentMethods.feeDescription"="Comisión por transacción";
 
 // ViewModel/GZEHelpViewModelGooze
 "vm.help.title"="Ayuda";

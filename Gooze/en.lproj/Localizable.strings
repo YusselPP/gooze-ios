@@ -216,6 +216,7 @@
 "vm.paymentMethods.pay"="Pay";
 "vm.paymentMethods.delete"="Delete";
 "vm.paymentMethods.delete.confirm.message"="Are you sure you want to delete this payment method?";
+"vm.paymentMethods.feeDescription"="Transaction fee";
 
 // ViewModel/GZEHelViewModelGooze
 "vm.help.title"="Help";

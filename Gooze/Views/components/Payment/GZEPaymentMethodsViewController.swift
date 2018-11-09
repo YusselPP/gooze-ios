@@ -130,6 +130,7 @@ class GZEPaymentMethodsViewController: UIViewController, GZEDismissVCDelegate {
         }
 
         // Actions
+        self.topActionView.mainButton.reactive.pressed = self.viewModel.topMainButtonAction
         self.bottomActionButton.reactive.pressed = self.viewModel.bottomActionButtonAction
     }
     // MARK: - DismissDelegate
