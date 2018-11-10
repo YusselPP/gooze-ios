@@ -28,12 +28,15 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
 
     let dataAtBottom = false
 
-    let bottomActionButtonTitle = MutableProperty<String>("vm.balance.history.clear".localized().uppercased())
+    let bottomActionButtonTitle = MutableProperty<String>("")
     let bottomActionButtonHidden = MutableProperty<Bool>(false)
     var bottomActionButtonCocoaAction: CocoaAction<GZEButton>?
     // END GZEBalanceViewModel protocol
 
     // Private properties
+    let clearHistoryTitle = "vm.balance.history.clear".localized()
+    let clearHistoryConfirmMessage = "vm.balance.history.clear.confirm.message".localized()
+
     let mode: GZEChatViewMode
     let dateRequestRepository: GZEDateRequestRepositoryProtocol = GZEDateRequestApiRepository()
     let dateRequests = MutableProperty<[GZEDateRequest]>([])
@@ -46,10 +49,32 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
     }()
 
     lazy var clearHistory: Action<Void, Void, GZEError> = {
-        Action {[weak self] in
-            guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
-            this.loading.value = true
-            return this.dateRequestRepository.clearHistory(mode: this.mode)
+        Action {[weak self] _ in
+            return SignalProducer<Void, GZEError> {[weak self] sink, dispose in
+
+                guard let this = self else {
+                    sink.send(error: .repository(error: .UnexpectedError))
+                    return
+                }
+
+                GZEAlertService.shared.showConfirmDialog(
+                    title: this.clearHistoryTitle,
+                    message: this.clearHistoryConfirmMessage,
+                    cancelButtonTitle: "No",
+                    destructiveButtonTitle: this.clearHistoryTitle,
+                    cancelHandler: { _ in sink.sendInterrupted() },
+                    destructiveHandler: { _ in
+                        sink.send(value: ())
+                        sink.sendCompleted()
+                    }
+                )
+            }.flatMap(.latest){[weak self] _ -> SignalProducer<Void, GZEError> in
+                guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
+
+                this.loading.value = true
+
+                return this.dateRequestRepository.clearHistory(mode: this.mode)
+            }.logEvents()
         }
     }()
 
@@ -59,6 +84,7 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
         log.debug("\(self) init")
 
         self.title.value = "vm.balance.history.title".localized()
+        self.bottomActionButtonTitle.value = clearHistoryTitle.uppercased()
         self.bottomActionButtonCocoaAction = CocoaAction(self.clearHistory)
 
         self.viewShown.signal.observeValues {[weak self] shown in
@@ -98,7 +124,7 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
             this.loading.value = false
             switch event {
             case .completed:
-                this.updateBalance()
+                this.dateRequests.value = []
             case .failed(let error):
                 this.onError(error)
             default: break

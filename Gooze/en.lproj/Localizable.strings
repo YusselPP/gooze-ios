@@ -232,6 +232,7 @@
 // ViewModel/GZEBalanceViewModelHistory
 "vm.balance.history.title"="History";
 "vm.balance.history.clear"="Clear history";
+"vm.balance.history.clear.confirm.message"="Are you sure you want to clear your history?";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";
