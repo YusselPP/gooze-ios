@@ -74,7 +74,7 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
                 this.loading.value = true
 
                 return this.dateRequestRepository.clearHistory(mode: this.mode)
-            }.logEvents()
+            }
         }
     }()
 
