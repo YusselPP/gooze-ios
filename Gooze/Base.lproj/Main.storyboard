@@ -1888,7 +1888,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rgS-qW-rrm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4004" y="2866.4167916041979"/>
+            <point key="canvasLocation" x="5126" y="2391"/>
         </scene>
         <!--Payment Methods View Controller-->
         <scene sceneID="rqN-QR-aNu">
@@ -2118,11 +2118,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mxp-dA-tBZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5400" y="1217"/>
+            <point key="canvasLocation" x="7063" y="2318"/>
         </scene>
         <!--Balance View Controller-->
         <scene sceneID="qVf-0J-x3C">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="33t-if-cdW" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="iBv-gz-hoZ" customClass="GZEBalanceViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9Nh-QA-4Lv"/>
@@ -2218,11 +2219,11 @@
                         <outlet property="bottomStack" destination="kLK-IT-7eE" id="13k-XF-iKq"/>
                         <outlet property="collectionView" destination="XZf-PV-56J" id="yeO-UN-0cQ"/>
                         <outlet property="rightLabel" destination="wNM-yu-oph" id="X0m-mP-Wje"/>
+                        <segue destination="aWE-G7-9VX" kind="show" identifier="segueToHistoryDetail" id="GVx-j8-cOK"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="33t-if-cdW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6636" y="1107"/>
+            <point key="canvasLocation" x="6009" y="1243"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="iTl-YK-QYX">
@@ -3504,6 +3505,156 @@
             </objects>
             <point key="canvasLocation" x="2408" y="2868"/>
         </scene>
+        <!--History Detail View Controller-->
+        <scene sceneID="cni-Mm-11D">
+            <objects>
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="aWE-G7-9VX" customClass="GZEHistoryDetailViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Sfl-4p-5eg"/>
+                        <viewControllerLayoutGuide type="bottom" id="mWp-RJ-JM9"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3Sh-mw-zoS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cJl-2d-36Z">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="21o-1R-tkd">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NR0-Yi-dQN">
+                                <rect key="frame" x="0.0" y="64" width="375" height="546"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gLo-c2-Peq">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FnS-9d-Jgb" userLabel="username-view">
+                                                <rect key="frame" x="10" y="24" width="177.5" height="30"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USERNAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qtJ-iu-fFD" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="177.5" height="30"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="qtJ-iu-fFD" secondAttribute="trailing" id="3Kk-LI-ihL"/>
+                                                    <constraint firstItem="qtJ-iu-fFD" firstAttribute="top" secondItem="FnS-9d-Jgb" secondAttribute="top" id="P1B-j7-EhZ"/>
+                                                    <constraint firstItem="qtJ-iu-fFD" firstAttribute="leading" secondItem="FnS-9d-Jgb" secondAttribute="leading" id="eWQ-5F-DaR"/>
+                                                    <constraint firstAttribute="bottom" secondItem="qtJ-iu-fFD" secondAttribute="bottom" id="hcq-vx-Rzn"/>
+                                                    <constraint firstAttribute="height" constant="30" id="yTI-Pi-4dG"/>
+                                                </constraints>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X0G-Sv-gq6" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
+                                                <rect key="frame" x="195.5" y="24" width="169.5" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="RSY-ic-8cu"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kbg-VF-1Mb" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="62" width="177.5" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="bbH-J1-hgt"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93U-uJ-meF" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
+                                                <rect key="frame" x="195.5" y="62" width="169.5" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="mx4-Ze-8cN"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sey-WJ-mAu" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
+                                                <rect key="frame" x="10" y="100" width="355" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="M0h-EW-xCQ"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="FnS-9d-Jgb" firstAttribute="top" secondItem="gLo-c2-Peq" secondAttribute="top" constant="24" id="9lf-Ce-sDj"/>
+                                            <constraint firstItem="93U-uJ-meF" firstAttribute="top" secondItem="X0G-Sv-gq6" secondAttribute="bottom" constant="8" id="B3p-ht-fU7"/>
+                                            <constraint firstAttribute="trailing" secondItem="X0G-Sv-gq6" secondAttribute="trailing" constant="10" id="CWy-eK-InN"/>
+                                            <constraint firstAttribute="trailing" secondItem="93U-uJ-meF" secondAttribute="trailing" constant="10" id="GE9-Bj-71r"/>
+                                            <constraint firstItem="FnS-9d-Jgb" firstAttribute="width" secondItem="sey-WJ-mAu" secondAttribute="width" multiplier="0.5" id="NeD-VK-4CW"/>
+                                            <constraint firstItem="FnS-9d-Jgb" firstAttribute="leading" secondItem="gLo-c2-Peq" secondAttribute="leading" constant="10" id="QF7-dV-BRv"/>
+                                            <constraint firstItem="Kbg-VF-1Mb" firstAttribute="top" secondItem="FnS-9d-Jgb" secondAttribute="bottom" constant="8" id="QaP-TH-yfk"/>
+                                            <constraint firstAttribute="bottom" secondItem="sey-WJ-mAu" secondAttribute="bottom" constant="10" id="U8j-eS-exh"/>
+                                            <constraint firstItem="93U-uJ-meF" firstAttribute="leading" secondItem="Kbg-VF-1Mb" secondAttribute="trailing" constant="8" id="VMZ-iS-Unt"/>
+                                            <constraint firstItem="sey-WJ-mAu" firstAttribute="top" secondItem="93U-uJ-meF" secondAttribute="bottom" constant="8" id="Zk1-j5-Ats"/>
+                                            <constraint firstItem="X0G-Sv-gq6" firstAttribute="leading" secondItem="FnS-9d-Jgb" secondAttribute="trailing" constant="8" id="l3g-10-KXX"/>
+                                            <constraint firstItem="sey-WJ-mAu" firstAttribute="top" secondItem="Kbg-VF-1Mb" secondAttribute="bottom" constant="8" id="nzV-Tb-oNM"/>
+                                            <constraint firstItem="X0G-Sv-gq6" firstAttribute="top" secondItem="gLo-c2-Peq" secondAttribute="top" constant="24" id="oAY-rr-c14"/>
+                                            <constraint firstItem="sey-WJ-mAu" firstAttribute="leading" secondItem="gLo-c2-Peq" secondAttribute="leading" constant="10" id="r3o-No-JHb"/>
+                                            <constraint firstAttribute="trailing" secondItem="sey-WJ-mAu" secondAttribute="trailing" constant="10" id="rcY-oT-QN0"/>
+                                            <constraint firstItem="Kbg-VF-1Mb" firstAttribute="leading" secondItem="gLo-c2-Peq" secondAttribute="leading" constant="10" id="yIo-eE-TF4"/>
+                                            <constraint firstItem="Kbg-VF-1Mb" firstAttribute="width" secondItem="sey-WJ-mAu" secondAttribute="width" multiplier="0.5" id="z0h-WA-2Mt"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="gLo-c2-Peq" firstAttribute="top" secondItem="NR0-Yi-dQN" secondAttribute="top" id="Ifw-Hr-28V"/>
+                                    <constraint firstItem="gLo-c2-Peq" firstAttribute="leading" secondItem="NR0-Yi-dQN" secondAttribute="leading" id="a5q-xs-a40"/>
+                                    <constraint firstAttribute="bottom" secondItem="gLo-c2-Peq" secondAttribute="bottom" id="ow3-Y0-L9d"/>
+                                    <constraint firstAttribute="trailing" secondItem="gLo-c2-Peq" secondAttribute="trailing" id="rWl-iC-F1Q"/>
+                                </constraints>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k0D-Lz-Lyy" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
+                                <rect key="frame" x="161.5" y="620" width="52" height="32"/>
+                                <color key="backgroundColor" red="0.30196078430000001" green="0.30196078430000001" blue="0.30196078430000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <inset key="titleEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.22" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="cJl-2d-36Z" secondAttribute="trailing" id="1Cm-uW-gET"/>
+                            <constraint firstItem="NR0-Yi-dQN" firstAttribute="top" secondItem="Sfl-4p-5eg" secondAttribute="bottom" id="5a5-WD-VIx"/>
+                            <constraint firstItem="k0D-Lz-Lyy" firstAttribute="centerX" secondItem="3Sh-mw-zoS" secondAttribute="centerX" id="61k-QF-PZv"/>
+                            <constraint firstItem="NR0-Yi-dQN" firstAttribute="leading" secondItem="3Sh-mw-zoS" secondAttribute="leading" id="C1e-MY-4E9"/>
+                            <constraint firstItem="gLo-c2-Peq" firstAttribute="width" secondItem="cJl-2d-36Z" secondAttribute="width" id="EeW-cC-khI"/>
+                            <constraint firstAttribute="trailing" secondItem="21o-1R-tkd" secondAttribute="trailing" id="G7g-TL-qWL"/>
+                            <constraint firstItem="21o-1R-tkd" firstAttribute="top" secondItem="3Sh-mw-zoS" secondAttribute="top" id="GdE-tr-ZzL"/>
+                            <constraint firstAttribute="bottom" secondItem="k0D-Lz-Lyy" secondAttribute="bottom" constant="15" id="Gre-3n-kcF"/>
+                            <constraint firstItem="cJl-2d-36Z" firstAttribute="leading" secondItem="3Sh-mw-zoS" secondAttribute="leading" id="JjU-XL-N76"/>
+                            <constraint firstItem="21o-1R-tkd" firstAttribute="leading" secondItem="3Sh-mw-zoS" secondAttribute="leading" id="Lqb-sU-oAL"/>
+                            <constraint firstItem="cJl-2d-36Z" firstAttribute="top" secondItem="Sfl-4p-5eg" secondAttribute="bottom" id="PcV-EG-Scv"/>
+                            <constraint firstItem="k0D-Lz-Lyy" firstAttribute="top" secondItem="NR0-Yi-dQN" secondAttribute="bottom" constant="10" id="X4e-u8-6D9"/>
+                            <constraint firstItem="mWp-RJ-JM9" firstAttribute="top" secondItem="cJl-2d-36Z" secondAttribute="bottom" id="YZs-CY-fH8"/>
+                            <constraint firstItem="NR0-Yi-dQN" firstAttribute="width" secondItem="cJl-2d-36Z" secondAttribute="width" id="foh-g9-azE"/>
+                            <constraint firstAttribute="bottom" secondItem="21o-1R-tkd" secondAttribute="bottom" id="i9h-O3-G6E"/>
+                            <constraint firstAttribute="trailing" secondItem="NR0-Yi-dQN" secondAttribute="trailing" id="z8x-St-OPq"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="address" destination="sey-WJ-mAu" id="ZnA-4S-5CN"/>
+                        <outlet property="amount" destination="X0G-Sv-gq6" id="KMZ-SC-or7"/>
+                        <outlet property="bottomActionButton" destination="k0D-Lz-Lyy" id="660-RB-iNQ"/>
+                        <outlet property="date" destination="Kbg-VF-1Mb" id="Z7e-J6-Vqk"/>
+                        <outlet property="scrollContentView" destination="gLo-c2-Peq" id="c00-MU-Hod"/>
+                        <outlet property="status" destination="93U-uJ-meF" id="TV2-UK-kyU"/>
+                        <outlet property="usernameLabel" destination="qtJ-iu-fFD" id="zbx-YR-SNb"/>
+                        <segue destination="OOY-bx-l2I" kind="show" identifier="segueToHelp" id="nrK-11-ZsM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JWU-bL-2WI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7026" y="1243"/>
+        </scene>
     </scenes>
     <resources>
         <image name="camera-153-icon" width="52" height="40"/>
@@ -3522,11 +3673,11 @@
         <image name="searching-radius-small" width="210" height="210"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aoX-cG-RKK"/>
-        <segue reference="2Yf-uK-vbD"/>
+        <segue reference="ado-a7-Lxa"/>
+        <segue reference="qNa-CM-5aU"/>
         <segue reference="uRz-tZ-uiL"/>
-        <segue reference="R1T-5h-Xv7"/>
-        <segue reference="XJg-fM-c9J"/>
+        <segue reference="nrK-11-ZsM"/>
+        <segue reference="YiG-yX-aa5"/>
         <segue reference="7Qg-7B-R48"/>
         <segue reference="3gu-Js-oOo"/>
         <segue reference="Dk2-YI-miw"/>

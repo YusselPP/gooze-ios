@@ -73,7 +73,7 @@
 // Models/GZETransaction/GoozeStatus
 "model.transaction.status.paid"="Paid";
 "model.transaction.status.pending"="Pending";
-"model.transaction.status.review"="Reviewing";
+"model.transaction.status.review"="On review";
 
 // Models/GZEDate/Status
 "model.date.status.route"="On the way";
@@ -233,6 +233,9 @@
 "vm.balance.history.title"="History";
 "vm.balance.history.clear"="Clear history";
 "vm.balance.history.clear.confirm.message"="Are you sure you want to clear your history?";
+
+// ViewModel/GZEHistoryDetailViewModelDates
+"vm.history.detail.action.help"="Help";
 
 // ViewModel/GZEPickerUIToolbar
 "vm.pickerToolbar.closeButton.title"="X";

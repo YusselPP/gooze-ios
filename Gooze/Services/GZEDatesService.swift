@@ -244,7 +244,6 @@ class GZEDatesService: NSObject {
                     let dateRequestJson = data[1] as? JSON, let dateRequest = GZEDateRequest(json: dateRequestJson),
                     let userJson = data[2] as? JSON, let user = GZEUser(json: userJson)
                 {
-                    // TODO: Test updated authUser
                     if user.id == GZEAuthService.shared.authUser?.id {
                         GZEAuthService.shared.authUser = user
                     } else {

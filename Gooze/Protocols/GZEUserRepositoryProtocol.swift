@@ -33,5 +33,5 @@ protocol GZEUserRepositoryProtocol {
     func activate(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
 
     func unreadMessagesCount(mode: GZEChatViewMode) -> SignalProducer<[String: Int], GZEError>
-    func sendEmail(subject: String, text: String) -> SignalProducer<Void, GZEError>
+    func sendEmail(subject: String, text: String, dateRequest: GZEDateRequest?) -> SignalProducer<Void, GZEError>
 }

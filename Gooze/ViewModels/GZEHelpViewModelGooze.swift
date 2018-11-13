@@ -33,6 +33,9 @@ class GZEHelpViewModelGooze: GZEHelpViewModel {
 
     let messageSend = "vm.help.messageSend".localized()
     let userRepository: GZEUserRepositoryProtocol = GZEUserApiRepository()
+
+    let dateRequest: GZEDateRequest?
+
     lazy var sendAction: CocoaAction<GZEButton> = {
         return CocoaAction<GZEButton>(self.send){_ in self.loading.value = true}
     }()
@@ -43,11 +46,12 @@ class GZEHelpViewModelGooze: GZEHelpViewModel {
             guard let subject = this.subjectText.value, let text = this.bodyText.value, !subject.isEmpty, !text.isEmpty else {
                 return SignalProducer(error: .validation(error: .required(fieldName: this.bodyPlaceholder.value)))
             }
-            return this.userRepository.sendEmail(subject: subject, text: text)
+            return this.userRepository.sendEmail(subject: subject, text: text, dateRequest: this.dateRequest)
         }
     }()
 
-    init() {
+    init(dateRequest: GZEDateRequest? = nil) {
+        self.dateRequest = dateRequest
         log.debug("\(self) init")
         self.bottomButtonAction = self.sendAction
 

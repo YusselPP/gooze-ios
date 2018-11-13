@@ -172,8 +172,6 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
         setupBindings()
 
         handleSceneChanged()
-
-        // TODO: load activate scene with the user current state(active/inactive)
     }
     
     override func viewWillAppear(_ animated: Bool) {

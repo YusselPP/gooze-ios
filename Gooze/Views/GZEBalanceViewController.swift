@@ -11,13 +11,15 @@ import ReactiveSwift
 import ReactiveCocoa
 import SwiftOverlays
 
-class GZEBalanceViewController: UIViewController {
+class GZEBalanceViewController: UIViewController, GZEDismissVCDelegate {
 
     var viewModel: GZEBalanceViewModel!
 
     weak var dismissDelegate: GZEDismissVCDelegate?
 
     let backButton = GZEBackUIBarButtonItem()
+
+    let segueToHistoryDetail = "segueToHistoryDetail"
 
     @IBOutlet weak var collectionView: GZEBalanceCollectionView!
     @IBOutlet weak var rightLabel: GZELabel!
@@ -84,6 +86,11 @@ class GZEBalanceViewController: UIViewController {
             }
         }
 
+        self.viewModel.segueToHistoryDetail.observeValues{[weak self] vm in
+            guard let this = self else {return}
+            this.performSegue(withIdentifier: this.segueToHistoryDetail, sender: vm)
+        }
+
         self.viewModel.dismiss.signal.observeValues{[weak self] in
             guard let this = self else {return}
             this.dismissDelegate?.onDismissTapped(this)
@@ -93,15 +100,28 @@ class GZEBalanceViewController: UIViewController {
         self.bottomActionButton.reactive.pressed = self.viewModel.bottomActionButtonCocoaAction
     }
 
-    /*
+    // MARK: - GZEDismissVCDelegate
+    func onDismissTapped(_ vc: UIViewController) {
+        vc.previousController(animated: true)
+    }
+
+
      // MARK: - Navigation
 
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
+        if segue.identifier == segueToHistoryDetail {
+
+            GZEHistoryDetailViewController.prepareView(
+                presenter: self,
+                viewController: segue.destination,
+                vm: sender
+            )
+        }
      }
-     */
+
 
     deinit {
         log.debug("\(self) disposed")

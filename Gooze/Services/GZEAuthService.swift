@@ -150,7 +150,6 @@ class GZEAuthService: NSObject {
         GZESocketManager.destroyAllSockets()
         GZEDatesService.shared.cleanup()
         GZEChatService.shared.cleanup()
-        // TODO: test unregister and register again in ios9 and 11
         UIApplication.shared.unregisterForRemoteNotifications()
         self.userRepository.logout().start()
         self.token = nil

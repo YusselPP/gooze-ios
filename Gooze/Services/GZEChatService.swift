@@ -362,7 +362,6 @@ class GZEChatService: NSObject {
             } else {
                 requestProperty = MutableProperty(dateRequest)
             }
-            //TODO: manage chat mode with client mode property instead of sending to vm
             GZEChatService.shared.openChat(
                 viewModel: GZEChatViewModelDates(chat: chat, dateRequest: requestProperty, mode: mode, username: username)
             )

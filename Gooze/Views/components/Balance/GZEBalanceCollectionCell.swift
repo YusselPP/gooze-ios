@@ -64,6 +64,8 @@ class GZEBalanceCollectionCell: UICollectionViewCell {
         }
     }
 
+    var onTap: CompletionBlock?
+
     let stackView = UIStackView()
 
     let leftView = UIView()
@@ -93,6 +95,8 @@ class GZEBalanceCollectionCell: UICollectionViewCell {
 
     // MARK: private methods
     private func initialize() {
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleOnTap)))
+
         self.stackView.axis = .horizontal
         self.stackView.alignment = .center
         self.stackView.distribution = .fill
@@ -180,6 +184,7 @@ class GZEBalanceCollectionCell: UICollectionViewCell {
         self.amountColor = model.amountColor
         self.date = model.date
         self.status = model.status
+        self.onTap = model.onTap
     }
 
     func clear() {
@@ -188,5 +193,10 @@ class GZEBalanceCollectionCell: UICollectionViewCell {
         self.amountColor = GZEConstants.Color.mainTextColor
         self.date = nil
         self.status = nil
+        self.onTap = nil
+    }
+
+    @objc func handleOnTap() {
+        self.onTap?()
     }
 }

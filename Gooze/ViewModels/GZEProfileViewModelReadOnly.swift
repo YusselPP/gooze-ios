@@ -241,8 +241,6 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                     actionHandler: {[weak self] (_, _, _) in
                         log.debug("Yes pressed")
                         guard let this = self else {return}
-                        // TODO implement this
-                        // this.performSegue(withIdentifier: this.segueToMyProfile, sender: nil)
                         this.openMyProfileView()
                     },
                     cancelHandler: { _ in

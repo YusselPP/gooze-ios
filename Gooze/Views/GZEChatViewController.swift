@@ -99,7 +99,6 @@ class GZEChatViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         setupBindings()
     }
     
-    // TODO: scroll bottom on orientation change
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         self.messagesTableView.collectionViewLayout.invalidateLayout()
     }

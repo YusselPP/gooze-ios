@@ -310,14 +310,22 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
-    func sendEmail(subject: String, text: String) -> SignalProducer<Void, GZEError> {
+    func sendEmail(subject: String, text: String, dateRequest: GZEDateRequest? = nil) -> SignalProducer<Void, GZEError> {
         guard GZEAuthService.shared.authUser != nil else {
             return SignalProducer(error: .repository(error: .AuthRequired))
         }
 
         return SignalProducer{sink, disposable in
 
-            Alamofire.request(GZEUserRouter.sendEmail(parameters: ["mail": ["subject": subject, "text": text]]))
+            var params: Parameters = [
+                "mail": ["subject": subject, "text": text]
+            ]
+
+            if let dateRequest = dateRequest {
+                params["dateRequest"] = dateRequest.toJSON()
+            }
+
+            Alamofire.request(GZEUserRouter.sendEmail(parameters: params))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
                     (val: NSNull) -> Void in ()
                 }))

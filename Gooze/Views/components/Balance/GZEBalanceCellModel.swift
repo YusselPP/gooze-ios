@@ -14,18 +14,21 @@ class GZEBalanceCellModel: NSObject {
     let amount: String
     let amountColor: UIColor
     let status: String
+    let onTap: CompletionBlock?
 
     init(
         author: String,
         date: String,
         amount: String,
         amountColor: UIColor,
-        status: String
+        status: String,
+        onTap: CompletionBlock? = nil
     ) {
         self.author = author
         self.date = date
         self.amount = amount
         self.amountColor = amountColor
         self.status = status
+        self.onTap = onTap
     }
 }

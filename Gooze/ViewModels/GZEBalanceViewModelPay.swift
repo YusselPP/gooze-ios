@@ -30,6 +30,8 @@ class GZEBalanceViewModelPay: GZEBalanceViewModel {
     let bottomActionButtonTitle = MutableProperty<String>("")
     let bottomActionButtonHidden = MutableProperty<Bool>(true)
     let bottomActionButtonCocoaAction: CocoaAction<GZEButton>? = nil
+
+    let segueToHistoryDetail = Signal<GZEHistoryDetailViewModel,NoError>.empty
     // END GZEBalanceViewModel protocol
 
     // Private properties

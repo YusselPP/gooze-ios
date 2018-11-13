@@ -30,4 +30,6 @@ protocol GZEBalanceViewModel {
     var bottomActionButtonTitle: MutableProperty<String> {get}
     var bottomActionButtonHidden: MutableProperty<Bool> {get}
     var bottomActionButtonCocoaAction: CocoaAction<GZEButton>? {get}
+
+    var segueToHistoryDetail: Signal<GZEHistoryDetailViewModel, NoError> {get}
 }

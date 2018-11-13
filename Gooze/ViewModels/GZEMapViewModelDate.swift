@@ -327,7 +327,7 @@ class GZEMapViewModelDate: NSObject, GZEMapViewModel {
         dropdownActionSignal.observeValues {[weak self] (_, item) in
             guard let this = self else {return}
             if item == this.helpButtonTitle {
-                this.segueToHelpObs.send(value: GZEHelpViewModelGooze())
+                this.segueToHelpObs.send(value: GZEHelpViewModelGooze(dateRequest: this.dateRequest.value))
             } else if item == this.cancelDateButtonTitle {
                 GZEAlertService.shared.showConfirmDialog(
                     title: this.cancelDateConfirmTitle,

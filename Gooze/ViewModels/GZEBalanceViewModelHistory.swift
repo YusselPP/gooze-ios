@@ -31,6 +31,8 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
     let bottomActionButtonTitle = MutableProperty<String>("")
     let bottomActionButtonHidden = MutableProperty<Bool>(false)
     var bottomActionButtonCocoaAction: CocoaAction<GZEButton>?
+
+    let (segueToHistoryDetail, segueToHistoryDetailObs) = Signal<GZEHistoryDetailViewModel,NoError>.pipe()
     // END GZEBalanceViewModel protocol
 
     // Private properties
@@ -96,12 +98,12 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
 
         self.list <~ (
             self.dateRequests
-                .map{
+                .map{[weak self] in
                     $0.filter({$0.date != nil})
                         .sorted(by: {
                             $0.date!.createdAt.compare($1.date!.createdAt) == .orderedDescending
                         })
-                        .map{dateRequest in
+                        .map{[weak self] dateRequest in
                             var date = ""
                             if let createdAt = dateRequest.date?.createdAt {
                                 date = GZEDateHelper.displayDateTimeFormatter.string(from: createdAt)
@@ -112,7 +114,13 @@ class GZEBalanceViewModelHistory: GZEBalanceViewModel {
                                 date: date,
                                 amount: dateRequest.amount?.toCurrencyString() ?? "$0",
                                 amountColor: .white,
-                                status: dateRequest.date?.status.localizedDescription ?? ""
+                                status: dateRequest.date?.status.localizedDescription ?? "",
+                                onTap: {[weak self] in
+                                    guard let this = self else {return}
+                                    this.segueToHistoryDetailObs.send(
+                                        value: GZEHistoryDetailViewModelDates(dateRequest: dateRequest, mode: mode)
+                                    )
+                                }
                             )
                         }
             }

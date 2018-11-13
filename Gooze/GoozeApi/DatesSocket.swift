@@ -116,7 +116,6 @@ class DatesSocket: GZESocket {
 
             log.debug("Charge success on date request [id=\(dateRequest.id)]")
 
-            // TODO: Test updated authUser
             if user.id == GZEAuthService.shared.authUser?.id {
                 GZEAuthService.shared.authUser = user
             } else {

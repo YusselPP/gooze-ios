@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 enum GZEError: Error {
     case validation(error: GZEValidationError)
@@ -17,6 +18,7 @@ enum GZEError: Error {
     case conektaToken(error: GZEConektaTokenError)
     case facebookError(error: Error)
     case message(text: String, args: [CVarArg])
+    case coreLocation(error: CLError)
 }
 
 extension GZEError: LocalizedError {
@@ -42,6 +44,8 @@ extension GZEError: LocalizedError {
             message = error.localizedDescription
         case .message(let text, let args):
             message = String(format: text.localized(), arguments: args)
+        case .coreLocation(let error):
+            message = error.localizedDescription
         }
         
         return message
