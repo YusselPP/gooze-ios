@@ -33,6 +33,15 @@ class GZEButton: UIButton {
         initProperties()
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if imageView != nil {
+            imageEdgeInsets = UIEdgeInsets(top: 10, left: (bounds.width / 2 + (titleLabel?.bounds.width ?? 0) / 2), bottom: 10, right: 0)
+            titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (imageView?.frame.width ?? 0))
+        }
+    }
+
     func initProperties() {
         translatesAutoresizingMaskIntoConstraints = false
         widthConstraint = widthAnchor.constraint(equalToConstant: minWidth)

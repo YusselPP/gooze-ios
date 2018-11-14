@@ -99,7 +99,7 @@ class GZEMenuMain {
                 controller.scene = .activate
             }
         }, enabledIf: switchModeEnabled)
-        self.switchModeGoozeButton = createMenuItemButton(title: menuItemTitleSearchGooze, action: switchModeCocoaAction)
+        self.switchModeGoozeButton = createMenuItemButton(title: menuItemTitleSearchGooze, action: switchModeCocoaAction, image: #imageLiteral(resourceName: "switch-mode"))
 
         let (_, chatCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
             guard let controller = self?.controller else {return}
@@ -179,13 +179,17 @@ class GZEMenuMain {
         return (action, cocoaAction)
     }
 
-    func createMenuItemButton(title: String, action: CocoaAction<GZEButton>, hasBadge: Bool = false) -> GZEButton {
+    func createMenuItemButton(title: String, action: CocoaAction<GZEButton>, hasBadge: Bool = false, image: UIImage? = nil) -> GZEButton {
         let button = GZEButton()
         button.setTitle(title, for: .normal)
         button.reactive.pressed = action
         button.backgroundColor = .clear
         button.widthConstraint.isActive = false
         button.heightConstraint.constant = 45
+
+        if let image = image {
+            button.setImage(image, for: .normal)
+        }
 
         if hasBadge {
             button.pp_addBadge(withNumber: 1)
