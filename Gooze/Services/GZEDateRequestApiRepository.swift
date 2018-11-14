@@ -154,7 +154,15 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             let params: JSON = [
                 "filter": [
                     "where": filterWhere,
-                    "order": "createdAt DESC"
+                    "order": "createdAt DESC",
+                    "include": [
+                        "relation": "transaction",
+                        "scope": [
+                            "include": [
+                                "fromUser", "toUser"
+                            ]
+                        ]
+                    ]
                 ]
             ]
 
@@ -191,7 +199,15 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
             let params: JSON = [
                 "filter": [
                     "where": filterWhere,
-                    "order": "createdAt DESC"
+                    "order": "createdAt DESC",
+                    "include": [
+                        "relation": "transaction",
+                        "scope": [
+                            "include": [
+                                "fromUser", "toUser"
+                            ]
+                        ]
+                    ]
                 ]
             ]
 

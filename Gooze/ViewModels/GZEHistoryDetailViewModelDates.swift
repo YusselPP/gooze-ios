@@ -34,22 +34,36 @@ class GZEHistoryDetailViewModelDates: GZEHistoryDetailViewModel {
     // END GZEHistoryDetailViewModel protocol
 
     // private
+    let actionHelpTitle = "vm.history.detail.action.help".localized()
+
     let dateRequest: GZEDateRequest
     let isActionButtonEnabled = MutableProperty<Bool>(false)
+
 
     // MARK - init
     init(dateRequest: GZEDateRequest, mode: GZEChatViewMode) {
         self.dateRequest = dateRequest
         log.debug("\(self) init")
 
-        self.bottomActionButtonTitle.value = "vm.history.detail.action.help".localized().uppercased()
-        self.bottomActionButtonIsHidden.value = dateRequest.date?.status != .canceled
+        self.bottomActionButtonTitle.value = (
+            dateRequest.transaction?.goozeStatus == .review ?
+                GZETransaction.GoozeStatus.review.localizedDescription :
+                actionHelpTitle
+        ).uppercased()
+        self.bottomActionButtonIsHidden.value = dateRequest.date?.status != .canceled || dateRequest.transaction?.goozeStatus == .paid
+        self.isActionButtonEnabled.value = (
+            dateRequest.transaction?.goozeStatus != .review
+        )
 
-        self.bottomActionButtonAction = CocoaAction(Action{SignalProducer<Void, NoError>.empty}) { [weak self] _ in
-            guard let this = self else {return}
+        self.bottomActionButtonAction = CocoaAction(Action(enabledIf: isActionButtonEnabled){SignalProducer<Void, GZEError>{[weak self] sink, dispose in
+            guard let this = self else {
+                sink.send(error: .repository(error: .UnexpectedError))
+                return
+            }
             this.segueToHelpObs.send(value: GZEHelpViewModelGooze(dateRequest: this.dateRequest))
-        }
-
+            sink.send(value: ())
+            sink.sendCompleted()
+        }})
 
         self.username.value = mode == .client ? dateRequest.recipient.username : dateRequest.sender.username
         self.status.value = dateRequest.date?.status.localizedDescription ?? ""

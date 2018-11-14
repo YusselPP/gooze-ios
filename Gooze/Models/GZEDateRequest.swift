@@ -33,12 +33,13 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
     let recipientClosed: Bool
     let shownInSenderHistory: Bool
     let shownInRecipientHistory: Bool
+    let transaction: GZETransaction?
 
     var isBlocked: Bool {
         return self.status != .accepted && self.status != .onDate
     }
 
-    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Decimal? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool, shownInSenderHistory: Bool, shownInRecipientHistory: Bool) {
+    init(id: String, status: Status, sender: GZEChatUser, recipient: GZEChatUser, location: GZEUser.GeoPoint, chat: GZEChat? = nil, amount: Decimal? = nil, date: GZEDate? = nil, senderClosed: Bool, recipientClosed: Bool, shownInSenderHistory: Bool, shownInRecipientHistory: Bool, transaction: GZETransaction? = nil) {
         self.id = id
         self.status = status
         self.sender = sender
@@ -51,6 +52,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.recipientClosed = recipientClosed
         self.shownInSenderHistory = shownInSenderHistory
         self.shownInRecipientHistory = shownInRecipientHistory
+        self.transaction = transaction
         super.init()
     }
 
@@ -91,6 +93,7 @@ class GZEDateRequest: GZEUserConvertible, Glossy {
         self.recipientClosed = recipientClosed
         self.shownInSenderHistory = shownInSenderHistory
         self.shownInRecipientHistory = shownInRecipientHistory
+        self.transaction = "transaction" <~~ json
         super.init()
     }
 
