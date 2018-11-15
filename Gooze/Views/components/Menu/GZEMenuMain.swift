@@ -189,6 +189,7 @@ class GZEMenuMain {
 
         if let image = image {
             button.setImage(image, for: .normal)
+            button.alignImageLeft = true
         }
 
         if hasBadge {

@@ -23,6 +23,8 @@ class GZEButton: UIButton {
     var maxWidth: CGFloat = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - 20
     var minWidth: CGFloat = 200
 
+    var alignImageLeft = false
+
     init() {
         super.init(frame: CGRect.zero)
         initProperties()
@@ -36,7 +38,7 @@ class GZEButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        if imageView != nil {
+        if alignImageLeft && imageView != nil {
             imageEdgeInsets = UIEdgeInsets(top: 10, left: (bounds.width / 2 + (titleLabel?.bounds.width ?? 0) / 2), bottom: 10, right: 0)
             titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (imageView?.frame.width ?? 0))
         }

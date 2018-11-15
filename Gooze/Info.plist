@@ -24,7 +24,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>net.gooze.Gooze.payments</string>
-                <string>fb263744227534966</string>
+				<string>fb263744227534966</string>
 			</array>
 		</dict>
 	</array>
@@ -32,6 +32,17 @@
 	<string>1</string>
 	<key>Config</key>
 	<string>$(CONFIGURATION)</string>
+	<key>FacebookAppID</key>
+	<string>263744227534966</string>
+	<key>FacebookDisplayName</key>
+	<string>Gooze</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -80,8 +91,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -92,16 +101,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>FacebookAppID</key>
-    <string>263744227534966</string>
-    <key>FacebookDisplayName</key>
-    <string>Gooze</string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>fbapi</string>
-        <string>fb-messenger-share-api</string>
-        <string>fbauth2</string>
-        <string>fbshareextension</string>
-    </array>
 </dict>
 </plist>
