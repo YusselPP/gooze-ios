@@ -2123,7 +2123,6 @@
         <!--Balance View Controller-->
         <scene sceneID="qVf-0J-x3C">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="33t-if-cdW" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="iBv-gz-hoZ" customClass="GZEBalanceViewController" customModule="Gooze" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9Nh-QA-4Lv"/>
@@ -2222,6 +2221,7 @@
                         <segue destination="aWE-G7-9VX" kind="show" identifier="segueToHistoryDetail" id="GVx-j8-cOK"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="33t-if-cdW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6009" y="1243"/>
         </scene>
@@ -3675,9 +3675,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="ado-a7-Lxa"/>
         <segue reference="qNa-CM-5aU"/>
-        <segue reference="uRz-tZ-uiL"/>
+        <segue reference="dzk-j8-Wul"/>
         <segue reference="nrK-11-ZsM"/>
-        <segue reference="YiG-yX-aa5"/>
+        <segue reference="XJg-fM-c9J"/>
         <segue reference="7Qg-7B-R48"/>
         <segue reference="3gu-Js-oOo"/>
         <segue reference="Dk2-YI-miw"/>

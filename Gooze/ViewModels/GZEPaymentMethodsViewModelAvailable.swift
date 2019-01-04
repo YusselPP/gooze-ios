@@ -16,8 +16,10 @@ class GZEPaymentMethodsViewModelAvailable: GZEPaymentMethodsViewModel {
 
     // GZEPaymentMethodsViewModel protocol
     let error = MutableProperty<String?>(nil)
-    let loading = MutableProperty<Bool>(false)
+    let loading = MutableProperty<Int>(0)
 
+    weak var controller: UIViewController?
+    
     let (viewShown, viewShownObs) = Signal<Bool, NoError>.pipe()
 
     let (dismiss, dismissObs) = Signal<Void, NoError>.pipe()

@@ -14,9 +14,11 @@ import enum Result.NoError
 protocol GZEPaymentMethodsViewModel {
 
     var error: MutableProperty<String?> {get}
-    var loading: MutableProperty<Bool> {get}
+    var loading: MutableProperty<Int> {get}
 
     var viewShownObs: Observer<Bool, NoError> {get}
+
+    var controller: UIViewController? { get set }
 
     var segueAvailableMethods: Signal<GZEPaymentMethodsViewModel, NoError> {get}
     var dismiss: Signal<Void, NoError> {get}

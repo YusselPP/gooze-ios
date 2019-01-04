@@ -17,7 +17,9 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
     // GZEPaymentMethodsViewModel protocol
     let error = MutableProperty<String?>(nil)
-    let loading = MutableProperty<Bool>(false)
+    let loading = MutableProperty<Int>(0)
+
+    weak var controller: UIViewController?
 
     let (viewShown, viewShownObs) = Signal<Bool, NoError>.pipe()
 
@@ -66,6 +68,10 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
         return self.createPayAction()
     }()
 
+    lazy var noncePayAction = {
+        return self.createNoncePayAction()
+    }()
+
     init(amount: Decimal, dateRequest: MutableProperty<GZEDateRequest>, senderId: String, username: String, chat: GZEChat, mode: GZEChatViewMode) {
         self.dateRequest = dateRequest
         self.senderId = senderId
@@ -78,7 +84,7 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
         self.title.value = selectPaymentMethodText.uppercased()
         self.bottomActionButtonTitle.value = payText.uppercased()
-        self.bottomActionButtonAction = CocoaAction(self.payAction)
+        self.bottomActionButtonAction = CocoaAction(self.noncePayAction)
         self.topMainButtonAction = CocoaAction<GZEButton>(Action<(), Any, NoError>{_ in SignalProducer.empty}, {
             [weak self] _ in
             self?.showPayDetails()
@@ -94,48 +100,58 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
 
         self.methodProperty <~ self.methods.map{$0.first}
 
+        self.paymentslist.value = [
+            GZEPaymentCellModel(
+                isSelection: true,
+                title: "PayPal",
+                icon: BTUIKViewUtil.vectorArtView(for: .payPal, size: .large)
+            )
+        ]
 
-        self.paymentslist <~ self.methods.combineLatest(with: methodProperty).map{[weak self] in
-            let (methods, selectedMethod) = $0
-            return methods.map{[weak self] method in
-                GZEPaymentCellModel(
-                    isSelection: method == selectedMethod,
-                    title: method.name,
-                    icon: BTUIKViewUtil.vectorArtView(for: .payPal, size: .large),
-                    onTap: {[weak self] _ in
-                        self?.methodProperty.value = method
-                    }
-                )
-            }
-        }.map{[weak self] (cells: [GZEPaymentCellModel]) in
-            var cellModels = cells
-            // Append add payment row
-            cellModels.append(GZEPaymentCellModel(
-                type: .add,
-                title: self?.addPaymentMethodTitle,
-                onTap: {
-                    [weak self] _ in
-                    self?.segueAvailableMethodsObs.send(value: GZEPaymentMethodsViewModelAvailable())
-                }
-            ))
-
-            return cellModels
-        }
+//        self.paymentslist <~ self.methods.combineLatest(with: methodProperty).map{[weak self] in
+//            let (methods, selectedMethod) = $0
+//            return methods.map{[weak self] method in
+//                GZEPaymentCellModel(
+//                    isSelection: method == selectedMethod,
+//                    title: method.name,
+//                    icon: BTUIKViewUtil.vectorArtView(for: .payPal, size: .large),
+//                    onTap: {[weak self] _ in
+//                        self?.methodProperty.value = method
+//                    }
+//                )
+//            }
+//        }.map{[weak self] (cells: [GZEPaymentCellModel]) in
+//            var cellModels = cells
+//            // Append add payment row
+//            cellModels.append(GZEPaymentCellModel(
+//                type: .add,
+//                title: self?.addPaymentMethodTitle,
+//                onTap: {
+//                    [weak self] _ in
+//                    self?.segueAvailableMethodsObs.send(value: GZEPaymentMethodsViewModelAvailable())
+//                }
+//            ))
+//
+//            return cellModels
+//        }
 
         self.viewShown.signal.observeValues {[weak self] shown in
             guard let this = self else {return}
             if shown {
-                this.loading.value = true
+                this.loading.value += 1
 
-                PayPalService.shared.getPaymentMethods()
-                    .combineLatest(with: GZEAppConfig.loadRemote()).start
+                GZEAppConfig.loadRemote().start
                     {[weak self] in
                         guard let this = self else {return}
-                        this.loading.value = false
-                        switch $0 {
-                        case .value(let (methods, config)):
-                            this.methods.value = methods
 
+                        switch $0 {
+                        case .value: break
+                        default:
+                            this.loading.value -= 1
+                        }
+
+                        switch $0 {
+                        case .value(let config):
                             if
                                 let clientTaxString: String = "clientTax" <~~ config,
                                 let clientTax = Decimal(string: clientTaxString)
@@ -154,16 +170,85 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                             this.onError(error)
                         default: break
                         }
-                    }
+                }
             }
         }
+//        self.viewShown.signal.observeValues {[weak self] shown in
+//            guard let this = self else {return}
+//            if shown {
+//                this.loading.value += 1
+//
+//                PayPalService.shared.getPaymentMethods()
+//                    .combineLatest(with: GZEAppConfig.loadRemote()).start
+//                    {[weak self] in
+//                        guard let this = self else {return}
+//
+//                        switch $0 {
+//                        case .value: break
+//                        default:
+//                            this.loading.value -= 1
+//                        }
+
+//                        switch $0 {
+//                        case .value(let (methods, config)):
+//                            this.methods.value = methods
+//
+//                            if
+//                                let clientTaxString: String = "clientTax" <~~ config,
+//                                let clientTax = Decimal(string: clientTaxString)
+//                            {
+//                                this.clientTax.value = clientTax
+//                            }
+//
+//                            if
+//                                let goozeTaxString: String = "goozeTax" <~~ config,
+//                                let goozeTax = Decimal(string: goozeTaxString)
+//                            {
+//                                this.goozeTax.value = goozeTax
+//                            }
+//                        case .failed(let error):
+//                            log.error(error)
+//                            this.onError(error)
+//                        default: break
+//                        }
+//                    }
+//            }
+//        }
 
         self.payAction.events.observeValues{[weak self] event in
             log.debug("Event received: \(event)")
 
             guard let this = self else {return}
 
-            this.loading.value = false
+            switch event {
+            case .value: break
+            default:
+                this.loading.value -= 1
+            }
+
+            switch event {
+            case .value(let value):
+                let (newdateRequest, newSender) = value
+                this.dateRequest.value = newdateRequest
+                GZEAuthService.shared.authUser = newSender
+                this.dismissObs.send(value: ())
+            case .failed(let err):
+                this.onError(err)
+            default:
+                break
+            }
+        }
+
+        self.noncePayAction.events.observeValues{[weak self] event in
+            log.debug("Event received: \(event)")
+
+            guard let this = self else {return}
+
+            switch event {
+            case .value: break
+            default:
+                this.loading.value -= 1
+            }
 
             switch event {
             case .value(let value):
@@ -200,14 +285,39 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                 return SignalProducer(error: .message(text: this.selectPaymentMethodText, args: []))
             }
 
+            this.loading.value += 1
+
             return this.createCharge(method: method)
         }
     }
 
+    func createNoncePayAction() -> Action<Void, (GZEDateRequest, GZEUser), GZEError> {
+        return Action(enabledIf: self.bottomActionButtonEnabled) {[weak self] in
+
+            guard let this = self, let controller = this.controller else {
+                return SignalProducer(error: .repository(error: .UnexpectedError))
+            }
+
+            this.loading.value += 1
+
+            return (
+                PayPalService.shared.oneTimePaymentNonce(amount: this.amount.value, presenter: controller)
+                    .flatMap(.latest) {[weak self] tokenizedPayPalAccount -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> in
+                        guard let this = self else {
+                            return SignalProducer(error: .repository(error: .UnexpectedError))
+                        }
+
+                        return this.createCharge(nonce: tokenizedPayPalAccount.nonce)
+                    }
+            )
+        }
+    }
+
+    
+
     func createCharge(method: GZEPaymentMethod)
         -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
 
-            self.loading.value = true
             return (
                 GZEDatesService.shared.createCharge(
                     dateRequest: self.dateRequest.value,
@@ -215,6 +325,24 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                     clientTaxAmount: self.clientTaxAmount.value,
                     goozeTaxAmount: self.goozeTaxAmount.value,
                     paymentMethodToken: method.token,
+                    senderId: self.senderId,
+                    username: self.username,
+                    chat: self.chat,
+                    mode: self.mode
+                )
+            )
+    }
+
+    func createCharge(nonce: String)
+        -> SignalProducer<(GZEDateRequest, GZEUser), GZEError> {
+
+            return (
+                GZEDatesService.shared.createCharge(
+                    dateRequest: self.dateRequest.value,
+                    amount: self.amount.value,
+                    clientTaxAmount: self.clientTaxAmount.value,
+                    goozeTaxAmount: self.goozeTaxAmount.value,
+                    paymentMethodNonce: nonce,
                     senderId: self.senderId,
                     username: self.username,
                     chat: self.chat,

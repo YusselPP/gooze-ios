@@ -347,7 +347,8 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
         amount: Decimal,
         clientTaxAmount: Decimal,
         goozeTaxAmount: Decimal,
-        paymentMethodToken: String,
+        paymentMethodToken: String?,
+        paymentMethodNonce: String?,
         senderId: String,
         username: String,
         chat: GZEChat,
@@ -371,11 +372,10 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
 
             log.debug("creating charge... for amount: \(amount.description)")
 
-            let parameters: JSON = [
+            var parameters: JSON = [
                 "amount": amount.description,
                 "clientTaxAmount": clientTaxAmount.description,
                 "goozeTaxAmount": goozeTaxAmount.description,
-                "paymentMethodToken": paymentMethodToken,
                 "deviceData": PayPalService.deviceData,
                 "description": "Recipient: \(dateRequest.recipient.username), DateRequest: \(dateRequest.id)",
                 "dateRequestId": dateRequest.id,
@@ -387,6 +387,12 @@ class GZEDateRequestApiRepository: GZEDateRequestRepositoryProtocol {
                 "chat": chatJson,
                 "mode": mode.rawValue
             ]
+
+            if let nonce = paymentMethodNonce {
+                parameters["paymentMethodNonce"] = nonce
+            } else if let token = paymentMethodToken {
+                parameters["paymentMethodToken"] = token
+            }
 
             Alamofire.request(GZEDateRequestRouter.createCharge(parameters: parameters))
                 .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: { (json: JSON) -> (GZEDateRequest, GZEUser)? in

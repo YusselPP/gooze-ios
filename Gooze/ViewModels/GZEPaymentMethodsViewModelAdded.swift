@@ -17,8 +17,10 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
 
     // GZEPaymentMethodsViewModel protocol
     let error = MutableProperty<String?>(nil)
-    let loading = MutableProperty<Bool>(false)
+    let loading = MutableProperty<Int>(0)
 
+    weak var controller: UIViewController?
+    
     let (viewShown, viewShownObs) = Signal<Bool, NoError>.pipe()
 
     let (dismiss, dismissObs) = Signal<Void, NoError>.pipe()
@@ -60,9 +62,15 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
         self.viewShown.signal.observeValues {[weak self] shown in
             guard let this = self else {return}
             if shown {
-                this.loading.value = true
+                this.loading.value += 1
                 PayPalService.shared.getPaymentMethods().start {
-                    this.loading.value = false
+
+                    switch $0 {
+                    case .value: break
+                    default:
+                        this.loading.value -= 1
+                    }
+
                     switch $0 {
                     case .value(let methods):
                         this.paymentslist.value = methods.map{ method in
@@ -80,7 +88,7 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
                                         cancelButtonTitle: "No",
                                         destructiveButtonTitle: this.deleteTitle,
                                         destructiveHandler: {[weak self] _ in
-                                            self?.loading.value = true
+                                            self?.loading.value += 1
                                             self?.deleteAction.apply(method).start()
                                         }
                                     )
@@ -99,7 +107,12 @@ class GZEPaymentMethodsViewModelAdded: GZEPaymentMethodsViewModel {
         self.deleteAction.events.observeValues{[weak self] event in
             log.debug("Event received: \(event)")
             guard let this = self else {return}
-            this.loading.value = false
+
+            switch event {
+            case .value: break
+            default:
+                this.loading.value -= 1
+            }
 
             switch event {
             case .completed:

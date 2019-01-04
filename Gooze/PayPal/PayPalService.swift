@@ -39,30 +39,36 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func showDropIn(presenter: UIViewController, clientToken: String) -> SignalProducer<BTDropInResult, GZEError> {
+    func showDropIn(presenter: UIViewController) -> SignalProducer<BTDropInResult, GZEError> {
 
-        return SignalProducer{sink, disposable in
-            let request =  BTDropInRequest()
-            let dropIn = BTDropInController(authorization: clientToken, request: request)
-            {(controller, result, error) in
-                if let error = error {
-                    sink.send(error: .payment(error: .paypal(error)))
-                } else if (result?.isCancelled == true) {
-                    log.debug("Cancelled")
-                    sink.sendInterrupted()
-                } else if let result = result {
-                    // Use the BTDropInResult properties to update your UI
-                    // result.paymentOptionType
-                    // result.paymentMethod
-                    // result.paymentIcon
-                    // result.paymentDescription
-                    sink.send(value: result)
-                    sink.sendCompleted()
+        return (
+            self.fetchClientToken()
+            .flatMap(.latest) {clientToken -> SignalProducer<BTDropInResult, GZEError> in
+                return SignalProducer{sink, disposable in
+                    let request =  BTDropInRequest()
+                    let dropIn = BTDropInController(authorization: clientToken, request: request)
+                    {(controller, result, error) in
+                        if let error = error {
+                            sink.send(error: .payment(error: .paypal(error)))
+                        } else if (result?.isCancelled == true) {
+                            log.debug("Cancelled")
+                            sink.sendInterrupted()
+                        } else if let result = result {
+                            // Use the BTDropInResult properties to update your UI
+                            // result.paymentOptionType
+                            // result.paymentMethod
+                            // result.paymentIcon
+                            // result.paymentDescription
+                            sink.send(value: result)
+                            sink.sendCompleted()
+                        }
+                        controller.dismiss(animated: true, completion: nil)
+                    }
+                    presenter.present(dropIn!, animated: true, completion: nil)
                 }
-                controller.dismiss(animated: true, completion: nil)
             }
-            presenter.present(dropIn!, animated: true, completion: nil)
-        }
+        )
+
     }
 
     func charge(amount: Decimal, paymentMethodNonce: String, dateRequest: GZEDateRequest) -> SignalProducer<JSON, GZEError> {
@@ -121,38 +127,49 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         }
     }
 
-    func createCharge(presenter: UIViewController, amount: Decimal, dateRequest: GZEDateRequest) {
-        self.fetchClientToken()
-            .flatMap(.latest) {[weak self] clientToken -> SignalProducer<BTDropInResult, GZEError> in
-                guard let this = self else {return SignalProducer(error: .repository(error: .UnexpectedError))}
-                return this.showDropIn(presenter: presenter, clientToken: clientToken)
-            }
-            .flatMap(.latest) {[weak self] result -> SignalProducer<JSON, GZEError> in
-                guard let this = self, let nonce = result.paymentMethod?.nonce else{
-                    return SignalProducer(error: .repository(error: .UnexpectedError))
-                }
+    func oneTimePaymentNonce(amount: Decimal, presenter: UIViewController, presentCompletion: CompletionBlock? = nil) -> SignalProducer<BTPayPalAccountNonce, GZEError> {
 
-                return this.charge(amount: amount, paymentMethodNonce: nonce, dateRequest: dateRequest)
-            }
-            .start{[weak self] in
-                guard let this = self else {
-                    log.error("Self was disposed")
-                    return
-                }
+        self.presenter = presenter
+        self.presenterCompletion = presentCompletion
 
-                switch $0 {
-                case .value(let value):
-                    // Response value could have errors
-                    // success: true / false
-                    // errors
-                    // message
-                    log.debug("value: \(value)")
-                case .failed(let error):
-                    log.error(error)
-                    this.onError(error)
-                default: break
+        log.debug("requesting oneTimePayment")
+
+        return (
+            self.fetchClientToken()
+                .flatMap(.latest) {clientToken -> SignalProducer<BTPayPalAccountNonce, GZEError> in
+
+                    return SignalProducer{sink, disposable in
+
+                        let braintreeClient = BTAPIClient(authorization: clientToken)!
+                        let payPalDriver = BTPayPalDriver(apiClient: braintreeClient)
+                        payPalDriver.viewControllerPresentingDelegate = self
+                        payPalDriver.appSwitchDelegate = self
+
+                        let request = BTPayPalRequest(amount: amount.description)
+                        request.displayName = "Gooze"
+                        request.currencyCode = "MXN"
+
+                        payPalDriver.requestOneTimePayment(request) { (tokenizedPayPalAccount, error) -> Void in
+                            if let tokenizedPayPalAccount = tokenizedPayPalAccount {
+                                log.debug(tokenizedPayPalAccount)
+                                log.debug("Got a nonce: \(tokenizedPayPalAccount.nonce)")
+                                log.debug("Email: \(String(describing: tokenizedPayPalAccount.email))")
+                                // Send payment method nonce to your server to create a transaction
+                                sink.send(value: tokenizedPayPalAccount)
+                                sink.sendCompleted()
+                            } else if let error = error {
+                                // Handle error here...
+                                log.error(error.localizedDescription)
+                                sink.send(error: .payment(error: .paypal(error)))
+                            } else {
+                                // Buyer canceled payment approval
+                                log.debug("Canceled")
+                                sink.sendInterrupted()
+                            }
+                        }
+                    }
                 }
-            }
+        )
     }
 
     func requestBillingAgreement(presenter: UIViewController, clientToken: String, presentCompletion: CompletionBlock? = nil) -> SignalProducer<BTPayPalAccountNonce, GZEError> {
@@ -161,7 +178,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
         let braintreeClient = BTAPIClient(authorization: clientToken)!
         let payPalDriver = BTPayPalDriver(apiClient: braintreeClient)
         payPalDriver.viewControllerPresentingDelegate = self
-        payPalDriver.appSwitchDelegate = self // Optional
+        payPalDriver.appSwitchDelegate = self
 
 
         log.debug("requesting billing agreement")
@@ -270,7 +287,7 @@ class PayPalService: NSObject, BTViewControllerPresentingDelegate, BTAppSwitchDe
                 case .interrupted:
                     completion?(false)
                 case .completed:
-                    completion?(false)
+                    break
                 }
         }
     }
