@@ -209,15 +209,19 @@ class GZEUpdateProfileViewModel: NSObject {
         }
         self.searchForGenderLabel <~ (
             self.searchForGender.map {[weak self] selectedIdx -> String? in
+                guard let this = self else {return ""}
                 guard selectedIdx.count > 0 else {
-                    return self?.genderSearchForLabelText
+                    return this.genderSearchForLabelText
                 }
 
-                return selectedIdx.sorted()
-                    .flatMap{[weak self] in self?.genderOptions[$0].displayPlural}
-                    .joined(separator: ", ")
+                let genders = (
+                    selectedIdx.sorted()
+                        .compactMap{[weak self] in self?.genderOptions[$0].displayPlural}
+                        .joined(separator: ", ")
+                )
+
+                return "\(this.searchingForLabel) \(genders)"
             }
-            .map{[weak self] in "\(self?.searchingForLabel ?? "") \($0 ?? "")"}
         )
         
         self.height <~ self.heightPickerDelegate.selectedElements.map{ $0.reduce("", { $0 + $1 }) }

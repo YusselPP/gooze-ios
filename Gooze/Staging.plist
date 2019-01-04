@@ -5,9 +5,9 @@
 	<key>AppTitle</key>
 	<string>Gooze</string>
 	<key>GoozeUrl</key>
-	<string>http://216.250.114.156/staging/</string>
+	<string>https://gooze.app/staging/</string>
 	<key>GoozeApiUrl</key>
-	<string>http://216.250.114.156/staging/api</string>
+	<string>https://gooze.app/staging/api</string>
 	<key>LogLevel</key>
 	<string>debug</string>
 	<key>LogAppID</key>

@@ -39,7 +39,7 @@ class GZEDatesService: NSObject {
     }
 
     override init() {
-        let configuration = URLSessionConfiguration.background(withIdentifier: "com.gooze.app.background")
+        let configuration = URLSessionConfiguration.background(withIdentifier: "net.gooze.app.background")
         self.bgSessionManager = Alamofire.SessionManager(configuration: configuration)
 
         super.init()
@@ -184,7 +184,8 @@ class GZEDatesService: NSObject {
         amount: Decimal,
         clientTaxAmount: Decimal,
         goozeTaxAmount: Decimal,
-        paymentMethodToken: String,
+        paymentMethodToken: String? = nil,
+        paymentMethodNonce: String? = nil,
         senderId: String,
         username: String,
         chat: GZEChat,
@@ -197,6 +198,7 @@ class GZEDatesService: NSObject {
             clientTaxAmount: clientTaxAmount,
             goozeTaxAmount: goozeTaxAmount,
             paymentMethodToken: paymentMethodToken,
+            paymentMethodNonce: paymentMethodNonce,
             senderId: senderId,
             username: username,
             chat: chat,
