@@ -14,4 +14,13 @@ extension Decimal {
             from: NSDecimalNumber(decimal: self)
         )
     }
+
+    func rounded(_ scale: Int = 0, _ roundingMode: RoundingMode = .plain) -> Decimal {
+        var rounded = Decimal()
+        var this = self
+
+        NSDecimalRound(&rounded, &this, scale, roundingMode)
+
+        return rounded
+    }
 }

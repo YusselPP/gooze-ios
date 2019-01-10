@@ -49,6 +49,10 @@ class GZEActivateGoozeViewModel {
         return GZEPaymentMethodsViewModelAdded()
     }
 
+    var registerPayPalViewModel: GZERegisterPayPalViewModel {
+        return GZERegisterPayPalViewModel()
+    }
+
     var activateGoozeAction: Action<Void, GZEUser, GZEError> {
         if let activateGoozeAction = _activateGoozeAction {
             return activateGoozeAction

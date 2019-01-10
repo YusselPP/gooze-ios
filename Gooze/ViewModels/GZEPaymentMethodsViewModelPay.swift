@@ -91,9 +91,9 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
             return
         }) as CocoaAction<GZEButton>
 
-        self.goozeTaxAmount <~ self.goozeTax.map{amount * $0}
-        self.clientTaxAmount <~ self.clientTax.map{amount * $0}
-        self.amount <~ self.clientTaxAmount.map{amount + $0}
+        self.goozeTaxAmount <~ self.goozeTax.map{amount * $0}.map{$0.rounded(2)}
+        self.clientTaxAmount <~ self.clientTax.map{amount * $0}.map{$0.rounded(2)}
+        self.amount <~ self.clientTaxAmount.map{amount + $0}.map{$0.rounded(2)}
         self.topMainButtonTitle <~ self.amount.map{
             (GZENumberHelper.shared.currencyFormatter.string(from: NSDecimalNumber(decimal: $0)) ?? "$0") + " MXN"
         }

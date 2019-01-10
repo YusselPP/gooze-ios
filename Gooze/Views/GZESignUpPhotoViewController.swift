@@ -14,9 +14,10 @@ import ALCameraViewController
 import Photos
 import SwiftOverlays
 
-class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZEDismissVCDelegate {
+class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZEDismissVCDelegate, GZENextVCDelegate {
 
     let segueToPayment = "segueToPayment"
+    let segueToRegisterPayPal = "segueToRegisterPayPal"
     
     var blur: GZEBlur?
 
@@ -1058,6 +1059,20 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
                 this.viewModel.dismiss = loginDismiss
             }
             vc.previousController(animated: true)
+        } else if vc.isKind(of: GZERegisterPayPalViewController.self) {
+            let loginDismiss = viewModel.dismiss
+            viewModel.dismiss = {[weak self] in
+                guard let this = self else {return}
+                this.performSegue(withIdentifier: this.segueToRegisterPayPal, sender: nil)
+                this.viewModel.dismiss = loginDismiss
+            }
+            vc.previousController(animated: true)
+        }
+    }
+
+    func onNextTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZERegisterPayPalViewController.self) {
+            self.showChooseModeController()
         }
     }
 
@@ -1069,6 +1084,14 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         // Pass the selected object to the new view controller.
         if segue.identifier == segueToPayment {
             showPaymentView(segue.destination)
+        } else if segue.identifier == segueToRegisterPayPal {
+
+            let nextButton = GZENextUIBarButtonItem()
+            nextButton.onButtonTapped = {[weak self] _ in
+                self?.showChooseModeController()
+            }
+
+            GZERegisterPayPalViewController.prepareView(presenter: self, nextDelegate: self, viewController: segue.destination, vm: GZERegisterPayPalViewModel(), rightBarButton: nextButton)
         }
     }
 

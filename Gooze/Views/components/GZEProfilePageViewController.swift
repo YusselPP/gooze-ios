@@ -8,10 +8,11 @@
 
 import UIKit
 
-class GZEProfilePageViewController: UIPageViewController, GZEDismissVCDelegate {
+class GZEProfilePageViewController: UIPageViewController, GZEDismissVCDelegate, GZENextVCDelegate {
 
     let segueToChat = "segueToChat"
     let segueToPayments = "segueToPayments"
+    let segueToRegisterPayPal = "segueToRegisterPayPal"
 
     var profileVm: GZEProfileUserInfoViewModel!
     var galleryVm: GZEGalleryViewModel!
@@ -102,6 +103,13 @@ class GZEProfilePageViewController: UIPageViewController, GZEDismissVCDelegate {
             }
         } else if segue.identifier == segueToPayments {
             preparePaymentSegue(segue.destination, vm: sender)
+        } else if segue.identifier == segueToRegisterPayPal {
+            GZERegisterPayPalViewController.prepareView(
+                presenter: self,
+                nextDelegate: self,
+                viewController: segue.destination,
+                vm: sender
+            )
         }
     }
 
@@ -122,6 +130,14 @@ class GZEProfilePageViewController: UIPageViewController, GZEDismissVCDelegate {
     // MARK: Dismiss delegate
     func onDismissTapped(_ vc: UIViewController) {
         if vc.isKind(of: GZEPaymentMethodsViewController.self) {
+            vc.previousController(animated: true)
+        } else if vc.isKind(of: GZERegisterPayPalViewController.self) {
+            vc.previousController(animated: true)
+        }
+    }
+
+    func onNextTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZERegisterPayPalViewController.self) {
             vc.previousController(animated: true)
         }
     }

@@ -202,6 +202,7 @@ class GZEUser: NSObject, Glossy {
     //var password: String?
 
     var paypalCustomerId: String?
+    var payPalEmail: String?
 
     var birthday: Date?
     var gender: Gender?
@@ -304,6 +305,7 @@ class GZEUser: NSObject, Glossy {
         // self.password = "password" <~~ json
 
         self.paypalCustomerId = "payment.paypalCustomerId" <~~ json
+        self.payPalEmail = "payPalEmail" <~~ json
 
         self.birthday = Decoder.decode(dateForKey: "birthday", dateFormatter: GZEApi.dateFormatter)(json)
         self.gender = "gender" <~~ json
@@ -365,6 +367,7 @@ class GZEUser: NSObject, Glossy {
             //"password" ~~> self.password,
 
             "payment.paypalCustomerId" ~~> self.paypalCustomerId,
+            "payPalEmail" ~~> self.payPalEmail,
 
             "gender" ~~> self.gender,
             "searchForGender"  ~~> self.searchForGender,

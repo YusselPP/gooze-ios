@@ -21,6 +21,7 @@ class GZEMenuMain {
     let menuItemTitleChats = "menu.item.title.chats".localized().uppercased()
     let menuItemTitleHistory = "menu.item.title.history".localized().uppercased()
     let menuItemTitlePayment = "menu.item.title.payment".localized().uppercased()
+    let menuItemTitleregisterPayPal = "menu.item.title.registerPayPal".localized().uppercased()
     let menuItemTitleCoupons = "menu.item.title.coupons".localized().uppercased()
     let menuItemTitleTransactions = "menu.item.title.transactions".localized().uppercased()
     let menuItemTitleInvite = "menu.item.title.invite".localized().uppercased()
@@ -116,6 +117,11 @@ class GZEMenuMain {
             controller.performSegue(withIdentifier: controller.segueToPayment, sender: nil)
         })
 
+        let (_, registerPayPalCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
+            guard let controller = self?.controller else {return}
+            controller.performSegue(withIdentifier: controller.segueToRegisterPayPal, sender: nil)
+        })
+
         let (_, transactionsCocoaAction) = createMenuAction(producer: SignalProducer{[weak self] in
             guard let controller = self?.controller else {return}
             controller.performSegue(withIdentifier: controller.segueToBalance, sender: nil)
@@ -142,7 +148,9 @@ class GZEMenuMain {
             createMenuSeparator(),
             createMenuItemButton(title: menuItemTitleHistory, action: historyCocoaAction),
             createMenuSeparator(),
-            createMenuItemButton(title: menuItemTitlePayment, action: paymentCocoaAction),
+            //createMenuItemButton(title: menuItemTitlePayment, action: paymentCocoaAction),
+            //createMenuSeparator(),
+            createMenuItemButton(title: menuItemTitleregisterPayPal, action: registerPayPalCocoaAction),
             createMenuSeparator(),
             //createMenuItemButton(title: menuItemTitleCoupons, action: profileCocoaAction),
             //createMenuSeparator(),

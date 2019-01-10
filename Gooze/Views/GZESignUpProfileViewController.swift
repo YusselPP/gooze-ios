@@ -563,7 +563,8 @@ class GZESignUpProfileViewController: UIViewController, UITextFieldDelegate, GZE
                 viewController.mode = .editGalleryPic
                 let loginDismiss = viewModel.dismiss
                 viewModel.dismiss = {[weak self] in
-                    viewController.performSegue(withIdentifier: viewController.segueToPayment, sender: nil)
+                    // viewController.performSegue(withIdentifier: viewController.segueToPayment, sender: nil)
+                    viewController.performSegue(withIdentifier: viewController.segueToRegisterPayPal, sender: nil)
                     self?.viewModel.dismiss = loginDismiss
                 }
             } else {

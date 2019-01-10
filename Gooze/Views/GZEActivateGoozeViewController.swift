@@ -14,7 +14,7 @@ import PPBadgeView
 import SwiftOverlays
 import enum Result.NoError
 
-class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDismissVCDelegate {
+class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDismissVCDelegate, GZENextVCDelegate {
 
     let segueToProfile = "segueToProfile"
     let segueToMyProfile = "segueToMyProfile"
@@ -25,6 +25,7 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
     let segueToBalance = "segueToBalance"
     let segueToHelp = "segueToHelp"
     let segueToHistory = "segueToHistory"
+    let segueToRegisterPayPal = "segueToRegisterPayPal"
 
     enum Scene {
         case activate
@@ -798,9 +799,16 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             vc.previousController(animated: true)
         } else if vc.isKind(of: GZEBalanceViewController.self) {
             vc.previousController(animated: true)
+        } else if vc.isKind(of: GZERegisterPayPalViewController.self) {
+            vc.previousController(animated: true)
         }
     }
 
+    func onNextTapped(_ vc: UIViewController) {
+        if vc.isKind(of: GZERegisterPayPalViewController.self) {
+            vc.previousController(animated: true)
+        }
+    }
 
      // MARK: - Navigation
 
@@ -860,6 +868,14 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
                 presenter: self,
                 viewController: segue.destination,
                 vm: GZEBalanceViewModelHistory(mode: scene.mode)
+            )
+        } else if segue.identifier == segueToRegisterPayPal {
+
+            GZERegisterPayPalViewController.prepareView(
+                presenter: self,
+                nextDelegate: self,
+                viewController: segue.destination,
+                vm: self.viewModel.registerPayPalViewModel
             )
         }
      }

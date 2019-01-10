@@ -87,6 +87,11 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     let rejectedRequestButtonTitle = "vm.profile.rejectedRequestButtonTitle".localized().uppercased()
     let sentRequestButtonTitle = "vm.profile.sentRequestButtonTitle".localized().uppercased()
     let endedRequestButtonTitle = "vm.profile.endedRequestButtonTitle".localized().uppercased()
+
+    let addPayPalAccountRequest = "vm.profile.addPayPalAccountRequest".localized()
+    let addPayPalAccountAnswerAdd = "vm.profile.addPayPalAccountAnswerAdd".localized()
+    let addPayPalAccountAnswerLater = "vm.profile.addPayPalAccountAnswerLater".localized()
+
     let addPaymentMethodRequest = "vm.profile.addPaymentMethodRequest".localized()
     let addPaymentMethodAnswerAdd = "vm.profile.addPaymentMethodAnswerAdd".localized()
     let addPaymentMethodAnswerLater = "vm.profile.addPaymentMethodAnswerLater".localized()
@@ -125,6 +130,10 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         }
 
         return GZEChatViewModelDates(chat: chat, dateRequest: daRequestProperty, mode: chatMode, username: self.user.username)
+    }
+
+    var registerPayPalViewModel: GZERegisterPayPalViewModel {
+        return GZERegisterPayPalViewModel()
     }
 
     var paymentsViewModel: GZEPaymentMethodsViewModel {
@@ -216,6 +225,22 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
     private func onError(_ error: GZEError) {
         switch error {
         case .datesSocket(let datesError):
+            if datesError == .payPalAccountRequired {
+                GZEAlertService.shared.showConfirmDialog(
+                    title: error.localizedDescription,
+                    message: addPayPalAccountRequest,
+                    buttonTitles: [addPayPalAccountAnswerAdd],
+                    cancelButtonTitle: addPayPalAccountAnswerLater,
+                    actionHandler: {[weak self] (_, _, _) in
+                        log.debug("Add pressed")
+                        self?.openRegisterPayPalView()
+                    },
+                    cancelHandler: { _ in
+                        log.debug("Cancel pressed")
+                }
+                )
+                return
+            }
             if datesError == .paymentMethodRequired {
                 GZEAlertService.shared.showConfirmDialog(
                     title: error.localizedDescription,
@@ -343,6 +368,19 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
         }
 
         controller.performSegue(withIdentifier: controller.segueToChat, sender: chatViewModel)
+    }
+
+    private func openRegisterPayPalView() {
+        log.debug("openRegisterPayPalView called")
+
+        guard
+            let controller = self.controller as? GZEProfilePageViewController
+            else {
+                log.error("Unable to payment view GZEProfilePageViewController is not set")
+                return
+        }
+
+        controller.performSegue(withIdentifier: controller.segueToRegisterPayPal, sender: self.registerPayPalViewModel)
     }
 
     private func openAddPaymentMethodsView() {

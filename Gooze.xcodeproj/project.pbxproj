@@ -128,6 +128,7 @@
 		8D2E3C0820E32939007889B1 /* GZEChatMessageRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E3C0720E32939007889B1 /* GZEChatMessageRouter.swift */; };
 		8D2E3C0A20E32E40007889B1 /* GZEChatMessageRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E3C0920E32E40007889B1 /* GZEChatMessageRepositoryProtocol.swift */; };
 		8D2E3C0C20E33097007889B1 /* GZEChatMessageApiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2E3C0B20E33097007889B1 /* GZEChatMessageApiRepository.swift */; };
+		8D2F4B9D21E4D6EA00B2207C /* GZENextVCDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2F4B9C21E4D6EA00B2207C /* GZENextVCDelegate.swift */; };
 		8D30CE4B20EE21DD009EB133 /* GZERetryQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D30CE4A20EE21DC009EB133 /* GZERetryQueue.swift */; };
 		8D32B2DE20D354A500290DDD /* GZEPaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D32B2DD20D354A500290DDD /* GZEPaymentMethod.swift */; };
 		8D32B2E020D356CE00290DDD /* GZEPayPalPaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D32B2DF20D356CE00290DDD /* GZEPayPalPaymentMethod.swift */; };
@@ -147,6 +148,8 @@
 		8D3F26A42193A65D00D2E55D /* Decimal+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3F26A32193A65D00D2E55D /* Decimal+Extension.swift */; };
 		8D413CB020410EDE00CB4B93 /* GZEPickerUIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D413CAF20410EDE00CB4B93 /* GZEPickerUIToolbar.swift */; };
 		8D413CB220412D0700CB4B93 /* GZEBackUIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D413CB120412D0600CB4B93 /* GZEBackUIBarButtonItem.swift */; };
+		8D45CAFC21E142ED0087476E /* GZERegisterPayPalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D45CAFB21E142ED0087476E /* GZERegisterPayPalViewController.swift */; };
+		8D45CAFE21E149BA0087476E /* GZERegisterPayPalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D45CAFD21E149BA0087476E /* GZERegisterPayPalViewModel.swift */; };
 		8D4A1FFF1F9CB4CC00CBF545 /* GZEAppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */; };
 		8D5253BA206CC174003D95A4 /* GZEDateRequestRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5253B9206CC174003D95A4 /* GZEDateRequestRouter.swift */; };
 		8D5253BC206CC2E6003D95A4 /* GZEDateRequestRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5253BB206CC2E6003D95A4 /* GZEDateRequestRepositoryProtocol.swift */; };
@@ -407,6 +410,7 @@
 		8D2E3C0720E32939007889B1 /* GZEChatMessageRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatMessageRouter.swift; sourceTree = "<group>"; };
 		8D2E3C0920E32E40007889B1 /* GZEChatMessageRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatMessageRepositoryProtocol.swift; sourceTree = "<group>"; };
 		8D2E3C0B20E33097007889B1 /* GZEChatMessageApiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEChatMessageApiRepository.swift; sourceTree = "<group>"; };
+		8D2F4B9C21E4D6EA00B2207C /* GZENextVCDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZENextVCDelegate.swift; sourceTree = "<group>"; };
 		8D30CE4A20EE21DC009EB133 /* GZERetryQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERetryQueue.swift; sourceTree = "<group>"; };
 		8D32B2DD20D354A500290DDD /* GZEPaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPaymentMethod.swift; sourceTree = "<group>"; };
 		8D32B2DF20D356CE00290DDD /* GZEPayPalPaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPayPalPaymentMethod.swift; sourceTree = "<group>"; };
@@ -427,6 +431,8 @@
 		8D3F26A32193A65D00D2E55D /* Decimal+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+Extension.swift"; sourceTree = "<group>"; };
 		8D413CAF20410EDE00CB4B93 /* GZEPickerUIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEPickerUIToolbar.swift; sourceTree = "<group>"; };
 		8D413CB120412D0600CB4B93 /* GZEBackUIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEBackUIBarButtonItem.swift; sourceTree = "<group>"; };
+		8D45CAFB21E142ED0087476E /* GZERegisterPayPalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERegisterPayPalViewController.swift; sourceTree = "<group>"; };
+		8D45CAFD21E149BA0087476E /* GZERegisterPayPalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZERegisterPayPalViewModel.swift; sourceTree = "<group>"; };
 		8D4A1FFE1F9CB4CC00CBF545 /* GZEAppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEAppConfig.swift; sourceTree = "<group>"; };
 		8D5253B9206CC174003D95A4 /* GZEDateRequestRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateRequestRouter.swift; sourceTree = "<group>"; };
 		8D5253BB206CC2E6003D95A4 /* GZEDateRequestRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GZEDateRequestRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -660,6 +666,7 @@
 				8D3D32CB20D28CB8005BE54B /* GZEPaymentCollectionView.swift */,
 				8D3D32CD20D28CDD005BE54B /* GZEPaymentCollectionViewCell.swift */,
 				8D3D32CF20D28D09005BE54B /* GZEPaymentCellModel.swift */,
+				8D45CAFB21E142ED0087476E /* GZERegisterPayPalViewController.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -699,6 +706,7 @@
 				8D0938042075CCE2008AEA00 /* GZEUserConvertible.swift */,
 				8D10766020B5C8DE00E9F22E /* CompletionBlock.swift */,
 				8D227CB620D552F000564DEE /* GZEDismissVCDelegate.swift */,
+				8D2F4B9C21E4D6EA00B2207C /* GZENextVCDelegate.swift */,
 				8DC8E71420D95C7B00603A26 /* GZEFacebookError.swift */,
 			);
 			path = Protocols;
@@ -1056,6 +1064,7 @@
 				8D2729A72194A2360069483C /* GZEBalanceViewModelHistory.swift */,
 				8D65D2732197567E00A8A4AB /* GZEHistoryDetailViewModel.swift */,
 				8D5DD2612198771C001AE991 /* GZEHistoryDetailViewModelDates.swift */,
+				8D45CAFD21E149BA0087476E /* GZERegisterPayPalViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1466,6 +1475,7 @@
 				8D413CB220412D0700CB4B93 /* GZEBackUIBarButtonItem.swift in Sources */,
 				8D6C8D511FB418D200EDBC69 /* GZEImageHelper.swift in Sources */,
 				8D210BEC20D7D11700F1ECCD /* GZEDeviceTokenRouter.swift in Sources */,
+				8D45CAFE21E149BA0087476E /* GZERegisterPayPalViewModel.swift in Sources */,
 				8DFAC992206FD8840040DFFB /* GZEChatViewModel.swift in Sources */,
 				8D0938052075CCE2008AEA00 /* GZEUserConvertible.swift in Sources */,
 				8D632CDE217E056800301F69 /* GZEAppConfigRouter.swift in Sources */,
@@ -1625,9 +1635,11 @@
 				8D26D94720E5CF29002D3586 /* GZEBalanceCellModel.swift in Sources */,
 				8D24472F1F9E8AEE004330AF /* GZEUserApiRepository.swift in Sources */,
 				8D033C5C206EB26400AF47E6 /* GZEChatViewController.swift in Sources */,
+				8D2F4B9D21E4D6EA00B2207C /* GZENextVCDelegate.swift in Sources */,
 				8D2559D720A05A380084CAC5 /* GZEPinAnnotationView.swift in Sources */,
 				8D169AF020500D900025C803 /* GZERatingView.swift in Sources */,
 				8DE1707820AEDF1200A07E92 /* GZEMenuView.swift in Sources */,
+				8D45CAFC21E142ED0087476E /* GZERegisterPayPalViewController.swift in Sources */,
 				8D572DBB1F9D352F00B824FA /* GZEUser.swift in Sources */,
 				8D19238A204ED18A005F6F5F /* GZERatingsViewController.swift in Sources */,
 				8D250C8B20B3D01B00D3E06B /* GZEChatsViewController.swift in Sources */,

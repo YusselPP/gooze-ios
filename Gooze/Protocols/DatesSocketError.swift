@@ -10,6 +10,7 @@ import Foundation
 
 enum DatesSocketError: String {
     case paymentMethodRequired = "PAYMENT_METHOD_REQUIRED"
+    case payPalAccountRequired = "PAY_PAL_ACCOUNT_REQUIRED"
     case requestAlreadySent = "DATE_REQUEST_ALREADY_SENT"
     case invalidSatus = "REQUEST_INVALID_STATUS"
     case incompleteProfile = "USER_INCOMPLETE_PROFILE"
@@ -27,6 +28,8 @@ extension DatesSocketError: LocalizedError {
         switch self {
         case .paymentMethodRequired:
             message = "error.socket.dates.paymentMethodRequired"
+        case .payPalAccountRequired:
+            message = "error.socket.dates.payPalAccountRequired"
         case .requestAlreadySent:
             message = "error.socket.dates.requestAlreadySent"
         case .invalidSatus:

@@ -26,6 +26,7 @@
 
 // Protocols/DatesSocketError
 "error.socket.dates.paymentMethodRequired"="Es necesario agregar un método de pago";
+"error.socket.dates.payPalAccountRequired"="Es necesario agregar una cuenta de PayPal";
 "error.socket.dates.requestAlreadySent"="Se ha enviado tu solicitud";
 "error.socket.dates.invalidSatus"="No se pudo aceptar. La solicitud ya fue aceptada o rechazada";
 "error.socket.dates.noAck"="No se pudo establecer la comunicación con el servidor";
@@ -242,6 +243,14 @@
 "vm.pickerToolbar.nextButton.title"="Siguiente";
 "vm.pickerToolbar.doneButton.title"="Ok";
 
+// ViewModel/GZERegisterPayPalViewModel
+"vm.register.paypal.description"="Favor de introducir una cuenta activa de PayPal ya que se utilizará para la entrega de beneficios generados al establecer tus citas";
+"vm.register.paypal.emailPlaceholder"="Correo electrónico";
+"vm.register.paypal.emailConfirmPlaceholder"="Confirmar correo electrónico";
+"vm.register.paypal.emailConfirmMismatch"="El correo electrónico y su confirmación no coinciden";
+"vm.register.paypal.botRightButtonSaveTitle"="Guardar";
+"vm.register.paypal.botRightButtonSaveEdit"="Editar";
+
 // Views/GZEBlurViewController
 "label.blurView.applyButtonTitle"="Aplicar";
 
@@ -254,6 +263,10 @@
 "vm.profile.endedRequestButtonTitle"="Cita finalizada";
 
 "vm.profile.rate.date.rate"="Calificar";
+
+"vm.profile.addPayPalAccountRequest"="¿Agregar cuenta de PayPal?";
+"vm.profile.addPayPalAccountAnswerAdd"="Agregar";
+"vm.profile.addPayPalAccountAnswerLater"="Más tarde";
 
 "vm.profile.addPaymentMethodRequest"="¿Agregar un método de pago ahora?";
 "vm.profile.addPaymentMethodAnswerAdd"="Agregar";
@@ -270,6 +283,7 @@
 "menu.item.title.chats"="Chats";
 "menu.item.title.history"="Historial";
 "menu.item.title.payment"="Formas de pago";
+"menu.item.title.registerPayPal"="Cuenta PayPal";
 "menu.item.title.coupons"="Créditos y cupones";
 "menu.item.title.transactions"="Transacciones";
 "menu.item.title.invite"="Invitar amigos";
