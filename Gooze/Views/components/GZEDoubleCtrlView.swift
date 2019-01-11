@@ -45,6 +45,8 @@ class GZEDoubleCtrlView: UIView {
         }
     }
 
+    var minSeparatorWidth: CGFloat = 0
+
     var controlsMaxTextWidth: CGFloat {
         return getControlsMaxTextWidth()
     }
@@ -253,7 +255,11 @@ class GZEDoubleCtrlView: UIView {
         log.debug("top text width: \(topTextWidth)")
         log.debug("bot text width: \(botTextWidth)")
 
-        return max(topTextWidth, botTextWidth)
+        return max(
+            topTextWidth,
+            botTextWidth,
+            isKeyboardShown ? 0 : self.minSeparatorWidth
+        )
     }
 
     // MARK: KeyboardNotifications

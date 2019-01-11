@@ -1085,13 +1085,17 @@ class GZESignUpPhotoViewController: UIViewController, UIScrollViewDelegate, GZED
         if segue.identifier == segueToPayment {
             showPaymentView(segue.destination)
         } else if segue.identifier == segueToRegisterPayPal {
+            let vm = GZERegisterPayPalViewModel()
 
-            let nextButton = GZENextUIBarButtonItem()
-            nextButton.onButtonTapped = {[weak self] _ in
-                self?.showChooseModeController()
-            }
+            vm.botLeftButtonHidden.value = false
 
-            GZERegisterPayPalViewController.prepareView(presenter: self, nextDelegate: self, viewController: segue.destination, vm: GZERegisterPayPalViewModel(), rightBarButton: nextButton)
+            GZERegisterPayPalViewController.prepareView(
+                presenter: self,
+                nextDelegate: self,
+                viewController: segue.destination,
+                vm: vm,
+                showRightBarButton: true
+            )
         }
     }
 

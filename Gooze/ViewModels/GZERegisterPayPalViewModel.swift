@@ -18,6 +18,7 @@ class GZERegisterPayPalViewModel {
     let title = MutableProperty<String?>(nil)
 
     let rightBarButtonItem = MutableProperty<UIBarButtonItem?>(nil)
+    let showRightBarButton = MutableProperty<Bool>(false)
 
     let (dismiss, dismissObs) = Signal<Void, NoError>.pipe()
     let (next, nextObs) = Signal<Void, NoError>.pipe()
@@ -26,7 +27,11 @@ class GZERegisterPayPalViewModel {
     let botRightButtonTitle = MutableProperty<String>("Button")
     let botRightButtonHidden =  MutableProperty<Bool>(false)
 
+    let botLeftButtonTitle = MutableProperty<String>("Button")
+    let botLeftButtonHidden =  MutableProperty<Bool>(true)
+
     var botRightButtonAction: CocoaAction<GZEButton>?
+    var botLeftButtonAction: CocoaAction<GZEButton>?
 
     let descriptionLabelText = MutableProperty<String?>(nil)
 
@@ -43,6 +48,7 @@ class GZERegisterPayPalViewModel {
     private let emailConfirmPlaceholderText = "vm.register.paypal.emailConfirmPlaceholder".localized()
     private let botRightButtonSaveTitle = "vm.register.paypal.botRightButtonSaveTitle".localized()
     private let botRightButtonEditTitle = "vm.register.paypal.botRightButtonEditTitle".localized()
+    private let skipButtonTitle = "vm.signUp.skipProfileText".localized()
 
     private let userRepository: GZEUserRepositoryProtocol = GZEUserApiRepository()
 
@@ -58,8 +64,13 @@ class GZERegisterPayPalViewModel {
         self.emailPlaceholder.value = self.emailPlaceholderText
         self.emailConfirmPlaceholder.value = self.emailConfirmPlaceholderText
         self.botRightButtonTitle.value = self.botRightButtonSaveTitle.uppercased()
+        self.botLeftButtonTitle.value = self.skipButtonTitle.uppercased()
 
         self.botRightButtonAction = CocoaAction(self.saveAction)
+        self.botLeftButtonAction = CocoaAction(Action<Void, Void, NoError>{[weak self] _ in
+            self?.nextObs.send(value: ())
+            return SignalProducer.empty
+        })
 
         // Get user paypal email to populate fields
         self.emailText <~ GZEAuthService.shared.authUserProperty.map{$0?.payPalEmail}

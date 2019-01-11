@@ -244,7 +244,7 @@
 "vm.pickerToolbar.doneButton.title"="Ok";
 
 // ViewModel/GZERegisterPayPalViewModel
-"vm.register.paypal.description"="Favor de introducir una cuenta activa de PayPal ya que se utilizará para la entrega de beneficios generados al establecer tus citas";
+"vm.register.paypal.description"="Favor de introducir una cuenta activa de PayPal, esta se utilizará para entregar los beneficios generados con tus citas";
 "vm.register.paypal.emailPlaceholder"="Correo electrónico";
 "vm.register.paypal.emailConfirmPlaceholder"="Confirmar correo electrónico";
 "vm.register.paypal.emailConfirmMismatch"="El correo electrónico y su confirmación no coinciden";

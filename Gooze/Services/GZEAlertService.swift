@@ -47,7 +47,8 @@ class GZEAlertService {
         }
         
         superview.addSubview(self.topAlert)
-        self.topAlert.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        self.topAlert.heightAnchor.constraint(greaterThanOrEqualToConstant: 60).isActive = true
+        self.topAlert.heightAnchor.constraint(lessThanOrEqualToConstant: 80).isActive = true
         superview.widthAnchor.constraint(equalTo: self.topAlert.widthAnchor).isActive = true
         superview.topAnchor.constraint(equalTo: self.topAlert.topAnchor, constant: -statusBarHeight()).isActive = true
         superview.centerXAnchor.constraint(equalTo: self.topAlert.centerXAnchor).isActive = true

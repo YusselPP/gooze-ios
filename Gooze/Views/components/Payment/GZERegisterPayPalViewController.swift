@@ -18,25 +18,43 @@ class GZERegisterPayPalViewController: UIViewController {
     weak var nextDelegate: GZENextVCDelegate?
 
     let backButton = GZEBackUIBarButtonItem()
+    let nextButton = GZENextUIBarButtonItem()
 
     let loadingView = GZELoadingUIView()
 
-    @IBOutlet weak var descriptionLabel: GZELabel!
-    @IBOutlet weak var emailTextField: GZETextField!
-    @IBOutlet weak var emailConfirmTextField: GZETextField!
-    @IBOutlet weak var botRightButton: GZEButton!
+    let emailTextField = GZETextField()
+    let emailConfirmTextField = GZETextField()
 
+    @IBOutlet weak var botRightButton: GZEButton!
+    @IBOutlet weak var botLeftButton: GZEButton!
+    @IBOutlet weak var dblCtrlView: GZEDoubleCtrlView!
+
+    @IBOutlet weak var bottomLayoutConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         log.debug("\(self) init")
 
         setupInterfaceObjects()
         setupBindings()
+
+        if let text = self.viewModel.descriptionLabelText.value {
+            GZEAlertService.shared.showTopAlert(text: text, duration: 10)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.viewModel.viewShownObs.send(value: true)
+        registerForKeyboarNotifications(
+            observer: self,
+            willShowSelector: #selector(keyboardWillShow(notification:)),
+            willHideSelector: #selector(keyboardWillHide(notification:))
+        )
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        deregisterFromKeyboardNotifications(observer: self)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -56,29 +74,50 @@ class GZERegisterPayPalViewController: UIViewController {
         }
         self.navigationItem.leftBarButtonItem = backButton
 
+
+        self.nextButton.onButtonTapped = {[weak self] _ in
+            self?.botRightButton.sendActions(for: .touchUpInside)
+        }
+
+        self.viewModel.rightBarButtonItem.value = nextButton
+
         self.loadingView.containerView = self.view
 
+        emailTextField.autocapitalizationType = .none
         emailTextField.keyboardType = .emailAddress
         emailTextField.tintColor = .white
         emailTextField.font = GZEConstants.Font.main
-        emailTextField.attributedPlaceholder = NSAttributedString(string: self.viewModel.emailPlaceholder.value, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: GZEConstants.Font.main])
+        emailTextField.attributedPlaceholder = NSAttributedString(string: self.viewModel.emailPlaceholder.value.uppercased(), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: GZEConstants.Font.main])
 
+        emailConfirmTextField.autocapitalizationType = .none
         emailConfirmTextField.keyboardType = .emailAddress
         emailConfirmTextField.tintColor = .white
         emailConfirmTextField.font = GZEConstants.Font.main
-        emailConfirmTextField.attributedPlaceholder = NSAttributedString(string: self.viewModel.emailConfirmPlaceholder.value, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: GZEConstants.Font.main])
+        emailConfirmTextField.attributedPlaceholder = NSAttributedString(string: self.viewModel.emailConfirmPlaceholder.value.uppercased(), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: GZEConstants.Font.main])
+
+        self.dblCtrlView.minSeparatorWidth = 200
+        self.dblCtrlView.topCtrlView = emailTextField
+        self.dblCtrlView.bottomCtrlView = emailConfirmTextField
+
+        self.dblCtrlView.topViewTappedHandler = {[weak self] _ in
+            self?.emailTextField.becomeFirstResponder()
+        }
+
+        self.dblCtrlView.bottomViewTappedHandler = {[weak self] _ in
+            self?.emailConfirmTextField.becomeFirstResponder()
+        }
     }
 
     func setupBindings() {
         // Producers
         self.navigationItem.reactive.title <~ self.viewModel.title
 
-        self.viewModel.rightBarButtonItem.producer.startWithValues{
-            [weak self] in
-            self?.navigationItem.rightBarButtonItem = $0
-        }
-
-        self.descriptionLabel.reactive.text <~ self.viewModel.descriptionLabelText
+        self.viewModel.rightBarButtonItem
+            .combineLatest(with: self.viewModel.showRightBarButton)
+            .producer
+            .startWithValues{[weak self] (button, show) in
+                self?.navigationItem.rightBarButtonItem = show ? button : nil
+            }
 
         self.emailTextField.reactive.text <~ self.viewModel.emailText
         self.emailConfirmTextField.reactive.text <~ self.viewModel.emailConfirmText
@@ -88,6 +127,10 @@ class GZERegisterPayPalViewController: UIViewController {
 
         self.botRightButton.reactive.title <~ self.viewModel.botRightButtonTitle
         self.botRightButton.reactive.isHidden <~ self.viewModel.botRightButtonHidden
+
+        self.botLeftButton.reactive.title <~ self.viewModel.botLeftButtonTitle
+        self.botLeftButton.reactive.isHidden <~ self.viewModel.botLeftButtonHidden
+
         self.viewModel.error.producer.skipNil().startWithValues{
             GZEAlertService.shared.showBottomAlert(text: $0)
         }
@@ -116,6 +159,19 @@ class GZERegisterPayPalViewController: UIViewController {
 
         // Actions
         self.botRightButton.reactive.pressed = self.viewModel.botRightButtonAction
+        self.botLeftButton.reactive.pressed = self.viewModel.botLeftButtonAction
+    }
+
+    // MARK: - KeyboardNotifications
+
+    @objc func keyboardWillShow(notification: Notification) {
+        log.debug("keyboard will show")
+        resizeViewWithKeyboard(keyboardShow: true, constraint: bottomLayoutConstraint, notification: notification, view: self.view)
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        log.debug("keyboard will hide")
+        resizeViewWithKeyboard(keyboardShow: false, constraint: bottomLayoutConstraint, notification: notification, view: self.view, safeInsets: false)
     }
 
     /*
@@ -128,7 +184,7 @@ class GZERegisterPayPalViewController: UIViewController {
      }
      */
 
-    static func prepareView(presenter: GZEDismissVCDelegate, nextDelegate: GZENextVCDelegate? = nil, viewController: UIViewController, vm: Any?, rightBarButton: UIBarButtonItem? = nil) {
+    static func prepareView(presenter: GZEDismissVCDelegate, nextDelegate: GZENextVCDelegate? = nil, viewController: UIViewController, vm: Any?, showRightBarButton: Bool = false) {
 
         let controllerType = GZERegisterPayPalViewController.self
 
@@ -147,7 +203,7 @@ class GZERegisterPayPalViewController: UIViewController {
             return
         }
 
-        vm.rightBarButtonItem.value = rightBarButton
+        vm.showRightBarButton.value = showRightBarButton
 
         viewController.dismissDelegate = presenter
         viewController.nextDelegate = nextDelegate

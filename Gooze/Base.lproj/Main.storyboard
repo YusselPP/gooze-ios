@@ -91,7 +91,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dYV-3i-SEh">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dYV-3i-SEh" userLabel="root-view-container">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="fA6-nB-KSM">
@@ -182,7 +182,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zZ2-W4-Q35" customClass="GZECheckListCollectionView" customModule="Gooze" customModuleProvider="target">
-                                <rect key="frame" x="16" y="64" width="343" height="603"/>
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xIK-sV-NXa">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -249,13 +249,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xbO-Sj-Jkc">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-background" translatesAutoresizingMaskIntoConstraints="NO" id="cCx-TY-NnN">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jgt-hf-4Co">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P9F-hy-S2v">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="607.5"/>
@@ -724,13 +724,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dO2-in-Qrd">
-                                <rect key="frame" x="0.0" y="64" width="375" height="368.5"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="412.5"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.20000000000000001" maximumZoomScale="5" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1l-1m-VOV">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4hT-lE-ril">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
                                             </imageView>
                                         </subviews>
                                         <constraints>
@@ -743,23 +743,23 @@
                                         </constraints>
                                     </scrollView>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n3U-KK-ELb">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="368.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="412.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wOa-CL-T0W">
-                                        <rect key="frame" x="3" y="0.0" width="369" height="368.5"/>
+                                        <rect key="frame" x="-19" y="0.0" width="413" height="412.5"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="wOa-CL-T0W" secondAttribute="height" multiplier="1:1" id="Yzm-pl-OQy"/>
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GeZ-wd-uBD">
-                                        <rect key="frame" x="0.0" y="120" width="375" height="129"/>
+                                        <rect key="frame" x="0.0" y="142" width="375" height="129"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="GeZ-wd-uBD" secondAttribute="height" multiplier="32:11" id="ELb-jC-hTg"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vA2-6o-xIQ">
-                                        <rect key="frame" x="166.5" y="154.5" width="42" height="60"/>
+                                        <rect key="frame" x="166.5" y="176.5" width="42" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgm-dZ-tx6">
                                                 <rect key="frame" x="5" y="-1" width="32" height="22"/>
@@ -804,14 +804,14 @@
                                         </constraints>
                                     </view>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsu-W6-Fua">
-                                        <rect key="frame" x="127.5" y="124.5" width="120" height="120"/>
+                                        <rect key="frame" x="127.5" y="146.5" width="120" height="120"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="tsu-W6-Fua" secondAttribute="height" multiplier="1:1" id="8Bb-kh-ION"/>
                                             <constraint firstAttribute="height" constant="120" id="CgV-eh-oPJ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdP-PT-gBJ" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="8" width="359" height="352.5"/>
+                                        <rect key="frame" x="8" y="8" width="359" height="396.5"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MLo-Oz-9ew">
                                         <rect key="frame" x="298" y="10" width="67" height="57"/>
@@ -1619,6 +1619,7 @@
                 <navigationController storyboardIdentifier="SearchGoozeNavController" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fqh-tX-u5t" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Bat-H4-wgq">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1908,7 +1909,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ot7-v8-W5i" userLabel="content-view">
-                                <rect key="frame" x="16" y="64" width="343" height="603"/>
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N35-Mx-TSz">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="50"/>
@@ -1925,7 +1926,7 @@
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Sjn-qM-qlR" customClass="GZEPaymentCollectionView" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="5" y="50" width="333" height="493"/>
+                                        <rect key="frame" x="5" y="50" width="333" height="537"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Za4-Do-WZ1">
                                             <size key="itemSize" width="50" height="50"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -1944,7 +1945,7 @@
                                         </cells>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4P5-c3-bwQ" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
-                                        <rect key="frame" x="148.5" y="553" width="46" height="30"/>
+                                        <rect key="frame" x="148.5" y="597" width="46" height="30"/>
                                         <state key="normal" title="Button"/>
                                     </button>
                                 </subviews>
@@ -3673,46 +3674,23 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8VE-EY-EDe" userLabel="content-view">
-                                <rect key="frame" x="16" y="64" width="343" height="557"/>
+                                <rect key="frame" x="16" y="20" width="343" height="601"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KHA-bL-PXB">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="557"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="601"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TT6-sg-GRZ" userLabel="scroll-content-view">
-                                                <rect key="frame" x="0.0" y="0.0" width="343" height="137.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="601"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="adw-xb-OGn" customClass="GZELabel" customModule="Gooze" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="18" width="343" height="20.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZM8-Xg-LMS" userLabel="email-text" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="58.5" width="343" height="21"/>
-                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <textInputTraits key="textInputTraits"/>
-                                                    </textField>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eAM-v6-v6I" userLabel="confirm-email-text" customClass="GZETextField" customModule="Gooze" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="99.5" width="343" height="22"/>
-                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                        <textInputTraits key="textInputTraits"/>
-                                                    </textField>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BvA-K3-6f5" customClass="GZEDoubleCtrlView" customModule="Gooze" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="300.5" width="343" height="300.5"/>
+                                                    </view>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="eAM-v6-v6I" secondAttribute="bottom" constant="16" id="6vl-ud-xpe"/>
-                                                    <constraint firstItem="eAM-v6-v6I" firstAttribute="top" secondItem="ZM8-Xg-LMS" secondAttribute="bottom" constant="20" id="KNl-SP-1dr"/>
-                                                    <constraint firstAttribute="trailing" secondItem="adw-xb-OGn" secondAttribute="trailing" id="QzV-S9-cH1"/>
-                                                    <constraint firstItem="ZM8-Xg-LMS" firstAttribute="leading" secondItem="TT6-sg-GRZ" secondAttribute="leading" id="dSY-Ap-xUf"/>
-                                                    <constraint firstAttribute="trailing" secondItem="eAM-v6-v6I" secondAttribute="trailing" id="gaL-jx-eRK"/>
-                                                    <constraint firstItem="eAM-v6-v6I" firstAttribute="leading" secondItem="TT6-sg-GRZ" secondAttribute="leading" id="h7U-sW-H8q"/>
-                                                    <constraint firstItem="ZM8-Xg-LMS" firstAttribute="top" secondItem="adw-xb-OGn" secondAttribute="bottom" constant="20" id="pnh-D3-NVm"/>
-                                                    <constraint firstItem="adw-xb-OGn" firstAttribute="top" secondItem="TT6-sg-GRZ" secondAttribute="top" constant="18" id="w30-8K-Y0p"/>
-                                                    <constraint firstItem="adw-xb-OGn" firstAttribute="leading" secondItem="TT6-sg-GRZ" secondAttribute="leading" id="xw6-YK-2od"/>
-                                                    <constraint firstAttribute="trailing" secondItem="ZM8-Xg-LMS" secondAttribute="trailing" id="zS1-yo-g56"/>
+                                                    <constraint firstItem="BvA-K3-6f5" firstAttribute="leading" secondItem="TT6-sg-GRZ" secondAttribute="leading" id="BXL-kI-fg9"/>
+                                                    <constraint firstAttribute="trailing" secondItem="BvA-K3-6f5" secondAttribute="trailing" id="SaW-yk-g72"/>
+                                                    <constraint firstItem="BvA-K3-6f5" firstAttribute="height" secondItem="TT6-sg-GRZ" secondAttribute="height" multiplier="0.5" id="W1Y-ln-qjE"/>
+                                                    <constraint firstAttribute="bottom" secondItem="BvA-K3-6f5" secondAttribute="bottom" id="lK8-Qx-zvK"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -3725,6 +3703,7 @@
                                     </scrollView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="TT6-sg-GRZ" firstAttribute="height" secondItem="8VE-EY-EDe" secondAttribute="height" id="3dX-tJ-zNk"/>
                                     <constraint firstItem="TT6-sg-GRZ" firstAttribute="width" secondItem="8VE-EY-EDe" secondAttribute="width" id="P3U-e0-dZV"/>
                                     <constraint firstAttribute="bottom" secondItem="KHA-bL-PXB" secondAttribute="bottom" id="Qr7-19-cKW"/>
                                     <constraint firstItem="KHA-bL-PXB" firstAttribute="leading" secondItem="8VE-EY-EDe" secondAttribute="leading" id="mPn-jE-Ghm"/>
@@ -3743,11 +3722,22 @@
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                                         <state key="normal" title="Button"/>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lhO-Uu-SZU" userLabel="bot-l-button" customClass="GZEButton" customModule="Gooze" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="8" width="53" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="mH0-NX-Dql"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="gzZ-RP-CaU" secondAttribute="bottom" constant="8" id="E0q-F1-Orv"/>
+                                    <constraint firstItem="lhO-Uu-SZU" firstAttribute="top" secondItem="tie-3t-e5Y" secondAttribute="top" constant="8" id="Jr4-ST-Ic0"/>
+                                    <constraint firstAttribute="bottom" secondItem="lhO-Uu-SZU" secondAttribute="bottom" constant="8" id="PUp-4a-pHs"/>
                                     <constraint firstItem="gzZ-RP-CaU" firstAttribute="top" secondItem="tie-3t-e5Y" secondAttribute="top" constant="8" id="YS1-VD-AWH"/>
                                     <constraint firstAttribute="trailing" secondItem="gzZ-RP-CaU" secondAttribute="trailing" constant="8" id="oaG-wz-Izw"/>
+                                    <constraint firstItem="lhO-Uu-SZU" firstAttribute="leading" secondItem="tie-3t-e5Y" secondAttribute="leading" constant="8" id="uBF-gI-EqQ"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -3767,10 +3757,10 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="botLeftButton" destination="lhO-Uu-SZU" id="O1a-Sm-BiK"/>
                         <outlet property="botRightButton" destination="gzZ-RP-CaU" id="ZWM-gd-GG8"/>
-                        <outlet property="descriptionLabel" destination="adw-xb-OGn" id="VoM-iq-TLO"/>
-                        <outlet property="emailConfirmTextField" destination="eAM-v6-v6I" id="Dqd-d1-f6J"/>
-                        <outlet property="emailTextField" destination="ZM8-Xg-LMS" id="bBQ-Cn-NDd"/>
+                        <outlet property="bottomLayoutConstraint" destination="hvv-e8-cwQ" id="Mnl-NL-lJz"/>
+                        <outlet property="dblCtrlView" destination="BvA-K3-6f5" id="ZCH-nz-gZE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a7G-ty-i3s" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3799,11 +3789,11 @@
         <segue reference="aoX-cG-RKK"/>
         <segue reference="qNa-CM-5aU"/>
         <segue reference="1Ut-GE-1n8"/>
-        <segue reference="R1T-5h-Xv7"/>
+        <segue reference="nrK-11-ZsM"/>
         <segue reference="XJg-fM-c9J"/>
         <segue reference="7Qg-7B-R48"/>
         <segue reference="e66-sX-XQT"/>
-        <segue reference="Dk2-YI-miw"/>
+        <segue reference="Hhf-2f-EG4"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
