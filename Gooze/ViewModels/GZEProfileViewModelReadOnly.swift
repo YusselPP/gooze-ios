@@ -11,6 +11,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import Result
 import SwiftOverlays
+import Gloss
 
 class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
 
@@ -257,22 +258,34 @@ class GZEProfileViewModelReadOnly: NSObject, GZEProfileViewModel {
                 )
                 return
             }
-            if datesError == .incompleteProfile {
-                GZEAlertService.shared.showConfirmDialog(
-                    title: error.localizedDescription,
-                    message: completeProfileRequest,
-                    buttonTitles: [completeProfileRequestYes],
-                    cancelButtonTitle: completeProfileRequestNo,
-                    actionHandler: {[weak self] (_, _, _) in
-                        log.debug("Yes pressed")
-                        guard let this = self else {return}
-                        this.openMyProfileView()
-                    },
-                    cancelHandler: { _ in
-                        log.debug("No pressed")
+
+        case .repository(let repoErr):
+            switch repoErr {
+            case .GZEApiError(let apiErr):
+                if apiErr.code == GZEApiError.Code.userIncompleteProfile.rawValue {
+                    var missingProperties: [String] = []
+
+                    if let detailsJson = apiErr.details?.json {
+                        missingProperties = ("missingProperties" <~~ detailsJson) ?? []
                     }
-                )
-                return
+
+                    GZEAlertService.shared.showConfirmDialog(
+                        title: "validation.profile.incomplete".localized(),
+                        message: "\(missingProperties.map{GZEUser.Validation(rawValue: $0)?.fieldName ?? $0}.joined(separator: ", ")).\n\n\(completeProfileRequest)",
+                        buttonTitles: [completeProfileRequestYes],
+                        cancelButtonTitle: completeProfileRequestNo,
+                        actionHandler: {[weak self] (_, _, _) in
+                            log.debug("Yes pressed")
+                            guard let this = self else {return}
+                            this.openMyProfileView()
+                        },
+                        cancelHandler: { _ in
+                            log.debug("No pressed")
+                        }
+                    )
+                    return
+                }
+            default: break
             }
         default:
             break

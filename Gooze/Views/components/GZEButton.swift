@@ -39,8 +39,18 @@ class GZEButton: UIButton {
         super.layoutSubviews()
 
         if alignImageLeft && imageView != nil {
-            imageEdgeInsets = UIEdgeInsets(top: 10, left: (bounds.width / 2 + (titleLabel?.bounds.width ?? 0) / 2), bottom: 10, right: 0)
-            titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (imageView?.frame.width ?? 0))
+
+            log.debug("layout")
+            let titleWidth = titleLabel?.bounds.width ?? 0
+            let imgWidth = imageView?.frame.width ?? 0
+
+            let imgLeft = (bounds.width / 2 + titleWidth / 2)
+            //let imgRight: CGFloat = (bounds.width - titleWidth - imgWidth) / 2 + 10
+
+            //log.debug("imgRight: \(imgRight)")
+
+            imageEdgeInsets = UIEdgeInsets(top: 10, left: imgLeft, bottom: 10, right: 0)
+            titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: imgWidth)
         }
     }
 

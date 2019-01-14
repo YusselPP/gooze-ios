@@ -22,7 +22,7 @@
 "validation.underAge"="Debes ser mayor de edad";
 "validation.invalidCardNumber"="Ingresa un número de tarjeta válido";
 
-"validation.profile.incomplete"="Es necesario completar tu perfil";
+"validation.profile.incomplete"="Es necesario completar la siguiente información de tu perfil";
 
 // Protocols/DatesSocketError
 "error.socket.dates.paymentMethodRequired"="Es necesario agregar un método de pago";
@@ -244,7 +244,7 @@
 "vm.pickerToolbar.doneButton.title"="Ok";
 
 // ViewModel/GZERegisterPayPalViewModel
-"vm.register.paypal.description"="Favor de introducir una cuenta activa de PayPal, esta se utilizará para entregar los beneficios generados con tus citas";
+"vm.register.paypal.description"="Introducir una cuenta de PayPal, en ella recibirás los beneficios generados con tus citas";
 "vm.register.paypal.emailPlaceholder"="Correo electrónico";
 "vm.register.paypal.emailConfirmPlaceholder"="Confirmar correo electrónico";
 "vm.register.paypal.emailConfirmMismatch"="El correo electrónico y su confirmación no coinciden";
@@ -278,8 +278,8 @@
 
 // Views/components/Menu/GZEMenu
 "menu.item.title.profile"="Perfil";
-"menu.item.title.beGooze"="Ser Gooze";
-"menu.item.title.searchGooze"="Buscar Gooze";
+"menu.item.title.beGooze"="Cambiar a Ser";
+"menu.item.title.searchGooze"="Cambiar a Buscar";
 "menu.item.title.chats"="Chats";
 "menu.item.title.history"="Historial";
 "menu.item.title.payment"="Formas de pago";

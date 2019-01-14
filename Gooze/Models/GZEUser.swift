@@ -455,7 +455,7 @@ class GZEUser: NSObject, Glossy {
 
     // MARK: Validation
 
-    enum Validation {
+    enum Validation: String {
 
         case username
         case email
@@ -469,6 +469,7 @@ class GZEUser: NSObject, Glossy {
         case phrase
 
         case language
+        case languages
         case interestedIn
 
         case registerCode
@@ -477,6 +478,7 @@ class GZEUser: NSObject, Glossy {
         case profilePic
         case searchPic
         case galleryPics
+        case photos
 
         case imagesRating
         case complianceRating
@@ -507,7 +509,7 @@ class GZEUser: NSObject, Glossy {
             case .phrase:
                 key = "user.phrase.fieldName"
 
-            case .language:
+            case .language, .languages:
                 key = "user.language.fieldName"
             case .interestedIn:
                 key = "user.interestedIn.fieldName"
@@ -520,7 +522,7 @@ class GZEUser: NSObject, Glossy {
                 key = "user.profilePic.fieldName"
             case .searchPic:
                 key = "user.searchPic.fieldName"
-            case .galleryPics:
+            case .galleryPics, .photos:
                 key = "user.galleryPics.fieldName"
 
             case .imagesRating:

@@ -12,6 +12,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import PPBadgeView
 import SwiftOverlays
+import Gloss
 import enum Result.NoError
 
 class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDismissVCDelegate, GZENextVCDelegate {
@@ -706,9 +707,15 @@ class GZEActivateGoozeViewController: UIViewController, MKMapViewDelegate, GZEDi
             switch repoErr {
             case .GZEApiError(let apiErr):
                 if apiErr.code == GZEApiError.Code.userIncompleteProfile.rawValue {
+                    var missingProperties: [String] = []
+
+                    if let detailsJson = apiErr.details?.json {
+                        missingProperties = ("missingProperties" <~~ detailsJson) ?? []
+                    }
+
                     GZEAlertService.shared.showConfirmDialog(
-                        title: err.localizedDescription,
-                        message: viewModel.completeProfileRequest,
+                        title: "validation.profile.incomplete".localized(),
+                        message: "\(missingProperties.map{GZEUser.Validation(rawValue: $0)?.fieldName ?? $0}.joined(separator: ", ")).\n\n\(viewModel.completeProfileRequest)",
                         buttonTitles: [viewModel.completeProfileRequestYes],
                         cancelButtonTitle: viewModel.completeProfileRequestNo,
                         actionHandler: {[weak self] (_, _, _) in

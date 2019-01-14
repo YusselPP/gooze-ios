@@ -497,14 +497,28 @@ class GZEDatesService: NSObject {
     }
 
     func handleError(_ error: GZEApiError, _ sink: Observer<GZEDateRequest, GZEError>) {
-        guard let errorCode = error.code, let datesError = DatesSocketError(rawValue: errorCode) else {
+
+        guard let errorCode = error.code else {
             log.error("\(String(describing: error.toJSON()))")
             sink.send(error: .datesSocket(error: .unexpected))
             return
         }
 
-        log.debug("Error: \(datesError)")
-        sink.send(error: .datesSocket(error: datesError))
+        if let datesError = DatesSocketError(rawValue: errorCode) {
+            log.debug("Error: \(datesError)")
+            sink.send(error: .datesSocket(error: datesError))
+            return
+        }
+
+        if errorCode == GZEApiError.Code.userIncompleteProfile.rawValue {
+            log.error("\(String(describing: error.toJSON()))")
+            sink.send(error: .repository(error: .GZEApiError(error: error)))
+            return
+        }
+
+        log.error("\(String(describing: error.toJSON()))")
+        sink.send(error: .datesSocket(error: .unexpected))
+        return
     }
 
     func cleanup() {

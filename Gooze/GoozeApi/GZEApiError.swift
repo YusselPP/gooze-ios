@@ -55,11 +55,13 @@ struct GZEApiError: Glossy {
 
 struct GZEApiErrorDetail: Glossy {
 
+    let json: JSON
     let context: String?
     let codes: Dictionary<String, Array<String>>?
     let messages: Dictionary<String, Array<String>>?
 
     init?(json: JSON) {
+        self.json = json
         self.context = "context" <~~ json
         self.codes = json["codes"] as? Dictionary<String, Array<String>>
         self.messages = json["messages"] as? Dictionary<String, Array<String>>

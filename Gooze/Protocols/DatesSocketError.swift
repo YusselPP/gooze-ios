@@ -13,7 +13,7 @@ enum DatesSocketError: String {
     case payPalAccountRequired = "PAY_PAL_ACCOUNT_REQUIRED"
     case requestAlreadySent = "DATE_REQUEST_ALREADY_SENT"
     case invalidSatus = "REQUEST_INVALID_STATUS"
-    case incompleteProfile = "USER_INCOMPLETE_PROFILE"
+    // case incompleteProfile = "USER_INCOMPLETE_PROFILE"
     case noAck
     
     case unexpected
@@ -34,8 +34,8 @@ extension DatesSocketError: LocalizedError {
             message = "error.socket.dates.requestAlreadySent"
         case .invalidSatus:
             message = "error.socket.dates.invalidSatus"
-        case .incompleteProfile:
-            message = "validation.profile.incomplete"
+        //case .incompleteProfile:
+          //  message = "validation.profile.incomplete"
         case .noAck:
             message = "error.socket.dates.noAck"
         case .unexpected:
