@@ -179,14 +179,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 destination.minLevel = .error
             }
             destination.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M"
-
-            // FILTERS
-            //destination.minLevel = .error
-            //let filter1 = Filters.Path.contains("View", minLevel: .debug)
-            let filter1 = Filters.Path.excludes("GZEDoubleCtrlView", required: true)
-            let filter2 = Filters.Path.excludes("GZEConstants", required: true)
-            destination.addFilter(filter1)
-            destination.addFilter(filter2)
         }
 
         log.debug("Log level: " + GZEAppConfig.logLevel)
