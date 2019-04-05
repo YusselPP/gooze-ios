@@ -25,6 +25,8 @@ class GZEApi {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        // WORKAROUND to ignore device configuration regarding AM/PM
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         return dateFormatter
     }
 
