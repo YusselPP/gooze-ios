@@ -400,6 +400,17 @@ class GZEUserApiRepository: GZEUserRepositoryProtocol {
         }
     }
 
+    func resetPassword(_ email: String) -> SignalProducer<Void, GZEError> {
+
+        return SignalProducer{sink, disposable in
+
+            Alamofire.request(GZEUserRouter.reset(parameters: ["email": email]))
+                .responseJSON(completionHandler: GZEApi.createResponseHandler(sink: sink, createInstance: {
+                    (val: NSNull) -> Void in ()
+                }))
+        }
+    }
+
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError> {
 
         if let photo = user.profilePic {

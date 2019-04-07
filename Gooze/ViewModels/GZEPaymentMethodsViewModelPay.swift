@@ -255,6 +255,9 @@ class GZEPaymentMethodsViewModelPay: GZEPaymentMethodsViewModel {
                 let (newdateRequest, newSender) = value
                 this.dateRequest.value = newdateRequest
                 GZEAuthService.shared.authUser = newSender
+                GZEDatesService.shared.sendLocationUpdate(
+                    to: newdateRequest.recipient.id, dateRequest: newdateRequest
+                )
                 this.dismissObs.send(value: ())
             case .failed(let err):
                 this.onError(err)

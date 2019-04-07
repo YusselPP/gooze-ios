@@ -25,6 +25,7 @@ protocol GZEUserRepositoryProtocol {
     func login(_ username: String?, _ password: String?) -> SignalProducer<GZEAccesToken, GZEError>
     func facebookLogin(_ token: String) -> SignalProducer<GZEAccesToken, GZEError>
     func logout() -> SignalProducer<Void, GZEError>
+    func resetPassword(_ email: String) -> SignalProducer<Void, GZEError>
     func signUp(username: String, email: String, password: String, userJSON: JSON?) -> SignalProducer<GZEUser, GZEError>
     func saveProfilePic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>
     func saveSearchPic(_ user: GZEUser) -> SignalProducer<GZEUser, GZEError>

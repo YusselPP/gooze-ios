@@ -127,6 +127,9 @@
 
 "vm.login.usernameLabel"="Usuario";
 "vm.login.passwordLabel"="Contraseña";
+"vm.login.resetPasswordLabel"="Correo electrónico";
+"vm.login.resetEmailSent"="Correo electrónico para restablecer contraseña enviado";
+"vm.login.emailNotfound"="Correo electrónico no registrado";
 
 "vm.login.alertOkButtonTitle"="Ok";
 
@@ -175,7 +178,7 @@
 "vm.datesChat.acceptAmountButtonTitle"="Aceptar %@";
 "vm.datesChat.dateButtonTitle"="Ver cita";
 "vm.datesChat.error.digitsOnly"="Establece el monto con dígitos únicamente";
-"vm.datesChat.error.positiveNumber"="El monto debe ser mayor que 0";
+"vm.datesChat.error.positiveNumber"="El monto mínimo es 500";
 "vm.datesChat.error.sendMessage.unavailable"="%@ ya no esta disponible";
 
 // ViewModel/GZEMapViewModelDate

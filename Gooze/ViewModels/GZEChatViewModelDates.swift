@@ -152,7 +152,7 @@ class GZEChatViewModelDates: GZEChatViewModel {
                         return nil
                     }
 
-                    guard amountDouble > 0 else {
+                    guard amountDouble >= 500 else {
                         self?.error.value = self?.errorPositiveNumber
                         return nil
                     }

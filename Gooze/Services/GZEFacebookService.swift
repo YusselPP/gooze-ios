@@ -21,6 +21,8 @@ class GZEFacebookService: NSObject {
 
     func login(withReadPermissions permissions: [String], from vc: UIViewController) -> SignalProducer<FBSDKAccessToken, GZEError> {
 
+        logout()
+
         return SignalProducer {sink, disposable in
 
             FBSDKLoginManager()
@@ -83,5 +85,9 @@ class GZEFacebookService: NSObject {
                     sink.sendCompleted()
                 }
         }
+    }
+
+    func logout() {
+        FBSDKLoginManager().logOut()
     }
 }

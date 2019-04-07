@@ -21,6 +21,7 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         case login
         case username
         case password
+        case resetPassword
     }
 
     var scene = Scene.loadingTransition {
@@ -33,11 +34,14 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
 
     var loginAction: CocoaAction<UIBarButtonItem>!
     var facebookLoginAction: CocoaAction<UIBarButtonItem>!
+    var resetPasswordAction: CocoaAction<UIBarButtonItem>!
 
     let usernameLabel = UILabel()
     let passwordLabel = UILabel()
+    let resetPasswordLabel = UILabel()
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
+    let resetPasswordTextField = UITextField()
     let loginButton = UIButton()
     let signUpButton = UIButton()
     let forgotPasswordButton = UIButton()
@@ -120,26 +124,14 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         // Titles
         usernameLabel.text = viewModel.usernameLabel.uppercased()
         passwordLabel.text = viewModel.passwordLabel.uppercased()
+        resetPasswordLabel.text = viewModel.resetPasswordLabel.uppercased()
         loginButton.setTitle(viewModel.loginButtonTitle.uppercased(), for: .normal)
         signUpButton.setTitle(viewModel.signUpButtonTitle.uppercased(), for: .normal)
         forgotPasswordButton.setTitle(viewModel.forgotPasswordButtonTitle, for: .normal)
 
         bottomButton.setGrayFormat()
-        let title = "\u{f09a}  " + "vm.login.facebookLogin".localized()
-        let attributedTitle = NSMutableAttributedString(string: title)
-        attributedTitle.setAttributes(
-            [NSAttributedString.Key.font: GZEConstants.Font.mainAwesome],
-            range: NSRange.init(location: 0, length: 1)
-        )
-        attributedTitle.setAttributes(
-            [NSAttributedString.Key.font: GZEConstants.Font.main],
-            range: NSRange.init(location: 1, length: title.count - 2)
-        )
 
         bottomButton.widthConstraint.constant = 220
-
-        bottomButton.setAttributedTitle(attributedTitle, for: .normal)
-        bottomButton.addTarget(self, action: #selector(facebookLogin), for: .touchUpInside)
 
         emailTextField.keyboardType = .emailAddress
         emailTextField.returnKeyType = .next
@@ -150,6 +142,10 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
 
+        resetPasswordTextField.keyboardType = .emailAddress
+        resetPasswordTextField.returnKeyType = .next
+        resetPasswordTextField.delegate = self
+        resetPasswordTextField.autocapitalizationType = .none
 
         loginButton.enableAnimationOnPressed()
         signUpButton.enableAnimationOnPressed()
@@ -170,9 +166,11 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         // Bindings
         emailTextField.reactive.text <~ viewModel.email
         passwordTextField.reactive.text <~ viewModel.password
+        resetPasswordTextField.reactive.text <~ viewModel.resetPassword
 
         viewModel.email <~ emailTextField.reactive.continuousTextValues
         viewModel.password <~ passwordTextField.reactive.continuousTextValues
+        viewModel.resetPassword <~ resetPasswordTextField.reactive.continuousTextValues
 
         loginAction = CocoaAction(viewModel.loginAction)
         { [weak self] _ in
@@ -182,12 +180,52 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         { [weak self] _ in
             self?.showLoading()
         }
+        resetPasswordAction = CocoaAction(viewModel.resetPasswordAction)
+        { [weak self] _ in
+            self?.showLoading()
+        }
 
         viewModel.loginAction.events.observeValues {[weak self] in
             self?.onEvent(event: $0)
         }
         viewModel.facebookLoginAction.events.observeValues {[weak self] in
             self?.onEvent(event: $0)
+        }
+        viewModel.resetPasswordAction.events.observeValues {[weak self] event in
+            guard let this = self else {
+                return
+            }
+            log.debug("Action event received: \(event)")
+            this.hideLoading()
+
+            switch event {
+            case .value:
+                GZEAlertService.shared.showTopAlert(
+                    text: this.viewModel.resetEmailSent
+                )
+                this.scene = .login
+                break
+            case .failed(let err):
+                switch err {
+                case .repository(let repoErr):
+                    switch repoErr {
+                    case .GZEApiError(let apiErr):
+                        if apiErr.code == GZEApiError.Code.emailNotFound.rawValue {
+                            GZEAlertService.shared.showBottomAlert(
+                                text: this.viewModel.emailNotFound
+                            )
+                            return
+                        }
+                    default:
+                        break
+                    }
+                default:
+                    break
+                }
+                this.onError(err)
+            default:
+                break
+            }
         }
     }
 
@@ -259,6 +297,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
             scene = .login
         case .password:
             scene = .username
+        case .resetPassword:
+            scene = .password
         default:
             break
         }
@@ -270,6 +310,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
             scene = .password
         case .password:
             loginAction.execute(nextButton)
+        case .resetPassword:
+            resetPasswordAction.execute(nextButton)
         default:
             break
         }
@@ -282,7 +324,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
 
         switch scene {
         case .username,
-             .password:
+             .password,
+             .resetPassword:
             return false
         default:
             log.debug("Text field without return action")
@@ -320,6 +363,8 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
             showUsernameScene()
         case .password:
             showPasswordScene()
+        case .resetPassword:
+            showResetPasswordScene()
         }
     }
 
@@ -371,13 +416,17 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         doubleCtrlView.bottomViewTappedHandler = doubleCtrlView.topViewTappedHandler
 
         // emailTextField.becomeFirstResponder()
+
+        bottomButton.setAttributedTitle(viewModel.fbLoginTitle, for: .normal)
+        bottomButton.removeAllTargets()
+        bottomButton.addTarget(self, action: #selector(facebookLogin), for: .touchUpInside)
     }
 
     func showPasswordScene() {
         showNavigationBar(true, animated: true)
 
         logoView.alpha = 0
-        bottomButton.alpha = 0
+        bottomButton.alpha = 1
         doubleCtrlView.alpha = 1
 
         doubleCtrlView.topCtrlView = passwordTextField
@@ -389,6 +438,33 @@ class GZELoginViewController: UIViewController, UITextFieldDelegate, UINavigatio
         doubleCtrlView.bottomViewTappedHandler = doubleCtrlView.topViewTappedHandler
 
         passwordTextField.becomeFirstResponder()
+
+        bottomButton.setAttributedTitle(nil, for: .normal)
+        bottomButton.setTitle(viewModel.forgotPasswordButtonTitle, for: .normal)
+        bottomButton.removeAllTargets()
+        bottomButton.addTarget(self, action: #selector(forgotPassword), for: .touchUpInside)
+    }
+
+    func showResetPasswordScene() {
+        showNavigationBar(true, animated: true)
+
+        logoView.alpha = 0
+        bottomButton.alpha = 0
+        doubleCtrlView.alpha = 1
+
+        doubleCtrlView.topCtrlView = resetPasswordTextField
+        doubleCtrlView.bottomCtrlView = resetPasswordLabel
+
+        doubleCtrlView.topViewTappedHandler = { [unowned self] _ in
+            self.resetPasswordTextField.becomeFirstResponder()
+        }
+        doubleCtrlView.bottomViewTappedHandler = doubleCtrlView.topViewTappedHandler
+
+        resetPasswordTextField.becomeFirstResponder()
+    }
+
+    @objc func forgotPassword() {
+        scene = .resetPassword
     }
 
     // Facebook login

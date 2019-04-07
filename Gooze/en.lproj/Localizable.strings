@@ -127,6 +127,9 @@
 
 "vm.login.usernameLabel"="Username";
 "vm.login.passwordLabel"="Password";
+"vm.login.resetPasswordLabel"="Email";
+"vm.login.resetEmailSent"="Password reset email sent";
+"vm.login.emailNotfound"="No matching email found";
 
 "vm.login.alertOkButtonTitle"="Ok";
 
@@ -175,7 +178,7 @@
 "vm.datesChat.acceptAmountButtonTitle"="Accept %@";
 "vm.datesChat.dateButtonTitle"="Date";
 "vm.datesChat.error.digitsOnly"="Amount should consist of only digits";
-"vm.datesChat.error.positiveNumber"="Amount must be greater than 0";
+"vm.datesChat.error.positiveNumber"="Amount must be greater or equal than 500";
 "vm.datesChat.error.sendMessage.unavailable"="%@ is not available anymore";
 
 // ViewModel/GZEMapViewModelDate

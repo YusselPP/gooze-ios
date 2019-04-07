@@ -147,6 +147,7 @@ class GZEAuthService: NSObject {
 
     func logout(presenter: UIViewController, completion: ((Bool) -> ())? = nil) {
         log.debug("logout user from GZEAuthService")
+        GZEFacebookService.shared.logout()
         GZESocketManager.destroyAllSockets()
         GZEDatesService.shared.cleanup()
         GZEChatService.shared.cleanup()

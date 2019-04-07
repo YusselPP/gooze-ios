@@ -13,6 +13,7 @@ import Gloss
 struct GZEApiError: Glossy {
 
     enum Code: String {
+        case emailNotFound = "EMAIL_NOT_FOUND"
         case userIncompleteProfile = "USER_INCOMPLETE_PROFILE"
     }
 
